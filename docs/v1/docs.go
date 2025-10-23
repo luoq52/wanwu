@@ -11573,7 +11573,11 @@ const docTemplate = `{
         "request.MCPUpdate": {
             "type": "object",
             "required": [
-                "mcpId"
+                "desc",
+                "from",
+                "mcpId",
+                "name",
+                "sseUrl"
             ],
             "properties": {
                 "desc": {

@@ -2125,7 +2125,11 @@ definitions:
         description: SSE URL
         type: string
     required:
+    - desc
+    - from
     - mcpId
+    - name
+    - sseUrl
     type: object
   request.MergeFileReq:
     properties:

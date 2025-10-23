@@ -22,10 +22,10 @@ func (req *MCPCreate) Check() error {
 
 type MCPUpdate struct {
 	MCPID  string `json:"mcpId" validate:"required"`
-	Name   string `json:"name"`   // 名称
-	Desc   string `json:"desc"`   // 描述
-	From   string `json:"from"`   // 来源
-	SSEURL string `json:"sseUrl"` // SSE URL
+	Name   string `json:"name" validate:"required"`   // 名称
+	Desc   string `json:"desc" validate:"required"`   // 描述
+	From   string `json:"from" validate:"required"`   // 来源
+	SSEURL string `json:"sseUrl" validate:"required"` // SSE URL
 }
 
 func (req *MCPUpdate) Check() error {
