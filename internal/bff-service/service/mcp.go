@@ -4,7 +4,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/ThinkInAIXYZ/go-mcp/protocol"
 	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
+	"github.com/UnicomAI/wanwu/api/proto/common"
 	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
@@ -235,13 +237,13 @@ func toMCPSquareDetail(ctx *gin.Context, mcpSquare *mcp_service.SquareMCPDetail)
 	ret := &response.MCPSquareDetail{
 		MCPSquareInfo:  toMCPSquareInfo(ctx, mcpSquare.Info),
 		MCPSquareIntro: toMCPSquareIntro(mcpSquare.Intro),
-		MCPTools: response.MCPTools{
+		MCPActions: response.MCPActions{
 			SSEURL:    mcpSquare.Tool.SseUrl,
 			HasCustom: mcpSquare.Tool.HasCustom,
 		},
 	}
 	for _, tool := range mcpSquare.Tool.Tools {
-		ret.MCPTools.Tools = append(ret.MCPTools.Tools, toMCPTool(tool))
+		ret.MCPActions.Tools = append(ret.MCPActions.Tools, toToolAction(tool))
 	}
 	return ret
 }
@@ -270,19 +272,19 @@ func toMCPSquareIntro(mcpSquareIntro *mcp_service.SquareMCPIntro) response.MCPSq
 	}
 }
 
-func toMCPTool(tool *mcp_service.MCPTool) response.MCPTool {
-	ret := response.MCPTool{
+func toToolAction(tool *common.ToolAction) *protocol.Tool {
+	ret := &protocol.Tool{
 		Name:        tool.Name,
 		Description: tool.Description,
-		InputSchema: response.MCPToolInputSchema{
-			Type:       tool.InputSchema.GetType(),
+		InputSchema: protocol.InputSchema{
+			Type:       protocol.InputSchemaType(tool.InputSchema.GetType()),
 			Required:   tool.InputSchema.GetRequired(),
-			Properties: make(map[string]response.MCPToolInputSchemaValue),
+			Properties: make(map[string]*protocol.Property),
 		},
 	}
 	for k, v := range tool.InputSchema.GetProperties() {
-		ret.InputSchema.Properties[k] = response.MCPToolInputSchemaValue{
-			Type:        v.Type,
+		ret.InputSchema.Properties[k] = &protocol.Property{
+			Type:        protocol.DataType(v.Type),
 			Description: v.Description,
 		}
 	}

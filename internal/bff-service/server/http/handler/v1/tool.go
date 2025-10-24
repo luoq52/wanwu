@@ -172,3 +172,54 @@ func UpdateToolSquareAPIKey(ctx *gin.Context) {
 	}
 	gin_util.Response(ctx, nil, service.UpdateToolSquareAPIKey(ctx, getUserID(ctx), getOrgID(ctx), req))
 }
+
+// GetToolSelect
+//
+//	@Tags			tool
+//	@Summary		获取工具列表（用于下拉选择）
+//	@Description	获取工具列表（用于下拉选择）
+//	@Accept			json
+//	@Produce		json
+//	@Param			name	query		string	true	"工具名"
+//	@Success		200		{object}	response.Response{data=response.ListResult{list=[]response.ToolActionList}}
+//	@Router			/tool/select [get]
+func GetToolSelect(ctx *gin.Context) {
+	resp, err := service.GetToolSelect(ctx, getUserID(ctx), getOrgID(ctx), ctx.Query("name"))
+	gin_util.Response(ctx, resp, err)
+}
+
+// GetToolActionList
+//
+//	@Tags			tool
+//	@Summary		获取工具列表
+//	@Description	获取工具列表
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	query		request.ToolActionListReq	true	"工具信息"
+//	@Success		200		{object}	response.Response{data=response.ToolActionList}
+//	@Router			/tool/action/list [get]
+func GetToolActionList(ctx *gin.Context) {
+	var req request.ToolActionListReq
+	if !gin_util.BindQuery(ctx, &req) {
+		return
+	}
+	// FIXME
+}
+
+// GetToolActionDetail
+//
+//	@Tags			tool
+//	@Summary		获取工具详情
+//	@Description	获取工具详情
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	query		request.ToolActionReq	true	"工具信息"
+//	@Success		200		{object}	response.Response{data=response.ToolActionDetail}
+//	@Router			/tool/action/detail [get]
+func GetToolActionDetail(ctx *gin.Context) {
+	var req request.ToolActionReq
+	if !gin_util.BindQuery(ctx, &req) {
+		return
+	}
+	// FIXME
+}

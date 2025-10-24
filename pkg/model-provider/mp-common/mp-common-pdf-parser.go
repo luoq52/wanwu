@@ -125,7 +125,7 @@ func PdfParser(ctx *gin.Context, provider, apiKey, url string, req *PdfParserReq
 	defer file.Close()
 	request := resty.New().
 		SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true}). // 关闭证书校验
-		SetTimeout(0). // 关闭请求超时
+		SetTimeout(0).                                             // 关闭请求超时
 		R().
 		SetContext(ctx).
 		SetHeader("Content-Type", "multipart/form-data").

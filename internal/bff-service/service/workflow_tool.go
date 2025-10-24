@@ -6,6 +6,7 @@ import (
 	net_url "net/url"
 	"strings"
 
+	"github.com/ThinkInAIXYZ/go-mcp/protocol"
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
 	"github.com/UnicomAI/wanwu/internal/bff-service/config"
@@ -130,7 +131,7 @@ func GetWorkflowToolDetail(ctx *gin.Context, userId, orgId, toolId, toolType, op
 
 // --- internal ---
 
-func builtInToolActions4Workflow(actions []response.MCPTool) []response.ToolAction4Workflow {
+func builtInToolActions4Workflow(actions []*protocol.Tool) []response.ToolAction4Workflow {
 	var ret []response.ToolAction4Workflow
 	for _, action := range actions {
 		ret = append(ret, response.ToolAction4Workflow{

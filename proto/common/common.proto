@@ -29,3 +29,20 @@ message AppModelConfig {
     string modelType = 4;
     string config = 5;
 }
+
+message ToolAction {
+    string name = 1;
+    string description = 2;
+    ToolActionInputSchema inputSchema = 3;
+}
+
+message ToolActionInputSchema {
+    string type = 1; // 固定 object
+    map<string, ToolActionInputSchemaValue> properties = 2;
+    repeated string required = 3;
+}
+
+message ToolActionInputSchemaValue {
+    string type = 1;
+    string description = 2;
+}

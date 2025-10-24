@@ -3,6 +3,7 @@ syntax = "proto3";
 package mcp_service;
 
 import "google/protobuf/empty.proto";
+import "proto/common/common.proto";
 
 option go_package = "github.com/UnicomAI/wanwu/api/proto/mcp-service";
 
@@ -19,11 +20,11 @@ service MCPService {
     rpc GetCustomMCPList(GetCustomMCPListReq) returns (CustomMCPList) {}
     rpc GetCustomMCPByMCPIdList(GetCustomMCPByMCPIdListReq) returns (CustomMCPList) {}
     
-    // --- tool ---
+    // --- custom mcp action ---
     rpc GetMCPToolList(GetMCPToolListReq) returns (MCPToolList) {}
     rpc GetMCPAvatar(GetMCPAvatarReq) returns (MCPAvatar) {}
 
-    // --- CustomTool ---
+    // --- custom tool ---
     rpc CreateCustomTool(CreateCustomToolReq) returns (google.protobuf.Empty) {}
     rpc GetCustomToolInfo(GetCustomToolInfoReq) returns (GetCustomToolInfoResp) {}
     rpc GetCustomToolList(GetCustomToolListReq) returns (GetCustomToolListResp) {}
@@ -31,9 +32,12 @@ service MCPService {
     rpc UpdateCustomTool(UpdateCustomToolReq) returns (google.protobuf.Empty) {}
     rpc DeleteCustomTool(DeleteCustomToolReq) returns (google.protobuf.Empty) {}
 
-    // --- square tool ---
+    // --- builtin tool ---
     rpc GetSquareTool(GetSquareToolReq) returns (SquareToolDetail) {}
     rpc GetSquareToolList(GetSquareToolListReq) returns (SquareToolList) {}
+
+    // --- custom & builtin tool ---
+    rpc GetToolSelect(GetToolSelectReq) returns (GetToolListResp) {}
 }
 
 // --- req ---
@@ -104,7 +108,7 @@ message GetMCPToolListReq {
 }
 
 message MCPToolList {
-    repeated MCPTool tools = 1;
+    repeated common.ToolAction tools = 1;
 }
 
 message GetMCPAvatarReq {
@@ -157,24 +161,7 @@ message SquareMCPIntro {
 message MCPTools {
     string sseUrl = 1;
     bool hasCustom = 2;
-    repeated MCPTool tools = 3;
-}
-
-message MCPTool {
-    string name = 1;
-    string description = 2;
-    MCPToolInputSchema inputSchema = 3;
-}
-
-message MCPToolInputSchema {
-    string type = 1; // 固定 object
-    map<string, MCPToolInputSchemaValue> properties = 2;
-    repeated string required = 3;
-}
-
-message MCPToolInputSchemaValue {
-    string type = 1;
-    string description = 2;
+    repeated common.ToolAction tools = 3;
 }
 
 // --- customTool ---
@@ -271,15 +258,36 @@ message ToolSquareInfo {
 }
 
 message BuiltInTools {
-    repeated MCPTool tools = 1;
+    repeated common.ToolAction tools = 1;
     string apiKey = 2;
     string detail = 3;
     int32 actionSum = 4;
     bool needApiKeyInput = 5;
 }
- message GetSquareToolListReq {
+
+message GetSquareToolListReq {
     string name = 1;
 }
+
 message SquareToolList {
     repeated ToolSquareInfo infos = 1;
+}
+
+message GetToolSelectReq {
+    string name = 1;
+    Identity identity = 2;
+}
+
+message GetToolItem {
+    string toolId = 1;
+    string toolName = 2;
+    string toolType = 3;
+    string desc = 4;
+    string apiKey = 5;
+    bool needApiKeyInput = 6;
+}
+
+message GetToolListResp {
+    repeated GetToolItem list = 1;
+    int32 total = 2;
 }

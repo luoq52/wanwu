@@ -934,6 +934,111 @@ definitions:
         description: 推理url
         type: string
     type: object
+  protocol.DataType:
+    enum:
+    - object
+    - number
+    - integer
+    - string
+    - array
+    - "null"
+    - boolean
+    type: string
+    x-enum-varnames:
+    - ObjectT
+    - Number
+    - Integer
+    - String
+    - Array
+    - "Null"
+    - Boolean
+  protocol.InputSchema:
+    properties:
+      properties:
+        additionalProperties:
+          $ref: '#/definitions/protocol.Property'
+        type: object
+      required:
+        items:
+          type: string
+        type: array
+      type:
+        $ref: '#/definitions/protocol.InputSchemaType'
+    type: object
+  protocol.InputSchemaType:
+    enum:
+    - object
+    type: string
+    x-enum-varnames:
+    - Object
+  protocol.Property:
+    properties:
+      description:
+        description: Description is the description of the schema.
+        type: string
+      enum:
+        items:
+          type: string
+        type: array
+      items:
+        allOf:
+        - $ref: '#/definitions/protocol.Property'
+        description: Items specifies which data type an array contains, if the schema
+          type is Array.
+      properties:
+        additionalProperties:
+          $ref: '#/definitions/protocol.Property'
+        description: Properties describes the properties of an object, if the schema
+          type is Object.
+        type: object
+      required:
+        items:
+          type: string
+        type: array
+      type:
+        $ref: '#/definitions/protocol.DataType'
+    type: object
+  protocol.Tool:
+    properties:
+      annotations:
+        allOf:
+        - $ref: '#/definitions/protocol.ToolAnnotations'
+        description: Annotations provides additional hints about the tool's behavior
+      description:
+        description: Description is a human-readable description of the tool
+        type: string
+      inputSchema:
+        allOf:
+        - $ref: '#/definitions/protocol.InputSchema'
+        description: InputSchema defines the expected parameters for the tool using
+          JSON Schema
+      name:
+        description: Name is the unique identifier of the tool
+        type: string
+    type: object
+  protocol.ToolAnnotations:
+    properties:
+      destructiveHint:
+        description: |-
+          DestructiveHint indicates the tool may perform destructive updates
+          (only meaningful when ReadOnlyHint is false)
+        type: boolean
+      idempotentHint:
+        description: |-
+          IdempotentHint indicates calling the tool repeatedly with the same arguments
+          has no additional effect (only meaningful when ReadOnlyHint is false)
+        type: boolean
+      openWorldHint:
+        description: OpenWorldHint indicates the tool may interact with an "open world"
+          of external entities
+        type: boolean
+      readOnlyHint:
+        description: ReadOnlyHint indicates the tool does not modify its environment
+        type: boolean
+      title:
+        description: Title is a human-readable title for the tool, useful for UI display
+        type: string
+    type: object
   request.Avatar:
     properties:
       key:
@@ -1044,44 +1149,6 @@ definitions:
         description: 广场mcpId(非空表示来源于广场)
         type: string
     type: object
-  response.MCPTool:
-    properties:
-      description:
-        description: 工具描述
-        type: string
-      inputSchema:
-        allOf:
-        - $ref: '#/definitions/response.MCPToolInputSchema'
-        description: 工具参数
-      name:
-        description: 工具名
-        type: string
-    type: object
-  response.MCPToolInputSchema:
-    properties:
-      properties:
-        additionalProperties:
-          $ref: '#/definitions/response.MCPToolInputSchemaValue'
-        description: 字段名 -> 字段信息
-        type: object
-      required:
-        description: 必填字段
-        items:
-          type: string
-        type: array
-      type:
-        description: '固定值: object'
-        type: string
-    type: object
-  response.MCPToolInputSchemaValue:
-    properties:
-      description:
-        description: 字段描述
-        type: string
-      type:
-        description: 字段类型
-        type: string
-    type: object
   response.ModelInfo:
     properties:
       avatar:
@@ -1183,7 +1250,7 @@ definitions:
       tools:
         description: action列表
         items:
-          $ref: '#/definitions/response.MCPTool'
+          $ref: '#/definitions/protocol.Tool'
         type: array
     type: object
 info:

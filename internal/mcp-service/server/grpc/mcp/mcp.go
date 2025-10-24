@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/UnicomAI/wanwu/api/proto/common"
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
 	"github.com/UnicomAI/wanwu/internal/mcp-service/client/model"
@@ -203,10 +204,10 @@ func buildSquareMCPIntro(mcpCfg config.McpConfig) *mcp_service.SquareMCPIntro {
 	}
 }
 
-func convertMCPTools(tools []config.McpToolConfig) []*mcp_service.MCPTool {
-	result := make([]*mcp_service.MCPTool, 0, len(tools))
+func convertMCPTools(tools []config.McpToolConfig) []*common.ToolAction {
+	result := make([]*common.ToolAction, 0, len(tools))
 	for _, tool := range tools {
-		result = append(result, &mcp_service.MCPTool{
+		result = append(result, &common.ToolAction{
 			Name:        tool.Name,
 			Description: tool.Description,
 			InputSchema: convertMCPInputSchema(&tool.InputSchema),
@@ -215,20 +216,20 @@ func convertMCPTools(tools []config.McpToolConfig) []*mcp_service.MCPTool {
 	return result
 }
 
-func convertMCPInputSchema(schema *config.McpInputSchemaConfig) *mcp_service.MCPToolInputSchema {
+func convertMCPInputSchema(schema *config.McpInputSchemaConfig) *common.ToolActionInputSchema {
 	if schema == nil {
 		return nil
 	}
 
-	properties := make(map[string]*mcp_service.MCPToolInputSchemaValue)
+	properties := make(map[string]*common.ToolActionInputSchemaValue)
 	for _, prop := range schema.Properties {
-		properties[prop.Field] = &mcp_service.MCPToolInputSchemaValue{
+		properties[prop.Field] = &common.ToolActionInputSchemaValue{
 			Type:        prop.Type,
 			Description: prop.Description,
 		}
 	}
 
-	return &mcp_service.MCPToolInputSchema{
+	return &common.ToolActionInputSchema{
 		Type:       schema.Type,
 		Required:   schema.Required,
 		Properties: properties,

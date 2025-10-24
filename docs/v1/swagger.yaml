@@ -4038,7 +4038,7 @@ definitions:
       tools:
         description: 工具列表
         items:
-          $ref: '#/definitions/response.MCPTool'
+          $ref: '#/definitions/protocol.Tool'
         type: array
     type: object
   response.MCPSquareInfo:
@@ -4061,44 +4061,6 @@ definitions:
         type: string
       name:
         description: 名称
-        type: string
-    type: object
-  response.MCPTool:
-    properties:
-      description:
-        description: 工具描述
-        type: string
-      inputSchema:
-        allOf:
-        - $ref: '#/definitions/response.MCPToolInputSchema'
-        description: 工具参数
-      name:
-        description: 工具名
-        type: string
-    type: object
-  response.MCPToolInputSchema:
-    properties:
-      properties:
-        additionalProperties:
-          $ref: '#/definitions/response.MCPToolInputSchemaValue'
-        description: 字段名 -> 字段信息
-        type: object
-      required:
-        description: 必填字段
-        items:
-          type: string
-        type: array
-      type:
-        description: '固定值: object'
-        type: string
-    type: object
-  response.MCPToolInputSchemaValue:
-    properties:
-      description:
-        description: 字段描述
-        type: string
-      type:
-        description: 字段类型
         type: string
     type: object
   response.MCPToolList:
@@ -4406,6 +4368,27 @@ definitions:
       desc:
         type: string
     type: object
+  response.ToolActionDetail:
+    properties:
+      action:
+        allOf:
+        - $ref: '#/definitions/protocol.Tool'
+        description: action列表
+      apiKey:
+        description: apiKey
+        type: string
+      needApiKeyInput:
+        description: 是否需要apiKey输入
+        type: boolean
+    type: object
+  response.ToolActionList:
+    properties:
+      actions:
+        description: action列表
+        items:
+          $ref: '#/definitions/protocol.Tool'
+        type: array
+    type: object
   response.ToolDetail4Workflow:
     properties:
       actionId:
@@ -4477,7 +4460,7 @@ definitions:
       tools:
         description: action列表
         items:
-          $ref: '#/definitions/response.MCPTool'
+          $ref: '#/definitions/protocol.Tool'
         type: array
     type: object
   response.ToolSquareInfo:
@@ -9030,6 +9013,79 @@ paths:
       summary: 获取词表数据列表
       tags:
       - safety
+  /tool/action/detail:
+    get:
+      consumes:
+      - application/json
+      description: 获取工具详情
+      parameters:
+      - description: action名称
+        in: query
+        name: actionName
+        required: true
+        type: string
+      - description: 工具id
+        in: query
+        name: toolId
+        required: true
+        type: string
+      - description: 工具类型
+        enum:
+        - builtin
+        - custom
+        in: query
+        name: toolType
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.ToolActionDetail'
+              type: object
+      summary: 获取工具详情
+      tags:
+      - tool
+  /tool/action/list:
+    get:
+      consumes:
+      - application/json
+      description: 获取工具列表
+      parameters:
+      - description: 工具id
+        in: query
+        name: toolId
+        required: true
+        type: string
+      - description: 工具类型
+        enum:
+        - builtin
+        - custom
+        in: query
+        name: toolType
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.ToolActionList'
+              type: object
+      summary: 获取工具列表
+      tags:
+      - tool
   /tool/builtin:
     post:
       consumes:
@@ -9237,6 +9293,39 @@ paths:
                     type: object
               type: object
       summary: 获取自定义工具列表（用于下拉选择）
+      tags:
+      - tool
+  /tool/select:
+    get:
+      consumes:
+      - application/json
+      description: 获取工具列表（用于下拉选择）
+      parameters:
+      - description: 工具名
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.ListResult'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/response.ToolActionList'
+                        type: array
+                    type: object
+              type: object
+      summary: 获取工具列表（用于下拉选择）
       tags:
       - tool
   /tool/square:
