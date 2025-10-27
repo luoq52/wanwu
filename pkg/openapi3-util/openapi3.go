@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/UnicomAI/wanwu/pkg/util"
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -37,4 +38,26 @@ func ValidateDoc(ctx context.Context, doc *openapi3.T) error {
 		}
 	}
 	return doc.Validate(ctx)
+}
+
+func FilterSchemaOperations(ctx context.Context, data []byte, operationIDs []string) ([]byte, error) {
+	doc, err := LoadFromData(data)
+	if err != nil {
+		return nil, err
+	}
+	ret := filterOperations(doc, operationIDs)
+	return ret.MarshalJSON()
+}
+
+func filterOperations(doc *openapi3.T, operationIDs []string) *openapi3.T {
+	paths := doc.Paths
+	doc.Paths = nil
+	for path, pathItem := range paths.Map() {
+		for method, operation := range pathItem.Operations() {
+			if util.Exist(operationIDs, operation.OperationID) {
+				doc.AddOperation(path, method, operation)
+			}
+		}
+	}
+	return doc
 }

@@ -245,7 +245,7 @@ func openapiParameters2ToolActionParams4Workflow(parameters openapi3.Parameters)
 			continue
 		}
 		var ret interface{}
-		propType := openapiParameterType(param.Value)
+		propType := openapiParameterType4Workflow(param.Value)
 		switch propType {
 		case "list":
 			prop := response.ToolActionParamWithTypeList4Workflow{
@@ -256,7 +256,7 @@ func openapiParameters2ToolActionParams4Workflow(parameters openapi3.Parameters)
 				Schema:      response.ToolActionParamInTypeList4Workflow{},
 			}
 			if param.Value.Schema != nil && param.Value.Schema.Value != nil && param.Value.Schema.Value.Items != nil {
-				prop.Schema.Type = openaiSchemaType(param.Value.Schema.Value.Items.Value)
+				prop.Schema.Type = openaiSchemaType4Workflow(param.Value.Schema.Value.Items.Value)
 				prop.Schema.Children = []interface{}{}
 			}
 			ret = prop
@@ -289,7 +289,7 @@ func openapiSchemaProperties2ToolActionParams4Workflow(properties openapi3.Schem
 			continue
 		}
 		var ret interface{}
-		propType := openaiSchemaType(propSchema.Value)
+		propType := openaiSchemaType4Workflow(propSchema.Value)
 		switch propType {
 		case "list":
 			prop := response.ToolActionParamWithTypeList4Workflow{
@@ -300,7 +300,7 @@ func openapiSchemaProperties2ToolActionParams4Workflow(properties openapi3.Schem
 				Schema:      response.ToolActionParamInTypeList4Workflow{},
 			}
 			if propSchema.Value.Items != nil && propSchema.Value.Items.Value != nil {
-				prop.Schema.Type = openaiSchemaType(propSchema.Value.Items.Value)
+				prop.Schema.Type = openaiSchemaType4Workflow(propSchema.Value.Items.Value)
 				prop.Schema.Children = openapiSchemaProperties2ToolActionParams4Workflow(propSchema.Value.Items.Value.Properties, propSchema.Value.Required)
 			}
 			ret = prop
@@ -320,16 +320,16 @@ func openapiSchemaProperties2ToolActionParams4Workflow(properties openapi3.Schem
 	return rets
 }
 
-// openapiParameterType 获取参数类型
-func openapiParameterType(param *openapi3.Parameter) string {
+// openapiParameterType4Workflow 获取参数类型
+func openapiParameterType4Workflow(param *openapi3.Parameter) string {
 	if param.Schema != nil && param.Schema.Value != nil {
-		return openaiSchemaType(param.Schema.Value)
+		return openaiSchemaType4Workflow(param.Schema.Value)
 	}
 	return "string"
 }
 
-// openaiSchemaType 获取 schema 的类型
-func openaiSchemaType(schema *openapi3.Schema) string {
+// openaiSchemaType4Workflow 获取 schema 的类型
+func openaiSchemaType4Workflow(schema *openapi3.Schema) string {
 	if schema.Type != nil {
 		// 检查类型切片中的具体类型
 		if schema.Type.Is("object") {
