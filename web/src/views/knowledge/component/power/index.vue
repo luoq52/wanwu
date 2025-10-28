@@ -238,7 +238,7 @@ export default {
     .title-tip {
       margin-left:5px;
       font-size: 12px;
-      color: #384BF7;
+      color: $color;
     }
   }
   

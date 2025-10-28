@@ -4,7 +4,7 @@
       <div class="tempSquare-main">
         <div class="tempSquare-content">
           <div class="tempSquare-card-box">
-            <div class="card-search card-search-cust">
+            <div class="card-search card-search-cust" v-if="!templateUrl">
               <div>
                 <span
                   v-for="item in typeList"
@@ -23,7 +23,7 @@
               />
             </div>
 
-            <div class="card-loading-box" v-if="list.length">
+            <div class="card-loading-box" v-if="list.length && !templateUrl">
               <div class="card-box" v-loading="loading">
                 <div
                   class="card"
@@ -50,7 +50,7 @@
                   <div class="card-bottom">
                     <div class="card-bottom-left">下载量：{{item.downloadCount || 0}}</div>
                     <div class="card-bottom-right">
-                      <i v-if="isLogin" class="el-icon-copy-document" title="复制" @click.stop="copyTemplate(item)"></i>
+                      <i v-if="!isPublic" class="el-icon-copy-document" title="复制" @click.stop="copyTemplate(item)"></i>
                       <i class="el-icon-download" title="下载" @click.stop="downloadTemplate(item)"></i>
                     </div>
                   </div>
@@ -83,23 +83,9 @@ export default {
     return {
       basePath: this.$basePath,
       category: '全部',
-      list: [
-        {
-          "author": "XXX",
-          "avatar": {
-            "key": "string",
-            "path": "http://192.168.0.21:8081/user/api/v1/cache/icon-Workflow-v2.jpg"
-          },
-          "category": "string",
-          "name": "工作流名称",
-          "desc": "工作流描述",
-          "downloadCount": 0,
-          "templateId": "gaodemap"
-        }
-      ],
-      templateUrl: 'https://baidu.com',
-      isLogin: false,
-      loading:false,
+      list: [],
+      templateUrl: '',
+      loading: false,
       typeRadio: 'all',
       typeList: [
         {name: '全部', key: 'all'},
@@ -112,10 +98,6 @@ export default {
         {name: '搜索', key: 'search'},
       ]
     };
-  },
-  created() {
-    const { token, is2FA } = this.$store.state.user || {}
-    this.isLogin = (token && !is2FA)
   },
   mounted() {
     this.doGetWorkflowTempList()
