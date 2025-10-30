@@ -65,16 +65,16 @@
       </div>
     </div>
     <HintDialog :templateUrl="templateUrl" ref="hintDialog" />
-    <CreateForm type="clone" ref="cloneWorkflowDialog" />
+    <CreateWorkflow type="clone" ref="cloneWorkflowDialog" />
   </div>
 </template>
 <script>
 import { getWorkflowTempList, downloadWorkflow } from "@/api/templateSquare"
 import SearchInput from "@/components/searchInput.vue"
 import HintDialog from "./components/hintDialog.vue"
-import CreateForm from "@/views/workflowList/components/createForm.vue"
+import CreateWorkflow from "@/components/createApp/createWorkflow.vue"
 export default {
-  components: { SearchInput, HintDialog, CreateForm },
+  components: { SearchInput, HintDialog, CreateWorkflow },
   props: {
     isPublic: true,
     type: ''
