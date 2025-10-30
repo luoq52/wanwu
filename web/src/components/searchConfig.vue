@@ -121,7 +121,7 @@
               </el-slider>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if=showHistory(item)>
             <el-col>
               <span class="content-name">最长上下文</span>
               <el-tooltip
@@ -325,10 +325,10 @@ export default {
     },
     showHistory(n){
       return (
-        (this.setType === 'rag'||this.setType === 'agent') &&
+       (this.setType === 'rag'||this.setType === 'agent') &&
         (n.value === "vector" ||
          n.value === "text" ||
-         (n.value === "mix" && n.mixTypeValue === "rerank")
+         (n.value === "mix") //&& n.mixTypeValue === "rerank"
         )
       )
     },

@@ -40,6 +40,7 @@ export default {
             isStoped : false,
             access_token:'',
             runResponse: "",
+            fileList: [],  // 文件列表
             processedLength: 0,  // 追踪已处理的文本长度
         };
     },
@@ -212,6 +213,7 @@ export default {
             }
             this.$refs['session-com'].pushHistory(params)
             let endStr = ''
+            this.processedLength = 0  // 重置处理长度
             this._print = new Print({
                 onPrintEnd: () => {
                     // this.setStoreSessionStatus(-1)

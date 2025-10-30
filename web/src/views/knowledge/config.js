@@ -76,5 +76,6 @@ export const MODEL_TYPE_TIP = {
 export const POWER_TYPE = {
     0:'可读',
     10:'可编辑',
-    20:'管理员'
+    20:'管理员',
+    30:'系统管理员'
 }

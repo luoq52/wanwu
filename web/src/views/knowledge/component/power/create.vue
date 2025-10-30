@@ -135,7 +135,7 @@ export default {
     return {
       searchKeyword: '',
       selectedOrganization: '',
-      selectedPermission: '可读',
+      selectedPermission:0,
       organizationList: [],
       originalTreeData: null,
       treeProps: {
@@ -168,7 +168,7 @@ export default {
   },
   methods: {
     getOrgList(){
-      getOrgList({knowledgeId:this.knowledgeId}).then(res => {
+      getOrgList({knowledgeId:this.knowledgeId,transfer:this.transferMode}).then(res => {
          if(res.code === 0){
           this.organizationList = res.data.knowOrgInfoList || []
          }

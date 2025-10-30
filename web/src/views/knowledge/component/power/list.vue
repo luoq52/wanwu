@@ -39,11 +39,11 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" align="center">
+        <el-table-column label="操作" width="180" align="center" v-if="[20,30].includes(permissionType)">
           <template slot-scope="scope">
             <div class="action-buttons">
-              <!-- 管理员权限：只显示转让按钮 -->
-              <template v-if="scope.row.permissionType === 20 && !scope.row.editing">
+              <!-- 系统管理员权限：只显示转让按钮 -->
+              <template v-if="scope.row.transfer && !scope.row.editing">
                 <el-button
                   type="text"
                   size="small"
@@ -54,19 +54,8 @@
                   转让
                 </el-button>
               </template>
-              
               <!-- 非管理员权限：显示编辑和删除按钮 -->
-              <template v-else>
-                <el-button
-                  v-if="!scope.row.editing"
-                  type="text"
-                  size="small"
-                  icon="el-icon-edit"
-                  @click="handleEdit(scope.row)"
-                  class="action-btn edit-btn"
-                >
-                  编辑
-                </el-button>
+              <template v-if="scope.row.editing">
                 <el-button
                   v-if="scope.row.editing"
                   type="text"
@@ -86,6 +75,18 @@
                   class="action-btn cancel-btn"
                 >
                   取消
+                </el-button>
+              </template>
+              <template v-if="(scope.row.permissionType === 0 || scope.row.permissionType === 10) && permissionType === 30">
+                <el-button
+                  v-if="!scope.row.editing"
+                  type="text"
+                  size="small"
+                  icon="el-icon-edit"
+                  @click="handleEdit(scope.row)"
+                  class="action-btn edit-btn"
+                >
+                  编辑
                 </el-button>
                 <el-button
                   v-if="!scope.row.editing"
@@ -115,6 +116,10 @@ export default {
     knowledgeId: {
       type: String,
       default: ''
+    },
+    permissionType:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -124,7 +129,7 @@ export default {
     }
   },
   created() {
-    this.getUserPower()
+    //this.getUserPower()
   },
   methods: {
     getUserPower() {
@@ -146,15 +151,13 @@ export default {
       // 保存编辑
       row.editing = false
       row.originalType = row.type
-      const knowledgeUserList = [
-        {
+      const knowledgeUser = {
           orgId:row.orgId,
           userId:row.userId,
           permissionType:row.permissionType,
           permissionId:row.permissionId
         }
-      ]
-      editUserPower({knowledgeId:this.knowledgeId,knowledgeUserList:knowledgeUserList}).then(res => {
+      editUserPower({knowledgeId:this.knowledgeId,knowledgeUser:knowledgeUser}).then(res => {
         if(res.code === 0){
           this.$message.success('权限修改成功')
           this.getUserPower()

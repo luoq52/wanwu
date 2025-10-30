@@ -2,7 +2,7 @@
   <div class="power-management">
     <el-dialog
       :visible.sync="dialogVisible"
-      width="50%"
+      width="60%"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       class="power-management-dialog"
@@ -24,9 +24,10 @@
             size="small"
             icon="el-icon-plus"
             @click="showCreate"
+            :disabled="[0, 10].includes(permissionType)"
           >新增</el-button>
         </div>
-        <PowerList ref="powerList" v-if="currentView === 'list'" @transfer="showTransfer" :knowledgeId="knowledgeId"/>
+        <PowerList ref="powerList" v-if="currentView === 'list'" @transfer="showTransfer" :knowledgeId="knowledgeId" :permissionType="permissionType" />
         <PowerCreate ref="powerCreate" v-if="currentView === 'create'" :knowledgeId="knowledgeId" />
         <PowerCreate ref="powerTransfer" v-if="currentView === 'transfer'" :transfer-mode="true" :knowledgeId="knowledgeId" />
       <div
@@ -72,6 +73,7 @@ export default {
       dialogVisible: false,
       knowledgeId:'',
       knowledgeName:'',
+      permissionType:'',
       currentTransferUser: null,
     };
   },
@@ -94,6 +96,11 @@ export default {
     showDialog() {
       this.currentView = "list";
       this.dialogVisible = true;
+      this.$nextTick(() => {
+        if (this.$refs.powerList) {
+            this.$refs.powerList.getUserPower()
+        }
+    })
     },
     showCreate() {
       this.currentView = "create";
@@ -106,6 +113,10 @@ export default {
 
     showList() {
       this.currentView = "list";
+      this.$nextTick(() => {
+        this.refreshList();
+      });
+
     },
     handleConfirm() {
       const createData = this.$refs.powerCreate.getResults();
