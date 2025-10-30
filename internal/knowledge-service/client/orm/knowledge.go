@@ -2,6 +2,7 @@ package orm
 
 import (
 	"context"
+	"fmt"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/generator"
 	"github.com/samber/lo"
 
@@ -110,17 +111,32 @@ func SelectKnowledgeByIdNoDeleteCheck(ctx context.Context, knowledgeId, userId, 
 
 // CheckSameKnowledgeName 知识库名称是否存在同名
 func CheckSameKnowledgeName(ctx context.Context, userId, orgId, name, knowledgeId string) error {
-	var count int64
-	err := sqlopt.SQLOptions(sqlopt.WithPermit(orgId, userId), sqlopt.WithName(name), sqlopt.WithoutKnowledgeID(knowledgeId), sqlopt.WithDelete(0)).
-		Apply(db.GetHandle(ctx), &model.KnowledgeBase{}).
-		Count(&count).Error
+	//var count int64
+	//err := sqlopt.SQLOptions(sqlopt.WithPermit(orgId, userId), sqlopt.WithName(name), sqlopt.WithoutKnowledgeID(knowledgeId), sqlopt.WithDelete(0)).
+	//	Apply(db.GetHandle(ctx), &model.KnowledgeBase{}).
+	//	Count(&count).Error
+	//if err != nil {
+	//	log.Errorf("KnowledgeNameExist userId %s name %s err: %v", userId, name, err)
+	//	return util.ErrCode(errs.Code_KnowledgeBaseDuplicateName)
+	//}
+	//if count > 0 {
+	//	return util.ErrCode(errs.Code_KnowledgeBaseDuplicateName)
+	//}
+	//return nil
+
+	list, _, err := SelectKnowledgeList(ctx, userId, orgId, name, nil)
 	if err != nil {
-		log.Errorf("KnowledgeNameExist userId %s name %s err: %v", userId, name, err)
+		log.Errorf(fmt.Sprintf("获取知识库列表失败(%v)  参数(%v)", err, name))
 		return util.ErrCode(errs.Code_KnowledgeBaseDuplicateName)
 	}
-	if count > 0 {
+	if len(list) > 1 {
 		return util.ErrCode(errs.Code_KnowledgeBaseDuplicateName)
 	}
+
+	if len(list) == 1 && list[0].KnowledgeId != knowledgeId {
+		return util.ErrCode(errs.Code_KnowledgeBaseDuplicateName)
+	}
+
 	return nil
 }
 
@@ -140,7 +156,7 @@ func CreateKnowledge(ctx context.Context, knowledge *model.KnowledgeBase, embedd
 		//3.通知rag创建知识库
 		return service.RagKnowledgeCreate(ctx, &service.RagCreateParams{
 			UserId:           knowledge.UserId,
-			Name:             knowledge.Name,
+			Name:             knowledge.RagName,
 			KnowledgeBaseId:  knowledge.KnowledgeId,
 			EmbeddingModelId: embeddingModelId,
 		})
@@ -149,20 +165,22 @@ func CreateKnowledge(ctx context.Context, knowledge *model.KnowledgeBase, embedd
 
 // UpdateKnowledge 更新知识库
 func UpdateKnowledge(ctx context.Context, name, description string, knowledgeBase *model.KnowledgeBase) error {
-	return db.GetHandle(ctx).Transaction(func(tx *gorm.DB) error {
-		//1.更新数据
-		err := updateKnowledge(tx, knowledgeBase.Id, name, description)
-		if err != nil {
-			return err
-		}
-		//2.通知rag更新知识库
-		return service.RagKnowledgeUpdate(ctx, &service.RagUpdateParams{
-			UserId:          knowledgeBase.UserId,
-			KnowledgeBaseId: knowledgeBase.KnowledgeId,
-			OldKbName:       knowledgeBase.Name,
-			NewKbName:       name,
-		})
-	})
+	//已经区分为知识库展示名称和rag知识库名称，不需要再通知rag修改名称
+	return updateKnowledge(db.GetHandle(ctx), knowledgeBase.Id, name, description)
+	//return db.GetHandle(ctx).Transaction(func(tx *gorm.DB) error {
+	//	//1.更新数据
+	//	err := updateKnowledge(tx, knowledgeBase.Id, name, description)
+	//	if err != nil {
+	//		return err
+	//	}
+	//	//2.通知rag更新知识库
+	//	return service.RagKnowledgeUpdate(ctx, &service.RagUpdateParams{
+	//		UserId:          knowledgeBase.UserId,
+	//		KnowledgeBaseId: knowledgeBase.KnowledgeId,
+	//		OldKbName:       knowledgeBase.Name,
+	//		NewKbName:       name,
+	//	})
+	//})
 }
 
 // UpdateKnowledgeShareCount 更新知识库分享数量

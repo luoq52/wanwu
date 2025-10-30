@@ -62,6 +62,10 @@ func (c DataBaseClient) Load() error {
 	if err != nil {
 		return err
 	}
+	err = initKnowledgeName(dbHandle)
+	if err != nil {
+		return err
+	}
 	dbClient.DB = dbHandle
 	return nil
 }
@@ -157,6 +161,30 @@ func initDocMeta(dbClient *gorm.DB) error {
 
 		}
 	}
+	return nil
+}
+
+func initKnowledgeName(dbClient *gorm.DB) error {
+	var knowledgeBaseList []model.KnowledgeBase
+	//数据量不会太大直接getAll
+	err := dbClient.Model(&model.KnowledgeBase{}).Find(&knowledgeBaseList).Error
+	if err != nil {
+		return err
+	}
+
+	for _, knowledgeBase := range knowledgeBaseList {
+		if len(knowledgeBase.RagName) > 0 {
+			continue
+		}
+		updateMap := map[string]interface{}{
+			"rag_name": knowledgeBase.Name,
+		}
+		err = dbClient.Model(&model.KnowledgeBase{}).Where("knowledge_id = ?", knowledgeBase.KnowledgeId).Updates(updateMap).Error
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 

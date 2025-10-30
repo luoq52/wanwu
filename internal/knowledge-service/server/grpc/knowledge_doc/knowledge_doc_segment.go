@@ -73,7 +73,7 @@ func (s *Service) CreateDocSegment(ctx context.Context, req *knowledgebase_doc_s
 	})
 	err = service.RagCreateDocSegment(ctx, &service.RagCreateDocSegmentParams{
 		UserId:           knowledge.UserId,
-		KnowledgeBase:    knowledge.Name,
+		KnowledgeBase:    knowledge.RagName,
 		KnowledgeId:      knowledge.KnowledgeId,
 		FileName:         fileName,
 		MaxSentenceSize:  segmentConfig.MaxSplitter,
@@ -182,7 +182,7 @@ func (s *Service) UpdateDocSegment(ctx context.Context, req *knowledgebase_doc_s
 	//8.发送rag请求
 	err = service.RagUpdateDocSegment(ctx, &service.RagUpdateDocSegmentParams{
 		UserId:          knowledge.UserId,
-		KnowledgeBase:   knowledge.Name,
+		KnowledgeBase:   knowledge.RagName,
 		KnowledgeId:     knowledge.KnowledgeId,
 		FileName:        fileName,
 		MaxSentenceSize: segmentConfig.MaxSplitter,
@@ -225,7 +225,7 @@ func (s *Service) DeleteDocSegment(ctx context.Context, req *knowledgebase_doc_s
 	//5.发送rag请求
 	err = service.RagDeleteDocSegment(ctx, &service.RagDeleteDocSegmentParams{
 		UserId:        knowledge.UserId,
-		KnowledgeBase: knowledge.Name,
+		KnowledgeBase: knowledge.RagName,
 		KnowledgeId:   knowledge.KnowledgeId,
 		FileName:      fileName,
 		ChunkIds:      []string{req.ContentId},
@@ -288,7 +288,7 @@ func (s *Service) UpdateDocSegmentLabels(ctx context.Context, req *knowledgebase
 	}
 	err = service.RagDocSegmentLabels(ctx, &service.RagDocSegmentLabelsParams{
 		UserId:        knowledge.UserId,
-		KnowledgeBase: knowledge.Name,
+		KnowledgeBase: knowledge.RagName,
 		KnowledgeId:   knowledge.KnowledgeId,
 		FileName:      fileName,
 		ContentId:     req.ContentId,
@@ -340,7 +340,7 @@ func (s *Service) CreateDocChildSegment(ctx context.Context, req *knowledgebase_
 	}
 	err = service.RagCreateDocChildSegment(ctx, &service.RagCreateDocChildSegmentParams{
 		UserId:        knowledge.UserId,
-		KnowledgeBase: knowledge.Name,
+		KnowledgeBase: knowledge.RagName,
 		KnowledgeId:   knowledge.KnowledgeId,
 		FileName:      fileName,
 		ChunkId:       req.ParentChunkId,
@@ -394,7 +394,7 @@ func (s *Service) UpdateDocChildSegment(ctx context.Context, req *knowledgebase_
 	//6.修改子分段信息
 	err = service.RagUpdateDocChildSegment(ctx, &service.RagUpdateDocChildSegmentParams{
 		UserId:          knowledge.UserId,
-		KnowledgeBase:   knowledge.Name,
+		KnowledgeBase:   knowledge.RagName,
 		KnowledgeId:     knowledge.KnowledgeId,
 		FileName:        fileName,
 		ChunkId:         req.ParentChunkId,
@@ -435,7 +435,7 @@ func (s *Service) DeleteDocChildSegment(ctx context.Context, req *knowledgebase_
 	//5.发送rag请求
 	err = service.RagDeleteDocChildSegment(ctx, &service.RagDeleteDocChildSegmentParams{
 		UserId:                knowledge.UserId,
-		KnowledgeBase:         knowledge.Name,
+		KnowledgeBase:         knowledge.RagName,
 		KnowledgeId:           knowledge.KnowledgeId,
 		FileName:              fileName,
 		ChunkId:               req.ParentChunkId,
@@ -465,6 +465,7 @@ func buildDocSegmentImportTask(knowledge *model.KnowledgeBase, fileName, docId s
 	params := &model.DocSegmentImportParams{
 		KnowledgeId:        knowledge.KnowledgeId,
 		KnowledgeName:      knowledge.Name,
+		KnowledgeRagName:   knowledge.RagName,
 		KnowledgeCreatorId: knowledge.UserId,
 		FileName:           fileName,
 		MaxSentenceSize:    segmentConfig.MaxSplitter,
@@ -499,7 +500,7 @@ func buildDocUpdateSegmentStatusParams(req *knowledgebase_doc_service.UpdateDocS
 		return &service.DocSegmentStatusUpdateAllParams{
 			DocSegmentStatusUpdateParams: service.DocSegmentStatusUpdateParams{
 				UserId:        knowledge.UserId,
-				KnowledgeName: knowledge.Name,
+				KnowledgeName: knowledge.RagName,
 				FileName:      service.RebuildFileName(docInfo.DocId, docInfo.FileType, docInfo.Name),
 				ContentId:     req.ContentId,
 			},
@@ -508,7 +509,7 @@ func buildDocUpdateSegmentStatusParams(req *knowledgebase_doc_service.UpdateDocS
 	} else {
 		return &service.DocSegmentStatusUpdateParams{
 			UserId:        knowledge.UserId,
-			KnowledgeName: knowledge.Name,
+			KnowledgeName: knowledge.RagName,
 			FileName:      service.RebuildFileName(docInfo.DocId, docInfo.FileType, docInfo.Name),
 			ContentId:     req.ContentId,
 			Status:        status,

@@ -9,6 +9,7 @@ const (
 
 type DocSegmentImportParams struct {
 	KnowledgeName      string   `json:"knowledgeName"`      // 知识库的名称
+	KnowledgeRagName   string   `json:"knowledgeRagName"`   // 知识库的rag名称
 	KnowledgeId        string   `json:"knowledgeId"`        // 知识库的唯一ID
 	KnowledgeCreatorId string   `json:"knowledgeCreatorId"` // 知识库的创建者ID
 	FileName           string   `json:"fileName"`           // 与chunk关联的文件名

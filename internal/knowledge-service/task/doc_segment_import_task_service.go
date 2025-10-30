@@ -194,7 +194,7 @@ func buildLineProcessor(importTask *model.DocSegmentImportTask, importParams *mo
 
 		return orm.CreateOneDocSegment(ctx, importTask, &service.RagCreateDocSegmentParams{
 			UserId:           importParams.KnowledgeCreatorId,
-			KnowledgeBase:    importParams.KnowledgeName,
+			KnowledgeBase:    buildKnowledgeBase(importParams),
 			KnowledgeId:      importParams.KnowledgeId,
 			FileName:         importParams.FileName,
 			MaxSentenceSize:  importParams.MaxSentenceSize,
@@ -203,6 +203,13 @@ func buildLineProcessor(importTask *model.DocSegmentImportTask, importParams *mo
 			ChildChunkConfig: service.RebuildChildChunkConfig(importParams.SegmentMethod, importParams.SubMaxSplitter, importParams.SubSplitter),
 		})
 	}
+}
+
+func buildKnowledgeBase(importParams *model.DocSegmentImportParams) string {
+	if len(importParams.KnowledgeRagName) > 0 {
+		return importParams.KnowledgeRagName
+	}
+	return importParams.KnowledgeName
 }
 
 func processCsvFileLine(ctx context.Context, csvUrl string,

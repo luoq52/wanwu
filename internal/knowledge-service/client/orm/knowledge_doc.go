@@ -197,7 +197,7 @@ func CreateKnowledgeDoc(ctx context.Context, doc *model.KnowledgeDoc, importTask
 		//2.rag文档导入
 		return service.RagImportDoc(ctx, &service.RagImportDocParams{
 			DocId:               doc.DocId,
-			KnowledgeName:       knowledge.Name,
+			KnowledgeName:       knowledge.RagName,
 			CategoryId:          knowledge.KnowledgeId,
 			UserId:              knowledge.UserId,
 			Overlap:             config.Overlap,
@@ -354,7 +354,7 @@ func CreateKnowledgeUrlDoc(ctx context.Context, doc *model.KnowledgeDoc, importT
 			SegmentType:       service.RebuildSegmentType(config.SegmentType, config.SegmentMethod),
 			SplitType:         service.RebuildSplitType(config.SegmentMethod),
 			Separators:        config.Splitter,
-			KnowledgeBaseName: knowledge.Name,
+			KnowledgeBaseName: knowledge.RagName,
 			OcrModelId:        importTask.OcrModelId,
 			PreProcess:        preProcess.PreProcessList,
 			RagMetaDataParams: ragMetaList,
@@ -366,7 +366,7 @@ func CreateKnowledgeUrlDoc(ctx context.Context, doc *model.KnowledgeDoc, importT
 		var fileName = service.RebuildFileName(doc.DocId, doc.FileType, doc.Name)
 		return service.RagImportDoc(ctx, &service.RagImportDocParams{
 			DocId:               doc.DocId,
-			KnowledgeName:       knowledge.Name,
+			KnowledgeName:       knowledge.RagName,
 			CategoryId:          knowledge.KnowledgeId,
 			UserId:              doc.UserId,
 			Overlap:             config.Overlap,

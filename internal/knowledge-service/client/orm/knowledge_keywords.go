@@ -179,7 +179,7 @@ func buildUserKnowledgeList(knowledgeList []*model.KnowledgeBase) map[string][]*
 		}
 		knowledgeInfos = append(knowledgeInfos, &service.RagKnowledgeInfo{
 			KnowledgeId:   knowledge.KnowledgeId,
-			KnowledgeName: knowledge.Name,
+			KnowledgeName: knowledge.RagName,
 		})
 		retMap[knowledge.UserId] = knowledgeInfos
 	}

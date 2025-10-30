@@ -134,7 +134,6 @@ type RagSearchKnowledgeBaseReq struct {
 type RagKnowledgeChatReq struct {
 	UserId               string                         `json:"userId"`
 	KnowledgeUser        map[string][]*RagKnowledgeInfo `json:"knowledge_base_info"`
-	KnowledgeBase        []string                       `json:"knowledgeBase"`   // 知识库名称列表
 	KnowledgeIdList      []string                       `json:"knowledgeIdList"` // 知识库id列表
 	Question             string                         `json:"question"`
 	Threshold            float32                        `json:"threshold"` // Score阈值

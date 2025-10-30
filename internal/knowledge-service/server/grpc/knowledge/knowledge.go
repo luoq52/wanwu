@@ -584,6 +584,7 @@ func buildKnowledgeInfo(knowledge *model.KnowledgeBase) *knowledgebase_service.K
 		CreatedAt:          pkg_util.Time2Str(knowledge.CreatedAt),
 		CreateOrgId:        knowledge.OrgId,
 		CreateUserId:       knowledge.UserId,
+		RagName:            knowledge.RagName,
 	}
 }
 
@@ -609,6 +610,7 @@ func buildKnowledgeBaseModel(req *knowledgebase_service.CreateKnowledgeReq) (*mo
 	return &model.KnowledgeBase{
 		KnowledgeId:    generator.GetGenerator().NewID(),
 		Name:           req.Name,
+		RagName:        generator.GetGenerator().NewID(), //重新生成的 不是knowledgeID
 		Description:    req.Description,
 		OrgId:          req.OrgId,
 		UserId:         req.UserId,
@@ -624,7 +626,7 @@ func buildKnowledgeList(knowledgeList []*model.KnowledgeBase) (knowledgeIdList [
 		return make([]string, 0), make([]string, 0)
 	}
 	for _, knowledge := range knowledgeList {
-		knowledgeNameList = append(knowledgeNameList, knowledge.Name)
+		knowledgeNameList = append(knowledgeNameList, knowledge.RagName)
 		knowledgeIdList = append(knowledgeIdList, knowledge.KnowledgeId)
 	}
 	return
@@ -648,6 +650,7 @@ func buildKnowledgeBaseHitResp(ragKnowledgeHitResp *rag_service.RagKnowledgeHitR
 			for _, score := range search.ChildScore {
 				childScore = append(childScore, float32(score))
 			}
+			//todo knowledgeName 替换
 			searchList = append(searchList, &knowledgebase_service.KnowledgeSearchInfo{
 				Title:            search.Title,
 				Snippet:          search.Snippet,

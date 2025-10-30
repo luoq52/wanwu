@@ -163,7 +163,7 @@ func buildBatchUpdateMetaRAGParams(tx *gorm.DB, knowledge *model.KnowledgeBase, 
 	}
 	ragParams := &service.BatchRagDocMetaParams{
 		UserId:        userId,
-		KnowledgeBase: knowledge.Name,
+		KnowledgeBase: knowledge.RagName,
 		KnowledgeId:   knowledge.KnowledgeId,
 		MetaList:      metaList,
 	}

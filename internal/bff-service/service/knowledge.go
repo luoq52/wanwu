@@ -204,7 +204,7 @@ func buildUserKnowledgeList(knowledgeList *response.KnowledgeListResp) map[strin
 		}
 		knowledgeInfos = append(knowledgeInfos, &request.RagKnowledgeInfo{
 			KnowledgeId:   knowledge.KnowledgeId,
-			KnowledgeName: knowledge.Name,
+			KnowledgeName: knowledge.RagName,
 		})
 		retMap[knowledge.CreateUserId] = knowledgeInfos
 	}
@@ -276,6 +276,7 @@ func buildKnowledgeInfoList(ctx *gin.Context, knowledgeListResp *knowledgebase_s
 			PermissionType:   knowledge.PermissionType,
 			CreateUserId:     knowledge.CreateUserId,
 			Share:            share, //数量大于1才是分享，因为权限记录中有一条是记录创建者权限
+			RagName:          knowledge.RagName,
 		})
 	}
 	return &response.KnowledgeListResp{KnowledgeList: list}

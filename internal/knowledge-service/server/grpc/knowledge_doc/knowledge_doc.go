@@ -241,7 +241,7 @@ func updateDocMetaData(ctx context.Context, req *knowledgebase_doc_service.Updat
 	err = orm.UpdateDocStatusDocMeta(ctx, req.DocId, addList, updateList, deleteList,
 		&service.RagDocMetaParams{
 			FileName:      fileName,
-			KnowledgeBase: knowledge.Name,
+			KnowledgeBase: knowledge.RagName,
 			UserId:        req.UserId,
 			MetaList:      params,
 		})
@@ -437,7 +437,7 @@ func (s *Service) GetDocSegmentList(ctx context.Context, req *knowledgebase_doc_
 	//4.查询分片信息
 	segmentListResp, err := service.RagGetDocSegmentList(ctx, &service.RagGetDocSegmentParams{
 		UserId:            knowledge.UserId,
-		KnowledgeBaseName: knowledge.Name,
+		KnowledgeBaseName: knowledge.RagName,
 		FileName:          service.RebuildFileName(docInfo.DocId, docInfo.FileType, docInfo.Name),
 		PageSize:          req.PageSize,
 		SearchAfter:       req.PageSize * (req.PageNo - 1),
@@ -467,7 +467,7 @@ func (s *Service) GetDocChildSegmentList(ctx context.Context, req *knowledgebase
 	//3.查询分片信息
 	segmentListResp, err := service.RagGetDocChildSegmentList(ctx, &service.RagGetDocChildSegmentParams{
 		UserId:            knowledge.UserId,
-		KnowledgeBaseName: knowledge.Name,
+		KnowledgeBaseName: knowledge.RagName,
 		KnowledgeId:       knowledge.KnowledgeId,
 		FileName:          service.RebuildFileName(docInfo.DocId, docInfo.FileType, docInfo.Name),
 		ChunkId:           req.ContentId,
@@ -531,7 +531,7 @@ func (s *Service) BatchUpdateDocMetaData(ctx context.Context, req *knowledgebase
 	//6.批量更新
 	err = orm.UpdateBatchStatusDocMeta(ctx, req.KnowledgeId, docNameMap, addList, updateList, &service.BatchRagDocMetaParams{
 		KnowledgeId:   knowledge.KnowledgeId,
-		KnowledgeBase: knowledge.Name,
+		KnowledgeBase: knowledge.RagName,
 		UserId:        req.UserId,
 	})
 	if err != nil {
