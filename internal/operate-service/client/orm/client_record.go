@@ -189,9 +189,9 @@ func updateActiveDailyStats(ctx context.Context, db *gorm.DB, date string) error
 		Count(&activeCount).Error; err != nil {
 		return fmt.Errorf("active client stat err: %v", err)
 	}
-	// 更新或插入每日活跃统计记录
+	// 更新或插入某一天的活跃统计记录
 	var existingRecord model.ClientDailyStats
-	if err := db.WithContext(ctx).First(&existingRecord).Error; err != nil {
+	if err := db.WithContext(ctx).Where("date=?", date).First(&existingRecord).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			// 记录不存在，创建新记录
 			if err := db.WithContext(ctx).Create(&model.ClientDailyStats{
