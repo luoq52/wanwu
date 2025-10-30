@@ -229,6 +229,10 @@ func ImportWorkflow(ctx *gin.Context, orgID string) (*response.CozeWorkflowIDDat
 	if err := json.Unmarshal(fileBytes, &rawData); err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_import_file", fmt.Sprintf("schema unmarshal failed: %v", err))
 	}
+	// 校验name和desc
+	if rawData.Name == "" || rawData.Desc == "" {
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_import_file", "name or desc is empty")
+	}
 	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.ImportUri)
 	ret := &response.CozeWorkflowIDResp{}
 	if resp, err := resty.New().
