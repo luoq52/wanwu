@@ -136,11 +136,17 @@ func CheckSameKnowledgeName(ctx context.Context, userId, orgId, name, knowledgeI
 		log.Errorf(fmt.Sprintf("获取知识库列表失败(%v)  参数(%v)", err, name))
 		return util.ErrCode(errs.Code_KnowledgeBaseDuplicateName)
 	}
-	if len(list) > 1 {
+	var resultList []*model.KnowledgeBase
+	for _, base := range list {
+		if base.Name == name {
+			resultList = append(resultList, base)
+		}
+	}
+	if len(resultList) > 1 {
 		return util.ErrCode(errs.Code_KnowledgeBaseDuplicateName)
 	}
 
-	if len(list) == 1 && list[0].KnowledgeId != knowledgeId {
+	if len(resultList) == 1 && resultList[0].KnowledgeId != knowledgeId {
 		return util.ErrCode(errs.Code_KnowledgeBaseDuplicateName)
 	}
 

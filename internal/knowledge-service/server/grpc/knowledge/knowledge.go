@@ -131,7 +131,7 @@ func (s *Service) UpdateKnowledge(ctx context.Context, req *knowledgebase_servic
 // DeleteKnowledge 删除知识库
 func (s *Service) DeleteKnowledge(ctx context.Context, req *knowledgebase_service.DeleteKnowledgeReq) (*emptypb.Empty, error) {
 	//1.查询知识库详情
-	knowledge, err := orm.SelectKnowledgeById(ctx, req.KnowledgeId, req.UserId, req.OrgId)
+	knowledge, err := orm.SelectKnowledgeById(ctx, req.KnowledgeId, "", "")
 	if err != nil {
 		log.Errorf(fmt.Sprintf("没有操作该知识库的权限 参数(%v)", req))
 		return nil, err
@@ -160,7 +160,7 @@ func (s *Service) KnowledgeHit(ctx context.Context, req *knowledgebase_service.K
 	for _, k := range req.KnowledgeList {
 		knowledgeIdList = append(knowledgeIdList, k.KnowledgeId)
 	}
-	list, _, err := orm.SelectKnowledgeByIdList(ctx, knowledgeIdList, req.UserId, req.OrgId)
+	list, _, err := orm.SelectKnowledgeByIdList(ctx, knowledgeIdList, "", "")
 	if err != nil {
 		return nil, err
 	}
