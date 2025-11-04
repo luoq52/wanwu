@@ -122,7 +122,7 @@
 
 <script>
 import sseMethod from "@/mixins/sseMethod.js";
-import ArrayEditor from "@/views/ArrayEditor";
+import ArrayEditor from "@/views/arrayEditor";
 import Upload from "./upload.vue";
 import { getQueryString } from "@/utils/util.js";
 import { getWorkFlowParams } from "@/api/workflow";

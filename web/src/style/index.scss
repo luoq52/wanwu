@@ -183,9 +183,9 @@
 }
 
 /*隐藏滚动条但是允许滚动*/
-::-webkit-scrollbar{
+/*::-webkit-scrollbar{
     display: none;
-}
+}*/
 pre::-webkit-scrollbar{
     display: block!important;
 }

@@ -500,12 +500,12 @@ export default {
       height: 100%;
     }
     .left-nav {
-      width: 70px;
+      width: 75px;
       text-align: center;
       padding: 0.5% 0 8px 0;
       position: fixed;
       height: calc(100% - 16px);
-      overflow: scroll;
+      overflow: auto;
       background: #F7F7FC;
       border-radius: 8px;
       box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
@@ -570,7 +570,7 @@ export default {
       .nav-bottom {
         position: absolute;
         bottom: 0;
-        width: 70px;
+        width: 100%;
         text-align: center;
         padding-bottom: 10px;
         img {
@@ -580,7 +580,7 @@ export default {
     }
     /*element ui 样式重写*/
     .inner-container {
-      width: calc(100% - 70px);
+      width: calc(100% - 80px);
       height: 100%;
       border-radius: 10px;
       // border: 1px solid #e6e6e6;

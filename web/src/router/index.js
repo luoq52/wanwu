@@ -117,7 +117,7 @@ const constantRoutes = [
             },
             {
                 path: '/explore',
-                component:resolve =>require(['@/views/ExploreSquare'],resolve),
+                component:resolve =>require(['@/views/exploreSquare'],resolve),
                 meta:{perm: [PERMS.EXPLORE]},
             },
             {

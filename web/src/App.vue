@@ -24,7 +24,7 @@
 }
 body,html{
   width: 100%;
-  height: 100%;
+  //height: 100%;
   //overflow: hidden;
   /*font-family:'Microsoft YaHei', Arial, sans-serif;*/
   font-family: 'Source Han Sans SC', 'Segoe UI';
@@ -35,13 +35,13 @@ body.el-popup-parent--hidden {
   padding-right: 0 !important;
 }
 
-::-webkit-scrollbar {
+/*::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-/*::-webkit-scrollbar-button {
+::-webkit-scrollbar-button {
   display: none;
-}*/
+}
 ::-webkit-scrollbar-corner {
   background-color: transparent;
 }
@@ -61,7 +61,7 @@ body.el-popup-parent--hidden {
 ::-webkit-scrollbar-track {
   -webkit-border-radius: 10px;
   border-radius: 10px;
-}
+}*/
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
