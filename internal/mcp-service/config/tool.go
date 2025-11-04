@@ -1,7 +1,11 @@
 package config
 
 import (
+	"context"
 	"fmt"
+	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
+	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
+	openapi3_util "github.com/UnicomAI/wanwu/pkg/openapi3-util"
 	"os"
 	"path/filepath"
 )
@@ -18,7 +22,8 @@ type ToolConfig struct {
 	AuthType         string          `json:"auth_type" mapstructure:"auth_type"`
 	CustomHeaderName string          `json:"custom_header_name" mapstructure:"custom_header_name"`
 	ApiKey           string          `json:"api_key" mapstructure:"api_key"`
-	Schema           string          `json:"schema" mapstructure:"schema"`
+	Schema           string          `json:"schema" mapstructure:"-"`
+	SchemaPath       string          `json:"schema_path" mapstructure:"schema_path"`
 	NeedApiKeyInput  bool            `json:"need_api_key_input" mapstructure:"need_api_key_input"`
 }
 
@@ -27,5 +32,14 @@ func (tool *ToolConfig) load() error {
 	if _, err := os.ReadFile(avatarPath); err != nil {
 		return fmt.Errorf("load tool %v avatar path %v err: %v", tool.ToolSquareId, avatarPath, err)
 	}
+	schemaPath := filepath.Join(ConfigDir, tool.SchemaPath)
+	schemaOpenAPI, err := os.ReadFile(schemaPath)
+	if err != nil {
+		return fmt.Errorf("load tool %v schema path %v err: %v", tool.ToolSquareId, schemaPath, err)
+	}
+	if err := openapi3_util.ValidateSchema(context.Background(), schemaOpenAPI); err != nil {
+		return grpc_util.ErrorStatus(errs.Code_MCPGeneral, err.Error())
+	}
+	tool.Schema = string(schemaOpenAPI)
 	return nil
 }
