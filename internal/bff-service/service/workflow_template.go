@@ -16,7 +16,6 @@ import (
 	"github.com/UnicomAI/wanwu/internal/bff-service/config"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/response"
-	gin_util "github.com/UnicomAI/wanwu/pkg/gin-util"
 	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
 	"github.com/UnicomAI/wanwu/pkg/log"
 	"github.com/UnicomAI/wanwu/pkg/redis"
@@ -138,116 +137,6 @@ func CreateWorkflowByTemplate(ctx *gin.Context, orgId, clientId string, req requ
 			return nil, err
 		}
 		return res, nil
-	}
-}
-
-func GetWorkflowTemplateStatistic(ctx *gin.Context, startDate, endDate string) (*response.WorkflowStatistic, error) {
-	// 获取当前周期和上一个周期的日期列表
-	prevDates, currentDates, err := util.PreviousDateRange(startDate, endDate)
-	if err != nil {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_template_stats", fmt.Sprintf("get date range error: %v", err))
-	}
-
-	// 获取浏览数据
-	currentBrowseData, err := getBrowseDataFromRedis(ctx.Request.Context(), currentDates)
-	if err != nil {
-		return nil, err
-	}
-	prevBrowseData, err := getBrowseDataFromRedis(ctx.Request.Context(), prevDates)
-	if err != nil {
-		return nil, err
-	}
-
-	// 计算总览数据
-	overview := calculateGlobalBrowseOverview(currentBrowseData, prevBrowseData)
-
-	// 计算趋势数据
-	trend := calculateGlobalBrowseTrend(ctx, currentBrowseData, currentDates)
-
-	return &response.WorkflowStatistic{
-		Overview: overview,
-		Trend:    trend,
-	}, nil
-}
-
-// 从Redis获取多个日期的浏览数据
-func getBrowseDataFromRedis(ctx context.Context, dates []string) (map[string]int64, error) {
-	items, err := redis.OP().HGetAll(ctx, redisGlobalBrowseKey)
-	if err != nil {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_template_stats", fmt.Sprintf("redis HGetAll key %v fields %v err: %v", redisGlobalBrowseKey, dates, err))
-	}
-
-	data := make(map[string]int64)
-	if len(items) == 0 {
-		return data, nil
-	}
-	for _, date := range dates {
-		for _, item := range items {
-			if item.K == date {
-				data[date] = util.MustI64(item.V)
-				break
-			}
-		}
-		// 如果某个日期没有数据，默认值为0
-		if _, exist := data[date]; !exist {
-			data[date] = 0
-		}
-	}
-
-	return data, nil
-}
-
-// 计算总览数据
-func calculateGlobalBrowseOverview(currentData, prevData map[string]int64) response.WorkflowTemplateOverView {
-	// 计算当前周期总浏览量
-	var currentTotal int64
-	for _, count := range currentData {
-		currentTotal += count
-	}
-
-	// 计算上一个周期总浏览量
-	var prevTotal int64
-	for _, count := range prevData {
-		prevTotal += count
-	}
-
-	// 计算环比
-	var pop float32
-	if prevTotal > 0 {
-		pop = (float32(currentTotal) - float32(prevTotal)) / float32(prevTotal) * 100
-	} else if currentTotal > 0 {
-		// 如果上期为0，本期有数据，增长率为100%
-		pop = 100
-	}
-
-	return response.WorkflowTemplateOverView{
-		Browse: response.WorkflowTemplateOverviewItem{
-			Value:            float32(currentTotal),
-			PeriodOverPeriod: pop,
-		},
-	}
-}
-
-// 计算趋势数据
-func calculateGlobalBrowseTrend(ctx *gin.Context, browseData map[string]int64, dates []string) response.WorkflowTemplateTrends {
-	var items []response.StatisticChartLineItem
-	for _, date := range dates {
-		count := browseData[date]
-		items = append(items, response.StatisticChartLineItem{
-			Key:   date,
-			Value: float32(count),
-		})
-	}
-	return response.WorkflowTemplateTrends{
-		Browse: response.StatisticChart{
-			TableName: gin_util.I18nKey(ctx, "ope_workflow_template_browse_table"),
-			Lines: []response.StatisticChartLine{
-				{
-					LineName: gin_util.I18nKey(ctx, "ope_workflow_template_browse_line"),
-					Items:    items,
-				},
-			},
-		},
 	}
 }
 

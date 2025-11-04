@@ -31,25 +31,3 @@ type WorkflowTemplateInfo struct {
 type WorkflowTemplateURL struct {
 	Url string `json:"url"`
 }
-
-type ClientTrends struct {
-	Client StatisticChart `json:"client"` // 客户端活跃数据
-}
-
-type WorkflowStatistic struct {
-	Overview WorkflowTemplateOverView `json:"overview"` // 工作流模板统计面板
-	Trend    WorkflowTemplateTrends   `json:"trend"`    // 工作流模板统计趋势
-}
-
-type WorkflowTemplateOverView struct {
-	Browse WorkflowTemplateOverviewItem `json:"browse"` // 工作流模板浏览数据总览
-}
-
-type WorkflowTemplateOverviewItem struct {
-	Value            float32 `json:"value"`            // 数量
-	PeriodOverPeriod float32 `json:"periodOverPeriod"` // 环比上周期百分比
-}
-
-type WorkflowTemplateTrends struct {
-	Browse StatisticChart `json:"browse"` // 工作流模板浏览数据趋势
-}

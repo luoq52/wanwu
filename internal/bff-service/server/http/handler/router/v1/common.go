@@ -16,7 +16,7 @@ func registerCommon(apiV1 *gin.RouterGroup) {
 	mid.Sub("common").Reg(apiV1, "/avatar", http.MethodPost, v1.UploadAvatar, "上传自定义图标")
 	mid.Sub("common").Reg(apiV1, "/user/avatar", http.MethodPut, v1.UpdateUserAvatar, "编辑用户头像")
 
-	//二阶段用户登录
+	// 二阶段用户登录
 	mid.Sub("common").Reg(apiV1, "/user/login", http.MethodPost, v1.LoginEmailCheck, "非首次登录邮箱绑定校验")
 	mid.Sub("common").Reg(apiV1, "/user/login", http.MethodPut, v1.ChangeUserPasswordByEmail, "首次登录修改用户密码与邮箱绑定校验（by 个人）")
 	mid.Sub("common").Reg(apiV1, "/user/login/email/code", http.MethodPost, v1.LoginSendEmailCode, "登录邮箱验证码发送")
@@ -56,9 +56,6 @@ func registerCommon(apiV1 *gin.RouterGroup) {
 	mid.Sub("common").Reg(apiV1, "/appspace/app/key", http.MethodDelete, v1.DelApiKey, "删除ApiKey")
 	mid.Sub("common").Reg(apiV1, "/appspace/app/key/list", http.MethodGet, v1.GetApiKeyList, "获取ApiKey列表")
 
-	// MCP通用
-	//mid.Sub("common").Reg(apiV1, "/mcp/select", http.MethodGet, v1.GetMCPSelect, "获取MCP自定义列表")
-
 	// Safety通用
 	mid.Sub("common").Reg(apiV1, "/safe/sensitive/table/select", http.MethodGet, v1.GetSensitiveWordTableSelect, "获取敏感词表下拉列表")
 
@@ -70,7 +67,5 @@ func registerCommon(apiV1 *gin.RouterGroup) {
 	mid.Sub("common").Reg(apiV1, "/appspace/app/openurl/status", http.MethodPut, v1.AppUrlStatusSwitch, "启用/停用应用Url")
 
 	// 工作流模板统计
-	mid.Sub("common").Reg(apiV1, "/workflow/template/statistic", http.MethodGet, v1.GetWorkflowTemplateStatistic, "获取工作流模板统计")
-	mid.Sub("common").Reg(apiV1, "/client/statistic", http.MethodGet, v1.GetClientStatistic, "获取使用工作流模板客户端统计")
-	mid.Sub("common").Reg(apiV1, "/client/statistic/cumulative", http.MethodGet, v1.GetCumulativeClientStatistic, "获取累计使用工作流模板客户端统计")
+	mid.Sub("common").Reg(apiV1, "/statistic/client", http.MethodGet, v1.GetClientStatistic, "获取使用工作流模板客户端统计")
 }

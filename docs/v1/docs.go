@@ -2573,111 +2573,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/client/statistic": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "description": "获取使用工作流模板用户统计",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "common"
-                ],
-                "summary": "获取使用工作流模板用户统计",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "开始时间（格式yyyy-mm-dd）",
-                        "name": "startDate",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "结束时间（格式yyyy-mm-dd）",
-                        "name": "endDate",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.ClientStatistic"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/client/statistic/cumulative": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "description": "获取累计使用工作流模板用户统计",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "common"
-                ],
-                "summary": "获取累计使用工作流模板用户统计",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "时间戳",
-                        "name": "endAt",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.ClientStatistic"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/custom/home": {
             "post": {
                 "security": [
@@ -8313,6 +8208,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/statistic/client": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "获取客户端统计数据",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "statistic_client"
+                ],
+                "summary": "获取客户端统计数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "开始时间（格式yyyy-mm-dd）",
+                        "name": "startDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "结束时间（格式yyyy-mm-dd）",
+                        "name": "endDate",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.ClientStatistic"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/tool/action/detail": {
             "get": {
                 "description": "获取工具详情",
@@ -9749,62 +9700,6 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/response.GetWorkflowTemplateListResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/workflow/template/statistic": {
-            "get": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "description": "获取工作流模板统计",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "common"
-                ],
-                "summary": "获取工作流模板统计",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "开始时间（格式yyyy-mm-dd）",
-                        "name": "startDate",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "结束时间（格式yyyy-mm-dd）",
-                        "name": "endDate",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.WorkflowStatistic"
                                         }
                                     }
                                 }
@@ -14828,7 +14723,7 @@ const docTemplate = `{
                     "description": "活跃客户端",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/response.ClientOverviewItem"
+                            "$ref": "#/definitions/response.StatisticOverviewItem"
                         }
                     ]
                 },
@@ -14836,22 +14731,25 @@ const docTemplate = `{
                     "description": "新增客户端",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/response.ClientOverviewItem"
+                            "$ref": "#/definitions/response.StatisticOverviewItem"
                         }
                     ]
-                }
-            }
-        },
-        "response.ClientOverviewItem": {
-            "type": "object",
-            "properties": {
-                "periodOverPeriod": {
-                    "description": "环比上周期百分比",
-                    "type": "number"
                 },
-                "value": {
-                    "description": "数量",
-                    "type": "number"
+                "browse": {
+                    "description": "浏览量",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/response.StatisticOverviewItem"
+                        }
+                    ]
+                },
+                "cumulativeClient": {
+                    "description": "累计客户端",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/response.StatisticOverviewItem"
+                        }
+                    ]
                 }
             }
         },
@@ -14859,7 +14757,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "overview": {
-                    "description": "客户端统计面板",
+                    "description": "统计面板",
                     "allOf": [
                         {
                             "$ref": "#/definitions/response.ClientOverView"
@@ -14867,20 +14765,28 @@ const docTemplate = `{
                     ]
                 },
                 "trend": {
-                    "description": "客户端统计趋势",
+                    "description": "统计趋势",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/response.ClientTrends"
+                            "$ref": "#/definitions/response.ClientTrend"
                         }
                     ]
                 }
             }
         },
-        "response.ClientTrends": {
+        "response.ClientTrend": {
             "type": "object",
             "properties": {
+                "browse": {
+                    "description": "浏览量",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/response.StatisticChart"
+                        }
+                    ]
+                },
                 "client": {
-                    "description": "客户端活跃数据",
+                    "description": "客户端",
                     "allOf": [
                         {
                             "$ref": "#/definitions/response.StatisticChart"
@@ -17080,6 +16986,19 @@ const docTemplate = `{
                 }
             }
         },
+        "response.StatisticOverviewItem": {
+            "type": "object",
+            "properties": {
+                "periodOverPeriod": {
+                    "description": "环比上周期百分比",
+                    "type": "number"
+                },
+                "value": {
+                    "description": "数量",
+                    "type": "number"
+                }
+            }
+        },
         "response.ToolAction4Workflow": {
             "type": "object",
             "properties": {
@@ -17489,27 +17408,6 @@ const docTemplate = `{
                 }
             }
         },
-        "response.WorkflowStatistic": {
-            "type": "object",
-            "properties": {
-                "overview": {
-                    "description": "工作流模板统计面板",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/response.WorkflowTemplateOverView"
-                        }
-                    ]
-                },
-                "trend": {
-                    "description": "工作流模板统计趋势",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/response.WorkflowTemplateTrends"
-                        }
-                    ]
-                }
-            }
-        },
         "response.WorkflowTemplateDetail": {
             "type": "object",
             "properties": {
@@ -17597,45 +17495,6 @@ const docTemplate = `{
                 "templateId": {
                     "description": "模板ID",
                     "type": "string"
-                }
-            }
-        },
-        "response.WorkflowTemplateOverView": {
-            "type": "object",
-            "properties": {
-                "browse": {
-                    "description": "工作流模板浏览数据总览",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/response.WorkflowTemplateOverviewItem"
-                        }
-                    ]
-                }
-            }
-        },
-        "response.WorkflowTemplateOverviewItem": {
-            "type": "object",
-            "properties": {
-                "periodOverPeriod": {
-                    "description": "环比上周期百分比",
-                    "type": "number"
-                },
-                "value": {
-                    "description": "数量",
-                    "type": "number"
-                }
-            }
-        },
-        "response.WorkflowTemplateTrends": {
-            "type": "object",
-            "properties": {
-                "browse": {
-                    "description": "工作流模板浏览数据趋势",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/response.StatisticChart"
-                        }
-                    ]
                 }
             }
         },
