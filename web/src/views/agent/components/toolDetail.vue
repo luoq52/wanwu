@@ -107,14 +107,15 @@ export default {
     },
     rerankChange(val){
       if(val){
+        console.log(this.currentItem.toolId)
         const data = {
-          assistantId:this.$router.query.id,
+          assistantId:this.$route.query.id,
           toolId:this.currentItem.toolId,
           toolConfig:{
             rerankId:this.rerankId
           }
         }
-        updateRerank({assistantId:toolId}).then(res =>{
+        updateRerank(data).then(res =>{
           if(res.code === 0){
             this.$emit('updateDetail')
           }

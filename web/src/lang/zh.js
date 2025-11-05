@@ -860,6 +860,10 @@ export default {
             required:'是否必填',
             yes:'是',
             no:'否'
+        },
+        promptTemplate:{
+            recommended:'推荐',
+            personal:'个人',
         }
     },
     agentDiglog:{

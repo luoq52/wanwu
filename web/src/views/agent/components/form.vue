@@ -470,6 +470,7 @@ import knowledgeSetDialog from "./knowledgeSetDialog";
 import { readWorkFlow } from "@/api/workflow";
 import Chat from "./chat";
 import LinkIcon from "@/components/linkIcon.vue";
+import promptTemplate from "./prompt/index.vue";
 import knowledgeSelect from "@/components/knowledgeSelect.vue";
 export default {
   components: {
@@ -483,7 +484,8 @@ export default {
     knowledgeSetDialog,
     knowledgeSelect,
     metaSet,
-    ToolDeatail
+    ToolDeatail,
+    promptTemplate
   },
   watch: {
     editForm: {

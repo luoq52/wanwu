@@ -888,5 +888,17 @@ export default {
         docWord:'文档中的词语',
         linkKnowledge:'关联知识库',
         undateTime:'更新时间'
+    },
+    promptTemplate:{
+        recommended:'Recommended',
+        personal:'Personal',
+        generalStructure:'General Structure',
+        generalStructureDesc:'Applicable to prompt structures in various scenarios, corresponding modules can be added or deleted according to specific needs',
+        taskExecution:'Task Execution',
+        taskExecutionDesc:'Applicable to task execution scenarios with clear work steps, by clarifying the work requirements for each step to guide the model to complete complex tasks',
+        rolePlaying:'Role-Playing',
+        rolePlayingDesc:'Applicable to chat companionship and interactive entertainment scenarios, can help models easily create personalized character roles and enhance conversation interest',
+        skillTuning:'Skill Tuning',
+        skillTuningDesc:'Applicable to scenarios that require acquiring specific skills, optimizing model performance in specific fields through structured prompts'
     }
 }
