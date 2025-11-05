@@ -18,14 +18,30 @@
       </div>
     </div>
 
-    <!-- 卡片列表容器 -->
     <div class="cards-wrapper">
+      <!-- 空状态展示 -->
+      <div v-if="showEmptyState" class="empty-state">
+        <div class="empty-icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 三条短线 -->
+            <path d="M20 24H44" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round"/>
+            <path d="M20 32H44" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round"/>
+            <path d="M20 40H44" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round"/>
+            <!-- 盒子/托盘 -->
+            <path d="M16 12H48C49.1046 12 50 12.8954 50 14V50C50 51.1046 49.1046 52 48 52H16C14.8954 52 14 51.1046 14 50V14C14 12.8954 14.8954 12 16 12Z" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 18H50" stroke="#D9D9D9" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="empty-text">当前空间暂无可用的提示词资源</div>
+      </div>
+      
+      <!-- 卡片列表 -->
       <div 
+        v-else
         class="cards-container" 
         ref="cardsContainer"
         @scroll="handleScroll"
       >
-        <!-- 左侧滚动按钮（初始隐藏，滚到最右显示） -->
         <div 
           class="scroll-button left" 
           v-if="showLeftButton"
@@ -43,7 +59,17 @@
           <div class="card-description">{{ card.description }}</div>
         </div>
         
-        <!-- 右侧滚动按钮（置于滚动容器内部） -->
+        <!-- 全部卡片 -->
+        <div 
+          v-if="activeTab === 'recommended'"
+          class="prompt-card all-card"
+          @click="handleAllClick"
+        >
+          <div class="all-card-content">
+            <div class="all-card-text">全部</div>
+          </div>
+        </div>
+        
         <div 
           class="scroll-button right" 
           v-if="showRightButton"
@@ -92,6 +118,9 @@ export default {
   computed: {
     currentCards() {
       return this.activeTab === 'recommended' ? this.recommendedCards : this.personalCards;
+    },
+    showEmptyState() {
+      return this.activeTab === 'personal' && (!this.personalCards || this.personalCards.length === 0);
     }
   },
   mounted() {
@@ -106,6 +135,10 @@ export default {
     handleCardClick(card) {
       // 触发卡片点击事件，可以传递给父组件
       this.$emit('card-click', card);
+    },
+    handleAllClick() {
+      // 触发全部卡片点击事件
+      this.$emit('all-click');
     },
     scrollLeft() {
       const container = this.$refs.cardsContainer;
@@ -194,26 +227,24 @@ export default {
 
 .prompt-tabs {
   display: flex;
-  margin-bottom: 20px;
-  gap: 0;
-  
+  gap: 10;
   .tab-item {
-    padding: 10px 20px;
+    padding: 3px 8px;
     cursor: pointer;
-    color: #606266;
+    color: #303133;
     font-size: 14px;
     transition: all 0.3s;
-    background: #fff;
     border: none;
     white-space: nowrap;
+    border-radius: 4px 4px 0 0;
     
     &:hover {
       color: $color;
     }
     
     &.active {
-      color: #fff;
-      background: $color;
+      color: $color;
+      background: #E0E7FF;
       font-weight: 500;
     }
   }
@@ -225,6 +256,35 @@ export default {
   overflow: hidden;
   width: 100%;
   min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 10px 0;
+  
+  .empty-icon {
+    margin-bottom: 16px;
+    opacity: 0.6;
+    
+    svg {
+      display: block;
+    }
+  }
+  
+  .empty-text {
+    font-size: 14px;
+    color: #606266;
+    text-align: center;
+    line-height: 1.5;
+  }
 }
 
 .cards-container {
@@ -252,7 +312,7 @@ export default {
   width: 200px;
   background: #fff;
   border-radius: 8px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
   cursor: pointer;
   transition: all 0.3s;
@@ -262,6 +322,37 @@ export default {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-color: $color;
     transform: translateY(-2px);
+  }
+  
+  &.all-card {
+    background: #fff;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-color: $color;
+      transform: translateY(-2px);
+    }
+    
+    .all-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      
+      .all-card-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #303133;
+      }
+    }
   }
   
   .card-title {
@@ -281,6 +372,8 @@ export default {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-break: break-word;
+    max-height: calc(1.6em * 3);
   }
 }
 

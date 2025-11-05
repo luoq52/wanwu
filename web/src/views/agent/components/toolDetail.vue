@@ -146,6 +146,7 @@ export default {
       this.dialogVisible = true;
       this.currentItem = n;
       if(n.toolId === 'bochawebsearch'){
+        this.getRerankData();
         this.rerankId = n.toolConfig.rerankId || '';
       }
       this.getDeatil(n);
