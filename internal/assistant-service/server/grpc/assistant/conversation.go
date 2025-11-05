@@ -876,12 +876,17 @@ func (s *Service) buildToolPluginListAlgParam(ctx context.Context, sseReq *confi
 					log.Infof("获取内置工具信息失败，assistantId: %s, toolId: %s, err: %v", assistantId, tool.ToolId, err)
 					continue
 				}
+				if builtinTool.BuiltInTools == nil || builtinTool.BuiltInTools.ApiKey == "" {
+					log.Errorf("获取bocha内置工具apiKey失败，assistantId: %s, toolId: %s", assistantId, tool.ToolId)
+					continue
+				}
 				sseReq.SearchKey = builtinTool.BuiltInTools.ApiKey
 
 				// 计算SearchUrl: 解析schema获取第一个server url和唯一的path url
 				doc, err := openapi3_util.LoadFromData(ctx, []byte(builtinTool.Schema))
 				if err != nil {
 					log.Errorf("解析内置工具Schema失败，assistantId: %s, toolId: %s, err: %v", assistantId, tool.ToolId, err)
+					continue
 				} else {
 					if len(doc.Servers) > 0 {
 						serverURL := doc.Servers[0].URL
@@ -895,6 +900,7 @@ func (s *Service) buildToolPluginListAlgParam(ctx context.Context, sseReq *confi
 					var toolConfig map[string]interface{}
 					if err := json.Unmarshal([]byte(tool.ToolConfig), &toolConfig); err != nil {
 						log.Errorf("解析工具配置失败，assistantId: %s, toolId: %s, err: %v", assistantId, tool.ToolId, err)
+						continue
 					} else {
 						if rerankId, ok := toolConfig["rerankId"]; ok {
 							sseReq.SearchRerankId = rerankId
@@ -902,6 +908,7 @@ func (s *Service) buildToolPluginListAlgParam(ctx context.Context, sseReq *confi
 					}
 				} else {
 					log.Errorf("bocha内置工具配置为空，缺少rerankId。assistantId: %s, toolId: %s", assistantId, tool.ToolId)
+					continue
 				}
 
 				continue
