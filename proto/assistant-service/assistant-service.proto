@@ -31,13 +31,6 @@ service AssistantService {
   rpc AssistantMCPGetList(AssistantMCPGetListReq) returns (AssistantMCPList) {}
   rpc AssistantMCPDeleteByMCPId(AssistantMCPDeleteByMCPIdReq) returns (google.protobuf.Empty) {}
 
-  // --- custom ---
-//  rpc AssistantCustomToolCreate(AssistantCustomToolCreateReq) returns (google.protobuf.Empty) {}
-//  rpc AssistantCustomToolDelete(AssistantCustomToolDeleteReq) returns (google.protobuf.Empty) {}
-//  rpc AssistantMCPDeleteByMCPId(AssistantMCPDeleteByMCPIdReq) returns (google.protobuf.Empty) {}
-//  rpc AssistantCustomToolEnableSwitch(AssistantCustomToolEnableSwitchReq) returns (google.protobuf.Empty) {}
-//  rpc AssistantCustomToolGetList(AssistantCustomToolGetListReq) returns (AssistantCustomToolList) {}
-
   // --- custom builtin tool ---
   rpc AssistantToolCreate(AssistantToolCreateReq) returns (google.protobuf.Empty) {}
   rpc AssistantToolDelete(AssistantToolDeleteReq) returns (google.protobuf.Empty) {}
@@ -52,6 +45,14 @@ service AssistantService {
   rpc GetConversationDetailList(GetConversationDetailListReq) returns (GetConversationDetailListResp) {}
   rpc AssistantConversionStream(AssistantConversionStreamReq) returns (stream AssistantConversionStreamResp) {}
   rpc ConversationDeleteByAssistantId(ConversationDeleteByAssistantIdReq) returns (google.protobuf.Empty) {}
+
+  // --- custom prompt ---
+  rpc CustomPromptCreate(CustomPromptCreateReq) returns (CustomPromptIDResp) {}
+  rpc CustomPromptDelete(CustomPromptDeleteReq) returns (google.protobuf.Empty) {}
+  rpc CustomPromptUpdate(CustomPromptUpdateReq) returns (google.protobuf.Empty) {}
+  rpc CustomPromptGet(CustomPromptGetReq) returns (CustomPromptInfo) {}
+  rpc CustomPromptGetList(CustomPromptGetListReq) returns (CustomPromptList) {}
+  rpc CustomPromptCopy(CustomPromptCopyReq) returns (CustomPromptIDResp) {}
 }
 
 message AssistantConversionStreamResp {
@@ -181,7 +182,6 @@ message AssistantInfo {
   int32 scope = 11;
   repeated AssistantWorkFlowInfos workFlowInfos = 12;
   repeated AssistantMCPInfos mcpInfos = 13;
-//  repeated AssistantCustomToolInfos customToolInfos = 14;
   repeated AssistantToolInfos toolInfos = 15;
   int64 creatTime = 16;
   int64 updateTime = 17;
@@ -204,12 +204,6 @@ message AssistantMCPInfos{
   string actionName = 4;
   bool enable = 5;
 }
-
-//message AssistantCustomToolInfos{
-//  string id = 1;
-//  string customToolId = 2;
-//  bool enable = 3;
-//}
 
 message AssistantToolInfos{
   string id = 1;
@@ -301,31 +295,12 @@ message AssistantMCPList {
   repeated AssistantMCPInfo assistantMCPInfos = 1;
 }
 
-//message AssistantCustomToolCreateReq {
-//  string assistantId = 1;
-//  string customToolId = 2;
-//  Identity identity = 3;
-//}
-//
-//message AssistantCustomToolDeleteReq {
-//  string assistantId = 1;
-//  string customToolId = 2;
-//  Identity identity = 3;
-//}
-//
 message AssistantToolDeleteByToolIdReq {
   string toolId = 1;
   string toolType = 2;
   Identity identity = 3;
 }
-//
-//message AssistantCustomToolEnableSwitchReq {
-//  string assistantId = 1;
-//  string customToolId = 2;
-//  bool enable = 3;
-//  Identity identity = 4;
-//}
-//
+
 message AssistantToolCreateReq {
   string assistantId = 1;
   string toolId = 2;
@@ -356,27 +331,6 @@ message AssistantToolConfigReq {
   string toolConfig = 3;
   Identity identity = 4;
 }
-
-
-//message AssistantCustomToolGetListReq {
-//  string assistantId = 1;
-//  Identity identity = 2;
-//}
-
-//message AssistantCustomToolInfo {
-//  uint32 id = 1;
-//  uint32 assistantId = 2;
-//  string customToolId = 3;
-//  bool enable = 4;
-//  string userId = 5;
-//  string orgId = 6;
-//  int64 createdAt = 7;
-//  int64 updatedAt = 8;
-//}
-//
-//message AssistantCustomToolList {
-//  repeated AssistantCustomToolInfo assistantCustomToolInfos = 1;
-//}
 
 message ConversationCreateReq {
   string assistantId = 1;
@@ -475,5 +429,61 @@ message ConversationDeleteByAssistantIdReq {
 
 message AssistantWorkFlowDeleteByWorkflowIdReq {
   string workflowId = 1;
+  Identity identity = 2;
+}
+
+message CustomPromptCreateReq {
+  string avatarPath = 1;
+  string name = 2;
+  string desc = 3;
+  string prompt = 4;
+  Identity identity = 5;
+}
+
+message CustomPromptIDResp {
+  string customPromptId = 1;
+}
+
+message CustomPromptDeleteReq {
+  string customPromptId = 1;
+  Identity identity = 2;
+}
+
+message CustomPromptUpdateReq {
+  string customPromptId = 1;
+  string avatarPath = 2;
+  string name = 3;
+  string desc = 4;
+  string prompt = 5;
+  Identity identity = 6;
+}
+
+message CustomPromptGetReq {
+  string customPromptId = 1;
+  Identity identity = 2;
+}
+
+message CustomPromptInfo {
+  string customPromptId = 1;
+  string avatarPath = 2;
+  string name = 3;
+  string desc = 4;
+  string prompt = 5;
+  int64 updatedAt = 6;
+  Identity identity = 7;
+}
+
+message CustomPromptGetListReq {
+  string name = 1;
+  Identity identity = 2;
+}
+
+message CustomPromptList {
+  repeated CustomPromptInfo customPromptInfos = 1;
+  int64 total = 2;
+}
+
+message CustomPromptCopyReq {
+  string customPromptId = 1;
   Identity identity = 2;
 }

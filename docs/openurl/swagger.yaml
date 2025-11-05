@@ -600,6 +600,8 @@ definitions:
         type: string
       enable:
         type: boolean
+      toolConfig:
+        $ref: '#/definitions/response.ToolConfig'
       toolId:
         type: string
       toolName:
@@ -700,6 +702,11 @@ definitions:
         type: integer
       data: {}
       msg:
+        type: string
+    type: object
+  response.ToolConfig:
+    properties:
+      rerankId:
         type: string
     type: object
   response.VisionConfig:

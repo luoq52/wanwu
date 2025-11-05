@@ -1280,6 +1280,9 @@
                 "enable": {
                     "type": "boolean"
                 },
+                "toolConfig": {
+                    "$ref": "#/definitions/response.ToolConfig"
+                },
                 "toolId": {
                     "type": "string"
                 },
@@ -1428,6 +1431,14 @@
                 },
                 "data": {},
                 "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ToolConfig": {
+            "type": "object",
+            "properties": {
+                "rerankId": {
                     "type": "string"
                 }
             }

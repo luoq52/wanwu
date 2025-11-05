@@ -124,6 +124,8 @@ enum Code {
   AssistantConversationErr = 160004; // 智能体对话相关错误
   AssistantMCPErr = 160005; // 智能体MCP相关错误
   AssistantToolErr = 160006; // 智能体工具相关错误
+  AssistantCustomPromptErr = 160007; // 智能体自定义提示错误
+
 
   // --- workflow-service ---
   // [210000, 219999]

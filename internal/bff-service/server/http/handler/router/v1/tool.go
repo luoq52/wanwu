@@ -51,4 +51,12 @@ func registerTool(apiV1 *gin.RouterGroup) {
 	// 自定义MCP与MCP Server
 	mid.Sub("tool").Reg(apiV1, "/mcp/select", http.MethodGet, v1.GetMCPSelect, "智能体mcp下拉列表")
 	mid.Sub("tool").Reg(apiV1, "/mcp/action/list", http.MethodGet, v1.GetMCPActionList, "获取MCP Tool列表")
+
+	// Custom Prompt
+	mid.Sub("tool").Reg(apiV1, "/prompt/custom", http.MethodPost, v1.CreateCustomPrompt, "创建自定义Prompt")
+	mid.Sub("tool").Reg(apiV1, "/prompt/custom", http.MethodGet, v1.GetCustomPrompt, "获取自定义Prompt详情")
+	mid.Sub("tool").Reg(apiV1, "/prompt/custom", http.MethodDelete, v1.DeleteCustomPrompt, "删除自定义Prompt")
+	mid.Sub("tool").Reg(apiV1, "/prompt/custom", http.MethodPut, v1.UpdateCustomPrompt, "修改自定义Prompt")
+	mid.Sub("tool").Reg(apiV1, "/prompt/custom/list", http.MethodGet, v1.GetCustomPromptList, "获取自定义Prompt列表")
+	mid.Sub("tool").Reg(apiV1, "/prompt/custom/copy", http.MethodPost, v1.CopyCustomPrompt, "复制自定义Prompt")
 }

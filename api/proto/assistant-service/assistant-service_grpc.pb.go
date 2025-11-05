@@ -48,6 +48,12 @@ const (
 	AssistantService_GetConversationDetailList_FullMethodName           = "/assistant_service.AssistantService/GetConversationDetailList"
 	AssistantService_AssistantConversionStream_FullMethodName           = "/assistant_service.AssistantService/AssistantConversionStream"
 	AssistantService_ConversationDeleteByAssistantId_FullMethodName     = "/assistant_service.AssistantService/ConversationDeleteByAssistantId"
+	AssistantService_CustomPromptCreate_FullMethodName                  = "/assistant_service.AssistantService/CustomPromptCreate"
+	AssistantService_CustomPromptDelete_FullMethodName                  = "/assistant_service.AssistantService/CustomPromptDelete"
+	AssistantService_CustomPromptUpdate_FullMethodName                  = "/assistant_service.AssistantService/CustomPromptUpdate"
+	AssistantService_CustomPromptGet_FullMethodName                     = "/assistant_service.AssistantService/CustomPromptGet"
+	AssistantService_CustomPromptGetList_FullMethodName                 = "/assistant_service.AssistantService/CustomPromptGetList"
+	AssistantService_CustomPromptCopy_FullMethodName                    = "/assistant_service.AssistantService/CustomPromptCopy"
 )
 
 // AssistantServiceClient is the client API for AssistantService service.
@@ -87,6 +93,13 @@ type AssistantServiceClient interface {
 	GetConversationDetailList(ctx context.Context, in *GetConversationDetailListReq, opts ...grpc.CallOption) (*GetConversationDetailListResp, error)
 	AssistantConversionStream(ctx context.Context, in *AssistantConversionStreamReq, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AssistantConversionStreamResp], error)
 	ConversationDeleteByAssistantId(ctx context.Context, in *ConversationDeleteByAssistantIdReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// --- custom prompt ---
+	CustomPromptCreate(ctx context.Context, in *CustomPromptCreateReq, opts ...grpc.CallOption) (*CustomPromptIDResp, error)
+	CustomPromptDelete(ctx context.Context, in *CustomPromptDeleteReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CustomPromptUpdate(ctx context.Context, in *CustomPromptUpdateReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CustomPromptGet(ctx context.Context, in *CustomPromptGetReq, opts ...grpc.CallOption) (*CustomPromptInfo, error)
+	CustomPromptGetList(ctx context.Context, in *CustomPromptGetListReq, opts ...grpc.CallOption) (*CustomPromptList, error)
+	CustomPromptCopy(ctx context.Context, in *CustomPromptCopyReq, opts ...grpc.CallOption) (*CustomPromptIDResp, error)
 }
 
 type assistantServiceClient struct {
@@ -386,6 +399,66 @@ func (c *assistantServiceClient) ConversationDeleteByAssistantId(ctx context.Con
 	return out, nil
 }
 
+func (c *assistantServiceClient) CustomPromptCreate(ctx context.Context, in *CustomPromptCreateReq, opts ...grpc.CallOption) (*CustomPromptIDResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CustomPromptIDResp)
+	err := c.cc.Invoke(ctx, AssistantService_CustomPromptCreate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assistantServiceClient) CustomPromptDelete(ctx context.Context, in *CustomPromptDeleteReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AssistantService_CustomPromptDelete_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assistantServiceClient) CustomPromptUpdate(ctx context.Context, in *CustomPromptUpdateReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AssistantService_CustomPromptUpdate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assistantServiceClient) CustomPromptGet(ctx context.Context, in *CustomPromptGetReq, opts ...grpc.CallOption) (*CustomPromptInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CustomPromptInfo)
+	err := c.cc.Invoke(ctx, AssistantService_CustomPromptGet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assistantServiceClient) CustomPromptGetList(ctx context.Context, in *CustomPromptGetListReq, opts ...grpc.CallOption) (*CustomPromptList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CustomPromptList)
+	err := c.cc.Invoke(ctx, AssistantService_CustomPromptGetList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assistantServiceClient) CustomPromptCopy(ctx context.Context, in *CustomPromptCopyReq, opts ...grpc.CallOption) (*CustomPromptIDResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CustomPromptIDResp)
+	err := c.cc.Invoke(ctx, AssistantService_CustomPromptCopy_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AssistantServiceServer is the server API for AssistantService service.
 // All implementations must embed UnimplementedAssistantServiceServer
 // for forward compatibility.
@@ -423,6 +496,13 @@ type AssistantServiceServer interface {
 	GetConversationDetailList(context.Context, *GetConversationDetailListReq) (*GetConversationDetailListResp, error)
 	AssistantConversionStream(*AssistantConversionStreamReq, grpc.ServerStreamingServer[AssistantConversionStreamResp]) error
 	ConversationDeleteByAssistantId(context.Context, *ConversationDeleteByAssistantIdReq) (*emptypb.Empty, error)
+	// --- custom prompt ---
+	CustomPromptCreate(context.Context, *CustomPromptCreateReq) (*CustomPromptIDResp, error)
+	CustomPromptDelete(context.Context, *CustomPromptDeleteReq) (*emptypb.Empty, error)
+	CustomPromptUpdate(context.Context, *CustomPromptUpdateReq) (*emptypb.Empty, error)
+	CustomPromptGet(context.Context, *CustomPromptGetReq) (*CustomPromptInfo, error)
+	CustomPromptGetList(context.Context, *CustomPromptGetListReq) (*CustomPromptList, error)
+	CustomPromptCopy(context.Context, *CustomPromptCopyReq) (*CustomPromptIDResp, error)
 	mustEmbedUnimplementedAssistantServiceServer()
 }
 
@@ -516,6 +596,24 @@ func (UnimplementedAssistantServiceServer) AssistantConversionStream(*AssistantC
 }
 func (UnimplementedAssistantServiceServer) ConversationDeleteByAssistantId(context.Context, *ConversationDeleteByAssistantIdReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConversationDeleteByAssistantId not implemented")
+}
+func (UnimplementedAssistantServiceServer) CustomPromptCreate(context.Context, *CustomPromptCreateReq) (*CustomPromptIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CustomPromptCreate not implemented")
+}
+func (UnimplementedAssistantServiceServer) CustomPromptDelete(context.Context, *CustomPromptDeleteReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CustomPromptDelete not implemented")
+}
+func (UnimplementedAssistantServiceServer) CustomPromptUpdate(context.Context, *CustomPromptUpdateReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CustomPromptUpdate not implemented")
+}
+func (UnimplementedAssistantServiceServer) CustomPromptGet(context.Context, *CustomPromptGetReq) (*CustomPromptInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CustomPromptGet not implemented")
+}
+func (UnimplementedAssistantServiceServer) CustomPromptGetList(context.Context, *CustomPromptGetListReq) (*CustomPromptList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CustomPromptGetList not implemented")
+}
+func (UnimplementedAssistantServiceServer) CustomPromptCopy(context.Context, *CustomPromptCopyReq) (*CustomPromptIDResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CustomPromptCopy not implemented")
 }
 func (UnimplementedAssistantServiceServer) mustEmbedUnimplementedAssistantServiceServer() {}
 func (UnimplementedAssistantServiceServer) testEmbeddedByValue()                          {}
@@ -1035,6 +1133,114 @@ func _AssistantService_ConversationDeleteByAssistantId_Handler(srv interface{}, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AssistantService_CustomPromptCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CustomPromptCreateReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssistantServiceServer).CustomPromptCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssistantService_CustomPromptCreate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssistantServiceServer).CustomPromptCreate(ctx, req.(*CustomPromptCreateReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssistantService_CustomPromptDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CustomPromptDeleteReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssistantServiceServer).CustomPromptDelete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssistantService_CustomPromptDelete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssistantServiceServer).CustomPromptDelete(ctx, req.(*CustomPromptDeleteReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssistantService_CustomPromptUpdate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CustomPromptUpdateReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssistantServiceServer).CustomPromptUpdate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssistantService_CustomPromptUpdate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssistantServiceServer).CustomPromptUpdate(ctx, req.(*CustomPromptUpdateReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssistantService_CustomPromptGet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CustomPromptGetReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssistantServiceServer).CustomPromptGet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssistantService_CustomPromptGet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssistantServiceServer).CustomPromptGet(ctx, req.(*CustomPromptGetReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssistantService_CustomPromptGetList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CustomPromptGetListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssistantServiceServer).CustomPromptGetList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssistantService_CustomPromptGetList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssistantServiceServer).CustomPromptGetList(ctx, req.(*CustomPromptGetListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssistantService_CustomPromptCopy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CustomPromptCopyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssistantServiceServer).CustomPromptCopy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssistantService_CustomPromptCopy_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssistantServiceServer).CustomPromptCopy(ctx, req.(*CustomPromptCopyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AssistantService_ServiceDesc is the grpc.ServiceDesc for AssistantService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1149,6 +1355,30 @@ var AssistantService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ConversationDeleteByAssistantId",
 			Handler:    _AssistantService_ConversationDeleteByAssistantId_Handler,
+		},
+		{
+			MethodName: "CustomPromptCreate",
+			Handler:    _AssistantService_CustomPromptCreate_Handler,
+		},
+		{
+			MethodName: "CustomPromptDelete",
+			Handler:    _AssistantService_CustomPromptDelete_Handler,
+		},
+		{
+			MethodName: "CustomPromptUpdate",
+			Handler:    _AssistantService_CustomPromptUpdate_Handler,
+		},
+		{
+			MethodName: "CustomPromptGet",
+			Handler:    _AssistantService_CustomPromptGet_Handler,
+		},
+		{
+			MethodName: "CustomPromptGetList",
+			Handler:    _AssistantService_CustomPromptGetList_Handler,
+		},
+		{
+			MethodName: "CustomPromptCopy",
+			Handler:    _AssistantService_CustomPromptCopy_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

@@ -82,12 +82,6 @@ func WithAssistantID(assistantId uint32) SQLOption {
 	})
 }
 
-func WithCustomID(customId string) SQLOption {
-	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
-		return db.Where("custom_id = ?", customId)
-	})
-}
-
 func WithToolId(toolId string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("tool_id = ?", toolId)
@@ -121,5 +115,23 @@ func WithMCPType(mcpType string) SQLOption {
 func WithWorkflowID(workflowId string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("workflow_id = ?", workflowId)
+	})
+}
+
+func WithCustomPromptNotID(id uint32) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("id != ?", id)
+	})
+}
+
+func WithCustomPromptName(name string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("name = ?", name)
+	})
+}
+
+func WithCustomPromptLikeName(name string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("name LIKE ?", "%"+name+"%")
 	})
 }

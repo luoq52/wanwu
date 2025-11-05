@@ -1288,6 +1288,9 @@ const docTemplate = `{
                 "enable": {
                     "type": "boolean"
                 },
+                "toolConfig": {
+                    "$ref": "#/definitions/response.ToolConfig"
+                },
                 "toolId": {
                     "type": "string"
                 },
@@ -1436,6 +1439,14 @@ const docTemplate = `{
                 },
                 "data": {},
                 "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ToolConfig": {
+            "type": "object",
+            "properties": {
+                "rerankId": {
                     "type": "string"
                 }
             }

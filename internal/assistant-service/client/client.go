@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 
+	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
 	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
 	"github.com/UnicomAI/wanwu/internal/assistant-service/client/model"
 )
@@ -50,4 +51,12 @@ type IClient interface {
 	GetConversation(ctx context.Context, conversationID uint32) (*model.Conversation, *err_code.Status)
 	GetConversationList(ctx context.Context, assistantID, userID, orgID string, offset, limit int32) ([]*model.Conversation, int64, *err_code.Status)
 	DeleteConversationByAssistantID(ctx context.Context, assistantID, userID, orgID string) *err_code.Status
+
+	//================CustomPrompt================
+	CreateCustomPrompt(ctx context.Context, avatarPath, name, desc, prompt, userId, orgID string) (string, *err_code.Status)
+	DeleteCustomPrompt(ctx context.Context, customPromptID uint32) *err_code.Status
+	UpdateCustomPrompt(ctx context.Context, info *assistant_service.CustomPromptUpdateReq) *err_code.Status
+	GetCustomPrompt(ctx context.Context, customPromptID uint32) (*model.CustomPrompt, *err_code.Status)
+	GetCustomPromptList(ctx context.Context, userID, orgID string, name string) ([]*model.CustomPrompt, int64, *err_code.Status)
+	CopyCustomPrompt(ctx context.Context, customPromptID uint32, userId, orgID string) (string, *err_code.Status)
 }
