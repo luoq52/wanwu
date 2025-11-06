@@ -79,7 +79,10 @@
     <div class="agent_form">
       <!-- 系统提示词 -->
       <div class="block prompt-box drawer-info">
-            <h3 class="labelTitle">系统提示词</h3>
+            <div class="promptTitle">
+              <h3>系统提示词</h3>
+              <span class="el-icon-folder-add"></span>
+            </div>
             <div class="rl" style="padding: 10px;">
               <el-input
                 class="desc-input "
@@ -1298,6 +1301,24 @@ export default {
     font-size: 18px;
     font-weight: 800;
     padding: 10px 20px;
+  }
+  .promptTitle{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 10px 0 10px;
+    h3{
+      font-size: 18px;
+      font-weight: 800;
+    }
+    span{
+      font-size: 16px;
+      color:$color;
+      cursor:pointer;
+      display:inline-block;
+      padding:8px;
+      border-radius:50%;
+      background:#E0E7FF;
+    }
   }
   .actionConfig {
     overflow-y: auto;

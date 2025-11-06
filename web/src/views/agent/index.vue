@@ -139,7 +139,7 @@ export default {
   },
   mounted() {
     if (!localStorage.getItem(this.STORAGE_KEY)) {
-      localStorage.setItem(this.STORAGE_KEY, "active");
+      localStorage.setItem(this.STORAGE_KEY, "");
     }
     window.addEventListener("storage", this.handleStorageEvent);
     //检查是否是移动端
@@ -172,6 +172,7 @@ export default {
     },
     initUUID() {
       const storedUUID = localStorage.getItem("chatUUID");
+      console.log(storedUUID)
       this.uuid = storedUUID || this.$guid();
       if (!storedUUID) {
         localStorage.setItem("chatUUID", this.uuid);
