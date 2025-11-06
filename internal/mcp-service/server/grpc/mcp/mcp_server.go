@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	app_service "github.com/UnicomAI/wanwu/api/proto/app-service"
+	"github.com/UnicomAI/wanwu/api/proto/common"
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
 	"github.com/UnicomAI/wanwu/internal/mcp-service/client/model"
@@ -120,7 +121,7 @@ func (s *Service) GetMCPServerTool(ctx context.Context, req *mcp_service.GetMCPS
 		AppToolId:       info.AppToolId,
 		AppToolName:     info.AppToolName,
 		Schema:          info.Schema,
-		ApiAuth: &mcp_service.ApiAuth{
+		ApiAuth: &common.ApiAuth{
 			AuthType:  info.AuthType,
 			AuthIn:    info.AuthIn,
 			AuthName:  info.AuthName,
@@ -192,7 +193,7 @@ func (s *Service) GetMCPServerToolList(ctx context.Context, req *mcp_service.Get
 			AppToolId:       info.AppToolId,
 			AppToolName:     info.AppToolName,
 			Schema:          info.Schema,
-			ApiAuth: &mcp_service.ApiAuth{
+			ApiAuth: &common.ApiAuth{
 				AuthType:  info.AuthType,
 				AuthIn:    info.AuthIn,
 				AuthName:  info.AuthName,

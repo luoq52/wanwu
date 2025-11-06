@@ -3,15 +3,16 @@ package response
 import (
 	"github.com/ThinkInAIXYZ/go-mcp/protocol"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
+	"github.com/UnicomAI/wanwu/pkg/util"
 )
 
 type CustomToolDetail struct {
 	CustomToolInfo
-	Schema        string                              `json:"schema"`        // schema
-	ApiAuth       request.CustomToolApiAuthWebRequest `json:"apiAuth"`       // apiAuth
-	ApiList       []CustomToolActionInfo              `json:"apiList"`       // action列表
-	PrivacyPolicy string                              `json:"privacyPolicy"` // 隐私政策
-	ToolSquareID  string                              `json:"toolSquareId"`  // 广场mcpId(非空表示来源于广场)
+	Schema        string                 `json:"schema"`        // schema
+	ApiAuth       util.ApiAuthWebRequest `json:"apiAuth"`       // apiAuth
+	ApiList       []CustomToolActionInfo `json:"apiList"`       // action列表
+	PrivacyPolicy string                 `json:"privacyPolicy"` // 隐私政策
+	ToolSquareID  string                 `json:"toolSquareId"`  // 广场mcpId(非空表示来源于广场)
 }
 
 type CustomToolInfo struct {

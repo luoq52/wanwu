@@ -12,16 +12,9 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-type APIAuth struct {
-	Type  string `json:"type"`
-	In    string `json:"in"`
-	Name  string `json:"name"`
-	Value string `json:"value"`
-}
-
 type McpTool struct {
 	schema  string
-	auth    *APIAuth
+	auth    *openapi3_util.Auth
 	tool    *protocol.Tool
 	handler server.ToolHandlerFunc
 }
@@ -32,7 +25,7 @@ func (tool *McpTool) Desc() string { return tool.tool.Description }
 
 func (tool *McpTool) Schema() string { return tool.schema }
 
-func (tool *McpTool) Auth() *APIAuth { return tool.auth }
+func (tool *McpTool) Auth() *openapi3_util.Auth { return tool.auth }
 
 func (tool *McpTool) Update(ctx context.Context, name, desc string) (*McpTool, error) {
 	doc, err := openapi3_util.LoadFromData(ctx, []byte(tool.schema))
@@ -76,7 +69,7 @@ func (tool *McpTool) Update(ctx context.Context, name, desc string) (*McpTool, e
 	}, nil
 }
 
-func CreateMcpTool(ctx context.Context, schema string, auth *APIAuth, operationID string) (*McpTool, error) {
+func CreateMcpTool(ctx context.Context, schema string, auth *openapi3_util.Auth, operationID string) (*McpTool, error) {
 	doc, err := openapi3_util.LoadFromData(ctx, []byte(schema))
 	if err != nil {
 		return nil, err
@@ -97,7 +90,7 @@ func CreateMcpTool(ctx context.Context, schema string, auth *APIAuth, operationI
 	}, nil
 }
 
-func CreateMcpTools(ctx context.Context, schema string, auth *APIAuth, operationIDs []string) ([]*McpTool, error) {
+func CreateMcpTools(ctx context.Context, schema string, auth *openapi3_util.Auth, operationIDs []string) ([]*McpTool, error) {
 	var mcpTools []*McpTool
 	for _, operationID := range operationIDs {
 		mcpTool, err := CreateMcpTool(ctx, schema, auth, operationID)
@@ -109,7 +102,7 @@ func CreateMcpTools(ctx context.Context, schema string, auth *APIAuth, operation
 	return mcpTools, nil
 }
 
-func genMcpToolHandler(doc *openapi3.T, auth *APIAuth, operationID string) server.ToolHandlerFunc {
+func genMcpToolHandler(doc *openapi3.T, auth *openapi3_util.Auth, operationID string) server.ToolHandlerFunc {
 	return func(ctx context.Context, req *protocol.CallToolRequest) (*protocol.CallToolResult, error) {
 
 		// operation
@@ -162,14 +155,14 @@ func genMcpToolHandler(doc *openapi3.T, auth *APIAuth, operationID string) serve
 		}
 
 		// auth
-		if auth != nil {
+		if auth != nil && auth.Type != "" && auth.Type != "none" && auth.Value != "" {
 			// switch auth.In {
 			// case "header":
 			// 	headerParams[auth.Name] = auth.Value
 			// case "query":
 			// 	queryParams[auth.Name] = auth.Value
 			// }
-			// FIXME 目前自定义工具auth设计有缺陷，header/query都传参
+			// FIXME 目前内置工具auth设计有缺陷，header/query都传参
 			headerParams[auth.Name] = auth.Value
 			queryParams[auth.Name] = auth.Value
 		}

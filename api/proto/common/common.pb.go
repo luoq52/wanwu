@@ -619,6 +619,156 @@ func (x *StatisticChartLineItem) GetValue() float32 {
 	return 0
 }
 
+type ApiAuthWebRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	AuthType           string `protobuf:"bytes,1,opt,name=authType,proto3" json:"authType,omitempty"`
+	ApiKeyHeaderPrefix string `protobuf:"bytes,2,opt,name=apiKeyHeaderPrefix,proto3" json:"apiKeyHeaderPrefix,omitempty"`
+	ApiKeyHeader       string `protobuf:"bytes,3,opt,name=apiKeyHeader,proto3" json:"apiKeyHeader,omitempty"`
+	ApiKeyQueryParam   string `protobuf:"bytes,4,opt,name=apiKeyQueryParam,proto3" json:"apiKeyQueryParam,omitempty"`
+	ApiKeyValue        string `protobuf:"bytes,5,opt,name=apiKeyValue,proto3" json:"apiKeyValue,omitempty"`
+}
+
+func (x *ApiAuthWebRequest) Reset() {
+	*x = ApiAuthWebRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_common_common_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ApiAuthWebRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ApiAuthWebRequest) ProtoMessage() {}
+
+func (x *ApiAuthWebRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_common_common_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ApiAuthWebRequest.ProtoReflect.Descriptor instead.
+func (*ApiAuthWebRequest) Descriptor() ([]byte, []int) {
+	return file_proto_common_common_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ApiAuthWebRequest) GetAuthType() string {
+	if x != nil {
+		return x.AuthType
+	}
+	return ""
+}
+
+func (x *ApiAuthWebRequest) GetApiKeyHeaderPrefix() string {
+	if x != nil {
+		return x.ApiKeyHeaderPrefix
+	}
+	return ""
+}
+
+func (x *ApiAuthWebRequest) GetApiKeyHeader() string {
+	if x != nil {
+		return x.ApiKeyHeader
+	}
+	return ""
+}
+
+func (x *ApiAuthWebRequest) GetApiKeyQueryParam() string {
+	if x != nil {
+		return x.ApiKeyQueryParam
+	}
+	return ""
+}
+
+func (x *ApiAuthWebRequest) GetApiKeyValue() string {
+	if x != nil {
+		return x.ApiKeyValue
+	}
+	return ""
+}
+
+type ApiAuth struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	AuthType  string `protobuf:"bytes,1,opt,name=authType,proto3" json:"authType,omitempty"`
+	AuthIn    string `protobuf:"bytes,2,opt,name=authIn,proto3" json:"authIn,omitempty"`
+	AuthName  string `protobuf:"bytes,3,opt,name=authName,proto3" json:"authName,omitempty"`
+	AuthValue string `protobuf:"bytes,4,opt,name=authValue,proto3" json:"authValue,omitempty"`
+}
+
+func (x *ApiAuth) Reset() {
+	*x = ApiAuth{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_common_common_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ApiAuth) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ApiAuth) ProtoMessage() {}
+
+func (x *ApiAuth) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_common_common_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ApiAuth.ProtoReflect.Descriptor instead.
+func (*ApiAuth) Descriptor() ([]byte, []int) {
+	return file_proto_common_common_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *ApiAuth) GetAuthType() string {
+	if x != nil {
+		return x.AuthType
+	}
+	return ""
+}
+
+func (x *ApiAuth) GetAuthIn() string {
+	if x != nil {
+		return x.AuthIn
+	}
+	return ""
+}
+
+func (x *ApiAuth) GetAuthName() string {
+	if x != nil {
+		return x.AuthName
+	}
+	return ""
+}
+
+func (x *ApiAuth) GetAuthValue() string {
+	if x != nil {
+		return x.AuthValue
+	}
+	return ""
+}
+
 var File_proto_common_common_proto protoreflect.FileDescriptor
 
 var file_proto_common_common_proto_rawDesc = []byte{
@@ -700,11 +850,31 @@ var file_proto_common_common_proto_rawDesc = []byte{
 	0x74, 0x61, 0x74, 0x69, 0x73, 0x74, 0x69, 0x63, 0x43, 0x68, 0x61, 0x72, 0x74, 0x4c, 0x69, 0x6e,
 	0x65, 0x49, 0x74, 0x65, 0x6d, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x42, 0x2c, 0x5a,
-	0x2a, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x55, 0x6e, 0x69, 0x63,
-	0x6f, 0x6d, 0x41, 0x49, 0x2f, 0x77, 0x61, 0x6e, 0x77, 0x75, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x02, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x22, 0xd1, 0x01,
+	0x0a, 0x11, 0x41, 0x70, 0x69, 0x41, 0x75, 0x74, 0x68, 0x57, 0x65, 0x62, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x61, 0x75, 0x74, 0x68, 0x54, 0x79, 0x70, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x61, 0x75, 0x74, 0x68, 0x54, 0x79, 0x70, 0x65, 0x12,
+	0x2e, 0x0a, 0x12, 0x61, 0x70, 0x69, 0x4b, 0x65, 0x79, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x50,
+	0x72, 0x65, 0x66, 0x69, 0x78, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x12, 0x61, 0x70, 0x69,
+	0x4b, 0x65, 0x79, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x50, 0x72, 0x65, 0x66, 0x69, 0x78, 0x12,
+	0x22, 0x0a, 0x0c, 0x61, 0x70, 0x69, 0x4b, 0x65, 0x79, 0x48, 0x65, 0x61, 0x64, 0x65, 0x72, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x61, 0x70, 0x69, 0x4b, 0x65, 0x79, 0x48, 0x65, 0x61,
+	0x64, 0x65, 0x72, 0x12, 0x2a, 0x0a, 0x10, 0x61, 0x70, 0x69, 0x4b, 0x65, 0x79, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x61,
+	0x70, 0x69, 0x4b, 0x65, 0x79, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x12,
+	0x20, 0x0a, 0x0b, 0x61, 0x70, 0x69, 0x4b, 0x65, 0x79, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x61, 0x70, 0x69, 0x4b, 0x65, 0x79, 0x56, 0x61, 0x6c, 0x75,
+	0x65, 0x22, 0x77, 0x0a, 0x07, 0x41, 0x70, 0x69, 0x41, 0x75, 0x74, 0x68, 0x12, 0x1a, 0x0a, 0x08,
+	0x61, 0x75, 0x74, 0x68, 0x54, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x61, 0x75, 0x74, 0x68, 0x54, 0x79, 0x70, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x75, 0x74, 0x68,
+	0x49, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x75, 0x74, 0x68, 0x49, 0x6e,
+	0x12, 0x1a, 0x0a, 0x08, 0x61, 0x75, 0x74, 0x68, 0x4e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x08, 0x61, 0x75, 0x74, 0x68, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1c, 0x0a, 0x09,
+	0x61, 0x75, 0x74, 0x68, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x09, 0x61, 0x75, 0x74, 0x68, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x42, 0x2c, 0x5a, 0x2a, 0x67, 0x69,
+	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x55, 0x6e, 0x69, 0x63, 0x6f, 0x6d, 0x41,
+	0x49, 0x2f, 0x77, 0x61, 0x6e, 0x77, 0x75, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -719,7 +889,7 @@ func file_proto_common_common_proto_rawDescGZIP() []byte {
 	return file_proto_common_common_proto_rawDescData
 }
 
-var file_proto_common_common_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_proto_common_common_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_proto_common_common_proto_goTypes = []interface{}{
 	(*AppBrief)(nil),                   // 0: common.AppBrief
 	(*AppBriefConfig)(nil),             // 1: common.AppBriefConfig
@@ -730,19 +900,21 @@ var file_proto_common_common_proto_goTypes = []interface{}{
 	(*StatisticChart)(nil),             // 6: common.StatisticChart
 	(*StatisticChartLine)(nil),         // 7: common.StatisticChartLine
 	(*StatisticChartLineItem)(nil),     // 8: common.StatisticChartLineItem
-	nil,                                // 9: common.ToolActionInputSchema.PropertiesEntry
+	(*ApiAuthWebRequest)(nil),          // 9: common.ApiAuthWebRequest
+	(*ApiAuth)(nil),                    // 10: common.ApiAuth
+	nil,                                // 11: common.ToolActionInputSchema.PropertiesEntry
 }
 var file_proto_common_common_proto_depIdxs = []int32{
-	4, // 0: common.ToolAction.inputSchema:type_name -> common.ToolActionInputSchema
-	9, // 1: common.ToolActionInputSchema.properties:type_name -> common.ToolActionInputSchema.PropertiesEntry
-	7, // 2: common.StatisticChart.chartLines:type_name -> common.StatisticChartLine
-	8, // 3: common.StatisticChartLine.items:type_name -> common.StatisticChartLineItem
-	5, // 4: common.ToolActionInputSchema.PropertiesEntry.value:type_name -> common.ToolActionInputSchemaValue
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	4,  // 0: common.ToolAction.inputSchema:type_name -> common.ToolActionInputSchema
+	11, // 1: common.ToolActionInputSchema.properties:type_name -> common.ToolActionInputSchema.PropertiesEntry
+	7,  // 2: common.StatisticChart.chartLines:type_name -> common.StatisticChartLine
+	8,  // 3: common.StatisticChartLine.items:type_name -> common.StatisticChartLineItem
+	5,  // 4: common.ToolActionInputSchema.PropertiesEntry.value:type_name -> common.ToolActionInputSchemaValue
+	5,  // [5:5] is the sub-list for method output_type
+	5,  // [5:5] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_proto_common_common_proto_init() }
@@ -859,6 +1031,30 @@ func file_proto_common_common_proto_init() {
 				return nil
 			}
 		}
+		file_proto_common_common_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ApiAuthWebRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_common_common_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ApiAuth); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -866,7 +1062,7 @@ func file_proto_common_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_common_common_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

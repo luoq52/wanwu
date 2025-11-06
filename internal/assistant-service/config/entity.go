@@ -1,5 +1,9 @@
 package config
 
+import (
+	openapi3_util "github.com/UnicomAI/wanwu/pkg/openapi3-util"
+)
+
 type AgentScopeWorkFlowSchemaResp struct {
 	Code int `json:"code"`
 	Data struct {
@@ -74,14 +78,7 @@ type AgentSSERequest struct {
 
 type PluginListAlgRequest struct {
 	APISchema map[string]interface{} `json:"api_schema"`
-	APIAuth   *APIAuth               `json:"api_auth,omitempty"`
-}
-
-type APIAuth struct {
-	Type  string `json:"type"`
-	In    string `json:"in"`
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	APIAuth   *openapi3_util.Auth    `json:"api_auth,omitempty"`
 }
 
 type MCPToolInfo struct {

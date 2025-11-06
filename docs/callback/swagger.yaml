@@ -1097,28 +1097,6 @@ definitions:
       llm_model_id:
         type: string
     type: object
-  request.CustomToolApiAuthWebRequest:
-    properties:
-      apiKey:
-        description: apiKey 仅当认证类型为API Key时必填
-        type: string
-      authType:
-        description: Auth类型 仅当认证类型为API Key时必填，也可以为空
-        enum:
-        - Custom
-        type: string
-      customHeaderName:
-        description: Custom Header Name 仅当认证类型为API Key时必填
-        type: string
-      type:
-        description: 认证类型 None 或 APIKey
-        enum:
-        - None
-        - API Key
-        type: string
-    required:
-    - type
-    type: object
   request.HistoryItem:
     properties:
       needHistory:
@@ -1321,7 +1299,7 @@ definitions:
     properties:
       apiAuth:
         allOf:
-        - $ref: '#/definitions/request.CustomToolApiAuthWebRequest'
+        - $ref: '#/definitions/util.ApiAuthWebRequest'
         description: apiAuth
       apiList:
         description: action列表
@@ -1454,6 +1432,34 @@ definitions:
         items:
           $ref: '#/definitions/protocol.Tool'
         type: array
+    type: object
+  util.ApiAuthWebRequest:
+    properties:
+      apiKeyHeader:
+        description: HTTP头部名称
+        type: string
+      apiKeyHeaderPrefix:
+        description: 鉴权头部前缀
+        enum:
+        - basic
+        - bearer
+        - custom
+        type: string
+      apiKeyQueryParam:
+        description: 查询参数名称
+        type: string
+      apiKeyValue:
+        description: apiKey
+        type: string
+      authType:
+        description: 鉴权类型 None 或 请求头 或 查询参数
+        enum:
+        - none
+        - api_key_query
+        - api_key_header
+        type: string
+    required:
+    - authType
     type: object
 info:
   contact: {}

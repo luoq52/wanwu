@@ -4,16 +4,16 @@ import (
 	"context"
 
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
-	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
-	mcp_util "github.com/UnicomAI/wanwu/internal/bff-service/pkg/mcp-util"
 	"github.com/UnicomAI/wanwu/pkg/constant"
+	openapi3_util "github.com/UnicomAI/wanwu/pkg/openapi3-util"
+	"github.com/UnicomAI/wanwu/pkg/util"
 )
 
 type mcpServerToolBuilder interface {
 	MCPServerToolType() string
 	AppID() string
 	AppName() string
-	GetOpenapiSchema(ctx context.Context) (string, *mcp_util.APIAuth, error)
+	GetOpenapiSchema(ctx context.Context) (string, *openapi3_util.Auth, error)
 }
 
 // --- mcpServerCustomToolBuilder ---
@@ -35,7 +35,7 @@ func (builder *mcpServerCustomToolBuilder) AppName() string {
 	return builder.customToolName
 }
 
-func (builder *mcpServerCustomToolBuilder) GetOpenapiSchema(ctx context.Context) (string, *mcp_util.APIAuth, error) {
+func (builder *mcpServerCustomToolBuilder) GetOpenapiSchema(ctx context.Context) (string, *openapi3_util.Auth, error) {
 	customToolInfo, err := mcp.GetCustomToolInfo(ctx, &mcp_service.GetCustomToolInfoReq{
 		CustomToolId: builder.customToolID,
 	})
@@ -43,7 +43,11 @@ func (builder *mcpServerCustomToolBuilder) GetOpenapiSchema(ctx context.Context)
 		return "", nil, err
 	}
 	builder.customToolName = customToolInfo.Name
-	return customToolInfo.Schema, convertToolApiAuth(customToolInfo.ApiAuth), nil
+	auth, err := util.ConvertApiAuthWebRequestProto(customToolInfo.ApiAuth)
+	if err != nil {
+		return "", nil, err
+	}
+	return customToolInfo.Schema, auth, nil
 }
 
 // --- mcpServerOpenapiSchemaBuilder ---
@@ -51,7 +55,7 @@ func (builder *mcpServerCustomToolBuilder) GetOpenapiSchema(ctx context.Context)
 type mcpServerOpenapiSchemaBuilder struct {
 	schema string
 	name   string
-	auth   request.CustomToolApiAuthWebRequest
+	auth   util.ApiAuthWebRequest
 }
 
 func (mcpServerOpenapiSchemaBuilder) MCPServerToolType() string {
@@ -66,20 +70,10 @@ func (builder *mcpServerOpenapiSchemaBuilder) AppName() string {
 	return builder.name
 }
 
-func (builder *mcpServerOpenapiSchemaBuilder) GetOpenapiSchema(ctx context.Context) (string, *mcp_util.APIAuth, error) {
-	auth := &mcp_util.APIAuth{}
-	if builder.auth.Type != "" && builder.auth.Type != "None" {
-		auth.Type = "API Key"
-		auth.In = "header"
-		if builder.auth.AuthType == "Custom" {
-			if builder.auth.CustomHeaderName != "" {
-				auth.Name = builder.auth.CustomHeaderName
-				auth.Value = builder.auth.APIKey
-			}
-		} else {
-			auth.Name = "Authorization"
-			auth.Value = "Bearer " + builder.auth.APIKey
-		}
+func (builder *mcpServerOpenapiSchemaBuilder) GetOpenapiSchema(ctx context.Context) (string, *openapi3_util.Auth, error) {
+	auth, err := builder.auth.ToOpenapiAuth()
+	if err != nil {
+		return "", nil, err
 	}
 	return builder.schema, auth, nil
 }

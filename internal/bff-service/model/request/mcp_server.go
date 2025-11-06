@@ -1,5 +1,7 @@
 package request
 
+import "github.com/UnicomAI/wanwu/pkg/util"
+
 type MCPServerCreateReq struct {
 	Avatar Avatar `json:"avatar"`                   // 图标
 	Name   string `json:"name" validate:"required"` // 名称
@@ -49,12 +51,12 @@ type MCPServerToolIDReq struct {
 func (req *MCPServerToolIDReq) Check() error { return nil }
 
 type MCPServerOpenAPIToolCreate struct {
-	MCPServerID   string                      `json:"mcpServerId" validate:"required"` // mcp server Id
-	Name          string                      `json:"name" validate:"required"`        // 名称
-	ApiAuth       CustomToolApiAuthWebRequest `json:"apiAuth" validate:"required"`     // api身份认证
-	Schema        string                      `json:"schema"  validate:"required"`     // schema
-	PrivacyPolicy string                      `json:"privacyPolicy"`                   // 隐私政策
-	MethodNames   []string                    `json:"methodNames" validate:"required"` // API名称列表
+	MCPServerID   string                 `json:"mcpServerId" validate:"required"` // mcp server Id
+	Name          string                 `json:"name" validate:"required"`        // 名称
+	ApiAuth       util.ApiAuthWebRequest `json:"apiAuth" validate:"required"`     // api身份认证
+	Schema        string                 `json:"schema"  validate:"required"`     // schema
+	PrivacyPolicy string                 `json:"privacyPolicy"`                   // 隐私政策
+	MethodNames   []string               `json:"methodNames" validate:"required"` // API名称列表
 }
 
 func (req *MCPServerOpenAPIToolCreate) Check() error { return nil }

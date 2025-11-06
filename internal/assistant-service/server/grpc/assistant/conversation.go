@@ -29,6 +29,7 @@ import (
 	"github.com/UnicomAI/wanwu/pkg/log"
 	mp "github.com/UnicomAI/wanwu/pkg/model-provider"
 	openapi3_util "github.com/UnicomAI/wanwu/pkg/openapi3-util"
+	"github.com/UnicomAI/wanwu/pkg/util"
 	pkgUtil "github.com/UnicomAI/wanwu/pkg/util"
 
 	"github.com/google/uuid"
@@ -841,8 +842,8 @@ func (s *Service) buildToolPluginListAlgParam(ctx context.Context, sseReq *confi
 			continue // 跳过禁用的工具
 		}
 
-		var rawSchema string        // 原始schema字符串
-		var apiAuth *config.APIAuth // API认证信息
+		var rawSchema string            // 原始schema字符串
+		var apiAuth *openapi3_util.Auth // API认证信息
 
 		// 根据工具类型获取详情和原始schema
 		switch tool.ToolType {
@@ -852,14 +853,17 @@ func (s *Service) buildToolPluginListAlgParam(ctx context.Context, sseReq *confi
 				CustomToolId: tool.ToolId,
 			})
 			if err != nil {
-				log.Infof("获取自定义工具信息失败，assistantId: %s, toolId: %s, err: %v", assistantId, tool.ToolId, err)
+				log.Errorf("获取自定义工具信息失败，assistantId: %s, toolId: %s, err: %v", assistantId, tool.ToolId, err)
 				continue
 			}
 			rawSchema = customTool.Schema
 
 			// 构建自定义工具的API认证
 			if customTool.ApiAuth != nil {
-				apiAuth = convertToolApiAuth(customTool.ApiAuth)
+				if apiAuth, err = util.ConvertApiAuthWebRequestProto(customTool.ApiAuth); err != nil {
+					log.Errorf("转换自定义工具API失败，assistantId: %s, toolId: %s, err: %v", assistantId, tool.ToolId, err)
+					continue
+				}
 			}
 		case constant.ToolTypeBuiltIn:
 			// 如果是博查搜索，特殊处理，兼容旧的智能体接口传参格式
@@ -922,20 +926,13 @@ func (s *Service) buildToolPluginListAlgParam(ctx context.Context, sseReq *confi
 				},
 			})
 			if err != nil {
-				log.Infof("获取内置工具信息失败，assistantId: %s, toolId: %s, err: %v", assistantId, tool.ToolId, err)
+				log.Errorf("获取内置工具信息失败，assistantId: %s, toolId: %s, err: %v", assistantId, tool.ToolId, err)
 				continue
 			}
 			rawSchema = builtinTool.Schema
 
 			// 构建内置工具的API认证
-			if builtinTool.BuiltInTools.ApiKey != "" {
-				apiAuth = &config.APIAuth{
-					Type:  "apiKey",
-					In:    "header",
-					Name:  "Authorization",
-					Value: fmt.Sprintf("Bearer %s", builtinTool.BuiltInTools.ApiKey),
-				}
-			}
+			apiAuth = openapi3_util.DefaultAuth(builtinTool.BuiltInTools.ApiKey)
 		}
 
 		// 处理schema
@@ -951,24 +948,6 @@ func (s *Service) buildToolPluginListAlgParam(ctx context.Context, sseReq *confi
 	}
 
 	return pluginList, nil
-}
-
-func convertToolApiAuth(auth *mcp_service.ApiAuthWebRequest) *config.APIAuth {
-	ret := &config.APIAuth{}
-	if auth != nil && auth.Type != "" && auth.Type != "None" {
-		ret.Type = "apiKey"
-		ret.In = "query"
-		if auth.AuthType == "Custom" {
-			if auth.CustomHeaderName != "" {
-				ret.Name = auth.CustomHeaderName
-				ret.Value = auth.ApiKey
-			}
-		} else {
-			ret.Name = "Authorization"
-			ret.Value = "Bearer " + auth.ApiKey
-		}
-	}
-	return ret
 }
 
 func processSchema(ctx context.Context, rawSchema string, actionName string) (map[string]interface{}, error) {

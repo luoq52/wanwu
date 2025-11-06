@@ -2,6 +2,7 @@ package service
 
 import (
 	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
+	"github.com/UnicomAI/wanwu/api/proto/common"
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
 	"github.com/UnicomAI/wanwu/internal/bff-service/config"
@@ -10,6 +11,7 @@ import (
 	"github.com/UnicomAI/wanwu/pkg/constant"
 	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
 	openapi3_util "github.com/UnicomAI/wanwu/pkg/openapi3-util"
+	"github.com/UnicomAI/wanwu/pkg/util"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/gin-gonic/gin"
 )
@@ -24,11 +26,12 @@ func CreateCustomTool(ctx *gin.Context, userID, orgID string, req request.Custom
 		Name:          req.Name,
 		Description:   req.Description,
 		PrivacyPolicy: req.PrivacyPolicy,
-		ApiAuth: &mcp_service.ApiAuthWebRequest{
-			Type:             req.ApiAuth.Type,
-			ApiKey:           req.ApiAuth.APIKey,
-			CustomHeaderName: req.ApiAuth.CustomHeaderName,
-			AuthType:         req.ApiAuth.AuthType,
+		ApiAuth: &common.ApiAuthWebRequest{
+			AuthType:           req.ApiAuth.AuthType,
+			ApiKeyHeaderPrefix: req.ApiAuth.ApiKeyHeaderPrefix,
+			ApiKeyHeader:       req.ApiAuth.ApiKeyHeader,
+			ApiKeyQueryParam:   req.ApiAuth.ApiKeyQueryParam,
+			ApiKeyValue:        req.ApiAuth.ApiKeyValue,
 		},
 		Identity: &mcp_service.Identity{
 			UserId: userID,
@@ -59,11 +62,12 @@ func GetCustomTool(ctx *gin.Context, userID, orgID string, customToolId string) 
 		ToolSquareID:  info.ToolSquareId,
 		Schema:        info.Schema,
 		PrivacyPolicy: info.PrivacyPolicy,
-		ApiAuth: request.CustomToolApiAuthWebRequest{
-			Type:             info.ApiAuth.Type,
-			APIKey:           info.ApiAuth.ApiKey,
-			CustomHeaderName: info.ApiAuth.CustomHeaderName,
-			AuthType:         info.ApiAuth.AuthType,
+		ApiAuth: util.ApiAuthWebRequest{
+			AuthType:           info.ApiAuth.AuthType,
+			ApiKeyHeaderPrefix: info.ApiAuth.ApiKeyHeaderPrefix,
+			ApiKeyHeader:       info.ApiAuth.ApiKeyHeader,
+			ApiKeyQueryParam:   info.ApiAuth.ApiKeyQueryParam,
+			ApiKeyValue:        info.ApiAuth.ApiKeyValue,
 		},
 		ApiList: openapiSchema2ToolList(doc),
 	}, nil
@@ -94,11 +98,12 @@ func UpdateCustomTool(ctx *gin.Context, userID, orgID string, req request.Custom
 		AvatarPath:   req.Avatar.Key,
 		Name:         req.Name,
 		Description:  req.Description,
-		ApiAuth: &mcp_service.ApiAuthWebRequest{
-			Type:             req.ApiAuth.Type,
-			ApiKey:           req.ApiAuth.APIKey,
-			CustomHeaderName: req.ApiAuth.CustomHeaderName,
-			AuthType:         req.ApiAuth.AuthType,
+		ApiAuth: &common.ApiAuthWebRequest{
+			AuthType:           req.ApiAuth.AuthType,
+			ApiKeyHeaderPrefix: req.ApiAuth.ApiKeyHeaderPrefix,
+			ApiKeyHeader:       req.ApiAuth.ApiKeyHeader,
+			ApiKeyQueryParam:   req.ApiAuth.ApiKeyQueryParam,
+			ApiKeyValue:        req.ApiAuth.ApiKeyValue,
 		},
 		Schema:        req.Schema,
 		PrivacyPolicy: req.PrivacyPolicy,

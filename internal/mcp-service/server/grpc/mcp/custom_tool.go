@@ -2,10 +2,12 @@ package mcp
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 
 	"github.com/UnicomAI/wanwu/pkg/constant"
 
+	"github.com/UnicomAI/wanwu/api/proto/common"
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
 	"github.com/UnicomAI/wanwu/internal/mcp-service/client/model"
@@ -22,19 +24,27 @@ func (s *Service) CreateCustomTool(ctx context.Context, req *mcp_service.CreateC
 	if req.ApiAuth == nil {
 		return nil, errStatus(errs.Code_MCPCreateCustomToolErr, toErrStatus("mcp_create_custom_tool_err", "apiAuth is empty"))
 	}
+	apiAuth := &common.ApiAuthWebRequest{
+		AuthType:           req.ApiAuth.AuthType,
+		ApiKeyHeaderPrefix: req.ApiAuth.ApiKeyHeaderPrefix,
+		ApiKeyHeader:       req.ApiAuth.ApiKeyHeader,
+		ApiKeyQueryParam:   req.ApiAuth.ApiKeyQueryParam,
+		ApiKeyValue:        req.ApiAuth.ApiKeyValue,
+	}
+	apiAuthBytes, err := json.Marshal(apiAuth)
+	if err != nil {
+		return nil, errStatus(errs.Code_MCPCreateCustomToolErr, toErrStatus("mcp_create_custom_tool_err", err.Error()))
+	}
 	if err := s.cli.CreateCustomTool(ctx, &model.CustomTool{
-		AvatarPath:       req.AvatarPath,
-		Name:             req.Name,
-		Description:      req.Description,
-		Schema:           req.Schema,
-		PrivacyPolicy:    req.PrivacyPolicy,
-		Type:             req.ApiAuth.Type,
-		APIKey:           req.ApiAuth.ApiKey,
-		AuthType:         req.ApiAuth.AuthType,
-		CustomHeaderName: req.ApiAuth.CustomHeaderName,
-		UserID:           req.Identity.UserId,
-		OrgID:            req.Identity.OrgId,
-		ToolSquareId:     req.ToolSquareId,
+		AvatarPath:    req.AvatarPath,
+		Name:          req.Name,
+		Description:   req.Description,
+		Schema:        req.Schema,
+		PrivacyPolicy: req.PrivacyPolicy,
+		AuthJSON:      string(apiAuthBytes),
+		UserID:        req.Identity.UserId,
+		OrgID:         req.Identity.OrgId,
+		ToolSquareId:  req.ToolSquareId,
 	}); err != nil {
 		return nil, errStatus(errs.Code_MCPCreateCustomToolErr, err)
 	}
@@ -51,6 +61,11 @@ func (s *Service) GetCustomToolInfo(ctx context.Context, req *mcp_service.GetCus
 	if err != nil {
 		return nil, grpc_util.ErrorStatus(errs.Code_MCPGetCustomToolInfoErr)
 	}
+	apiAuthJson := info.AuthJSON
+	apiAuth := &common.ApiAuthWebRequest{}
+	if err := json.Unmarshal([]byte(apiAuthJson), apiAuth); err != nil {
+		return nil, errStatus(errs.Code_MCPGetCustomToolInfoErr, toErrStatus("mcp_get_custom_tool_info_err", err.Error()))
+	}
 	return &mcp_service.GetCustomToolInfoResp{
 		CustomToolId:  util.Int2Str(info.ID),
 		AvatarPath:    info.AvatarPath,
@@ -58,12 +73,7 @@ func (s *Service) GetCustomToolInfo(ctx context.Context, req *mcp_service.GetCus
 		Description:   info.Description,
 		Schema:        info.Schema,
 		PrivacyPolicy: info.PrivacyPolicy,
-		ApiAuth: &mcp_service.ApiAuthWebRequest{
-			Type:             info.Type,
-			ApiKey:           info.APIKey,
-			AuthType:         info.AuthType,
-			CustomHeaderName: info.CustomHeaderName,
-		},
+		ApiAuth:       apiAuth,
 	}, nil
 }
 
@@ -125,17 +135,25 @@ func (s *Service) UpdateCustomTool(ctx context.Context, req *mcp_service.UpdateC
 	if req.ApiAuth == nil {
 		return nil, errStatus(errs.Code_MCPUpdateCustomToolErr, toErrStatus("mcp_update_custom_tool_err", "apiAuth is empty"))
 	}
+	apiAuth := &common.ApiAuthWebRequest{
+		AuthType:           req.ApiAuth.AuthType,
+		ApiKeyHeaderPrefix: req.ApiAuth.ApiKeyHeaderPrefix,
+		ApiKeyHeader:       req.ApiAuth.ApiKeyHeader,
+		ApiKeyQueryParam:   req.ApiAuth.ApiKeyQueryParam,
+		ApiKeyValue:        req.ApiAuth.ApiKeyValue,
+	}
+	apiAuthBytes, err := json.Marshal(apiAuth)
+	if err != nil {
+		return nil, errStatus(errs.Code_MCPUpdateCustomToolErr, toErrStatus("mcp_update_custom_tool_err", err.Error()))
+	}
 	if err := s.cli.UpdateCustomTool(ctx, &model.CustomTool{
-		ID:               util.MustU32(req.CustomToolId),
-		AvatarPath:       req.AvatarPath,
-		Name:             req.Name,
-		Description:      req.Description,
-		Schema:           req.Schema,
-		PrivacyPolicy:    req.PrivacyPolicy,
-		Type:             req.ApiAuth.Type,
-		APIKey:           req.ApiAuth.ApiKey,
-		AuthType:         req.ApiAuth.AuthType,
-		CustomHeaderName: req.ApiAuth.CustomHeaderName,
+		ID:            util.MustU32(req.CustomToolId),
+		AvatarPath:    req.AvatarPath,
+		Name:          req.Name,
+		Description:   req.Description,
+		Schema:        req.Schema,
+		PrivacyPolicy: req.PrivacyPolicy,
+		AuthJSON:      string(apiAuthBytes),
 	}); err != nil {
 		return nil, errStatus(errs.Code_MCPUpdateCustomToolErr, err)
 	}
@@ -247,7 +265,6 @@ func (s *Service) GetToolByIdList(ctx context.Context, req *mcp_service.GetToolB
 }
 
 func (s *Service) UpsertBuiltinToolAPIKey(ctx context.Context, req *mcp_service.UpsertBuiltinToolAPIKeyReq) (*emptypb.Empty, error) {
-
 	if req.Identity == nil {
 		return nil, errStatus(errs.Code_MCPUpdateCustomToolErr, toErrStatus("mcp_update_custom_tool_err", "identity is empty"))
 	}

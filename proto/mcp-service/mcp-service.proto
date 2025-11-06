@@ -200,20 +200,13 @@ message Identity {
 
 message CreateCustomToolReq {
     string schema = 1;
-    ApiAuthWebRequest apiAuth = 2;
+    common.ApiAuthWebRequest apiAuth = 2;
     Identity identity = 3;
     string name = 4;
     string description = 5;
     string privacyPolicy = 6;
     string toolSquareId = 7;
     string avatarPath = 8;
-}
-
-message ApiAuthWebRequest{
-    string type = 1;
-    string apiKey = 2;
-    string customHeaderName = 3;
-    string authType = 4;
 }
 
 message GetCustomToolInfoReq {
@@ -224,7 +217,7 @@ message GetCustomToolInfoReq {
 message GetCustomToolInfoResp {
     string customToolId = 1;
     string schema = 2;
-    ApiAuthWebRequest apiAuth = 3;
+    common.ApiAuthWebRequest apiAuth = 3;
     string name = 4;
     string description = 5;
     string privacyPolicy = 6;
@@ -256,7 +249,7 @@ message GetCustomToolListResp {
 message UpdateCustomToolReq {
     string customToolId = 1;
     string schema = 2;
-    ApiAuthWebRequest apiAuth = 3;
+    common.ApiAuthWebRequest apiAuth = 3;
     string name = 4;
     string description = 5;
     string privacyPolicy = 6;
@@ -406,13 +399,6 @@ message GetMCPServerToolListResp {
   repeated MCPServerToolInfo list = 1;
 }
 
-message ApiAuth {
-  string authType = 1;
-  string authIn = 2;
-  string authName = 3;
-  string authValue = 4;
-}
-
 message MCPServerToolInfo {
   string mcpServerToolId = 1;
   string mcpServerId = 2;
@@ -422,7 +408,7 @@ message MCPServerToolInfo {
   string appToolId = 6;
   string appToolName = 7;
   string schema = 8;
-  ApiAuth apiAuth = 9;
+  common.ApiAuth apiAuth = 9;
 }
 message GetToolByToolIdListReq {
     repeated string builtInToolIdList = 1;

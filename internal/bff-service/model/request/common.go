@@ -3,6 +3,10 @@ package request
 type CommonCheck struct {
 }
 
+func (c *CommonCheck) Check() error {
+	return nil
+}
+
 type PageSearch struct {
 	PageSize int `json:"pageSize" form:"pageSize" validate:"required"`
 	PageNo   int `json:"pageNo" form:"pageNo"`
@@ -13,6 +17,10 @@ type LoginEmailCheck struct {
 	Code  string `json:"code" validate:"required"`  // 邮箱验证码
 }
 
+func (l *LoginEmailCheck) Check() error {
+	return nil
+}
+
 type ChangeUserPasswordByEmail struct {
 	OldPassword string `json:"oldPassword" validate:"required"`
 	NewPassword string `json:"newPassword" validate:"required"`
@@ -20,13 +28,6 @@ type ChangeUserPasswordByEmail struct {
 	Code        string `json:"code" validate:"required"`  // 邮箱验证码
 }
 
-func (l *LoginEmailCheck) Check() error {
-	return nil
-}
-
 func (c *ChangeUserPasswordByEmail) Check() error {
-	return nil
-}
-func (c *CommonCheck) Check() error {
 	return nil
 }

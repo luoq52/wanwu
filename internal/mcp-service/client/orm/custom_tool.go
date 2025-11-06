@@ -84,15 +84,12 @@ func (c *Client) UpdateCustomTool(ctx context.Context, customTool *model.CustomT
 		if err := sqlopt.SQLOptions(
 			sqlopt.WithID(customTool.ID),
 		).Apply(c.db).WithContext(ctx).Model(customTool).Updates(map[string]interface{}{
-			"name":               customTool.Name,
-			"avatar_path":        customTool.AvatarPath,
-			"description":        customTool.Description,
-			"schema":             customTool.Schema,
-			"privacy_policy":     customTool.PrivacyPolicy,
-			"api_key":            customTool.APIKey,
-			"auth_type":          customTool.AuthType,
-			"custom_header_name": customTool.CustomHeaderName,
-			"type":               customTool.Type,
+			"name":           customTool.Name,
+			"avatar_path":    customTool.AvatarPath,
+			"description":    customTool.Description,
+			"schema":         customTool.Schema,
+			"privacy_policy": customTool.PrivacyPolicy,
+			"auth_json":      customTool.AuthJSON,
 		}).Error; err != nil {
 			return toErrStatus("mcp_update_custom_tool_err", err.Error())
 		}

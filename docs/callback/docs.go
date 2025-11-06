@@ -2231,37 +2231,6 @@ const docTemplate = `{
                 }
             }
         },
-        "request.CustomToolApiAuthWebRequest": {
-            "type": "object",
-            "required": [
-                "type"
-            ],
-            "properties": {
-                "apiKey": {
-                    "description": "apiKey 仅当认证类型为API Key时必填",
-                    "type": "string"
-                },
-                "authType": {
-                    "description": "Auth类型 仅当认证类型为API Key时必填，也可以为空",
-                    "type": "string",
-                    "enum": [
-                        "Custom"
-                    ]
-                },
-                "customHeaderName": {
-                    "description": "Custom Header Name 仅当认证类型为API Key时必填",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "认证类型 None 或 APIKey",
-                    "type": "string",
-                    "enum": [
-                        "None",
-                        "API Key"
-                    ]
-                }
-            }
-        },
         "request.HistoryItem": {
             "type": "object",
             "properties": {
@@ -2561,7 +2530,7 @@ const docTemplate = `{
                     "description": "apiAuth",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/request.CustomToolApiAuthWebRequest"
+                            "$ref": "#/definitions/util.ApiAuthWebRequest"
                         }
                     ]
                 },
@@ -2756,6 +2725,44 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/protocol.Tool"
                     }
+                }
+            }
+        },
+        "util.ApiAuthWebRequest": {
+            "type": "object",
+            "required": [
+                "authType"
+            ],
+            "properties": {
+                "apiKeyHeader": {
+                    "description": "HTTP头部名称",
+                    "type": "string"
+                },
+                "apiKeyHeaderPrefix": {
+                    "description": "鉴权头部前缀",
+                    "type": "string",
+                    "enum": [
+                        "basic",
+                        "bearer",
+                        "custom"
+                    ]
+                },
+                "apiKeyQueryParam": {
+                    "description": "查询参数名称",
+                    "type": "string"
+                },
+                "apiKeyValue": {
+                    "description": "apiKey",
+                    "type": "string"
+                },
+                "authType": {
+                    "description": "鉴权类型 None 或 请求头 或 查询参数",
+                    "type": "string",
+                    "enum": [
+                        "none",
+                        "api_key_query",
+                        "api_key_header"
+                    ]
                 }
             }
         }

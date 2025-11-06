@@ -7,6 +7,7 @@ import (
 
 	app_service "github.com/UnicomAI/wanwu/api/proto/app-service"
 	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
+	"github.com/UnicomAI/wanwu/api/proto/common"
 	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
@@ -15,6 +16,7 @@ import (
 	"github.com/UnicomAI/wanwu/pkg/constant"
 	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
 	openapi3_util "github.com/UnicomAI/wanwu/pkg/openapi3-util"
+	"github.com/UnicomAI/wanwu/pkg/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +36,7 @@ func StartMCPServer(ctx context.Context) error {
 		}
 		var mcpTools []*mcp_util.McpTool
 		for _, tool := range mcpServerToolList.List {
-			tools, err := mcp_util.CreateMcpTools(ctx, tool.Schema, convertMcpApiAuth(tool.ApiAuth), []string{tool.Name})
+			tools, err := mcp_util.CreateMcpTools(ctx, tool.Schema, util.ConvertApiAuthProto(tool.ApiAuth), []string{tool.Name})
 			if err != nil {
 				return err
 			}
@@ -187,7 +189,7 @@ func UpdateMCPServerTool(ctx *gin.Context, req request.MCPServerToolUpdateReq) e
 		return nil
 	}
 
-	mcpTool, err := mcp_util.CreateMcpTool(ctx.Request.Context(), tool.Schema, convertMcpApiAuth(tool.ApiAuth), tool.Name)
+	mcpTool, err := mcp_util.CreateMcpTool(ctx.Request.Context(), tool.Schema, util.ConvertApiAuthProto(tool.ApiAuth), tool.Name)
 	if err != nil {
 		return err
 	}
@@ -349,7 +351,7 @@ func createMCPServerTool(ctx *gin.Context, mcpServerID string, builder mcpServer
 			Name:        tool.Name(),
 			Desc:        tool.Desc(),
 			Schema:      tool.Schema(),
-			ApiAuth: &mcp_service.ApiAuth{
+			ApiAuth: &common.ApiAuth{
 				AuthType:  tool.Auth().Type,
 				AuthIn:    tool.Auth().In,
 				AuthName:  tool.Auth().Name,
@@ -402,33 +404,6 @@ func toMCPServerDetail(ctx *gin.Context, mcpServerInfo *mcp_service.MCPServerInf
 		StreamableExample: mcpServerInfo.StreamableExample,
 		Tools:             mcpServerTools,
 	}
-}
-
-func convertMcpApiAuth(auth *mcp_service.ApiAuth) *mcp_util.APIAuth {
-	return &mcp_util.APIAuth{
-		Type:  auth.GetAuthType(),
-		In:    auth.GetAuthIn(),
-		Name:  auth.GetAuthName(),
-		Value: auth.GetAuthValue(),
-	}
-}
-
-func convertToolApiAuth(auth *mcp_service.ApiAuthWebRequest) *mcp_util.APIAuth {
-	ret := &mcp_util.APIAuth{}
-	if auth != nil && auth.Type != "" && auth.Type != "None" {
-		ret.Type = "API Key"
-		ret.In = "header"
-		if auth.AuthType == "Custom" {
-			if auth.CustomHeaderName != "" {
-				ret.Name = auth.CustomHeaderName
-				ret.Value = auth.ApiKey
-			}
-		} else {
-			ret.Name = "Authorization"
-			ret.Value = "Bearer " + auth.ApiKey
-		}
-	}
-	return ret
 }
 
 func toMCPServerCustomToolSelect(item *mcp_service.GetCustomToolItem, apis []response.CustomToolActionInfo) []response.MCPServerCustomToolSelect {
