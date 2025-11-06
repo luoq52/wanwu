@@ -13,7 +13,7 @@
       <div :class="['setting-tab',{ 'active': tabActive === 1 }]" @click="tabClick(1)">
         {{$t('infoSetting.title')}}
       </div>
-      <div :class="['setting-tab',{ 'active': tabActive === 2 }]" @click="tabClick(2)">
+      <div :class="['setting-tab',{ 'active': tabActive === 2 }]" @click="tabClick(2) " v-if="checkPerm(statisticsPerm)">
         {{$t('statistics.title')}}
       </div>
     </div>
@@ -58,6 +58,7 @@ export default {
       radio: '',
       tabActive: 0,
       settingPerm: PERMS.SETTING,
+      statisticsPerm: PERMS.STATISTIC,
       list: [
         {name: '用户', key: 'user', perm: PERMS.PERMISSION_USER},
         {name: '角色', key: 'role', perm: PERMS.PERMISSION_ROLE},

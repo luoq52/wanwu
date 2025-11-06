@@ -171,12 +171,10 @@ export default {
             },
             // 折线拐点的样式
             itemStyle: {
-              normal: {
-                // 静止时：
-                color: "#0088FF",
-                borderColor: "#0088FF", //拐点的边框颜色
-                borderWidth: 2,
-              },
+              // 静止时：
+              color: "#0088FF",
+              borderColor: "#0088FF", //拐点的边框颜色
+              borderWidth: 2,
             },
             areaStyle: {
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
