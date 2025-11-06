@@ -2572,6 +2572,14 @@ const docTemplate = `{
                         "$ref": "#/definitions/response.CustomToolActionInfo"
                     }
                 },
+                "avatar": {
+                    "description": "图标",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.Avatar"
+                        }
+                    ]
+                },
                 "customToolId": {
                     "description": "自定义工具id",
                     "type": "string"

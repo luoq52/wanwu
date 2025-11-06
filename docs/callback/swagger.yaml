@@ -1328,6 +1328,10 @@ definitions:
         items:
           $ref: '#/definitions/response.CustomToolActionInfo'
         type: array
+      avatar:
+        allOf:
+        - $ref: '#/definitions/request.Avatar'
+        description: 图标
       customToolId:
         description: 自定义工具id
         type: string

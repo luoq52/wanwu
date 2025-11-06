@@ -15,9 +15,10 @@ type CustomToolDetail struct {
 }
 
 type CustomToolInfo struct {
-	CustomToolId string `json:"customToolId"` // 自定义工具id
-	Name         string `json:"name"`         // 名称
-	Description  string `json:"description"`  // 描述
+	CustomToolId string         `json:"customToolId"` // 自定义工具id
+	Name         string         `json:"name"`         // 名称
+	Description  string         `json:"description"`  // 描述
+	Avatar       request.Avatar `json:"avatar"`       // 图标
 }
 
 type CustomToolActionInfo struct {

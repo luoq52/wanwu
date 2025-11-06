@@ -1,6 +1,7 @@
 package request
 
 type CustomToolCreate struct {
+	Avatar        Avatar                      `json:"avatar"`                          // 图标
 	Name          string                      `json:"name" validate:"required"`        // 名称
 	Description   string                      `json:"description" validate:"required"` // 描述
 	ApiAuth       CustomToolApiAuthWebRequest `json:"apiAuth" validate:"required"`     // api身份认证
@@ -20,6 +21,7 @@ type CustomToolApiAuthWebRequest struct {
 func (req *CustomToolApiAuthWebRequest) Check() error { return nil }
 
 type CustomToolUpdateReq struct {
+	Avatar        Avatar                      `json:"avatar"`                           // 图标
 	CustomToolID  string                      `json:"customToolId" validate:"required"` // 自定义工具ID
 	Name          string                      `json:"name" validate:"required"`         // 名称
 	Description   string                      `json:"description" validate:"required"`  // 描述

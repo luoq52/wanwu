@@ -83,6 +83,7 @@ message CreateCustomMCPReq {
     string desc = 5;
     string from = 6;
     string sseUrl = 7;
+    string avatarPath = 8;
 }
 
 message UpdateCustomMCPReq {
@@ -93,6 +94,7 @@ message UpdateCustomMCPReq {
     string desc = 5;
     string from = 6;
     string sseUrl = 7;
+    string avatarPath = 8;
 }
 
 message GetCustomMCPReq {
@@ -204,6 +206,7 @@ message CreateCustomToolReq {
     string description = 5;
     string privacyPolicy = 6;
     string toolSquareId = 7;
+    string avatarPath = 8;
 }
 
 message ApiAuthWebRequest{
@@ -226,6 +229,7 @@ message GetCustomToolInfoResp {
     string description = 5;
     string privacyPolicy = 6;
     string toolSquareId = 7;
+    string avatarPath = 8;
 }
 
 message GetCustomToolListReq {
@@ -242,6 +246,7 @@ message GetCustomToolItem {
     string customToolId = 1;
     string name = 2;
     string description = 3;
+    string avatarPath = 4;
 }
 
 message GetCustomToolListResp {
@@ -256,6 +261,7 @@ message UpdateCustomToolReq {
     string description = 5;
     string privacyPolicy = 6;
     Identity identity = 7;
+    string avatarPath = 8;
 }
 
 message DeleteCustomToolReq {
@@ -315,6 +321,7 @@ message GetToolItem {
     string desc = 4;
     string apiKey = 5;
     bool needApiKeyInput = 6;
+    string avatarPath = 7;
 }
 
 message GetToolListResp {

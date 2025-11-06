@@ -85,6 +85,7 @@ func (c *Client) UpdateCustomTool(ctx context.Context, customTool *model.CustomT
 			sqlopt.WithID(customTool.ID),
 		).Apply(c.db).WithContext(ctx).Model(customTool).Updates(map[string]interface{}{
 			"name":               customTool.Name,
+			"avatar_path":        customTool.AvatarPath,
 			"description":        customTool.Description,
 			"schema":             customTool.Schema,
 			"privacy_policy":     customTool.PrivacyPolicy,

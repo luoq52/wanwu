@@ -9,6 +9,7 @@ import (
 	"github.com/UnicomAI/wanwu/api/proto/common"
 	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
+	"github.com/UnicomAI/wanwu/internal/bff-service/config"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/response"
 	mcp_util "github.com/UnicomAI/wanwu/internal/bff-service/pkg/mcp-util"
@@ -61,19 +62,21 @@ func CreateMCP(ctx *gin.Context, userID, orgID string, req request.MCPCreate) er
 		Desc:        req.Desc,
 		From:        req.From,
 		SseUrl:      req.SSEURL,
+		AvatarPath:  req.Avatar.Key,
 	})
 	return err
 }
 
 func UpdateMCP(ctx *gin.Context, userID, orgID string, req request.MCPUpdate) error {
 	_, err := mcp.UpdateCustomMCP(ctx.Request.Context(), &mcp_service.UpdateCustomMCPReq{
-		OrgId:  orgID,
-		UserId: userID,
-		McpId:  req.MCPID,
-		Name:   req.Name,
-		Desc:   req.Desc,
-		From:   req.From,
-		SseUrl: req.SSEURL,
+		OrgId:      orgID,
+		UserId:     userID,
+		McpId:      req.MCPID,
+		Name:       req.Name,
+		Desc:       req.Desc,
+		From:       req.From,
+		SseUrl:     req.SSEURL,
+		AvatarPath: req.Avatar.Key,
 	})
 	return err
 }
@@ -286,7 +289,7 @@ func toMCPCustomDetail(ctx *gin.Context, mcpDetail *mcp_service.CustomMCPDetail)
 		MCPInfo: response.MCPInfo{
 			MCPID:         mcpDetail.McpId,
 			SSEURL:        mcpDetail.SseUrl,
-			MCPSquareInfo: toMCPSquareInfo(ctx, mcpDetail.Info),
+			MCPSquareInfo: toCustomMCP(ctx, mcpDetail.Info),
 		},
 		MCPSquareIntro: toMCPSquareIntro(mcpDetail.Intro),
 	}
@@ -296,7 +299,7 @@ func toMCPCustomInfo(ctx *gin.Context, mcpInfo *mcp_service.CustomMCPInfo) respo
 	return response.MCPInfo{
 		MCPID:         mcpInfo.McpId,
 		SSEURL:        mcpInfo.SseUrl,
-		MCPSquareInfo: toMCPSquareInfo(ctx, mcpInfo.Info),
+		MCPSquareInfo: toCustomMCP(ctx, mcpInfo.Info),
 	}
 }
 
@@ -319,6 +322,17 @@ func toMCPSquareInfo(ctx *gin.Context, mcpSquareInfo *mcp_service.SquareMCPInfo)
 	return response.MCPSquareInfo{
 		MCPSquareID: mcpSquareInfo.McpSquareId,
 		Avatar:      cacheMCPAvatar(ctx, mcpSquareInfo.AvatarPath),
+		Name:        mcpSquareInfo.Name,
+		Desc:        mcpSquareInfo.Desc,
+		From:        mcpSquareInfo.From,
+		Category:    mcpSquareInfo.Category,
+	}
+}
+
+func toCustomMCP(ctx *gin.Context, mcpSquareInfo *mcp_service.SquareMCPInfo) response.MCPSquareInfo {
+	return response.MCPSquareInfo{
+		MCPSquareID: mcpSquareInfo.McpSquareId,
+		Avatar:      cacheCustomMCPAvatar(ctx, mcpSquareInfo.AvatarPath),
 		Name:        mcpSquareInfo.Name,
 		Desc:        mcpSquareInfo.Desc,
 		From:        mcpSquareInfo.From,
@@ -356,4 +370,13 @@ func toToolAction(tool *common.ToolAction) *protocol.Tool {
 		}
 	}
 	return ret
+}
+
+func cacheCustomMCPAvatar(ctx *gin.Context, avatarObjectPath string) request.Avatar {
+	avatar := request.Avatar{}
+	if avatarObjectPath == "" {
+		avatar.Path = config.Cfg().DefaultIcon.McpIcon
+		return avatar
+	}
+	return CacheAvatar(ctx, avatarObjectPath, true)
 }

@@ -9,6 +9,7 @@ func (req *MCPIDReq) Check() error {
 }
 
 type MCPCreate struct {
+	Avatar      Avatar `json:"avatar"`                     // 图标
 	MCPSquareID string `json:"mcpSquareId"`                // 广场mcpId(非空表示来源于广场)
 	Name        string `json:"name" validate:"required"`   // 名称
 	Desc        string `json:"desc" validate:"required"`   // 描述
@@ -21,6 +22,7 @@ func (req *MCPCreate) Check() error {
 }
 
 type MCPUpdate struct {
+	Avatar Avatar `json:"avatar"` // 图标
 	MCPID  string `json:"mcpId" validate:"required"`
 	Name   string `json:"name" validate:"required"`   // 名称
 	Desc   string `json:"desc" validate:"required"`   // 描述

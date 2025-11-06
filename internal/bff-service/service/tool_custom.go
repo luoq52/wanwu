@@ -4,6 +4,7 @@ import (
 	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	mcp_service "github.com/UnicomAI/wanwu/api/proto/mcp-service"
+	"github.com/UnicomAI/wanwu/internal/bff-service/config"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/response"
 	"github.com/UnicomAI/wanwu/pkg/constant"
@@ -18,6 +19,7 @@ func CreateCustomTool(ctx *gin.Context, userID, orgID string, req request.Custom
 		return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, err.Error())
 	}
 	_, err := mcp.CreateCustomTool(ctx.Request.Context(), &mcp_service.CreateCustomToolReq{
+		AvatarPath:    req.Avatar.Key,
 		Schema:        req.Schema,
 		Name:          req.Name,
 		Description:   req.Description,
@@ -52,6 +54,7 @@ func GetCustomTool(ctx *gin.Context, userID, orgID string, customToolId string) 
 			CustomToolId: info.CustomToolId,
 			Name:         info.Name,
 			Description:  info.Description,
+			Avatar:       cacheCustomToolAvatar(ctx, info.AvatarPath),
 		},
 		ToolSquareID:  info.ToolSquareId,
 		Schema:        info.Schema,
@@ -88,6 +91,7 @@ func UpdateCustomTool(ctx *gin.Context, userID, orgID string, req request.Custom
 	}
 	_, err := mcp.UpdateCustomTool(ctx.Request.Context(), &mcp_service.UpdateCustomToolReq{
 		CustomToolId: req.CustomToolID,
+		AvatarPath:   req.Avatar.Key,
 		Name:         req.Name,
 		Description:  req.Description,
 		ApiAuth: &mcp_service.ApiAuthWebRequest{
@@ -119,6 +123,7 @@ func GetCustomToolList(ctx *gin.Context, userID, orgID, name string) (*response.
 			CustomToolId: item.CustomToolId,
 			Name:         item.Name,
 			Description:  item.Description,
+			Avatar:       cacheCustomToolAvatar(ctx, item.AvatarPath),
 		})
 	}
 	return &response.ListResult{
@@ -182,4 +187,13 @@ func openapiSchema2ToolList(doc *openapi3.T) []response.CustomToolActionInfo {
 		}
 	}
 	return list
+}
+
+func cacheCustomToolAvatar(ctx *gin.Context, avatarObjectPath string) request.Avatar {
+	avatar := request.Avatar{}
+	if avatarObjectPath == "" {
+		avatar.Path = config.Cfg().DefaultIcon.ToolIcon
+		return avatar
+	}
+	return CacheAvatar(ctx, avatarObjectPath, true)
 }

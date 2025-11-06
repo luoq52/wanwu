@@ -23,6 +23,7 @@ func (s *Service) CreateCustomTool(ctx context.Context, req *mcp_service.CreateC
 		return nil, errStatus(errs.Code_MCPCreateCustomToolErr, toErrStatus("mcp_create_custom_tool_err", "apiAuth is empty"))
 	}
 	if err := s.cli.CreateCustomTool(ctx, &model.CustomTool{
+		AvatarPath:       req.AvatarPath,
 		Name:             req.Name,
 		Description:      req.Description,
 		Schema:           req.Schema,
@@ -52,6 +53,7 @@ func (s *Service) GetCustomToolInfo(ctx context.Context, req *mcp_service.GetCus
 	}
 	return &mcp_service.GetCustomToolInfoResp{
 		CustomToolId:  util.Int2Str(info.ID),
+		AvatarPath:    info.AvatarPath,
 		Name:          info.Name,
 		Description:   info.Description,
 		Schema:        info.Schema,
@@ -79,6 +81,7 @@ func (s *Service) GetCustomToolList(ctx context.Context, req *mcp_service.GetCus
 			CustomToolId: util.Int2Str(info.ID),
 			Name:         info.Name,
 			Description:  info.Description,
+			AvatarPath:   info.AvatarPath,
 		})
 	}
 	return &mcp_service.GetCustomToolListResp{
@@ -124,6 +127,7 @@ func (s *Service) UpdateCustomTool(ctx context.Context, req *mcp_service.UpdateC
 	}
 	if err := s.cli.UpdateCustomTool(ctx, &model.CustomTool{
 		ID:               util.MustU32(req.CustomToolId),
+		AvatarPath:       req.AvatarPath,
 		Name:             req.Name,
 		Description:      req.Description,
 		Schema:           req.Schema,
@@ -295,6 +299,7 @@ func (s *Service) GetToolSelect(ctx context.Context, req *mcp_service.GetToolSel
 			ToolType:        constant.ToolTypeCustom,
 			ApiKey:          info.APIKey,
 			NeedApiKeyInput: needApiKeyInput,
+			AvatarPath:      info.AvatarPath,
 		})
 	}
 	// search builtin tools
@@ -318,6 +323,7 @@ func (s *Service) GetToolSelect(ctx context.Context, req *mcp_service.GetToolSel
 			Desc:            toolCfg.Desc,
 			ToolType:        constant.ToolTypeBuiltIn,
 			NeedApiKeyInput: toolCfg.NeedApiKeyInput,
+			AvatarPath:      toolCfg.AvatarPath,
 		}
 		// 从map中查询内置工具
 		if tool, ok := builtinToolMap[toolCfg.ToolSquareId]; ok {
