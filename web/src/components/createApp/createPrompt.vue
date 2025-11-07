@@ -1,5 +1,5 @@
 <template>
-  <div class="workflow-list">
+  <div>
     <el-dialog
       :title="titleMap[type]"
       :visible.sync="dialogVisible"
@@ -209,10 +209,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/style/workflow.scss";
-.workflow-list {
-  position: absolute;
-}
 .avatar-uploader {
   position: relative;
   width: 98px;

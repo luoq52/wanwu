@@ -1,5 +1,5 @@
 <template>
-  <div class="workflow-list">
+  <div>
     <el-dialog
       :title="titleMap[type]"
       :visible.sync="dialogVisible"

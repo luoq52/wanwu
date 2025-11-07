@@ -124,7 +124,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/style/workflow.scss";
 .workflow-result {
   margin-left: 450px;
   margin-top: 20px;

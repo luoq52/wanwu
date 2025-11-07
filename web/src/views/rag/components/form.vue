@@ -1049,52 +1049,6 @@ export default {
     }
   }
 }
-.workflow-dialog {
-  height: 700px;
-}
-.workflow-list {
-  height: calc(100% - 60px);
-  overflow: auto;
-  padding: 0 40px;
-  .workflow-item {
-    display: flex;
-    margin: 10px 0;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-    .workflow-item-icon {
-      width: 30px;
-      height: 30px;
-      object-fit: fill;
-    }
-    .workflow-item-info {
-      flex: 6;
-      margin-left: 20px;
-      .info-name {
-        font-size: 16px;
-        color: #111;
-      }
-      .info-desc {
-        margin-top: 10px;
-      }
-    }
-    .workflow-item-bt {
-      flex: 1;
-      margin-top: 7px;
-    }
-  }
-}
-.workflow-modal /deep/.el-dialog__body {
-  max-height: none;
-  padding: 10px 20px 30px 20px;
-}
-.workflow-list-checked {
-  .workflow-item {
-    display: flex;
-    margin: 10px 0;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-  }
-}
 </style>
 <style lang="scss">
 .vue-treeselect .vue-treeselect__menu-container {
