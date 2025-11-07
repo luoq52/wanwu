@@ -29,12 +29,15 @@ func (c *Client) CreateMCPServer(ctx context.Context, mcpServer *model.MCPServer
 }
 
 func (c *Client) UpdateMCPServer(ctx context.Context, mcpServer *model.MCPServer) *errs.Status {
+	var mcpServerInfo model.MCPServer
 	if err := sqlopt.SQLOptions(
 		sqlopt.WithName(mcpServer.Name),
 		sqlopt.WithOrgID(mcpServer.OrgID),
 		sqlopt.WithUserID(mcpServer.UserID),
-	).Apply(c.db).First(&model.MCPServer{}).Error; err == nil {
-		return toErrStatus("mcp_update_duplicate_mcp_server_err")
+	).Apply(c.db).First(&mcpServerInfo).Error; err == nil {
+		if mcpServerInfo.MCPServerID != mcpServer.MCPServerID {
+			return toErrStatus("mcp_update_duplicate_mcp_server_err")
+		}
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
 		return toErrStatus("mcp_update_mcp_server_err", err.Error())
 	}

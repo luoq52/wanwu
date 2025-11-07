@@ -45,7 +45,6 @@ func registerTool(apiV1 *gin.RouterGroup) {
 	mid.Sub("tool").Reg(apiV1, "/mcp/server/tool", http.MethodPut, v1.UpdateMCPServerTool, "更新MCP服务工具")
 	mid.Sub("tool").Reg(apiV1, "/mcp/server/tool", http.MethodDelete, v1.DeleteMCPServerTool, "删除MCP服务工具")
 	mid.Sub("tool").Reg(apiV1, "/mcp/server/tool/openapi", http.MethodPost, v1.CreateMCPServerOpenAPITool, "创建openapi工具")
-	mid.Sub("tool").Reg(apiV1, "/mcp/server/tool/custom/select", http.MethodGet, v1.GetMCPServerCustomToolSelect, "获取MCP服务自定义工具列表（用于下拉选择）")
 
 	// 自定义MCP与MCP Server
 	mid.Sub("tool").Reg(apiV1, "/mcp/select", http.MethodGet, v1.GetMCPSelect, "智能体mcp下拉列表")

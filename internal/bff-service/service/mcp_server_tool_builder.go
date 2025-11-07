@@ -50,6 +50,38 @@ func (builder *mcpServerCustomToolBuilder) GetOpenapiSchema(ctx context.Context)
 	return customToolInfo.Schema, auth, nil
 }
 
+// --- mcpServerBuiltInToolBuilder ---
+
+type mcpServerBuiltInToolBuilder struct {
+	toolSquareId   string
+	toolSquareName string
+}
+
+func (mcpServerBuiltInToolBuilder) MCPServerToolType() string {
+	return constant.MCPServerToolTypeBuiltInTool
+}
+
+func (builder *mcpServerBuiltInToolBuilder) AppID() string {
+	return builder.toolSquareId
+}
+
+func (builder *mcpServerBuiltInToolBuilder) AppName() string {
+	return builder.toolSquareName
+}
+
+func (builder *mcpServerBuiltInToolBuilder) GetOpenapiSchema(ctx context.Context) (string, *openapi3_util.Auth, error) {
+	toolSquareInfo, err := mcp.GetSquareTool(ctx, &mcp_service.GetSquareToolReq{
+		ToolSquareId: builder.toolSquareId,
+		Identity:     &mcp_service.Identity{},
+	})
+	if err != nil {
+		return "", nil, err
+	}
+	builder.toolSquareName = toolSquareInfo.Info.Name
+	auth := openapi3_util.DefaultAuth(toolSquareInfo.BuiltInTools.ApiKey)
+	return toolSquareInfo.Schema, auth, nil
+}
+
 // --- mcpServerOpenapiSchemaBuilder ---
 
 type mcpServerOpenapiSchemaBuilder struct {

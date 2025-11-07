@@ -29,6 +29,7 @@ const (
 
 // mcp server tool type
 const (
-	MCPServerToolTypeCustomTool = "custom"  // 自定义工具
-	MCPServerToolTypeOpenAPI    = "openapi" // 用户导入的openapi
+	MCPServerToolTypeCustomTool  = "custom"  // 自定义工具
+	MCPServerToolTypeBuiltInTool = "builtin" // 内置工具
+	MCPServerToolTypeOpenAPI     = "openapi" // 用户导入的openapi
 )

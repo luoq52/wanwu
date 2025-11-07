@@ -166,18 +166,3 @@ func CreateMCPServerOpenAPITool(ctx *gin.Context) {
 	err := service.CreateMCPServerOpenAPITool(ctx, getUserID(ctx), getOrgID(ctx), req)
 	gin_util.Response(ctx, nil, err)
 }
-
-// GetMCPServerCustomToolSelect
-//
-//	@Tags			tool
-//	@Summary		获取MCP Server自定义工具列表（用于下拉选择）
-//	@Description	获取MCP Server自定义工具列表（用于下拉选择）
-//	@Accept			json
-//	@Produce		json
-//	@Param			name	query		string	false	"CustomTool名称"
-//	@Success		200		{object}	response.Response{data=response.ListResult{list=[]response.MCPServerCustomToolSelect}}
-//	@Router			/mcp/server/tool/custom/select [get]
-func GetMCPServerCustomToolSelect(ctx *gin.Context) {
-	resp, err := service.GetMCPServerCustomToolSelect(ctx, getUserID(ctx), getOrgID(ctx), ctx.Query("name"))
-	gin_util.Response(ctx, resp, err)
-}
