@@ -46,17 +46,25 @@
             </el-form-item>
             <el-form-item prop="knowledgeGraph.switch">
                 <template #label>
-                   <span>知识图谱:</span>
-                   <span></span>
+                   <span>{{$t('knowledgeManage.create.knowledgeGraph')}}:</span>
+                   <el-tooltip class="item" effect="dark" content="Top Left 提示文字" placement="top-start" popper-class="knowledge-graph-tooltip">
+                        <span class="el-icon-question question-icon"></span>
+                        <template #content>
+                         <p v-for="(item,i) in knowledgeGraphTips" :key="i" class="tooltip-item">
+                            <span class="tooltip-title">{{item.title}}</span>
+                            <span class="tooltip-content">{{item.content}}</span>
+                         </p>
+                        </template>
+                   </el-tooltip>
                 </template>
                 <el-switch v-model="ruleForm.knowledgeGraph.switch"></el-switch>
             </el-form-item>
-            <el-form-item label="模型选择:" prop="knowledgeGraph.llmModelId" v-if="ruleForm.knowledgeGraph.switch">
+            <el-form-item :label="$t('knowledgeManage.create.modelSelect')+':'" prop="knowledgeGraph.llmModelId" v-if="ruleForm.knowledgeGraph.switch">
                 <el-select
                 v-model="ruleForm.knowledgeGraph.llmModelId"
-                placeholder="可输入模型名称搜索"
+                :placeholder="$t('knowledgeManage.create.modelSearchPlaceholder')"
                 @visible-change="visibleChange"
-                loading-text="模型加载中..."
+                :loading-text="$t('knowledgeManage.create.modelLoading')"
                 class="cover-input-icon model-select"
                 :disabled="isPublish"
                 :loading="modelLoading"
@@ -86,7 +94,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="上传图谱Schema:" v-if="ruleForm.knowledgeGraph.switch">
+            <el-form-item :label="$t('knowledgeManage.create.uploadSchema')+':'" v-if="ruleForm.knowledgeGraph.switch">
                 <el-upload
                     action=""
                     :auto-upload="false"
@@ -104,12 +112,12 @@
                             :src="require('@/assets/imgs/uploadImg.png')"
                             class="upload-img"
                             />
-                            <p class="click-text">将文件拖到此处，或<span class="clickUpload">点击上传</span></p>
+                            <p class="click-text">{{$t('knowledgeManage.create.dragUpload')}}<span class="clickUpload">{{$t('knowledgeManage.create.clickUpload')}}</span></p>
                         </div>
                         <div class="tips">
-                           <p><span class="red">*</span>请下载schema模板并参考模板示例定义出图谱的类目表和类目属性表，系统将按模板抽取实体属性
-                           <a class="template_downLoad" href="#" @click.prevent.stop="downloadTemplate">模板下载</a></p>
-                           <p><span class="red">*</span>若未上传图谱schema模板，则系统将默认的类目和属性进行抽取，可能会影响实体属性抽取的准确性。</p>
+                           <p><span class="red">*</span>{{$t('knowledgeManage.create.schemaTip1')}}
+                           <a class="template_downLoad" href="#" @click.prevent.stop="downloadTemplate">{{$t('knowledgeManage.create.templateDownload')}}</a></p>
+                           <p><span class="red">*</span>{{$t('knowledgeManage.create.schemaTip2')}}</p>
                         </div>
                     </div>
                 </el-upload>
@@ -191,6 +199,7 @@
 import {mapActions, mapGetters} from 'vuex'
 import { createKnowledgeItem,editKnowledgeItem } from "@/api/knowledge";
 import { selectModelList} from "@/api/modelAccess";
+import {KNOWLEDGE_GRAPH_TIPS} from "../config";
 import uploadChunk from "@/mixins/uploadChunk";
 import { delfile } from "@/api/chunkFile";
 export default {
@@ -225,6 +234,7 @@ export default {
             EmbeddingOptions:[],
             knowledgeGraphModelOptions: [],
             modelLoading:false,
+            knowledgeGraphTips: KNOWLEDGE_GRAPH_TIPS,
             maxSizeBytes: 0, // 设置为0，所有文件都走切片上传
             rules: {
                 name: [
@@ -233,7 +243,7 @@ export default {
                 ],
                 description:[{ required: true, message: this.$t('knowledgeManage.inputDesc'), trigger: "blur" }],
                 'embeddingModelInfo.modelId':[{ required: true, message:this.$t('common.select.placeholder'), trigger: "blur" }],
-                'knowledgeGraph.llmModelId':[{ required: true, message:'请选择模型',trigger: "change" }]
+                'knowledgeGraph.llmModelId':[{ required: true, message: this.$t('knowledgeManage.create.selectModel'),trigger: "change" }]
             },
             isEdit: false,
             knowledgeId:'',
@@ -269,7 +279,7 @@ export default {
             const fileName = "url_import_template.xlsx";
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error("文件不存在或服务器错误");
+                if (!response.ok) throw new Error(this.$t('knowledgeManage.create.fileNotExist'));
 
                 const blob = await response.blob();
                 const blobUrl = URL.createObjectURL(blob);
@@ -281,7 +291,7 @@ export default {
 
                 URL.revokeObjectURL(blobUrl); // 释放内存
             } catch (error) {
-                alert("文件下载失败，请稍后重试！");
+                alert(this.$t('knowledgeManage.create.downloadFailed'));
             }
         },
         async getModelData() {
@@ -454,7 +464,7 @@ export default {
         delfile(data) {
             delfile(data).then((res) => {
                 if (res.code === 0) {
-                    this.$message.success("删除成功");
+                    this.$message.success(this.$t('knowledgeManage.create.deleteSuccess'));
                 }
             });
         },
@@ -484,7 +494,7 @@ export default {
         createKnowledge(){
             createKnowledgeItem(this.ruleForm).then(res =>{
                 if(res.code === 0){
-                    this.$message.success('创建成功');
+                    this.$message.success(this.$t('knowledgeManage.create.createSuccess'));
                     this.$emit('reloadData')
                     this.dialogVisible = false;
                 }
@@ -499,7 +509,7 @@ export default {
             }
             editKnowledgeItem(data).then(res =>{
                 if(res.code === 0){
-                    this.$message.success('编辑成功');
+                    this.$message.success(this.$t('knowledgeManage.create.editSuccess'));
                     this.$emit('reloadData')
                     this.clearform();
                     this.dialogVisible = false;
@@ -552,6 +562,11 @@ export default {
             width: 100%;
         }
     }
+}
+
+.question-icon {
+    cursor: pointer;
+    color: #909399;
 }
 
 .upload-box {
@@ -646,6 +661,27 @@ export default {
     }
     .document_lise_item:hover {
         background: #eceefe;
+    }
+}
+</style>
+
+<style lang="scss">
+// tooltip 样式需要全局作用域，因为 popper-class 是挂载在 body 上的
+.knowledge-graph-tooltip {
+    max-width: 400px !important;
+    
+    .tooltip-item {
+        margin: 0;
+        padding: 4px 0;
+        
+        .tooltip-title {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .tooltip-content {
+            display: inline-block;
+        }
     }
 }
 </style>

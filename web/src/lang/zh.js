@@ -727,7 +727,25 @@ export default {
         keyWordManage:'关键词管理',
         keyWordTip:'知识库问答场景，可配置问题中使用的口语化关键词与知识库文档中词语的映射规则，便于提升知识库内容的召回效果及回答准确率 。',
         keyWordPlaceholder:'输入问题中的关键词或文档中的词语搜索',
-        newKeyWord:'新建关键词'
+        newKeyWord:'新建关键词',
+        create:{
+            knowledgeGraph:'知识图谱',
+            modelSelect:'模型选择',
+            modelSearchPlaceholder:'可输入模型名称搜索',
+            modelLoading:'模型加载中...',
+            uploadSchema:'上传图谱Schema',
+            dragUpload:'将文件拖到此处，或',
+            clickUpload:'点击上传',
+            schemaTip1:'请下载schema模板并参考模板示例定义出图谱的类目表和类目属性表，系统将按模板抽取实体属性',
+            templateDownload:'模板下载',
+            schemaTip2:'若未上传图谱schema模板，则系统将默认的类目和属性进行抽取，可能会影响实体属性抽取的准确性。',
+            selectModel:'请选择模型',
+            fileNotExist:'文件不存在或服务器错误',
+            downloadFailed:'文件下载失败，请稍后重试！',
+            deleteSuccess:'删除成功',
+            createSuccess:'创建成功',
+            editSuccess:'编辑成功'
+        }
     },
     knowledgeSelect:{
         title:'选择知识库',
