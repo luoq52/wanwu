@@ -139,7 +139,7 @@ export default {
   },
   mounted() {
     if (!localStorage.getItem(this.STORAGE_KEY)) {
-      localStorage.setItem(this.STORAGE_KEY, "active");
+      localStorage.setItem(this.STORAGE_KEY, "");
     }
     window.addEventListener("storage", this.handleStorageEvent);
     //检查是否是移动端
