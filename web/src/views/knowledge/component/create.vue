@@ -242,7 +242,7 @@ import { delfile } from "@/api/chunkFile";
 export default {
   mixins: [uploadChunk],
   data() {
-    var checkName = (rule, value, callback) => {
+    let checkName = (rule, value, callback) => {
       const reg = /^[\u4E00-\u9FA5a-z0-9_-]+$/;
       if (!reg.test(value)) {
         callback(new Error(this.$t("knowledgeManage.inputErrorTips")));
@@ -347,7 +347,7 @@ export default {
 
         URL.revokeObjectURL(blobUrl); // 释放内存
       } catch (error) {
-        alert(this.$t("knowledgeManage.create.downloadFailed"));
+        this.$message.error(this.$t("knowledgeManage.create.downloadFailed"));
       }
     },
     async getModelData() {
@@ -485,7 +485,7 @@ export default {
     },
     filterSize(size) {
       if (!size) return "";
-      var num = 1024.0; //byte
+      let num = 1024.0; //byte
       if (size < num) return size + "B";
       if (size < Math.pow(num, 2)) return (size / num).toFixed(2) + "KB"; //kb
       if (size < Math.pow(num, 3))
