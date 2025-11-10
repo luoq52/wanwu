@@ -131,7 +131,7 @@
         </div>
         <div class="block prompt-box safety-box">
             <p class="block-title tool-title">
-            <span>
+            <span class="block-title-text">
               安全护栏配置
               <el-tooltip class="item" effect="dark" content="实时拦截高风险内容的输入和输出，保障内容安全合规。" placement="top">
                   <span class="el-icon-question question-tips"></span>
@@ -143,6 +143,9 @@
               <el-switch v-model="editForm.safetyConfig.enable" :disabled="!(editForm.safetyConfig.tables || []).length"></el-switch>
             </span>
           </p>
+        </div>
+        <div class="block prompt-box safety-box">
+          <graphSwitch ref="graphSwitch" @graphSwitchchange="graphSwitchchange"/>
         </div>
       </div>
       <div class="drawer-test">
@@ -194,6 +197,7 @@ import { getRagInfo,updateRagConfig } from "@/api/rag";
 import Chat from "./chat";
 import searchConfig from '@/components/searchConfig.vue';
 import LinkIcon from "@/components/linkIcon.vue";
+import graphSwitch from "@/components/graphSwitch.vue"
 import knowledgeSelect from "@/components/knowledgeSelect.vue"
 export default {
   components: {
@@ -206,7 +210,8 @@ export default {
     setSafety,
     searchConfig,
     knowledgeSelect,
-    metaSet
+    metaSet,
+    graphSwitch
   },
   data() {
     return {
@@ -321,6 +326,9 @@ export default {
     }
   },
   methods: {
+    graphSwitchchange(val){
+      console.log(val)
+    },
     submitMeta(){
       const metaData  = this.$refs.metaSet.getMetaData();
       if(this.$refs.metaSet.validateRequiredFields(metaData['metaDataFilterParams']['metaFilterParams'])){
@@ -780,6 +788,9 @@ export default {
       font-weight: bold;
       display: flex;
       align-items: center;
+      .block-title-text{
+        font-size:15px;
+      }
       .handleBtn{
         cursor: pointer;
       }

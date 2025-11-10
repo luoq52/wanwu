@@ -364,9 +364,9 @@
           </p>
         </div>
         <!-- 知识图谱开关 -->
-        <!-- <div class="block prompt-box link-box">
-            <graphSwitch ref="graphSwitch" />
-        </div> -->
+        <div class="block prompt-box link-box">
+            <graphSwitch ref="graphSwitch" @graphSwitchchange="graphSwitchchange"/>
+        </div>
       </div>
       <div class="drawer-test">
         <Chat
@@ -681,6 +681,9 @@ export default {
   },
   methods: {
     ...mapActions("app", ["setMaxPicNum","clearMaxPicNum"]),
+    graphSwitchchange(val){
+      console.log(val)
+    },
     updatePrompt(){
         this.$refs.promptTemplate.getPromptTemplateList()
     },

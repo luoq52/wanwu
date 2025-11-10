@@ -35,6 +35,9 @@
         <div class="test_form">
           <searchConfig ref="searchConfig" @sendConfigInfo="sendConfigInfo" />
         </div>
+        <div class="hitTest_input graph_box">
+          <graphSwitch ref="graphSwitch" @graphSwitchchange="graphSwitchchange"/>
+        </div>
       </div>
       <div class="test-right test-box">
         <div class="result_title">
@@ -127,9 +130,10 @@ import { formatScore } from "@/utils/util";
 import searchConfig from '@/components/searchConfig.vue';
 import LinkIcon from "@/components/linkIcon.vue";
 import metaSet from "@/components/metaSet";
+import graphSwitch from "@/components/graphSwitch.vue"
 import sectionShow from "./sectionShow.vue";
 export default {
-  components:{LinkIcon, searchConfig, metaSet, sectionShow}, 
+  components:{LinkIcon, searchConfig, metaSet, sectionShow,graphSwitch}, 
   data() {
     return {
       md: md,
@@ -148,6 +152,9 @@ export default {
     formatScore,
     goBack() {
       this.$router.go(-1);
+    },
+    graphSwitchchange(val){
+      console.log(val)
     },
     sendConfigInfo(data){
       this.formInline = data;
@@ -469,6 +476,9 @@ export default {
       .metaSet{
         width:100%;
       }
+    }
+    .graph_box{
+      margin-top:20px;
     }
   }
 }

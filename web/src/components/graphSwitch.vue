@@ -43,11 +43,7 @@ export default {
       type: Boolean,
       default: false
     },
-    label: {
-      type: String,
-      default: '知识图谱'
-    },
-    disabled: {
+    switchValue: {
       type: Boolean,
       default: false
     },
@@ -70,7 +66,7 @@ export default {
   },
   methods: {
     handleChange(val) {
-      this.$emit('change', val)
+      this.$emit('graphSwitchchange', val)
     }
   }
 }

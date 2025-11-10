@@ -33,8 +33,9 @@
               </div>
 
               <div class="content_title">
+                <el-button size="mini" type="primary" @click="$router.push(`/knowledge/graphMap?knowledgeId=${docQuery.knowledgeId}&name=${knowledgeName}`)">知识图谱</el-button>
+                <el-button size="mini" type="primary" @click="$router.push(`/knowledge/communityReport?knowledgeId=${docQuery.knowledgeId}&name=${knowledgeName}`)">社区报告</el-button>
                 <el-button size="mini" type="primary" icon="el-icon-refresh" @click="reload" >{{$t('common.gpuDialog.reload')}}</el-button>
-                <!--<el-button size="mini" type="primary" @click="showBatchMeta" v-if="[10,20,30].includes(permissionType)">批量编辑元数据值</el-button> -->
                 <el-button size="mini" type="primary" @click="showMeta" v-if="[10,20,30].includes(permissionType)">元数据管理</el-button>
                 <el-button size="mini" type="primary" @click="$router.push(`/knowledge/hitTest?knowledgeId=${docQuery.knowledgeId}&name=${knowledgeName}`)">命中测试</el-button>
                 <el-button

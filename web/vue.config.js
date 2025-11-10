@@ -18,6 +18,7 @@ module.exports = {
   assetsDir: "static",
   lintOnSave: process.env.NODE_ENV === "development",
   productionSourceMap: false,//源码映射
+  transpileDependencies: ['@antv/g6','@antv/graphlib'],
   chainWebpack(config){
     config.module
       .rule('md')
@@ -39,6 +40,7 @@ module.exports = {
         })
       )
     }
+
     config.module
       .rule('svg')
       .exclude.add(resolve('src/assets/icons'))	//svg文件位置
@@ -190,6 +192,7 @@ module.exports = {
         'vue$': 'vue/dist/vue.esm.js',
         "@": resolve("src"),
         "@common": resolve("common"),
+        "@antv/g6": path.resolve(__dirname, 'node_modules/@antv/g6'),
       },
     },
     output: {
