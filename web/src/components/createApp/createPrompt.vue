@@ -48,12 +48,18 @@
           ></el-input>
         </el-form-item>
         <el-form-item v-if="type !== 'copy'" :label="$t('tempSquare.promptText')+':'" prop="prompt">
-          <i
-            v-if="![detail, 'copy'].includes(type)"
-            class="el-icon-s-help prompt-optimize-icon"
-            :title="$t('tempSquare.promptOptimize')"
-            @click="showPromptOptimize"
-          />
+          <el-tooltip
+            effect="dark"
+            :content="$t('tempSquare.promptOptimize')"
+            placement="top-start"
+            popper-class="prompt-optimize-tooltip"
+          >
+            <i
+              v-if="type !== detail"
+              class="el-icon-s-help prompt-optimize-icon"
+              @click="showPromptOptimize"
+            />
+          </el-tooltip>
           <el-input
             type="textarea"
             :rows="10"
@@ -257,7 +263,11 @@ export default {
   font-size: 16px;
   color: $color;
   margin-top: -10px;
+  margin-bottom: 2px;
   float: right;
   cursor: pointer;
+}
+.prompt-optimize-tooltip {
+  z-index: 2100;
 }
 </style>

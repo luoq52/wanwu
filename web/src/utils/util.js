@@ -12,6 +12,8 @@ export function guid() {
     });
 }
 
+export const getXClientId = () => localStorage.getItem('xClientId')
+
 // 用于登录切组织等找到有权限的第一个菜单路径 (除用模型：用模型为打开的新页面)
 export const fetchPermFirPath = (list = menuList) => {
     if (!list.length) return ''

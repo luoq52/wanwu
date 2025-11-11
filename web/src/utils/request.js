@@ -3,7 +3,7 @@ import { store } from '@/store/index'
 import { Message } from 'element-ui'
 import { basePath } from "@/utils/config"
 import { ZH } from '@/lang/constants'
-import { guid } from "@/utils/util"
+import { guid, getXClientId } from "@/utils/util"
 
 // create an axios instance
 const service = axios.create({
@@ -17,7 +17,7 @@ service.interceptors.request.use(
     const token = store.getters['user/token']
     const user = store.getters['user/userInfo']
     const lang = localStorage.getItem('locale') || ZH // store.getters['user/lang']
-    let xClientId = localStorage.getItem('xClientId')
+    let xClientId = getXClientId()
     if (!xClientId) {
       xClientId = guid()
       localStorage.setItem('xClientId', xClientId)

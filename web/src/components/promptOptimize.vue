@@ -6,6 +6,7 @@
       width="700"
       append-to-body
       :close-on-click-modal="false"
+      :before-close="handleClose"
     >
       <div class="prompt-optimize-dialog-content">
         <div>
@@ -63,9 +64,8 @@
 <script>
 import { selectModelList } from "@/api/modelAccess"
 import Print from '@/utils/printPlus2.js'
-import { md } from '@/mixins/marksown-it'
 import { fetchEventSource } from "@/sse/index.js"
-
+import { getXClientId } from "@/utils/util"
 
 export default {
   data() {
@@ -77,7 +77,6 @@ export default {
       modelOptions: [],
       modelLoading: false,
       loading: false,
-      md: md,
       eventSource: null,
       ctrlAbort: null,
     };
@@ -105,10 +104,12 @@ export default {
       const { prompt } = item || {}
       this.dialogVisible = true
       this.prompt = prompt || ''
+      this.optimizedPrompt = ''
+      this.modelId = ''
     },
     handleClose() {
+      this.stopEventSource()
       this.prompt = ''
-      this.modelId = ''
       this.dialogVisible = false
       this.loading = false
     },
@@ -131,13 +132,14 @@ export default {
       let endStr = ''
 
       this.ctrlAbort = new AbortController()
-      this.eventSource = new fetchEventSource(origin + '/user/api/v1/prompt/optimization', {
+      this.eventSource = new fetchEventSource(origin + '/user/api/v1/prompt/optimize', {
         method: 'POST',
         headers: {
           "Content-Type": 'application/json',
           'Authorization': 'Bearer ' + token,
           "x-user-id": userInfo.uid,
-          "x-org-id": userInfo.orgId
+          "x-org-id": userInfo.orgId,
+          // 'x-client-id': getXClientId(),
         },
         openWhenHidden: true,
         signal: this.ctrlAbort.signal,

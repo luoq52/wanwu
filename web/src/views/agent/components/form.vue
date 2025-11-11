@@ -78,24 +78,28 @@
     <!-- 智能体配置 -->
     <div class="agent_form">
       <div class="block prompt-box drawer-info">
-            <div class="promptTitle">
-              <h3>{{ $t('agent.form.systemPrompt') }}</h3>
-              <el-tooltip class="item" effect="dark" :content="$t('agent.form.submitToPrompt')" placement="top-start">
+        <div class="promptTitle">
+          <h3>{{ $t('agent.form.systemPrompt') }}</h3>
+          <div>
+            <el-tooltip class="item" effect="dark" :content="$t('agent.form.submitToPrompt')" placement="top-start">
               <span class="el-icon-folder-add" @click="handleShowPrompt"></span>
-              </el-tooltip>
-            </div>
-            <div class="rl" style="padding: 10px;">
-              <el-input
-                class="desc-input "
-                v-model="editForm.instructions"
-                maxlength="600"
-                :placeholder="$t('agent.form.promptTips')"
-                type="textarea"
-                show-word-limit
-                :rows="5"
-              ></el-input>
-            </div>
-            <promptTemplate ref="promptTemplate" />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" :content="$t('tempSquare.promptOptimize')" placement="top-start">
+              <span style="margin-left: 5px" class="el-icon-s-help" @click="showPromptOptimize"></span>
+            </el-tooltip>
+          </div>
+        </div>
+        <div class="rl" style="padding: 10px;">
+          <el-input
+            class="desc-input "
+            v-model="editForm.instructions"
+            :placeholder="$t('agent.form.promptTips')"
+            type="textarea"
+            show-word-limit
+            :rows="12"
+          ></el-input>
+        </div>
+        <promptTemplate ref="promptTemplate" />
       </div>
       <div class="drawer-form">
         <div class="agnetSet">
@@ -420,6 +424,8 @@
     <ToolDeatail ref="toolDeatail" @updateDetail="updateDetail" />
     <!-- 提交至提示词 -->
     <createPrompt :isCustom="true" :type="promptType" ref="createPrompt" @reload="updatePrompt"/>
+    <!-- 提示词优化 -->
+    <PromptOptimize ref="promptOptimize" @promptSubmit="promptSubmit" />
     <!-- 元数据设置 -->
     <el-dialog
       :visible.sync="metaSetVisible"
@@ -484,6 +490,7 @@ import graphSwitch from "@/components/graphSwitch.vue"
 import promptTemplate from "./prompt/index.vue";
 import createPrompt from "@/components/createApp/createPrompt.vue"
 import knowledgeSelect from "@/components/knowledgeSelect.vue";
+import PromptOptimize from "@/components/promptOptimize.vue";
 export default {
   components: {
     LinkIcon,
@@ -499,7 +506,8 @@ export default {
     ToolDeatail,
     promptTemplate,
     createPrompt,
-    graphSwitch
+    graphSwitch,
+    PromptOptimize
   },
   provide() {
     return {
@@ -686,6 +694,16 @@ export default {
     },
     handleShowPrompt(){
       this.$refs.createPrompt.openDialog({prompt: this.editForm.instructions});
+    },
+    showPromptOptimize() {
+      if (!this.editForm.instructions) {
+        this.$message.warning(this.$t('tempSquare.promptOptimizeHint'))
+        return
+      }
+      this.$refs.promptOptimize.openDialog({prompt: this.editForm.instructions})
+    },
+    promptSubmit(prompt) {
+      this.editForm.instructions = prompt
     },
     getPrompt(prompt){
       this.editForm.instructions = prompt;
