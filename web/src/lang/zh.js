@@ -517,6 +517,12 @@ export default {
         promptRules: '请填写提示词',
         promptLimitRules: '提示词描述须在50字符以内',
         copySuccess: '复制成功',
+        selectModel: '选模型，可输入名称搜索',
+        loadingText: '加载中...',
+        promptOptimize: '提示词优化',
+        promptOptimizeHint: '请填写提示词后，再进行提示词优化',
+        optimize: '优化',
+        replace: '替换'
     },
     // 工作流
     list:{

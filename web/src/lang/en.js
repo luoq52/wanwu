@@ -70,6 +70,7 @@ export default {
             custom: '自定义工具',
             openapi: 'OpenAPI',
             builtIn: '内置工具',
+            tool: '工具',
         },
         knowledge: '知识库',
         account: '账户',
@@ -94,6 +95,8 @@ export default {
     },
     common: {
         fileUpload:{
+            messageAvatar:'请上传图像',
+            messageFile:'请上传文件',
             uploadFile:'上传文件',
             submitBtn:'确认上传',
             videoTips:'您的浏览器不支持Video标签。',
@@ -112,7 +115,14 @@ export default {
             endPlaceholder: '结束时间',
             week: '最近一周',
             month: '最近一个月',
-            threeMonth: '最新三个月'
+            threeMonth: '最新三个月',
+            day: '最近一天',
+            data: '数据查询周期',
+            oneMonth: '最近一月',
+            startDate: '开始日期',
+            endDate: '结束日期',
+            custom: '自定义',
+            at: '至'
         },
         confirm: {
             confirm: '确定',
@@ -507,6 +517,12 @@ export default {
         promptRules: '请填写提示词',
         promptLimitRules: '提示词描述须在50字符以内',
         copySuccess: '复制成功',
+        selectModel: '选模型，可输入名称搜索',
+        loadingText: '加载中...',
+        promptOptimize: '提示词优化',
+        promptOptimizeHint: '请填写提示词后，再进行提示词优化',
+        optimize: '优化',
+        replace: '替换'
     },
     // 工作流
     list:{
@@ -565,6 +581,7 @@ export default {
         publicTotalText: '公开发布为工具：所有人可见',
     },
     knowledgeManage:{
+        author:'作者',
         noData:'暂无数据',
         searchPlaceholder:'按照知识库名称搜索',
         docPlaceholder:'按照文件名称搜索',
@@ -795,6 +812,7 @@ export default {
             search: '输入名称搜索',
             deleteHint: '确定要删除该提示词模板吗？'
         },
+
         server:{
             slogan:'可绑定已发布的应用，创建自己的MCP server，并对外提供服务。',
             search:'请输入MCP名称进行搜索',
@@ -812,6 +830,7 @@ export default {
                 add:'添加',
                 added:'已添加',
                 addMsg:'工具添加成功',
+                apiWarming:'该工具暂未绑定API Key，会导致调用失败!',
                 hint:'已绑定的应用发布新版本之后，引用此工具所创建的MCP服务不会自动更新到该工具的最新版本，以免影响已线上业务的正常运行。若需绑定最新版应用，请手动删除原应用后，重新添加新版应用。',
                 action:'关联',
                 methodName:'显示名称',
@@ -849,7 +868,9 @@ export default {
             action:'获取MCP工具',
             publish:'确定发布',
             sseUrlMsg:'sseUrl为空',
-            sseUrlErr:'请再次检查Server Url格式',
+            sseUrlErr:'请再次检查sseUrl格式',
+            serverUrlMsg:'Server Url为空',
+            serverUrlErr:'请再次检查Server Url格式',
         },
         builtIn:{
             slogan:'内置工具',
@@ -866,10 +887,11 @@ export default {
             slogan:'自定义工具',
             addTitle:'创建自定义工具',
             editTitle:'修改自定义工具',
-            toolTitle:'创建工具',
+            toolTitle:'创建应用',
             search:'请输入名称进行搜索',
             deleteHint:'删除后，历史引用了本自定义工具的智能体将自动取消引用，且此操作不可撤回，确认删除吗？',
             app:'应用名称',
+            avatar:'工具图标',
             tool:'工具名称',
             desc:'工具描述',
             apiAuth:'API身份认证',
@@ -883,10 +905,63 @@ export default {
             privacyHint:'填写API对应的隐私政策url链接',
             auth: {
                 title:'鉴权',
-                type:'认证类型',
-                authType:'Auth类型'
+                authType:'认证类型',
+                headerType: '请求头',
+                queryType: '查询参数',
+                prefix:'鉴权头部前缀',
+                header: '键',
+                headerHint: 'HTTP 头部名称，如果你不知道是什么，可以将其保留为 Authorization 或设置为自定义值',
+                value: '值',
+                query: '查询参数',
+                queryHint: '用于传递 API 密钥查询参数的名称，如"http://192.168.0.21:8081/server/test? key=xxx"中的"key"参数',
             }
-        }
+        },
+        square: {
+            all: '全部',
+            gov: '政务',
+            industry: '工业',
+            edu: '文教',
+            tourism: '文旅',
+            medical: '医疗',
+            data: '数据',
+            creator: '创作',
+            search: '搜索',
+            searchHint: '请输入MCP名称进行搜索',
+            info: '介绍概览',
+            sseUrl: 'SSE URL及工具',
+            summary: '使用概述',
+            feature: '特性说明',
+            scenario: '应用场景',
+            manual: '使用说明',
+            detail: '详情',
+            sendButton: '发送到资源库',
+            send: {
+                title: '添加MCP服务',
+            },
+            sendHint1: '* 将MCP发送到资源库后，您可在工作流或智能体中直接调用。',
+            sendHint2: '* 您已添加到资源库，可直接在工作流或智能体中直接调用。',
+
+            tool: {
+                info: '工具介绍：',
+                desc: '描述：',
+                params: '参数说明：',
+                setup: '安装说明：',
+                cursor: {
+                    title: '在 Cursor 中安装',
+                    step1: '1. 点击Cursor右上角\'设置\'，进入左侧菜单中的\'MCP\'选项',
+                    step2: '2. 点击页面右上方的\'+添加\'按钮, 自动打开mcp.json配置文件',
+                    step3: '3. 在文件中粘贴MCP配置并保存（在合适位置插入，无需删除已有内容）',
+                    step4: '4. MCP设置界面显示绿色原点即可使用',
+                },
+                claude: {
+                    title: '在 Claude 中安装',
+                    step1: '1. 在Claude页面左上角打开\'设置\'，进入\'Developer\'',
+                    step2: '2. 点击\'Edit Config\' 定位claude_desktop_config.json配置文件',
+                    step3: '3. 在json文件中粘贴MCP配置并保存（在合适位置插入，无需删除已有内容）',
+                },
+                other: '其他MCP服务查看',
+            },
+        },
     },
     agent:{
         addComponent:'添加组件',
@@ -907,6 +982,17 @@ export default {
         copyToInput:'复制入框',
         clearHistory:'清空历史',
         clickCopy:'点击复制',
+        toolDetail:{
+            modelLoadingText:'模型加载中...',
+            selectRerank:'请选择rerank模型',
+            inputApikey:'请输入apikey',
+            parameters:'参数',
+            type:'类型',
+            description:'描述',
+            required:'是否必填',
+            yes:'是',
+            no:'否'
+        },
         promptTemplate:{
             recommended:'推荐',
             personal:'个人',
@@ -991,5 +1077,24 @@ export default {
         docWord:'文档中的词语',
         linkKnowledge:'关联知识库',
         undateTime:'更新时间'
-    }
+    },
+    statistics: {
+        title: '统计分析',
+        overview: '数据概况',
+        cumulativeClient: '累计用户量',
+        additionClient: '新增用户量',
+        activeClient: '日均用户量',
+        browse: '平台浏览量',
+        percentage: '环比上周期',
+    },
+    statisticsEcharts: {
+        units: ["", "万", "亿", "万亿", "亿亿"],
+        date: '日期',
+        unit: '单位',
+        minute: '分',
+        saveImage: '保存为图片',
+        dateView: '数据视图',
+        close: '关闭',
+        reload: '刷新'
+    },
 }
