@@ -3,8 +3,6 @@ package orm
 import (
 	"context"
 	"fmt"
-	"strconv"
-
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/generator"
 	"github.com/samber/lo"
 
@@ -173,7 +171,7 @@ func CreateKnowledge(ctx context.Context, knowledge *model.KnowledgeBase, embedd
 			Name:                 knowledge.RagName,
 			KnowledgeBaseId:      knowledge.KnowledgeId,
 			EmbeddingModelId:     embeddingModelId,
-			EnableKnowledgeGraph: strconv.FormatBool(knowledge.KnowledgeGraphSwitch > 0),
+			EnableKnowledgeGraph: knowledge.KnowledgeGraphSwitch > 0,
 		})
 	})
 }

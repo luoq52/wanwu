@@ -50,6 +50,7 @@ type KnowledgeInfo struct {
 	PermissionType     int32               `json:"permissionType"` //权限类型:0: 查看权限; 10: 编辑权限; 20: 授权权限,数值不连续的原因防止后续有中间权限，目前逻辑 授权权限>编辑权限>查看权限
 	Share              bool                `json:"share"`          //是分享，还是私有
 	RagName            string              `json:"ragName"`        //rag名称
+	GraphSwitch        int32               `json:"graphSwitch"`    //图谱开关
 }
 
 type KnowledgeMetaData struct {

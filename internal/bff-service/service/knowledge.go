@@ -295,6 +295,7 @@ func buildKnowledgeInfoList(ctx *gin.Context, knowledgeListResp *knowledgebase_s
 			CreateUserId:     knowledge.CreateUserId,
 			Share:            share, //数量大于1才是分享，因为权限记录中有一条是记录创建者权限
 			RagName:          knowledge.RagName,
+			GraphSwitch:      knowledge.GraphSwitch,
 		})
 	}
 	return &response.KnowledgeListResp{KnowledgeList: list}

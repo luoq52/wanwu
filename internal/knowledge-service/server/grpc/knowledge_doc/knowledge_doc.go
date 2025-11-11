@@ -102,7 +102,7 @@ func (s *Service) UpdateDocStatus(ctx context.Context, req *knowledgebase_doc_se
 			return nil, util.ErrCode(errs.Code_KnowledgeDocUpdateStatusFailed)
 		}
 		//开启了知识图谱
-		if graph.KnowledgeGraphSwitch == "true" {
+		if graph.KnowledgeGraphSwitch {
 			err = createKnowledgeGraph(ctx, knowledge, doc, graph)
 			if err != nil {
 				log.Errorf("docId: %v create knowledge graph fail %v", req.DocId, err)

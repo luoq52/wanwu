@@ -28,7 +28,7 @@ const (
 )
 
 type KnowledgeGraph struct {
-	KnowledgeGraphSwitch  string `json:"knowledgeGraphSwitch"`
+	KnowledgeGraphSwitch  bool   `json:"knowledgeGraphSwitch"`
 	GraphModelId          string `json:"graphModelId"`
 	GraphSchemaObjectName string `json:"graphSchemaObjectName"`
 	GraphSchemaFileName   string `json:"graphSchemaFileName"`
@@ -244,14 +244,14 @@ func BuildKnowledgeGraph(knowledgeGraph string) *KnowledgeGraph {
 			_, graphSchemaObjectName, graphSchemaFileName = service.SplitFilePath(graph.SchemaUrl)
 		}
 		return &KnowledgeGraph{
-			KnowledgeGraphSwitch:  strconv.FormatBool(graph.Switch),
+			KnowledgeGraphSwitch:  graph.Switch,
 			GraphModelId:          graph.LlmModelId,
 			GraphSchemaObjectName: graphSchemaObjectName,
 			GraphSchemaFileName:   graphSchemaFileName,
 		}
 	}
 	return &KnowledgeGraph{
-		KnowledgeGraphSwitch: "false",
+		KnowledgeGraphSwitch: false,
 	}
 }
 

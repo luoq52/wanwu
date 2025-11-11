@@ -597,6 +597,7 @@ func buildKnowledgeInfo(knowledge *model.KnowledgeBase) *knowledgebase_service.K
 		CreateOrgId:        knowledge.OrgId,
 		CreateUserId:       knowledge.UserId,
 		RagName:            knowledge.RagName,
+		GraphSwitch:        int32(knowledge.KnowledgeGraphSwitch),
 	}
 }
 

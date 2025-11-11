@@ -165,6 +165,7 @@ message KnowledgeInfo {
   string createOrgId = 10;//创建者组织id
   int32 shareCount = 11;//共享数量
   string ragName = 12;//传给rag的知识库名称
+  int32 graphSwitch = 13; //知识图谱开关
 }
 
 message KnowledgeTagInfo {

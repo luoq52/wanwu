@@ -62,7 +62,7 @@ type RagImportDocParams struct {
 	PreProcess            []string             `json:"pre_process"`
 	RagMetaDataParams     []*RagMetaDataParams `json:"meta_data"`
 	RagChildChunkConfig   *RagChunkConfig      `json:"child_chunk_config"`
-	KnowledgeGraphSwitch  string               `json:"enable_knowledge_graph"`
+	KnowledgeGraphSwitch  bool                 `json:"enable_knowledge_graph"`
 	GraphModelId          string               `json:"graph_model_id"`
 	GraphSchemaObjectName string               `json:"graph_schema_objectname"`
 	GraphSchemaFileName   string               `json:"graph_schema_filename"`

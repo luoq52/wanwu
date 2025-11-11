@@ -23,7 +23,7 @@ type RagCreateParams struct {
 	Name                 string `json:"knowledgeBase"`
 	KnowledgeBaseId      string `json:"kb_id"`
 	EmbeddingModelId     string `json:"embedding_model_id"`
-	EnableKnowledgeGraph string `json:"enable_knowledge_graph"`
+	EnableKnowledgeGraph bool   `json:"enable_knowledge_graph"`
 }
 
 type RagCommonResp struct {
