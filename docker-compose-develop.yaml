@@ -29,6 +29,8 @@ services:
       - ${WANWU_PROJECT_DIR}/bff-service/cache:/app/cache
       - ${WANWU_PROJECT_DIR}/bff-service/log:/app/log
       - ${WANWU_PROJECT_DIR}/bff-service/tmp:/app/tmp
+      - ${WANWU_BFF_OAUTH_RSA_PRIVATE_KEY_PATH}:/app/tmp/oauth_rsa_private.pem
+      - ${WANWU_BFF_OAUTH_RSA_PUBLIC_KEY_PATH}:/app/tmp/oauth_rsa_public.pem
     environment:
       CUSTOM_INFO_VERSION: ${WANWU_VERSION}
       SERVER_WEB_BASE_URL: ${WANWU_WEB_BASE_URL}
@@ -50,6 +52,9 @@ services:
       CUSTOM_INFO_REGISTER_BY_EMAIL: ${WANWU_BFF_REGISTER_BY_EMAIL}
       CUSTOM_INFO_RESET_PASSWORD_BY_EMAIL: ${WANWU_BFF_RESET_PASSWORD_BY_EMAIL}
       CUSTOM_INFO_LOGIN_BY_EMAIL: ${WANWU_BFF_LOGIN_BY_EMAIL}
+      WANWU_EXTERNAL_SCHEME: ${WANWU_EXTERNAL_SCHEME}
+      WANWU_EXTERNAL_ENDPOINT: ${WANWU_EXTERNAL_ENDPOINT}
+      OAUTH_SWITCH: ${WANWU_BFF_OAUTH_SWITCH}
     working_dir: /app
     command: ./bin/bff-service
 

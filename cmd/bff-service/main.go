@@ -9,15 +9,15 @@ import (
 	"runtime"
 	"syscall"
 
-	"github.com/UnicomAI/wanwu/internal/bff-service/service"
-
 	"github.com/UnicomAI/wanwu/internal/bff-service/config"
 	"github.com/UnicomAI/wanwu/internal/bff-service/pkg/ahocorasick"
 	assistant_template "github.com/UnicomAI/wanwu/internal/bff-service/pkg/assistant-template"
 	mcp_util "github.com/UnicomAI/wanwu/internal/bff-service/pkg/mcp-util"
+	oauth2_util "github.com/UnicomAI/wanwu/internal/bff-service/pkg/oauth2-util"
 	"github.com/UnicomAI/wanwu/internal/bff-service/server/http/handler"
 	http_client "github.com/UnicomAI/wanwu/pkg/http-client"
 	"github.com/UnicomAI/wanwu/pkg/i18n"
+	jwt_util "github.com/UnicomAI/wanwu/pkg/jwt-util"
 	"github.com/UnicomAI/wanwu/pkg/log"
 	"github.com/UnicomAI/wanwu/pkg/minio"
 	mp "github.com/UnicomAI/wanwu/pkg/model-provider"
@@ -74,9 +74,9 @@ func main() {
 		log.Fatalf("init aho-corasick err: %v", err)
 	}
 
-	// doc-center
-	if err := service.InitDocCenter(); err != nil {
-		log.Fatalf("init doc-center err: %v", err)
+	// init jwt
+	if err := jwt_util.InitUserJWT(config.Cfg().JWT.SigningKey); err != nil {
+		log.Errorf("init jwt err: %v", err)
 	}
 
 	// init minio: custom
@@ -93,10 +93,19 @@ func main() {
 	if err := http_client.InitProxyMinio(); err != nil {
 		log.Fatalf("init http client err: %v", err)
 	}
+
 	// init redis
 	if err := redis.InitOP(ctx, config.Cfg().Redis); err != nil {
 		log.Fatalf("init redis err: %v", err)
 	}
+
+	// init oauth2
+	if config.Cfg().OAuth.Switch != 0 {
+		if err := oauth2_util.Init(redis.OP().Cli(), config.Cfg().OAuth.RSA, config.Cfg().Server.WebBaseUrl, config.Cfg().JWT.SigningKey); err != nil {
+			log.Fatalf("init oauth err: %v", err)
+		}
+	}
+
 	// init model provider
 	mp.Init(config.Cfg().Server.CallbackUrl)
 

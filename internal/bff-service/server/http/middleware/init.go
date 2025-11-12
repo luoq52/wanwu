@@ -1,14 +1,11 @@
 package middleware
 
 import (
-	"github.com/UnicomAI/wanwu/internal/bff-service/config"
 	mid "github.com/UnicomAI/wanwu/pkg/gin-util/mid-wrap"
 	"github.com/UnicomAI/wanwu/pkg/gin-util/route"
-	jwt_util "github.com/UnicomAI/wanwu/pkg/jwt-util"
 )
 
 func Init() {
-	jwt_util.InitUserJWT(config.Cfg().JWT.SigningKey)
 
 	mid.InitWrapper(Record)
 
@@ -71,4 +68,7 @@ func Init() {
 
 	// --- statistic_client ---
 	mid.NewSub("statistic_client", "统计分析", route.PermNeedCheck, true, true, JWTUser, CheckUserPerm)
+
+	// --- oauth ---
+	mid.NewSub("oauth", "OAuth密钥管理", route.PermNeedCheck, true, true, JWTUser, CheckUserPerm)
 }

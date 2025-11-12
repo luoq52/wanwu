@@ -52,6 +52,11 @@ func Start(ctx context.Context) {
 		log.Fatalf("init service err: %v", err)
 	}
 
+	// doc-center
+	if err := service.InitDocCenter(); err != nil {
+		log.Fatalf("init doc-center err: %v", err)
+	}
+
 	// start mcp server
 	if err := service.StartMCPServer(ctx); err != nil {
 		log.Fatalf("start mcp server err: %v", err)

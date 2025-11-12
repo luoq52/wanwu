@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
+	oauth2_util "github.com/UnicomAI/wanwu/internal/bff-service/pkg/oauth2-util"
 	"github.com/UnicomAI/wanwu/pkg/i18n"
 	"github.com/UnicomAI/wanwu/pkg/log"
 	"github.com/UnicomAI/wanwu/pkg/minio"
@@ -19,6 +20,7 @@ type Config struct {
 	Server            ServerConfig               `json:"server" mapstructure:"server"`
 	Log               LogConfig                  `json:"log" mapstructure:"log"`
 	JWT               JWTConfig                  `json:"jwt" mapstructure:"jwt"`
+	OAuth             OAuthConfig                `json:"oauth" mapstructure:"oauth"`
 	Decrypt           DecryptPasswd              `json:"decrypt-passwd" mapstructure:"decrypt-passwd"`
 	I18n              i18n.Config                `json:"i18n" mapstructure:"i18n"`
 	AssistantTemplate AssistantTemplateConfig    `json:"assistant-template" mapstructure:"assistant-template"`
@@ -71,6 +73,20 @@ type LogConfig struct {
 
 type JWTConfig struct {
 	SigningKey string `json:"signing-key" mapstructure:"signing-key"`
+}
+
+type OAuthSwitch struct {
+	OAuthSwitch int `json:"switch" mapstructure:"switch"`
+}
+
+type OAuthJWTConfig struct {
+	RSAPrivateKeyPath string `json:"private_key_path" mapstructure:"private_key_path"`
+	RSAPublicKeyPath  string `json:"public_key_path" mapstructure:"public_key_path"`
+}
+
+type OAuthConfig struct {
+	Switch int                   `json:"switch" mapstructure:"switch"`
+	RSA    oauth2_util.RSAConfig `json:"rsa" mapstructure:"rsa"`
 }
 
 type DecryptPasswd struct {

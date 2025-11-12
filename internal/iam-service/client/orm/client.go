@@ -32,6 +32,7 @@ func NewClient(db *gorm.DB) (*Client, error) {
 		model.OrgUser{},
 		model.OrgRole{},
 		model.Captcha{},
+		model.OauthApp{},
 	); err != nil {
 		return nil, err
 	}
