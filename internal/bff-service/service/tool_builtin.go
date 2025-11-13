@@ -7,6 +7,7 @@ import (
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/response"
 	"github.com/UnicomAI/wanwu/pkg/constant"
+	"github.com/UnicomAI/wanwu/pkg/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -66,6 +67,13 @@ func toToolSquareDetail(ctx *gin.Context, toolSquare *mcp_service.SquareToolDeta
 			APIKey:          toolSquare.BuiltInTools.ApiAuth.ApiKeyValue,
 			Detail:          toolSquare.BuiltInTools.Detail,
 			ActionSum:       int64(toolSquare.BuiltInTools.ActionSum),
+			ApiAuth: util.ApiAuthWebRequest{
+				AuthType:           toolSquare.BuiltInTools.ApiAuth.AuthType,
+				ApiKeyHeaderPrefix: toolSquare.BuiltInTools.ApiAuth.ApiKeyHeaderPrefix,
+				ApiKeyHeader:       toolSquare.BuiltInTools.ApiAuth.ApiKeyHeader,
+				ApiKeyQueryParam:   toolSquare.BuiltInTools.ApiAuth.ApiKeyQueryParam,
+				ApiKeyValue:        toolSquare.BuiltInTools.ApiAuth.ApiKeyValue,
+			},
 		},
 		Schema: toolSquare.Schema,
 	}

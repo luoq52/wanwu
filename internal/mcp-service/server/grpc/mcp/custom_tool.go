@@ -24,14 +24,7 @@ func (s *Service) CreateCustomTool(ctx context.Context, req *mcp_service.CreateC
 	if req.ApiAuth == nil {
 		return nil, errStatus(errs.Code_MCPCreateCustomToolErr, toErrStatus("mcp_create_custom_tool_err", "apiAuth is empty"))
 	}
-	apiAuth := &common.ApiAuthWebRequest{
-		AuthType:           req.ApiAuth.AuthType,
-		ApiKeyHeaderPrefix: req.ApiAuth.ApiKeyHeaderPrefix,
-		ApiKeyHeader:       req.ApiAuth.ApiKeyHeader,
-		ApiKeyQueryParam:   req.ApiAuth.ApiKeyQueryParam,
-		ApiKeyValue:        req.ApiAuth.ApiKeyValue,
-	}
-	apiAuthBytes, err := json.Marshal(apiAuth)
+	apiAuthBytes, err := json.Marshal(req.ApiAuth)
 	if err != nil {
 		return nil, errStatus(errs.Code_MCPCreateCustomToolErr, toErrStatus("mcp_create_custom_tool_err", err.Error()))
 	}
@@ -134,14 +127,7 @@ func (s *Service) UpdateCustomTool(ctx context.Context, req *mcp_service.UpdateC
 	if req.ApiAuth == nil {
 		return nil, errStatus(errs.Code_MCPUpdateCustomToolErr, toErrStatus("mcp_update_custom_tool_err", "apiAuth is empty"))
 	}
-	apiAuth := &common.ApiAuthWebRequest{
-		AuthType:           req.ApiAuth.AuthType,
-		ApiKeyHeaderPrefix: req.ApiAuth.ApiKeyHeaderPrefix,
-		ApiKeyHeader:       req.ApiAuth.ApiKeyHeader,
-		ApiKeyQueryParam:   req.ApiAuth.ApiKeyQueryParam,
-		ApiKeyValue:        req.ApiAuth.ApiKeyValue,
-	}
-	apiAuthBytes, err := json.Marshal(apiAuth)
+	apiAuthBytes, err := json.Marshal(req.ApiAuth)
 	if err != nil {
 		return nil, errStatus(errs.Code_MCPUpdateCustomToolErr, toErrStatus("mcp_update_custom_tool_err", err.Error()))
 	}
@@ -191,10 +177,7 @@ func (s *Service) GetSquareTool(ctx context.Context, req *mcp_service.GetSquareT
 			if err := json.Unmarshal([]byte(apiAuthJson), apiAuth); err != nil {
 				return nil, errStatus(errs.Code_MCPGetSquareToolErr, toErrStatus("mcp_get_square_tool_err", err.Error()))
 			}
-			apiAuth.AuthType = toolCfg.AuthType
-			apiAuth.ApiKeyHeaderPrefix = toolCfg.ApiKeyHeaderPrefix
-			apiAuth.ApiKeyHeader = toolCfg.ApiKeyHeader
-			apiAuth.ApiKeyQueryParam = toolCfg.ApiKeyQueryParam
+			apiAuth = toBuiltinToolApiAuth(toolCfg, apiAuth.ApiKeyValue)
 		}
 	}
 	return buildSquareToolDetail(toolCfg, apiAuth), nil
@@ -275,11 +258,12 @@ func (s *Service) UpsertBuiltinToolAPIKey(ctx context.Context, req *mcp_service.
 	if req.Identity == nil {
 		return nil, errStatus(errs.Code_MCPUpdateBuiltinToolErr, toErrStatus("mcp_update_builtin_tool_err", "identity is empty"))
 	}
-	apiAuth := &common.ApiAuthWebRequest{}
 	builtToolCfg, exist := config.Cfg().Tool(req.ToolSquareId)
 	if !exist {
 		return nil, errStatus(errs.Code_MCPUpdateBuiltinToolErr, toErrStatus("mcp_update_builtin_tool_err", "toolSquareId not exist"))
 	}
+	apiAuth := toBuiltinToolApiAuth(builtToolCfg, req.ApiKey)
+	apiAuthBytes, _ := json.Marshal(apiAuth)
 
 	info, _ := s.cli.GetBuiltinTool(ctx, &model.BuiltinTool{
 		ToolSquareId: req.ToolSquareId,
@@ -288,16 +272,6 @@ func (s *Service) UpsertBuiltinToolAPIKey(ctx context.Context, req *mcp_service.
 	})
 	if info != nil {
 		// update
-		apiAuthJson := info.AuthJSON
-		if err := json.Unmarshal([]byte(apiAuthJson), apiAuth); err != nil {
-			return nil, errStatus(errs.Code_MCPUpdateBuiltinToolErr, toErrStatus("mcp_update_builtin_tool_err", err.Error()))
-		}
-		apiAuth.AuthType = builtToolCfg.AuthType
-		apiAuth.ApiKeyHeaderPrefix = builtToolCfg.ApiKeyHeaderPrefix
-		apiAuth.ApiKeyHeader = builtToolCfg.ApiKeyHeader
-		apiAuth.ApiKeyQueryParam = builtToolCfg.ApiKeyQueryParam
-		apiAuth.ApiKeyValue = req.ApiKey
-		apiAuthBytes, _ := json.Marshal(apiAuth)
 		info.AuthJSON = string(apiAuthBytes)
 		if err := s.cli.UpdateBuiltinTool(ctx, info); err != nil {
 			return nil, errStatus(errs.Code_MCPUpdateBuiltinToolErr, err)
@@ -305,13 +279,6 @@ func (s *Service) UpsertBuiltinToolAPIKey(ctx context.Context, req *mcp_service.
 		return &emptypb.Empty{}, nil
 	} else {
 		// create
-		apiAuth.AuthType = builtToolCfg.AuthType
-		apiAuth.ApiKeyHeaderPrefix = builtToolCfg.ApiKeyHeaderPrefix
-		apiAuth.ApiKeyHeader = builtToolCfg.ApiKeyHeader
-		apiAuth.ApiKeyQueryParam = builtToolCfg.ApiKeyQueryParam
-		apiAuth.ApiKeyValue = req.ApiKey
-		apiAuthBytes, _ := json.Marshal(apiAuth)
-
 		if err := s.cli.CreateBuiltinTool(ctx, &model.BuiltinTool{
 			ToolSquareId: req.ToolSquareId,
 			AuthJSON:     string(apiAuthBytes),
@@ -387,4 +354,14 @@ func (s *Service) GetToolSelect(ctx context.Context, req *mcp_service.GetToolSel
 		List:  list,
 		Total: int32(len(list)),
 	}, nil
+}
+
+func toBuiltinToolApiAuth(builtinToolCfg config.ToolConfig, apiKey string) *common.ApiAuthWebRequest {
+	return &common.ApiAuthWebRequest{
+		AuthType:           builtinToolCfg.AuthType,
+		ApiKeyHeaderPrefix: builtinToolCfg.ApiKeyHeaderPrefix,
+		ApiKeyHeader:       builtinToolCfg.ApiKeyHeader,
+		ApiKeyQueryParam:   builtinToolCfg.ApiKeyQueryParam,
+		ApiKeyValue:        apiKey,
+	}
 }
