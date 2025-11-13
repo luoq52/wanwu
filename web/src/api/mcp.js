@@ -1,10 +1,10 @@
 import request from "@/utils/request"
-const BASE_URL = '/use/model/api/v1'
+import {USER_API} from "@/utils/requestConstants";
 
 /*----自定义工具------*/
 export const getCustomList = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/custom/list`,
+        url: `${USER_API}/tool/custom/list`,
         method: 'get',
         params: data
     })
@@ -12,7 +12,7 @@ export const getCustomList = (data)=>{
 
 export const getCustom = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/custom`,
+        url: `${USER_API}/tool/custom`,
         method: 'get',
         params: data
     })
@@ -20,7 +20,7 @@ export const getCustom = (data)=>{
 
 export const editCustom = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/custom`,
+        url: `${USER_API}/tool/custom`,
         method: 'put',
         data: data
     })
@@ -28,7 +28,7 @@ export const editCustom = (data)=>{
 
 export const addCustom = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/custom`,
+        url: `${USER_API}/tool/custom`,
         method: 'post',
         data: data
     })
@@ -36,7 +36,7 @@ export const addCustom = (data)=>{
 
 export const deleteCustom = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/custom`,
+        url: `${USER_API}/tool/custom`,
         method: 'delete',
         data: data
     })
@@ -44,7 +44,7 @@ export const deleteCustom = (data)=>{
 
 export const getSchema = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/custom/schema`,
+        url: `${USER_API}/tool/custom/schema`,
         method: 'post',
         data: data
     })
@@ -53,7 +53,7 @@ export const getSchema = (data)=>{
 /*---创建mcp---*/
 export const getServerList = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server/list`,
+        url: `${USER_API}/mcp/server/list`,
         method: 'get',
         params: data
     })
@@ -61,7 +61,7 @@ export const getServerList = (data)=>{
 
 export const getServer = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server`,
+        url: `${USER_API}/mcp/server`,
         method: 'get',
         params: data
     })
@@ -69,7 +69,7 @@ export const getServer = (data)=>{
 
 export const addServer = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server`,
+        url: `${USER_API}/mcp/server`,
         method: 'post',
         data: data
     })
@@ -77,7 +77,7 @@ export const addServer = (data)=>{
 
 export const editServer = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server`,
+        url: `${USER_API}/mcp/server`,
         method: 'put',
         data: data
     })
@@ -85,7 +85,7 @@ export const editServer = (data)=>{
 
 export const deleteServer = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server`,
+        url: `${USER_API}/mcp/server`,
         method: 'delete',
         data: data
     })
@@ -93,7 +93,7 @@ export const deleteServer = (data)=>{
 
 export const addServerTool = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server/tool`,
+        url: `${USER_API}/mcp/server/tool`,
         method: 'post',
         data: data
     })
@@ -101,7 +101,7 @@ export const addServerTool = (data)=>{
 
 export const editServerTool = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server/tool`,
+        url: `${USER_API}/mcp/server/tool`,
         method: 'put',
         data: data
     })
@@ -109,7 +109,7 @@ export const editServerTool = (data)=>{
 
 export const deleteServerTool = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server/tool`,
+        url: `${USER_API}/mcp/server/tool`,
         method: 'delete',
         data: data
     })
@@ -117,7 +117,7 @@ export const deleteServerTool = (data)=>{
 
 export const addOpenapi = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/server/tool/openapi`,
+        url: `${USER_API}/mcp/server/tool/openapi`,
         method: 'post',
         data: data
     })
@@ -126,7 +126,7 @@ export const addOpenapi = (data)=>{
 /*---导入mcp---*/
 export const getList = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/list`,
+        url: `${USER_API}/mcp/list`,
         method: 'get',
         params: data
     })
@@ -134,7 +134,7 @@ export const getList = (data)=>{
 
 export const getDetail = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp`,
+        url: `${USER_API}/mcp`,
         method: 'get',
         params: data
     })
@@ -142,7 +142,7 @@ export const getDetail = (data)=>{
 
 export const setDelete = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp`,
+        url: `${USER_API}/mcp`,
         method: 'delete',
         data: data
     })
@@ -150,7 +150,7 @@ export const setDelete = (data)=>{
 
 export const getTools = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/tool/list`,
+        url: `${USER_API}/mcp/tool/list`,
         method: 'get',
         params: data
     })
@@ -158,7 +158,7 @@ export const getTools = (data)=>{
 
 export const setCreate = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp`,
+        url: `${USER_API}/mcp`,
         method: 'post',
         data: data
     })
@@ -166,7 +166,7 @@ export const setCreate = (data)=>{
 
 export const setUpdate = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp`,
+        url: `${USER_API}/mcp`,
         method: 'put',
         data: data
     })
@@ -175,21 +175,21 @@ export const setUpdate = (data)=>{
 /*---第三方MCP广场---*/
 export const getPublicMcpList = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/square/list`,
+        url: `${USER_API}/mcp/square/list`,
         method: 'get',
         params: data
     })
 };
 export const getPublicMcpInfo = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/square`,
+        url: `${USER_API}/mcp/square`,
         method: 'get',
         params: data
     })
 };
 export const getRecommendsList = (data)=>{
     return request({
-        url: `${BASE_URL}/mcp/square/recommend`,
+        url: `${USER_API}/mcp/square/recommend`,
         method: 'get',
         params: data
     })
@@ -198,7 +198,7 @@ export const getRecommendsList = (data)=>{
 /*----内置工具------*/
 export const getBuiltInList = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/square/list`,
+        url: `${USER_API}/tool/square/list`,
         method: 'get',
         params: data
     })
@@ -206,7 +206,7 @@ export const getBuiltInList = (data)=>{
 
 export const getToolDetail = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/square`,
+        url: `${USER_API}/tool/square`,
         method: 'get',
         params: data
     })
@@ -214,7 +214,7 @@ export const getToolDetail = (data)=>{
 
 export const changeApiKey = (data)=>{
     return request({
-        url: `${BASE_URL}/tool/builtin`,
+        url: `${USER_API}/tool/builtin`,
         method: 'post',
         data
     })

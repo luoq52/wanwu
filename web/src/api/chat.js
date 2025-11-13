@@ -1,57 +1,58 @@
 import request from "@/utils/request";
+import {MODEL_API, SERVICE_API} from "@/utils/requestConstants"
 
 export const createApp = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/create',
+        url: `${MODEL_API}/assistant/create`,
         method: 'post',
         data
     })
 };
 export const updateApp = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/update',
+        url: `${MODEL_API}/assistant/update`,
         method: 'put',
         data
     })
 };
 export const getAppDetail = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/info',
+        url: `${MODEL_API}/assistant/info`,
         method: 'get',
         params: data
     })
 };
 export const deleteApp = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/delete',
+        url: `${MODEL_API}/assistant/delete`,
         method: 'delete',
         data
     })
 };
 export const publishApp = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/publish',
+        url: `${MODEL_API}/assistant/publish`,
         method: 'post',
         data
     })
 };
 export const getAppDraftList = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/draft_list',
+        url: `${MODEL_API}/assistant/draft_list`,
         method: 'get',
         params: data
     })
 };
 export const getAppMoreList = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/more_list',
+        url: `${MODEL_API}/assistant/more_list`,
         method: 'get',
         params: data
     })
 };
 export const getMyAppList = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/list',
+        url: `${MODEL_API}/assistant/list`,
         method: 'get',
         params: data
     })
@@ -59,7 +60,7 @@ export const getMyAppList = (data)=>{
 //头像上传
 export const fileUpload = (data,config)=>{
     return request({
-        url: '/service/api/v1/model/expansion/file/batch/upload',
+        url: `${SERVICE_API}/model/expansion/file/batch/upload`,
         method: 'post',
         data,
         config
@@ -68,7 +69,7 @@ export const fileUpload = (data,config)=>{
 //知识增强文件上传
 export const knowledgeFileUpload = (data,config)=>{
     return request({
-        url: '/use/model/api/v1/assistant/knowledge/file/upload',
+        url: `${MODEL_API}/assistant/knowledge/file/upload`,
         method: 'post',
         data,
         config
@@ -77,14 +78,14 @@ export const knowledgeFileUpload = (data,config)=>{
 //查询已上传文件列表
 export const getKnowledgeFileList = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/knowledge/file/list',
+        url: `${MODEL_API}/assistant/knowledge/file/list`,
         method: 'get',
         params: data
     })
 };
 export const deleteKnowledgeFile = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/knowledge/file/delete',
+        url: `${MODEL_API}/assistant/knowledge/file/delete`,
         method: 'delete',
         data
     })
@@ -92,7 +93,7 @@ export const deleteKnowledgeFile = (data)=>{
 //常用应用
 export const getRecentApp = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/common/list',
+        url: `${MODEL_API}/assistant/common/list`,
         method: 'get',
         params: data
     })
@@ -100,7 +101,7 @@ export const getRecentApp = (data)=>{
 //删除常用应用
 export const deleteRecentApp = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/common/delete',
+        url: `${MODEL_API}/assistant/common/delete`,
         method: 'delete',
         data
     })
@@ -109,7 +110,7 @@ export const deleteRecentApp = (data)=>{
 //对话列表
 export const getConversationList = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/conversation/list',
+        url: `${MODEL_API}/assistant/conversation/list`,
         method: 'get',
         params: data
     })
@@ -117,7 +118,7 @@ export const getConversationList = (data)=>{
 //创建对话
 export const createConversation = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/conversation/create',
+        url: `${MODEL_API}/assistant/conversation/create`,
         method: 'post',
         data
     })
@@ -125,7 +126,7 @@ export const createConversation = (data)=>{
 //删除对话
 export const deleteConversation = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/conversation/delete',
+        url: `${MODEL_API}/assistant/conversation/delete`,
         method: 'delete',
         data
     })
@@ -133,7 +134,7 @@ export const deleteConversation = (data)=>{
 //对话详情
 export const getConversationDetail = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/conversation/detail',
+        url: `${MODEL_API}/assistant/conversation/detail`,
         method: 'get',
         params: data
     })
@@ -142,7 +143,7 @@ export const getConversationDetail = (data)=>{
 //对话列表
 export const getConversationListCUBM = (data)=>{
     return request({
-        url: '/use/model/api/v1/chatllm/conversation/list',
+        url: `${MODEL_API}/chatllm/conversation/list`,
         method: 'get',
         params: data
     })
@@ -150,7 +151,7 @@ export const getConversationListCUBM = (data)=>{
 //创建对话
 export const createConversationCUBM = (data)=>{
     return request({
-        url: '/use/model/api/v1/chatllm/conversation/create',
+        url: `${MODEL_API}/chatllm/conversation/create`,
         method: 'post',
         data
     })
@@ -158,7 +159,7 @@ export const createConversationCUBM = (data)=>{
 //删除对话
 export const deleteConversationCUBM = (data)=>{
     return request({
-        url: '/use/model/api/v1/chatllm/conversation/delete',
+        url: `${MODEL_API}/chatllm/conversation/delete`,
         method: 'delete',
         data
     })
@@ -166,7 +167,7 @@ export const deleteConversationCUBM = (data)=>{
 //对话详情
 export const getConversationDetailCUBM = (data)=>{
     return request({
-        url: '/use/model/api/v1/chatllm/conversation/detail',
+        url: `${MODEL_API}/chatllm/conversation/detail`,
         method: 'get',
         params: data
     })
@@ -174,7 +175,7 @@ export const getConversationDetailCUBM = (data)=>{
 //批量文件上传
 export const batchUpload = (data,config)=>{
     return request({
-        url: '/use/model/api/v1/file/batch/upload',
+        url: `${MODEL_API}/file/batch/upload`,
         method: 'post',
         data,
         config
@@ -183,7 +184,7 @@ export const batchUpload = (data,config)=>{
 // app接入
 export const linkAPP = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/app/publish',
+        url: `${MODEL_API}/assistant/app/publish`,
         method: 'post',
         data
     })
@@ -192,7 +193,7 @@ export const linkAPP = (data)=>{
 //推荐智能体列表
 export const recommendList = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/recommend/list',
+        url: `${MODEL_API}/assistant/recommend/list`,
         method: 'get',
         params:data
     })
@@ -200,7 +201,7 @@ export const recommendList = (data)=>{
 //标记推荐智能体
 export const recommendMark = (data)=>{
     return request({
-        url: '/use/model/api/v1/assistant/recommend/update',
+        url: `${MODEL_API}/assistant/recommend/update`,
         method: 'put',
         data
     })
@@ -209,7 +210,7 @@ export const recommendMark = (data)=>{
 //上传文件确认路径
 export const confirmPath = (data)=>{
     return request({
-        url: '/use/model/api/v1/file/confirmPath',
+        url: `${MODEL_API}/file/confirmPath`,
         method: 'post',
         data
     })

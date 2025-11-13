@@ -105,6 +105,7 @@
 </template>
 <script>
 import fileUpload from "@/components/fileUpload";
+import {USER_API} from "@/utils/requestConstants"
 import {
   createSegment,
   createBatchSegment,
@@ -133,7 +134,7 @@ export default {
         fileUploadId: "",
       },
       dialogVisible: false,
-      templateUrl: "/user/api/v1/static/docs/segment.csv",
+      templateUrl: `${USER_API}/static/docs/segment.csv`,
       isChildChunk: false,
     };
   },

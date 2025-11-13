@@ -1,10 +1,10 @@
 import service from "@/utils/request"
-const BASE_URL = '/user/api/v1'
+import {USER_API} from "@/utils/requestConstants"
 
 // 获取组织列表
 export const fetchOrgList = (params) => {
     return service({
-        url: `${BASE_URL}/org/list`,
+        url: `${USER_API}/org/list`,
         method: "get",
         params,
     })
@@ -12,7 +12,7 @@ export const fetchOrgList = (params) => {
 // 获取组织详情
 export const fetchOrgDetail = (params) => {
     return service({
-        url: `${BASE_URL}/org/info`,
+        url: `${USER_API}/org/info`,
         method: "get",
         params,
     })
@@ -20,7 +20,7 @@ export const fetchOrgDetail = (params) => {
 // 创建组织
 export const createOrg = (data) => {
     return service({
-        url: `${BASE_URL}/org`,
+        url: `${USER_API}/org`,
         method: "post",
         data,
     })
@@ -28,7 +28,7 @@ export const createOrg = (data) => {
 // 编辑组织
 export const editOrg = (data) => {
     return service({
-        url: `${BASE_URL}/org`,
+        url: `${USER_API}/org`,
         method: "put",
         data,
     })
@@ -36,7 +36,7 @@ export const editOrg = (data) => {
 // 删除组织
 export const deleteOrg = (data) => {
     return service({
-        url: `${BASE_URL}/org`,
+        url: `${USER_API}/org`,
         method: "delete",
         data,
     })
@@ -44,7 +44,7 @@ export const deleteOrg = (data) => {
 // 修改组织状态
 export const changeOrgStatus = (data) => {
     return service({
-        url: `${BASE_URL}/org/status`,
+        url: `${USER_API}/org/status`,
         method: "put",
         data,
     })
@@ -53,7 +53,7 @@ export const changeOrgStatus = (data) => {
 // 获取导航组织列表
 export const fetchOrgs = () => {
     return service({
-        url: `${BASE_URL}/org/select`,
+        url: `${USER_API}/org/select`,
         method: "get",
     })
 }

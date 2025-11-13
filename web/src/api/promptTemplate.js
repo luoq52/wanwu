@@ -1,9 +1,9 @@
 import service from "@/utils/request"
-const BASE_URL = '/user/api/v1'
+import {USER_API} from "@/utils/requestConstants"
 //获取自定义propmpt详情
 export const getPromptTemplateDetail = (data)=>{
     return service({
-        url: `${BASE_URL}/prompt/custom`,
+        url: `${USER_API}/prompt/custom`,
         method: 'get',
         params: data
     })
@@ -11,7 +11,7 @@ export const getPromptTemplateDetail = (data)=>{
 //获取自定义prompt列表
 export const getPromptTemplateList= (data)=>{
     return service({
-        url: `${BASE_URL}/prompt/custom/list`,
+        url: `${USER_API}/prompt/custom/list`,
         method: 'get',
         params: data
     })
@@ -20,7 +20,7 @@ export const getPromptTemplateList= (data)=>{
 //获取内置prompt列表
 export const getPromptBuiltInList= (data)=>{
     return service({
-        url: `${BASE_URL}/prompt/template/list`,
+        url: `${USER_API}/prompt/template/list`,
         method: 'get',
         params: data
     })
@@ -28,7 +28,7 @@ export const getPromptBuiltInList= (data)=>{
 //获取内置prompt详情
 export const getPromptBuiltInDetail= (data)=>{
     return service({
-        url: `${BASE_URL}/prompt/template/detail`,
+        url: `${USER_API}/prompt/template/detail`,
         method: 'get',
         params: data
     })

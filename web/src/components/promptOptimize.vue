@@ -65,6 +65,7 @@
 import { selectModelList } from "@/api/modelAccess"
 import Print from '@/utils/printPlus2.js'
 import { fetchEventSource } from "@/sse/index.js"
+import {USER_API} from "@/utils/requestConstants"
 
 export default {
   data() {
@@ -131,7 +132,7 @@ export default {
       let endStr = ''
 
       this.ctrlAbort = new AbortController()
-      this.eventSource = new fetchEventSource(origin + '/user/api/v1/prompt/optimize', {
+      this.eventSource = new fetchEventSource(origin + `${USER_API}/prompt/optimize`, {
         method: 'POST',
         headers: {
           "Content-Type": 'application/json',

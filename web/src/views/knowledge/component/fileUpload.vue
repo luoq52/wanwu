@@ -447,6 +447,7 @@ import { delfile } from "@/api/chunkFile";
 import LinkIcon from "@/components/linkIcon.vue";
 import splitterDialog from "./splitterDialog.vue";
 import mataData from "./metadata.vue";
+import {USER_API} from "@/utils/requestConstants"
 import {
   SEGMENT_COMMON_LIST,
   SEGMENT_LIST,
@@ -695,7 +696,7 @@ export default {
       });
     },
     async downloadTemplate() {
-      const url = "/user/api/v1/static/docs/url_import_template.xlsx";
+      const url = `${USER_API}/static/docs/url_import_template.xlsx`;
       const fileName = "url_import_template.xlsx";
       try {
         const response = await fetch(url);

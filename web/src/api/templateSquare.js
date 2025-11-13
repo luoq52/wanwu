@@ -1,31 +1,31 @@
 import request from "@/utils/request"
-const BASE_URL = '/user/api/v1'
+import {USER_API} from "@/utils/requestConstants"
 
 /*---工作流模板---*/
 export const getWorkflowTempList = (data)=>{
     return request({
-        url: `${BASE_URL}/workflow/template/list`,
+        url: `${USER_API}/workflow/template/list`,
         method: 'get',
         params: data
     })
 };
 export const getWorkflowTempInfo = (data)=>{
     return request({
-        url: `${BASE_URL}/workflow/template/detail`,
+        url: `${USER_API}/workflow/template/detail`,
         method: 'get',
         params: data
     })
 };
 export const getWorkflowRecommendsList = (data)=>{
     return request({
-        url: `${BASE_URL}/workflow/template/recommend`,
+        url: `${USER_API}/workflow/template/recommend`,
         method: 'get',
         params: data
     })
 };
 export const downloadWorkflow = (params) => {
     return request({
-        url: `${BASE_URL}/workflow/template/download`,
+        url: `${USER_API}/workflow/template/download`,
         method: "get",
         params,
         responseType: 'blob'
@@ -33,7 +33,7 @@ export const downloadWorkflow = (params) => {
 };
 export const copyWorkflowTemplate = (data)=>{
     return request({
-        url: `${BASE_URL}/workflow/template`,
+        url: `${USER_API}/workflow/template`,
         method: 'post',
         data
     })
@@ -42,7 +42,7 @@ export const copyWorkflowTemplate = (data)=>{
 /*---提示词模板---*/
 export const getPromptTempList = (data)=>{
     return request({
-        url: `${BASE_URL}/prompt/template/list`,
+        url: `${USER_API}/prompt/template/list`,
         method: 'get',
         params: data
     })
@@ -50,7 +50,7 @@ export const getPromptTempList = (data)=>{
 
 export const copyPromptTemplate = (data)=>{
     return request({
-        url: `${BASE_URL}/prompt/template`,
+        url: `${USER_API}/prompt/template`,
         method: 'post',
         data
     })
@@ -59,7 +59,7 @@ export const copyPromptTemplate = (data)=>{
 /*---自定义提示词---*/
 export const getCustomPromptList = (data)=>{
     return request({
-        url: `${BASE_URL}/prompt/custom/list`,
+        url: `${USER_API}/prompt/custom/list`,
         method: 'get',
         params: data
     })
@@ -67,7 +67,7 @@ export const getCustomPromptList = (data)=>{
 
 export const createCustomPrompt = (data)=>{
     return request({
-        url: `${BASE_URL}/prompt/custom`,
+        url: `${USER_API}/prompt/custom`,
         method: 'post',
         data
     })
@@ -75,7 +75,7 @@ export const createCustomPrompt = (data)=>{
 
 export const editCustomPrompt = (data)=>{
     return request({
-        url: `${BASE_URL}/prompt/custom`,
+        url: `${USER_API}/prompt/custom`,
         method: 'put',
         data
     })
@@ -83,7 +83,7 @@ export const editCustomPrompt = (data)=>{
 
 export const copyCustomPrompt = (data)=>{
     return request({
-        url: `${BASE_URL}/prompt/custom/copy`,
+        url: `${USER_API}/prompt/custom/copy`,
         method: 'post',
         data
     })
@@ -91,7 +91,7 @@ export const copyCustomPrompt = (data)=>{
 
 export const deleteCustomPrompt = (data)=>{
     return request({
-        url: `${BASE_URL}/prompt/custom`,
+        url: `${USER_API}/prompt/custom`,
         method: 'delete',
         data
     })

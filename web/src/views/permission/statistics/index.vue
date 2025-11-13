@@ -84,7 +84,7 @@ import Search from "./components/search.vue";
 import UserEchart from "./components/userEchart.vue";
 import PcuEchart from "./components/pcuEchart.vue";
 import { formatAmount } from "@/utils/util.js";
-import { getData } from "@/api/statistic.js";
+import { getData } from "@/api/permission/statistic.js";
 
 export default {
   components: {

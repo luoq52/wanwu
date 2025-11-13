@@ -1,11 +1,11 @@
 import service from "@/utils/request";
 const hasLang = true
-const BASE_URL = '/user/api/v1'
+import {USER_API} from "@/utils/requestConstants"
 
 // 登录
 export const login = (data) => {
     return service({
-        url: `${BASE_URL}/base/login`,
+        url: `${USER_API}/base/login`,
         method: "post",
         data,
         hasLang
@@ -16,7 +16,7 @@ export const login = (data) => {
 // 第一级验证：密码
 export const login2FA1 = (data) => {
     return service({
-        url: `${BASE_URL}/base/login/email`,
+        url: `${USER_API}/base/login/email`,
         method: "post",
         data
     });
@@ -25,7 +25,7 @@ export const login2FA1 = (data) => {
 // 邮箱验证码
 export const login2FA2Code = (data) => {
     return service({
-        url: `${BASE_URL}/user/login/email/code`,
+        url: `${USER_API}/user/login/email/code`,
         method: "post",
         data,
     });
@@ -33,7 +33,7 @@ export const login2FA2Code = (data) => {
 // 首次登录
 export const login2FA2new = (data) => {
     return service({
-        url: `${BASE_URL}/user/login`,
+        url: `${USER_API}/user/login`,
         method: "put",
         data
     });
@@ -41,7 +41,7 @@ export const login2FA2new = (data) => {
 // 非首次登录
 export const login2FA2exist = (data) => {
     return service({
-        url: `${BASE_URL}/user/login`,
+        url: `${USER_API}/user/login`,
         method: "post",
         data
     });
@@ -50,7 +50,7 @@ export const login2FA2exist = (data) => {
 // 获取图形验证码
 export const getImgVerCode = () => {
     return service({
-        url: `${BASE_URL}/base/captcha`,
+        url: `${USER_API}/base/captcha`,
         method: "get",
         hasLang
     });
@@ -59,7 +59,7 @@ export const getImgVerCode = () => {
 // 邮箱注册验证码发送
 export const registerCode = (data) => {
     return service({
-        url: `${BASE_URL}/base/register/email/code`,
+        url: `${USER_API}/base/register/email/code`,
         method: "post",
         data,
     });
@@ -68,7 +68,7 @@ export const registerCode = (data) => {
 // 用户邮箱注册
 export const register = (data) => {
     return service({
-        url: `${BASE_URL}/base/register/email`,
+        url: `${USER_API}/base/register/email`,
         method: "post",
         data,
     });
@@ -77,7 +77,7 @@ export const register = (data) => {
 // 重置密码邮箱验证码发送
 export const resetCode = (data) => {
     return service({
-        url: `${BASE_URL}/base/password/email/code`,
+        url: `${USER_API}/base/password/email/code`,
         method: "post",
         data,
     });
@@ -86,7 +86,7 @@ export const resetCode = (data) => {
 // 重置密码
 export const reset = (data) => {
     return service({
-        url: `${BASE_URL}/base/password/email`,
+        url: `${USER_API}/base/password/email`,
         method: "post",
         data,
     });
@@ -94,7 +94,7 @@ export const reset = (data) => {
 
 export const getLangList = () => {
     return service({
-        url: `${BASE_URL}/base/language/select`,
+        url: `${USER_API}/base/language/select`,
         method: "get",
     });
 };
@@ -102,7 +102,7 @@ export const getLangList = () => {
 
 export const changeLang = (data) => {
     return service({
-        url: `${BASE_URL}/user/language`,
+        url: `${USER_API}/user/language`,
         method: "put",
         data
     });
@@ -110,7 +110,7 @@ export const changeLang = (data) => {
 
 export const getUserDetail = (data) => {
     return service({
-        url: `${BASE_URL}/user/info`,
+        url: `${USER_API}/user/info`,
         method: "get",
         params:data,
     });
@@ -118,7 +118,7 @@ export const getUserDetail = (data) => {
 
 export const getPermission = (data) => {
     return service({
-        url: `${BASE_URL}/user/permission`,
+        url: `${USER_API}/user/permission`,
         method: "get",
         params:data
     });
@@ -126,14 +126,14 @@ export const getPermission = (data) => {
 
 export const restUserPassword= (data) => {
     return service({
-        url: `${BASE_URL}/user/admin/password`,
+        url: `${USER_API}/user/admin/password`,
         method: "put",
         data,
     });
 };
 export const restOwnPassword= (data) => {
     return service({
-        url: `${BASE_URL}/user/password`,
+        url: `${USER_API}/user/password`,
         method: "put",
         data,
     });
@@ -141,7 +141,7 @@ export const restOwnPassword= (data) => {
 
 export const restAvatar= (data, config) => {
     return service({
-        url: `${BASE_URL}/user/avatar`,
+        url: `${USER_API}/user/avatar`,
         method: "put",
         data,
         config
@@ -150,7 +150,7 @@ export const restAvatar= (data, config) => {
 
 export const docDownload = () => {
     return service({
-        url: `${BASE_URL}/doc_center`,
+        url: `${USER_API}/doc_center`,
         method: "get",
     });
 };
@@ -158,7 +158,7 @@ export const docDownload = () => {
 // 公用上传 avatar
 export const uploadAvatar = (data, config) => {
     return service({
-        url: `${BASE_URL}/avatar`,
+        url: `${USER_API}/avatar`,
         method: "post",
         data,
         config
@@ -168,7 +168,7 @@ export const uploadAvatar = (data, config) => {
 // 平台信息
 export const getCommonInfo= () => {
     return service({
-        url: `${BASE_URL}/base/custom`,
+        url: `${USER_API}/base/custom`,
         method: "get",
         hasLang
     });

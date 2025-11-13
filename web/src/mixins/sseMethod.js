@@ -10,7 +10,7 @@ var originalFetch = window.fetch;
 import {md} from './marksown-it'
 import $ from './jquery.min.js'
 import { file } from "jszip";
-
+import {OPENURL_API, USER_API} from "@/utils/requestConstants"
 
 export default {
     data() {
@@ -31,8 +31,8 @@ export default {
             origin:window.location.origin,
             reconnectCount:0,
             isEnd: true,
-            sseApi: "/user/api/v1/assistant/stream",
-            rag_sseApi:"/user/api/v1/rag/chat",
+            sseApi: `${USER_API}/assistant/stream`,
+            rag_sseApi:`${USER_API}/rag/chat`,
             token:store.getters['user/token'],
             lastIndex:0,
             query:'',
@@ -384,7 +384,7 @@ export default {
             let headers = null;
             //判断是是不是openurl对话
             if(this.type === 'agentChat'){
-                this.sseApi = "/user/api/v1/assistant/stream";
+                this.sseApi = `${USER_API}/assistant/stream`;
                 const trial = this.isTestChat ? true : false
                 data = {
                     ...this.sseParams,
@@ -398,7 +398,7 @@ export default {
                     "x-org-id": userInfo.orgId
                 }
             }else{
-                this.sseApi = `/service/url/openurl/v1/agent/${this.sseParams.assistantId}/stream`;
+                this.sseApi = `${OPENURL_API}/agent/${this.sseParams.assistantId}/stream`;
                 data = {
                    conversationId:this.sseParams.conversationId, 
                    prompt

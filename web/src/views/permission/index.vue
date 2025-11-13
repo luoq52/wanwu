@@ -48,7 +48,7 @@ import User from "./user/index.vue"
 import Role from "./role/index.vue"
 import Org from "./org/index.vue"
 import InfoSetting from "@/views/infoSetting/index.vue";
-import Statistics from "@/views/userCenter/components/statistics";
+import Statistics from "./statistics";
 import { checkPerm, PERMS } from "@/router/permission"
 
 export default {
