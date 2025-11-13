@@ -7215,6 +7215,12 @@
                 "summary": "获取OAuth应用列表",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "第三方平台名(模糊查询)",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "页面编号，从1开始",
                         "name": "pageNo",

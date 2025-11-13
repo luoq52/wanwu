@@ -231,9 +231,10 @@ func UpdateOauthApp(ctx *gin.Context, req *request.UpdateOauthAppReq) error {
 	return nil
 }
 
-func GetOauthAppList(ctx *gin.Context, userId string, pageNo, pageSize int32) (*response.PageResult, error) {
+func GetOauthAppList(ctx *gin.Context, userId, name string, pageNo, pageSize int32) (*response.PageResult, error) {
 	resp, err := iam.GetOauthAppList(ctx, &iam_service.GetOauthAppListReq{
 		UserId:   userId,
+		Name:     name,
 		PageNo:   pageNo,
 		PageSize: pageSize,
 	})

@@ -9854,6 +9854,10 @@ paths:
       - application/json
       description: 获取OAuth应用分页列表
       parameters:
+      - description: 第三方平台名(模糊查询)
+        in: query
+        name: name
+        type: string
       - description: 页面编号，从1开始
         in: query
         name: pageNo
