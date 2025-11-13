@@ -15,7 +15,6 @@ func (c *Client) CreateCustomTool(ctx context.Context, customTool *model.CustomT
 		// 检查是否已存在相同的记录
 		if err := sqlopt.SQLOptions(
 			sqlopt.WithName(customTool.Name),
-			sqlopt.WithToolSquareID(customTool.ToolSquareId),
 			sqlopt.WithOrgID(customTool.OrgID),
 			sqlopt.WithUserID(customTool.UserID),
 		).Apply(tx).First(&model.CustomTool{}).Error; err == nil {
@@ -49,7 +48,6 @@ func (c *Client) ListCustomTools(ctx context.Context, orgID, userID, name string
 		sqlopt.WithOrgID(orgID),
 		sqlopt.WithUserID(userID),
 		sqlopt.LikeName(name),
-		sqlopt.WithToolSquareIDEmpty(),
 	).Apply(c.db).WithContext(ctx).Order("updated_at desc").Find(&customToolInfos).Error; err != nil {
 		return nil, toErrStatus("mcp_get_custom_tool_list_err", err.Error())
 	}
@@ -110,7 +108,6 @@ func (c *Client) ListBuiltinTools(ctx context.Context, orgID, userID string) ([]
 	if err := sqlopt.SQLOptions(
 		sqlopt.WithOrgID(orgID),
 		sqlopt.WithUserID(userID),
-		sqlopt.WithToolSquareIDNotEmpty(),
 	).Apply(c.db).WithContext(ctx).Find(&builtinToolInfos).Error; err != nil {
 		return nil, toErrStatus("mcp_get_custom_tool_list_err", err.Error())
 	}

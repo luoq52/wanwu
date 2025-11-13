@@ -191,6 +191,10 @@ func (s *Service) GetSquareTool(ctx context.Context, req *mcp_service.GetSquareT
 			if err := json.Unmarshal([]byte(apiAuthJson), apiAuth); err != nil {
 				return nil, errStatus(errs.Code_MCPGetSquareToolErr, toErrStatus("mcp_get_square_tool_err", err.Error()))
 			}
+			apiAuth.AuthType = toolCfg.AuthType
+			apiAuth.ApiKeyHeaderPrefix = toolCfg.ApiKeyHeaderPrefix
+			apiAuth.ApiKeyHeader = toolCfg.ApiKeyHeader
+			apiAuth.ApiKeyQueryParam = toolCfg.ApiKeyQueryParam
 		}
 	}
 	return buildSquareToolDetail(toolCfg, apiAuth), nil
@@ -272,6 +276,11 @@ func (s *Service) UpsertBuiltinToolAPIKey(ctx context.Context, req *mcp_service.
 		return nil, errStatus(errs.Code_MCPUpdateBuiltinToolErr, toErrStatus("mcp_update_builtin_tool_err", "identity is empty"))
 	}
 	apiAuth := &common.ApiAuthWebRequest{}
+	builtToolCfg, exist := config.Cfg().Tool(req.ToolSquareId)
+	if !exist {
+		return nil, errStatus(errs.Code_MCPUpdateBuiltinToolErr, toErrStatus("mcp_update_builtin_tool_err", "toolSquareId not exist"))
+	}
+
 	info, _ := s.cli.GetBuiltinTool(ctx, &model.BuiltinTool{
 		ToolSquareId: req.ToolSquareId,
 		OrgID:        req.Identity.OrgId,
@@ -283,6 +292,10 @@ func (s *Service) UpsertBuiltinToolAPIKey(ctx context.Context, req *mcp_service.
 		if err := json.Unmarshal([]byte(apiAuthJson), apiAuth); err != nil {
 			return nil, errStatus(errs.Code_MCPUpdateBuiltinToolErr, toErrStatus("mcp_update_builtin_tool_err", err.Error()))
 		}
+		apiAuth.AuthType = builtToolCfg.AuthType
+		apiAuth.ApiKeyHeaderPrefix = builtToolCfg.ApiKeyHeaderPrefix
+		apiAuth.ApiKeyHeader = builtToolCfg.ApiKeyHeader
+		apiAuth.ApiKeyQueryParam = builtToolCfg.ApiKeyQueryParam
 		apiAuth.ApiKeyValue = req.ApiKey
 		apiAuthBytes, _ := json.Marshal(apiAuth)
 		info.AuthJSON = string(apiAuthBytes)
@@ -292,11 +305,6 @@ func (s *Service) UpsertBuiltinToolAPIKey(ctx context.Context, req *mcp_service.
 		return &emptypb.Empty{}, nil
 	} else {
 		// create
-		builtToolCfg, exist := config.Cfg().Tool(req.ToolSquareId)
-		if !exist {
-			return nil, errStatus(errs.Code_MCPUpdateBuiltinToolErr, toErrStatus("mcp_update_builtin_tool_err", "toolSquareId not exist"))
-		}
-
 		apiAuth.AuthType = builtToolCfg.AuthType
 		apiAuth.ApiKeyHeaderPrefix = builtToolCfg.ApiKeyHeaderPrefix
 		apiAuth.ApiKeyHeader = builtToolCfg.ApiKeyHeader

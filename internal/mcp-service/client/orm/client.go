@@ -75,6 +75,13 @@ func initCustomToolAuthJson(dbClient *gorm.DB) error {
 		}
 	}
 
+	// 清理脏数据
+	err = dbClient.Model(&model.CustomTool{}).
+		Where("tool_square_id != ''").Delete(&model.CustomTool{}).Error
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
