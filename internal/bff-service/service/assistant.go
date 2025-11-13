@@ -387,7 +387,7 @@ func assistantToolsConvert(ctx *gin.Context, assistantToolInfos []*assistant_ser
 		}
 
 		if exists {
-			var toolConfig response.ToolConfig
+			var toolConfig request.AssistantToolConfig
 			if info.ToolConfig != "" {
 				if err := json.Unmarshal([]byte(info.ToolConfig), &toolConfig); err != nil {
 					log.Warnf("解析ToolConfig失败，使用空配置，error: %v, toolConfig: %s", err, info.ToolConfig)
@@ -837,13 +837,13 @@ func buildAssistantMetaFilterParams(metaFilterList []*assistant_service.MetaFilt
 	return metaList
 }
 
-func transRequestFiles(files []*assistant_service.RequestFile) []response.RequestFile {
+func transRequestFiles(files []*assistant_service.RequestFile) []response.AssistantRequestFile {
 	if files == nil {
 		return nil
 	}
-	var result []response.RequestFile
+	var result []response.AssistantRequestFile
 	for _, file := range files {
-		result = append(result, response.RequestFile{
+		result = append(result, response.AssistantRequestFile{
 			FileName: file.FileName,
 			FileSize: file.FileSize,
 			FileUrl:  file.FileUrl,

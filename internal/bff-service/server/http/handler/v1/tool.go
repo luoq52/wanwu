@@ -9,7 +9,7 @@ import (
 
 // CreateCustomTool
 //
-//	@Tags			tool
+//	@Tags			tool.custom
 //	@Summary		创建自定义工具
 //	@Description	创建自定义工具
 //	@Accept			json
@@ -27,7 +27,7 @@ func CreateCustomTool(ctx *gin.Context) {
 
 // GetCustomTool
 //
-//	@Tags			tool
+//	@Tags			tool.custom
 //	@Summary		获取自定义工具详情
 //	@Description	获取自定义工具详情
 //	@Accept			json
@@ -42,7 +42,7 @@ func GetCustomTool(ctx *gin.Context) {
 
 // DeleteCustomTool
 //
-//	@Tags			tool
+//	@Tags			tool.custom
 //	@Summary		删除自定义工具
 //	@Description	删除自定义工具
 //	@Accept			json
@@ -60,7 +60,7 @@ func DeleteCustomTool(ctx *gin.Context) {
 
 // UpdateCustomTool
 //
-//	@Tags			tool
+//	@Tags			tool.custom
 //	@Summary		修改自定义工具
 //	@Description	修改自定义工具
 //	@Accept			json
@@ -78,7 +78,7 @@ func UpdateCustomTool(ctx *gin.Context) {
 
 // GetCustomToolList
 //
-//	@Tags			tool
+//	@Tags			tool.custom
 //	@Summary		获取自定义工具列表
 //	@Description	获取自定义工具列表
 //	@Accept			json
@@ -93,7 +93,7 @@ func GetCustomToolList(ctx *gin.Context) {
 
 // GetCustomToolActions
 //
-//	@Tags			tool
+//	@Tags			tool.custom
 //	@Summary		获取可用API列表（根据Schema）
 //	@Description	解析自定义工具的Schema转换为API相关数据
 //	@Accept			json
@@ -127,7 +127,7 @@ func GetToolSquareDetail(ctx *gin.Context) {
 
 // GetToolSquareList
 //
-//	@Tags			tool.square
+//	@Tags			tool.builtin
 //	@Summary		获取内置工具列表
 //	@Description	获取内置工具列表
 //	@Accept			json
@@ -142,7 +142,7 @@ func GetToolSquareList(ctx *gin.Context) {
 
 // UpdateToolSquareAPIKey
 //
-//	@Tags			tool
+//	@Tags			tool.builtin
 //	@Summary		修改内置工具
 //	@Description	修改内置工具
 //	@Accept			json

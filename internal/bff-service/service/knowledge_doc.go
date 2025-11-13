@@ -210,10 +210,10 @@ func AnalysisDocUrl(ctx *gin.Context, userId, orgId string, r *request.AnalysisU
 	if err != nil {
 		return nil, err
 	}
-	var urlList []*response.Url
+	var urlList []*response.DocUrl
 	if len(resp.UrlList) > 0 {
 		for _, url := range resp.UrlList {
-			urlList = append(urlList, &response.Url{
+			urlList = append(urlList, &response.DocUrl{
 				Url:      url.Url,
 				FileName: url.FileName,
 				FileSize: int(url.FileSize),

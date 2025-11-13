@@ -14,7 +14,6 @@ import (
 	"github.com/UnicomAI/wanwu/internal/assistant-service/server/grpc"
 	"github.com/UnicomAI/wanwu/pkg/db"
 	"github.com/UnicomAI/wanwu/pkg/es"
-	http_client "github.com/UnicomAI/wanwu/pkg/http-client"
 	"github.com/UnicomAI/wanwu/pkg/log"
 	"github.com/UnicomAI/wanwu/pkg/minio"
 	mp "github.com/UnicomAI/wanwu/pkg/model-provider"
@@ -63,11 +62,6 @@ func main() {
 
 	if err := es.InitESIndexTemplate(ctx); err != nil {
 		log.Fatalf("init es index template err: %v", err)
-	}
-
-	// init workflow http client
-	if err := http_client.InitWorkflow(); err != nil {
-		log.Fatalf("init workflow http client err: %v", err)
 	}
 
 	if err := minio.InitAssistant(ctx, minio.Config{

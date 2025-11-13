@@ -353,6 +353,11 @@ definitions:
           $ref: '#/definitions/request.SensitiveTable'
         type: array
     type: object
+  request.AssistantToolConfig:
+    properties:
+      rerankId:
+        type: string
+    type: object
   request.Avatar:
     properties:
       key:
@@ -587,6 +592,15 @@ definitions:
     required:
     - mcpType
     type: object
+  response.AssistantRequestFile:
+    properties:
+      fileUrl:
+        type: string
+      name:
+        type: string
+      size:
+        type: integer
+    type: object
   response.AssistantToolInfo:
     properties:
       actionName:
@@ -596,7 +610,7 @@ definitions:
       enable:
         type: boolean
       toolConfig:
-        $ref: '#/definitions/response.ToolConfig'
+        $ref: '#/definitions/request.AssistantToolConfig'
       toolId:
         type: string
       toolName:
@@ -657,7 +671,7 @@ definitions:
         type: integer
       requestFiles:
         items:
-          $ref: '#/definitions/response.RequestFile'
+          $ref: '#/definitions/response.AssistantRequestFile'
         type: array
       response:
         type: string
@@ -684,26 +698,12 @@ definitions:
       total:
         type: integer
     type: object
-  response.RequestFile:
-    properties:
-      fileUrl:
-        type: string
-      name:
-        type: string
-      size:
-        type: integer
-    type: object
   response.Response:
     properties:
       code:
         type: integer
       data: {}
       msg:
-        type: string
-    type: object
-  response.ToolConfig:
-    properties:
-      rerankId:
         type: string
     type: object
   response.VisionConfig:

@@ -24,7 +24,7 @@ type ListDocResp struct {
 	ErrorMsg      string `json:"errorMsg"`      //解析错误信息，预留
 	FileSize      string `json:"fileSize"`      //文件大小，预留
 	SegmentMethod string `json:"segmentMethod"` //分段模式 0:通用分段，1：父子分段
-	Author        string `json:"author"`        // 上传文档 作者
+	Author        string `json:"author"`        //上传文档 作者
 	GraphStatus   int32  `json:"graphStatus"`   //图谱状态 0:待处理，1.解析中，2.解析成功，3.解析失败
 	GraphErrMsg   string `json:"graphErrMsg"`   //图谱错误信息
 }
@@ -43,11 +43,11 @@ type DocSegmentResp struct {
 	MaxSegmentSize      int               `json:"maxSegmentSize"`      //设置最大长度
 	SegmentType         string            `json:"segmentType"`         //分段方式 0自动分段 1自定义分段
 	UploadTime          string            `json:"uploadTime"`          //上传时间
-	Splitter            string            `json:"splitter"`            // 分隔符（只有自定义分段必填）
+	Splitter            string            `json:"splitter"`            //分隔符（只有自定义分段必填）
 	MetaDataList        []*DocMetaData    `json:"metaDataList"`        //文档元数据
 	SegmentContentList  []*SegmentContent `json:"contentList"`         //内容
 	SegmentImportStatus string            `json:"segmentImportStatus"` //分段导入状态描述
-	SegmentMethod       string            `json:"segmentMethod"`       // 分段方式 父子分段/通用分段
+	SegmentMethod       string            `json:"segmentMethod"`       //分段方式 父子分段/通用分段
 }
 
 type DocMetaData struct {
@@ -76,10 +76,10 @@ type ChildSegmentInfo struct {
 }
 
 type AnalysisDocUrlResp struct {
-	UrlList []*Url `json:"urlList"`
+	UrlList []*DocUrl `json:"urlList"`
 }
 
-type Url struct {
+type DocUrl struct {
 	Url      string `json:"url"`
 	FileName string `json:"fileName"`
 	FileSize int    `json:"fileSize"`

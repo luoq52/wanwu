@@ -1401,6 +1401,10 @@ definitions:
       actionSum:
         description: action总数
         type: integer
+      apiAuth:
+        allOf:
+        - $ref: '#/definitions/util.ApiAuthWebRequest'
+        description: apiAuth
       apiKey:
         description: apiKey
         type: string

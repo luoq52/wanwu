@@ -30,8 +30,8 @@ type DocImportReq struct {
 	DocSegment    *DocSegment    `json:"docSegment" validate:"required"`  //文档分段配置
 	DocAnalyzer   []string       `json:"docAnalyzer" validate:"required"` //文档解析类型 text / ocr  / model
 	ParserModelId string         `json:"parserModelId"`                   //模型解析或ocr模型id
-	DocPreprocess []string       `json:"docPreprocess"`                   // 文本预处理规则 replaceSymbols / deleteLinks
-	DocMetaData   []*DocMetaData `json:"docMetaData"`                     // 元数据
+	DocPreprocess []string       `json:"docPreprocess"`                   //文本预处理规则 replaceSymbols / deleteLinks
+	DocMetaData   []*DocMetaData `json:"docMetaData"`                     //元数据
 }
 
 type DocMetaDataReq struct {
@@ -47,16 +47,16 @@ type BatchDocMetaDataReq struct {
 }
 
 type DocInfo struct {
-	DocId   string `json:"docId"`   //文档id
-	DocName string `json:"docName"` //文档名称
-	DocUrl  string `json:"docUrl"`  //文档url
+	DocId   string `json:"docId"`   // 文档id
+	DocName string `json:"docName"` // 文档名称
+	DocUrl  string `json:"docUrl"`  // 文档url
 	DocType string `json:"docType"` // 文档类型
 	DocSize int64  `json:"docSize"` // 文档类型
 }
 
 type DocSegment struct {
-	SegmentMethod  string   `json:"segmentMethod" validate:"required"` //分段方法 0：通用分段；1：父子分段
-	SegmentType    string   `json:"segmentType"`                       //分段方式，只有通用分段必填 0：自动分段；1：自定义分段
+	SegmentMethod  string   `json:"segmentMethod" validate:"required"` // 分段方法 0：通用分段；1：父子分段
+	SegmentType    string   `json:"segmentType"`                       // 分段方式，只有通用分段必填 0：自动分段；1：自定义分段
 	Splitter       []string `json:"splitter"`                          // 分隔符（只有自定义分段必填）
 	MaxSplitter    int      `json:"maxSplitter"`                       // 可分隔最大值（只有自定义分段必填）
 	Overlap        float32  `json:"overlap"`                           // 可重叠值（只有自定义分段必填）

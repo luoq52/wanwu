@@ -11,11 +11,9 @@ import (
 
 	"github.com/UnicomAI/wanwu/internal/bff-service/config"
 	"github.com/UnicomAI/wanwu/internal/bff-service/pkg/ahocorasick"
-	assistant_template "github.com/UnicomAI/wanwu/internal/bff-service/pkg/assistant-template"
 	mcp_util "github.com/UnicomAI/wanwu/internal/bff-service/pkg/mcp-util"
 	oauth2_util "github.com/UnicomAI/wanwu/internal/bff-service/pkg/oauth2-util"
 	"github.com/UnicomAI/wanwu/internal/bff-service/server/http/handler"
-	http_client "github.com/UnicomAI/wanwu/pkg/http-client"
 	"github.com/UnicomAI/wanwu/pkg/i18n"
 	jwt_util "github.com/UnicomAI/wanwu/pkg/jwt-util"
 	"github.com/UnicomAI/wanwu/pkg/log"
@@ -89,11 +87,6 @@ func main() {
 		log.Fatalf("init minio err: %v", err)
 	}
 
-	// init proxy minio http client
-	if err := http_client.InitProxyMinio(); err != nil {
-		log.Fatalf("init http client err: %v", err)
-	}
-
 	// init redis
 	if err := redis.InitOP(ctx, config.Cfg().Redis); err != nil {
 		log.Fatalf("init redis err: %v", err)
@@ -112,11 +105,6 @@ func main() {
 	// init mcp server
 	if err := mcp_util.Init(ctx); err != nil {
 		log.Fatalf("init mcp server err: %v", err)
-	}
-
-	// init assistant template
-	if err := assistant_template.Init(ctx); err != nil {
-		log.Fatalf("init assistant template err: %v", err)
 	}
 
 	// start http handler

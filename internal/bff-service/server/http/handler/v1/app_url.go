@@ -9,7 +9,7 @@ import (
 
 // AppUrlCreate
 //
-//	@Tags			app
+//	@Tags			app.url
 //	@Summary		创建应用Url
 //	@Description	创建应用Url
 //	@Security		JWT
@@ -29,7 +29,7 @@ func AppUrlCreate(ctx *gin.Context) {
 
 // AppUrlDelete
 //
-//	@Tags			app
+//	@Tags			app.url
 //	@Summary		删除应用Url
 //	@Description	删除应用Url
 //	@Security		JWT
@@ -49,7 +49,7 @@ func AppUrlDelete(ctx *gin.Context) {
 
 // AppUrlUpdate
 //
-//	@Tags			app
+//	@Tags			app.url
 //	@Summary		编辑应用Url
 //	@Description	编辑应用Url
 //	@Security		JWT
@@ -69,7 +69,7 @@ func AppUrlUpdate(ctx *gin.Context) {
 
 // GetAppUrlList
 //
-//	@Tags			app
+//	@Tags			app.url
 //	@Summary		获取应用Url列表
 //	@Description	获取应用Url列表
 //	@Security		JWT
@@ -89,7 +89,7 @@ func GetAppUrlList(ctx *gin.Context) {
 
 // AppUrlStatusSwitch
 //
-//	@Tags			app
+//	@Tags			app.url
 //	@Summary		启用/停用应用Url
 //	@Description	启用/停用应用Url
 //	@Security		JWT

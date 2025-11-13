@@ -9,7 +9,7 @@ import (
 
 // CreateMCPServer
 //
-//	@Tags			tool
+//	@Tags			mcp.server
 //	@Summary		创建MCP Server
 //	@Description	创建MCP Server
 //	@Accept			json
@@ -28,7 +28,7 @@ func CreateMCPServer(ctx *gin.Context) {
 
 // UpdateMCPServer
 //
-//	@Tags			tool
+//	@Tags			mcp.server
 //	@Summary		更新MCP Server
 //	@Description	更新MCP Server
 //	@Accept			json
@@ -46,7 +46,7 @@ func UpdateMCPServer(ctx *gin.Context) {
 
 // GetMCPServer
 //
-//	@Tags			tool
+//	@Tags			mcp.server
 //	@Summary		获取MCP Server详情
 //	@Description	获取MCP Server详情
 //	@Accept			json
@@ -61,7 +61,7 @@ func GetMCPServer(ctx *gin.Context) {
 
 // DeleteMCPServer
 //
-//	@Tags			tool
+//	@Tags			mcp.server
 //	@Summary		删除MCP Server
 //	@Description	删除MCP Server
 //	@Accept			json
@@ -80,7 +80,7 @@ func DeleteMCPServer(ctx *gin.Context) {
 
 // GetMCPServerList
 //
-//	@Tags			tool
+//	@Tags			mcp.server
 //	@Summary		获取MCP Server列表
 //	@Description	获取MCP Server列表
 //	@Accept			json
@@ -95,7 +95,7 @@ func GetMCPServerList(ctx *gin.Context) {
 
 // CreateMCPServerTool
 //
-//	@Tags			tool
+//	@Tags			mcp.server
 //	@Summary		创建MCP Server工具
 //	@Description	创建MCP Server工具
 //	@Accept			json
@@ -113,7 +113,7 @@ func CreateMCPServerTool(ctx *gin.Context) {
 
 // UpdateMCPServerTool
 //
-//	@Tags			tool
+//	@Tags			mcp.server
 //	@Summary		更新MCP Server工具
 //	@Description	更新MCP Server工具
 //	@Accept			json
@@ -131,7 +131,7 @@ func UpdateMCPServerTool(ctx *gin.Context) {
 
 // DeleteMCPServerTool
 //
-//	@Tags			tool
+//	@Tags			mcp.server
 //	@Summary		删除MCP Server工具
 //	@Description	删除MCP Server工具
 //	@Accept			json

@@ -11,9 +11,9 @@ import (
 
 // OAuthAuthorize
 //
+//	@Tags			oauth
 //	@Summary		授权码方式
 //	@Description	授权码方式-获取授权码
-//	@Tags			oauth
 //	@Accept			json
 //	@Produce		json
 //	@Param			client_id		query		string	true	"备案ID"

@@ -910,6 +910,14 @@ const docTemplate = `{
                 }
             }
         },
+        "request.AssistantToolConfig": {
+            "type": "object",
+            "properties": {
+                "rerankId": {
+                    "type": "string"
+                }
+            }
+        },
         "request.Avatar": {
             "type": "object",
             "properties": {
@@ -1262,6 +1270,20 @@ const docTemplate = `{
                 }
             }
         },
+        "response.AssistantRequestFile": {
+            "type": "object",
+            "properties": {
+                "fileUrl": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.AssistantToolInfo": {
             "type": "object",
             "required": [
@@ -1278,7 +1300,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "toolConfig": {
-                    "$ref": "#/definitions/response.ToolConfig"
+                    "$ref": "#/definitions/request.AssistantToolConfig"
                 },
                 "toolId": {
                     "type": "string"
@@ -1368,7 +1390,7 @@ const docTemplate = `{
                 "requestFiles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/response.RequestFile"
+                        "$ref": "#/definitions/response.AssistantRequestFile"
                     }
                 },
                 "response": {
@@ -1409,20 +1431,6 @@ const docTemplate = `{
                 }
             }
         },
-        "response.RequestFile": {
-            "type": "object",
-            "properties": {
-                "fileUrl": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "size": {
-                    "type": "integer"
-                }
-            }
-        },
         "response.Response": {
             "type": "object",
             "properties": {
@@ -1431,14 +1439,6 @@ const docTemplate = `{
                 },
                 "data": {},
                 "msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "response.ToolConfig": {
-            "type": "object",
-            "properties": {
-                "rerankId": {
                     "type": "string"
                 }
             }

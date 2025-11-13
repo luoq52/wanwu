@@ -11,9 +11,9 @@ import (
 
 // OAuthToken
 //
+//	@Tags			openapi.OIDC
 //	@Summary		授权码方式
 //	@Description	授权码方式-获取Token
-//	@Tags			OIDC
 //	@Accept			x-www-form-urlencoded
 //	@Produce		json
 //	@Param			grant_type		formData	string	true	"授权类型"
@@ -37,9 +37,9 @@ func OAuthToken(ctx *gin.Context) {
 
 // OAuthRefresh
 //
+//	@Tags			openapi.OIDC
 //	@Summary		刷新令牌
 //	@Description	刷新令牌
-//	@Tags			OIDC
 //	@Accept			json
 //	@Produce		json
 //	@Param			data	body		request.OAuthRefreshRequest	true	"RefreshToken"
@@ -56,9 +56,9 @@ func OAuthRefresh(ctx *gin.Context) {
 
 // OAuthConfig
 //
+//	@Tags			openapi.OIDC
 //	@Summary		动态客户端发现配置
 //	@Description	自动获取 OP 的配置信息
-//	@Tags			OIDC
 //	@Produce		json
 //	@Success		200	{object}	response.OAuthConfig
 //	@Router			/.well-known/openid-configuration [get]
@@ -72,9 +72,9 @@ func OAuthConfig(ctx *gin.Context) {
 
 // OAuthJWKS
 //
+//	@Tags			openapi.OIDC
 //	@Summary		公钥获取链接
 //	@Description	自动获取OAuthJWKS
-//	@Tags			OIDC
 //	@Produce		json
 //	@Success		200	{object}	response.OAuthJWKS
 //	@Router			/oauth/jwks [get]
@@ -88,9 +88,9 @@ func OAuthJWKS(ctx *gin.Context) {
 
 // OAuthGetUserInfo
 //
+//	@Tags			openapi.OIDC
 //	@Summary		OAuth获取用户信息
 //	@Description	通过access token获取用户信息
-//	@Tags			OIDC
 //	@Produce		json
 //	@Success		200	{object}	response.OAuthGetUserInfo
 //	@Router			/oauth/userinfo [get]
@@ -102,9 +102,9 @@ func OAuthGetUserInfo(ctx *gin.Context) {
 
 // OAuthLogin
 //
+//	@Tags			openapi.OIDC
 //	@Summary		OAuth登录授权
 //	@Description	返回OAuth登录页面
-//	@Tags			OIDC
 //	@Accept			json
 //	@Produce		json
 //	@Param			client_id		query		string	true	"备案ID"

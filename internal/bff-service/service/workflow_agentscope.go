@@ -18,7 +18,7 @@ import (
 func ListAgentScopeWorkFlow(ctx *gin.Context, userId, orgId, name string) (*response.AgentScopeWorkFlowPageResult, error) {
 	workflowService := config.Cfg().AgentScopeWorkFlow
 	url, _ := net_url.JoinPath(workflowService.Endpoint, workflowService.WorkFlowListUri)
-	result, err := http_client.Workflow().Get(ctx.Request.Context(), &http_client.HttpRequestParams{
+	result, err := http_client.Default().Get(ctx.Request.Context(), &http_client.HttpRequestParams{
 		Url: url,
 		Headers: map[string]string{
 			"x-org-id":      orgId,
@@ -55,7 +55,7 @@ func DeleteAgentScopeWorkFlow(ctx *gin.Context, userId, orgId, id string) error 
 	if err != nil {
 		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_delete", err.Error())
 	}
-	result, err := http_client.Workflow().Delete(ctx.Request.Context(), &http_client.HttpRequestParams{
+	result, err := http_client.Default().Delete(ctx.Request.Context(), &http_client.HttpRequestParams{
 		Url: url,
 		Headers: map[string]string{
 			"x-org-id":      orgId,
@@ -91,7 +91,7 @@ func PublishAgentScopeWorkFlow(ctx *gin.Context, userId, orgId, workflowID strin
 	if err != nil {
 		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_publish", err.Error())
 	}
-	result, err := http_client.Workflow().PostJson(ctx.Request.Context(), &http_client.HttpRequestParams{
+	result, err := http_client.Default().PostJson(ctx.Request.Context(), &http_client.HttpRequestParams{
 		Url: url,
 		Headers: map[string]string{
 			"x-org-id":      orgId,
@@ -124,7 +124,7 @@ func PublishAgentScopeWorkFlow(ctx *gin.Context, userId, orgId, workflowID strin
 func ListAgentScopeWorkFlowInternal(ctx *gin.Context) (*response.AgentScopeWorkFlowPageResult, error) {
 	workflowService := config.Cfg().AgentScopeWorkFlow
 	url, _ := net_url.JoinPath(workflowService.Endpoint, workflowService.WorkFlowListUriInternal)
-	result, err := http_client.Workflow().Get(ctx.Request.Context(), &http_client.HttpRequestParams{
+	result, err := http_client.Default().Get(ctx.Request.Context(), &http_client.HttpRequestParams{
 		Url: url,
 		Headers: map[string]string{
 			"Authorization": ctx.GetHeader("Authorization"),
@@ -156,7 +156,7 @@ func UnPublishAgentScopeWorkFlow(ctx *gin.Context, userId, orgId, workflowID str
 	if err != nil {
 		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_unpublish", err.Error())
 	}
-	result, err := http_client.Workflow().PostJson(ctx.Request.Context(), &http_client.HttpRequestParams{
+	result, err := http_client.Default().PostJson(ctx.Request.Context(), &http_client.HttpRequestParams{
 		Url: url,
 		Headers: map[string]string{
 			"x-org-id":      orgId,

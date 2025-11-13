@@ -178,13 +178,13 @@ type AssistantToolEnableRequest struct {
 func (c *AssistantToolEnableRequest) Check() error { return nil }
 
 type AssistantToolConfigRequest struct {
-	AssistantId string     `json:"assistantId" validate:"required"`
-	ToolId      string     `json:"toolId" validate:"required"`
-	ToolConfig  ToolConfig `json:"toolConfig" validate:"required"`
+	AssistantId string              `json:"assistantId" validate:"required"`
+	ToolId      string              `json:"toolId" validate:"required"`
+	ToolConfig  AssistantToolConfig `json:"toolConfig" validate:"required"`
 }
 
-type ToolConfig struct {
-	RerankId string `json:"rerankId"`
+type AssistantToolConfig struct {
+	RerankId string `json:"rerankId,omitempty"`
 }
 
 func (c *AssistantToolConfigRequest) Check() error { return nil }

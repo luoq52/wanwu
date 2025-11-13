@@ -19,6 +19,8 @@ import (
 	"github.com/UnicomAI/wanwu/pkg/log"
 )
 
+var _default *HttpClient = CreateDefault()
+
 const (
 	timeout        = 120 * time.Second
 	connectTimeout = 60 * time.Second
@@ -61,6 +63,10 @@ func Create(client *http.Client) *HttpClient {
 
 func CreateDefault() *HttpClient {
 	return &HttpClient{newHttpClient()}
+}
+
+func Default() *HttpClient {
+	return _default
 }
 
 // newHttpClient 初始化httpclient,httpclient 是一个比较重的资源，

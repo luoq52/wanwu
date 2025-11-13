@@ -64,7 +64,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.key"
                 ],
                 "summary": "生成ApiKey",
                 "parameters": [
@@ -108,7 +108,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.key"
                 ],
                 "summary": "删除ApiKey",
                 "parameters": [
@@ -142,7 +142,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.key"
                 ],
                 "summary": "获取ApiKey",
                 "parameters": [
@@ -276,7 +276,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.url"
                 ],
                 "summary": "编辑应用Url",
                 "parameters": [
@@ -313,7 +313,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.url"
                 ],
                 "summary": "创建应用Url",
                 "parameters": [
@@ -350,7 +350,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.url"
                 ],
                 "summary": "删除应用Url",
                 "parameters": [
@@ -389,7 +389,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.url"
                 ],
                 "summary": "获取应用Url列表",
                 "parameters": [
@@ -460,7 +460,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.url"
                 ],
                 "summary": "启用/停用应用Url",
                 "parameters": [
@@ -575,7 +575,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "app"
+                    "app.key"
                 ],
                 "summary": "获取Api根地址",
                 "parameters": [
@@ -630,7 +630,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "workflow"
+                    "chatflow"
                 ],
                 "summary": "创建Chatflow",
                 "parameters": [
@@ -680,7 +680,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "workflow"
+                    "chatflow"
                 ],
                 "summary": "拷贝Chatflow",
                 "parameters": [
@@ -731,7 +731,7 @@ const docTemplate = `{
                     "application/octet-stream"
                 ],
                 "tags": [
-                    "workflow"
+                    "chatflow"
                 ],
                 "summary": "导出Chatflow",
                 "parameters": [
@@ -768,7 +768,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "workflow"
+                    "chatflow"
                 ],
                 "summary": "导入Chatflow",
                 "parameters": [
@@ -3176,7 +3176,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "common"
+                    "common.file"
                 ],
                 "summary": "文件校验",
                 "parameters": [
@@ -3227,7 +3227,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "common"
+                    "common.file"
                 ],
                 "summary": "文件列表校验",
                 "parameters": [
@@ -3278,7 +3278,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "common"
+                    "common.file"
                 ],
                 "summary": "文件清除",
                 "parameters": [
@@ -3329,7 +3329,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "common"
+                    "common.file"
                 ],
                 "summary": "文件删除",
                 "parameters": [
@@ -3380,7 +3380,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "common"
+                    "common.file"
                 ],
                 "summary": "文件合并",
                 "parameters": [
@@ -3431,7 +3431,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "common"
+                    "common.file"
                 ],
                 "summary": "文件上传",
                 "parameters": [
@@ -3629,7 +3629,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "删除文档",
                 "parameters": [
@@ -3668,7 +3668,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "上传文档",
                 "parameters": [
@@ -3707,7 +3707,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "获取知识库异步上传任务提示",
                 "parameters": [
@@ -3743,7 +3743,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "获取文档列表",
                 "parameters": [
@@ -3813,7 +3813,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "更新文档元数据",
                 "parameters": [
@@ -3852,7 +3852,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "批量更新文档元数据",
                 "parameters": [
@@ -3891,7 +3891,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "批量新增文档切片",
                 "parameters": [
@@ -3930,7 +3930,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "新增文档子分片",
                 "parameters": [
@@ -3969,7 +3969,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "删除文档子切片",
                 "parameters": [
@@ -4008,7 +4008,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "获取子分段列表",
                 "parameters": [
@@ -4062,7 +4062,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "更新文档子切片",
                 "parameters": [
@@ -4101,7 +4101,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "新增文档切片",
                 "parameters": [
@@ -4140,7 +4140,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "删除文档切片",
                 "parameters": [
@@ -4179,7 +4179,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "更新文档切片标签",
                 "parameters": [
@@ -4218,7 +4218,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "获取文档切分结果",
                 "parameters": [
@@ -4277,7 +4277,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "更新文档切片启用状态",
                 "parameters": [
@@ -4316,7 +4316,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "更新文档切片",
                 "parameters": [
@@ -4355,7 +4355,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.doc"
                 ],
                 "summary": "解析url",
                 "parameters": [
@@ -4382,6 +4382,57 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/response.AnalysisDocUrlResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/graph": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "查询知识图谱详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge"
+                ],
+                "summary": "查询知识图谱详情",
+                "parameters": [
+                    {
+                        "description": "查询知识图谱详情",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.KnowledgeGraphReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.KnowledgeGraphResp"
                                         }
                                     }
                                 }
@@ -4787,7 +4838,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.permission"
                 ],
                 "summary": "知识库组织列表",
                 "parameters": [
@@ -4836,7 +4887,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.report"
                 ],
                 "summary": "单条新增社区报告",
                 "parameters": [
@@ -4846,7 +4897,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.AddReportReq"
+                            "$ref": "#/definitions/request.KnowledgeReportAddReq"
                         }
                     }
                 ],
@@ -4875,7 +4926,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.report"
                 ],
                 "summary": "批量新增社区报告",
                 "parameters": [
@@ -4885,7 +4936,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.BatchAddReportReq"
+                            "$ref": "#/definitions/request.KnowledgeReportBatchAddReq"
                         }
                     }
                 ],
@@ -4914,7 +4965,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.report"
                 ],
                 "summary": "删除社区报告",
                 "parameters": [
@@ -4924,7 +4975,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.DeleteReportReq"
+                            "$ref": "#/definitions/request.KnowledgeReportDeleteReq"
                         }
                     }
                 ],
@@ -4953,7 +5004,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.report"
                 ],
                 "summary": "生成社区报告",
                 "parameters": [
@@ -4963,7 +5014,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.GenerateReportReq"
+                            "$ref": "#/definitions/request.KnowledgeReportGenerateReq"
                         }
                     }
                 ],
@@ -4992,7 +5043,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.report"
                 ],
                 "summary": "获取社区报告",
                 "parameters": [
@@ -5026,7 +5077,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.ReportPageResult"
+                                            "$ref": "#/definitions/response.KnowledgeReportPageResult"
                                         }
                                     }
                                 }
@@ -5051,7 +5102,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.report"
                 ],
                 "summary": "编辑社区报告",
                 "parameters": [
@@ -5061,7 +5112,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.UpdateReportReq"
+                            "$ref": "#/definitions/request.KnowledgeReportUpdateReq"
                         }
                     }
                 ],
@@ -5561,7 +5612,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.permission"
                 ],
                 "summary": "知识库用户权限列表",
                 "parameters": [
@@ -5610,7 +5661,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.permission"
                 ],
                 "summary": "增加知识库用户",
                 "parameters": [
@@ -5649,7 +5700,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.permission"
                 ],
                 "summary": "转让管理员权限",
                 "parameters": [
@@ -5688,7 +5739,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.permission"
                 ],
                 "summary": "删除知识库用户",
                 "parameters": [
@@ -5727,7 +5778,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.permission"
                 ],
                 "summary": "修改知识库用户",
                 "parameters": [
@@ -5766,7 +5817,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "knowledge"
+                    "knowledge.permission"
                 ],
                 "summary": "没有知识库用户列表",
                 "parameters": [
@@ -5823,7 +5874,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp"
                 ],
                 "summary": "获取自定义MCP详情",
                 "parameters": [
@@ -5865,7 +5916,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp"
                 ],
                 "summary": "修改自定义MCP",
                 "parameters": [
@@ -5897,7 +5948,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp"
                 ],
                 "summary": "创建自定义MCP",
                 "parameters": [
@@ -5929,7 +5980,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp"
                 ],
                 "summary": "删除自定义MCP",
                 "parameters": [
@@ -6016,7 +6067,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp"
                 ],
                 "summary": "获取自定义MCP列表",
                 "parameters": [
@@ -6132,7 +6183,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp.server"
                 ],
                 "summary": "获取MCP Server详情",
                 "parameters": [
@@ -6174,7 +6225,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp.server"
                 ],
                 "summary": "更新MCP Server",
                 "parameters": [
@@ -6206,7 +6257,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp.server"
                 ],
                 "summary": "创建MCP Server",
                 "parameters": [
@@ -6250,7 +6301,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp.server"
                 ],
                 "summary": "删除MCP Server",
                 "parameters": [
@@ -6284,7 +6335,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp.server"
                 ],
                 "summary": "获取MCP Server列表",
                 "parameters": [
@@ -6342,7 +6393,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp.server"
                 ],
                 "summary": "更新MCP Server工具",
                 "parameters": [
@@ -6374,7 +6425,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp.server"
                 ],
                 "summary": "创建MCP Server工具",
                 "parameters": [
@@ -6406,7 +6457,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "mcp.server"
                 ],
                 "summary": "删除MCP Server工具",
                 "parameters": [
@@ -7986,7 +8037,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "prompt"
                 ],
                 "summary": "获取自定义Prompt详情",
                 "parameters": [
@@ -8028,7 +8079,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "prompt"
                 ],
                 "summary": "更新自定义Prompt",
                 "parameters": [
@@ -8060,7 +8111,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "prompt"
                 ],
                 "summary": "创建自定义Prompt",
                 "parameters": [
@@ -8104,7 +8155,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "prompt"
                 ],
                 "summary": "删除自定义Prompt",
                 "parameters": [
@@ -8138,7 +8189,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "prompt"
                 ],
                 "summary": "复制自定义Prompt",
                 "parameters": [
@@ -8184,7 +8235,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "prompt"
                 ],
                 "summary": "获取自定义Prompt列表",
                 "parameters": [
@@ -8242,7 +8293,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "prompt"
                 ],
                 "summary": "获取提示词优化结果",
                 "parameters": [
@@ -8276,7 +8327,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "prompt"
                 ],
                 "summary": "复制提示词模板",
                 "parameters": [
@@ -8445,7 +8496,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "common"
+                    "common.file"
                 ],
                 "summary": "代理文件上传",
                 "parameters": [
@@ -9552,7 +9603,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "tool.builtin"
                 ],
                 "summary": "修改内置工具",
                 "parameters": [
@@ -9586,7 +9637,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "tool.custom"
                 ],
                 "summary": "获取自定义工具详情",
                 "parameters": [
@@ -9628,7 +9679,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "tool.custom"
                 ],
                 "summary": "修改自定义工具",
                 "parameters": [
@@ -9660,7 +9711,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "tool.custom"
                 ],
                 "summary": "创建自定义工具",
                 "parameters": [
@@ -9692,7 +9743,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "tool.custom"
                 ],
                 "summary": "删除自定义工具",
                 "parameters": [
@@ -9726,7 +9777,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "tool.custom"
                 ],
                 "summary": "获取自定义工具列表",
                 "parameters": [
@@ -9784,7 +9835,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool"
+                    "tool.custom"
                 ],
                 "summary": "获取可用API列表（根据Schema）",
                 "parameters": [
@@ -9948,7 +9999,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "tool.square"
+                    "tool.builtin"
                 ],
                 "summary": "获取内置工具列表",
                 "parameters": [
@@ -12114,25 +12165,6 @@ const docTemplate = `{
                 }
             }
         },
-        "request.AddReportReq": {
-            "type": "object",
-            "required": [
-                "content",
-                "knowledgeId",
-                "title"
-            ],
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "knowledgeId": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
         "request.AnalysisUrlDocReq": {
             "type": "object",
             "required": [
@@ -12669,6 +12701,14 @@ const docTemplate = `{
                 }
             }
         },
+        "request.AssistantToolConfig": {
+            "type": "object",
+            "properties": {
+                "rerankId": {
+                    "type": "string"
+                }
+            }
+        },
         "request.AssistantToolConfigRequest": {
             "type": "object",
             "required": [
@@ -12681,7 +12721,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "toolConfig": {
-                    "$ref": "#/definitions/request.ToolConfig"
+                    "$ref": "#/definitions/request.AssistantToolConfig"
                 },
                 "toolId": {
                     "type": "string"
@@ -12802,21 +12842,6 @@ const docTemplate = `{
                 },
                 "path": {
                     "description": "前端请求地址，例如：/v1/static/avatar/abc/def.png (请求非必填)",
-                    "type": "string"
-                }
-            }
-        },
-        "request.BatchAddReportReq": {
-            "type": "object",
-            "required": [
-                "fileUploadId",
-                "knowledgeId"
-            ],
-            "properties": {
-                "fileUploadId": {
-                    "type": "string"
-                },
-                "knowledgeId": {
                     "type": "string"
                 }
             }
@@ -13675,21 +13700,6 @@ const docTemplate = `{
                 }
             }
         },
-        "request.DeleteReportReq": {
-            "type": "object",
-            "required": [
-                "contentId",
-                "knowledgeId"
-            ],
-            "properties": {
-                "contentId": {
-                    "type": "string"
-                },
-                "knowledgeId": {
-                    "type": "string"
-                }
-            }
-        },
         "request.DeleteSensitiveVocabularyReq": {
             "type": "object",
             "required": [
@@ -13942,17 +13952,6 @@ const docTemplate = `{
                 }
             }
         },
-        "request.GenerateReportReq": {
-            "type": "object",
-            "required": [
-                "knowledgeId"
-            ],
-            "properties": {
-                "knowledgeId": {
-                    "type": "string"
-                }
-            }
-        },
         "request.GetModelRequest": {
             "type": "object",
             "required": [
@@ -14059,6 +14058,17 @@ const docTemplate = `{
                 }
             }
         },
+        "request.KnowledgeGraphReq": {
+            "type": "object",
+            "required": [
+                "knowledgeId"
+            ],
+            "properties": {
+                "knowledgeId": {
+                    "type": "string"
+                }
+            }
+        },
         "request.KnowledgeHitReq": {
             "type": "object",
             "required": [
@@ -14142,6 +14152,89 @@ const docTemplate = `{
                     }
                 },
                 "knowledgeId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.KnowledgeReportAddReq": {
+            "type": "object",
+            "required": [
+                "content",
+                "knowledgeId",
+                "title"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "knowledgeId": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.KnowledgeReportBatchAddReq": {
+            "type": "object",
+            "required": [
+                "fileUploadId",
+                "knowledgeId"
+            ],
+            "properties": {
+                "fileUploadId": {
+                    "type": "string"
+                },
+                "knowledgeId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.KnowledgeReportDeleteReq": {
+            "type": "object",
+            "required": [
+                "contentId",
+                "knowledgeId"
+            ],
+            "properties": {
+                "contentId": {
+                    "type": "string"
+                },
+                "knowledgeId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.KnowledgeReportGenerateReq": {
+            "type": "object",
+            "required": [
+                "knowledgeId"
+            ],
+            "properties": {
+                "knowledgeId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.KnowledgeReportUpdateReq": {
+            "type": "object",
+            "required": [
+                "content",
+                "contentId",
+                "knowledgeId",
+                "title"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "contentId": {
+                    "type": "string"
+                },
+                "knowledgeId": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -15032,14 +15125,6 @@ const docTemplate = `{
                 }
             }
         },
-        "request.ToolConfig": {
-            "type": "object",
-            "properties": {
-                "rerankId": {
-                    "type": "string"
-                }
-            }
-        },
         "request.ToolSquareAPIKeyReq": {
             "type": "object",
             "required": [
@@ -15317,29 +15402,6 @@ const docTemplate = `{
                 }
             }
         },
-        "request.UpdateReportReq": {
-            "type": "object",
-            "required": [
-                "content",
-                "contentId",
-                "knowledgeId",
-                "title"
-            ],
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "contentId": {
-                    "type": "string"
-                },
-                "knowledgeId": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
         "request.UpdateSensitiveWordTableReplyReq": {
             "type": "object",
             "required": [
@@ -15595,7 +15657,7 @@ const docTemplate = `{
                 "urlList": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/response.Url"
+                        "$ref": "#/definitions/response.DocUrl"
                     }
                 }
             }
@@ -15895,6 +15957,20 @@ const docTemplate = `{
                 }
             }
         },
+        "response.AssistantRequestFile": {
+            "type": "object",
+            "properties": {
+                "fileUrl": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.AssistantTemplateInfo": {
             "type": "object",
             "required": [
@@ -15978,7 +16054,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "toolConfig": {
-                    "$ref": "#/definitions/response.ToolConfig"
+                    "$ref": "#/definitions/request.AssistantToolConfig"
                 },
                 "toolId": {
                     "type": "string"
@@ -16252,7 +16328,7 @@ const docTemplate = `{
                 "requestFiles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/response.RequestFile"
+                        "$ref": "#/definitions/response.AssistantRequestFile"
                     }
                 },
                 "response": {
@@ -16914,6 +16990,20 @@ const docTemplate = `{
                 }
             }
         },
+        "response.DocUrl": {
+            "type": "object",
+            "properties": {
+                "fileName": {
+                    "type": "string"
+                },
+                "fileSize": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
         "response.EmbeddingModelInfo": {
             "type": "object",
             "properties": {
@@ -17106,6 +17196,121 @@ const docTemplate = `{
                 }
             }
         },
+        "response.KnowledgeGraphEdge": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "source_entity": {
+                    "type": "string"
+                },
+                "source_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "target_entity": {
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "number"
+                }
+            }
+        },
+        "response.KnowledgeGraphNode": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "entity_name": {
+                    "type": "string"
+                },
+                "entity_type": {
+                    "type": "string"
+                },
+                "pagerank": {
+                    "type": "number"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "source_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "response.KnowledgeGraphResp": {
+            "type": "object",
+            "properties": {
+                "failCount": {
+                    "description": "失败数量",
+                    "type": "integer"
+                },
+                "graph": {
+                    "description": "知识图谱节点、边",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/response.KnowledgeGraphSchema"
+                        }
+                    ]
+                },
+                "processingCount": {
+                    "description": "处理中",
+                    "type": "integer"
+                },
+                "successCount": {
+                    "description": "成功数量",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "总数",
+                    "type": "integer"
+                }
+            }
+        },
+        "response.KnowledgeGraphSchema": {
+            "type": "object",
+            "properties": {
+                "directed": {
+                    "type": "boolean"
+                },
+                "edges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.KnowledgeGraphEdge"
+                    }
+                },
+                "graph": {
+                    "$ref": "#/definitions/response.KnowledgeGraphSourceIdList"
+                },
+                "mutigraph": {
+                    "type": "boolean"
+                },
+                "nodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.KnowledgeGraphNode"
+                    }
+                }
+            }
+        },
+        "response.KnowledgeGraphSourceIdList": {
+            "type": "object",
+            "properties": {
+                "source_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "response.KnowledgeHitResp": {
             "type": "object",
             "properties": {
@@ -17254,6 +17459,64 @@ const docTemplate = `{
                 },
                 "metaValueType": {
                     "type": "string"
+                }
+            }
+        },
+        "response.KnowledgeReportInfo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "contentId": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.KnowledgeReportPageResult": {
+            "type": "object",
+            "properties": {
+                "canAddReport": {
+                    "description": "是否可新增社区报告：true.可新增 false.不可新增",
+                    "type": "boolean"
+                },
+                "canGenerate": {
+                    "description": "是否可生成：true.可生成 false.不可生成",
+                    "type": "boolean"
+                },
+                "createdAt": {
+                    "description": "生成时间：unix毫秒级时间戳，若为空串显示-",
+                    "type": "string"
+                },
+                "generateLabel": {
+                    "description": "生成社区报告按钮文案: 生成/重新生成",
+                    "type": "string"
+                },
+                "list": {
+                    "description": "社区报告内容列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.KnowledgeReportInfo"
+                    }
+                },
+                "pageNo": {
+                    "description": "当前页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页数量",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态：0.未生成(-) 1.生成中 2.已生成 3.生成失败",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "社区报告数量：如果为0显示-",
+                    "type": "integer"
                 }
             }
         },
@@ -17407,6 +17670,10 @@ const docTemplate = `{
                 },
                 "fileSize": {
                     "description": "文件大小，预留",
+                    "type": "string"
+                },
+                "graphErrMsg": {
+                    "description": "图谱错误信息",
                     "type": "string"
                 },
                 "graphStatus": {
@@ -18304,78 +18571,6 @@ const docTemplate = `{
                 }
             }
         },
-        "response.ReportInfo": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "string"
-                },
-                "contentId": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "response.ReportPageResult": {
-            "type": "object",
-            "properties": {
-                "canAddReport": {
-                    "description": "是否可新增社区报告：true.可新增 false.不可新增",
-                    "type": "boolean"
-                },
-                "canGenerate": {
-                    "description": "是否可生成：true.可生成 false.不可生成",
-                    "type": "boolean"
-                },
-                "createdAt": {
-                    "description": "生成时间：unix毫秒级时间戳，若为空串显示-",
-                    "type": "string"
-                },
-                "generateLabel": {
-                    "description": "生成社区报告按钮文案: 生成/重新生成",
-                    "type": "string"
-                },
-                "list": {
-                    "description": "社区报告内容列表",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/response.ReportInfo"
-                    }
-                },
-                "pageNo": {
-                    "description": "当前页码",
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "description": "每页数量",
-                    "type": "integer"
-                },
-                "status": {
-                    "description": "状态：0.未生成(-) 1.生成中 2.已生成 3.生成失败",
-                    "type": "integer"
-                },
-                "total": {
-                    "description": "社区报告数量：如果为0显示-",
-                    "type": "integer"
-                }
-            }
-        },
-        "response.RequestFile": {
-            "type": "object",
-            "properties": {
-                "fileUrl": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "size": {
-                    "type": "integer"
-                }
-            }
-        },
         "response.Response": {
             "type": "object",
             "properties": {
@@ -18656,14 +18851,6 @@ const docTemplate = `{
                 }
             }
         },
-        "response.ToolConfig": {
-            "type": "object",
-            "properties": {
-                "rerankId": {
-                    "type": "string"
-                }
-            }
-        },
         "response.ToolDetail4Workflow": {
             "type": "object",
             "properties": {
@@ -18770,6 +18957,14 @@ const docTemplate = `{
                     "description": "action总数",
                     "type": "integer"
                 },
+                "apiAuth": {
+                    "description": "apiAuth",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/util.ApiAuthWebRequest"
+                        }
+                    ]
+                },
                 "apiKey": {
                     "description": "apiKey",
                     "type": "string"
@@ -18859,20 +19054,6 @@ const docTemplate = `{
                 "status": {
                     "description": "0:上传失败，1：上传成功",
                     "type": "integer"
-                }
-            }
-        },
-        "response.Url": {
-            "type": "object",
-            "properties": {
-                "fileName": {
-                    "type": "string"
-                },
-                "fileSize": {
-                    "type": "integer"
-                },
-                "url": {
-                    "type": "string"
                 }
             }
         },

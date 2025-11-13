@@ -17,7 +17,7 @@ type KnowledgeHitResp struct {
 	Prompt     string             `json:"prompt"`     //提示词列表
 	SearchList []*ChunkSearchList `json:"searchList"` //种种结果
 	Score      []float64          `json:"score"`      //打分信息
-	UseGraph   bool               `json:"useGraph"`   // 是否使用知识图谱
+	UseGraph   bool               `json:"useGraph"`   //是否使用知识图谱
 }
 
 type RagKnowledgeResp struct {

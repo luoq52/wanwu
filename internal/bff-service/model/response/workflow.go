@@ -84,15 +84,6 @@ type ToolDetail4Workflow struct {
 	IconUrl    string        `json:"iconUrl"`
 }
 
-// type ToolActionParam4Workflow struct {
-// 	Input       struct{}                   `json:"input"`
-// 	Description string                     `json:"description"`
-// 	Name        string                     `json:"name"`
-// 	Type        string                     `json:"type"`
-// 	Required    bool                       `json:"required"`
-// 	Children    []ToolActionParam4Workflow `json:"schema"`
-// }
-
 // ToolActionParamWithoutTypeList4Workflow type非list的定义
 type ToolActionParamWithoutTypeList4Workflow struct {
 	Input       struct{}      `json:"input"`

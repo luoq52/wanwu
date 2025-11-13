@@ -9,7 +9,7 @@ import (
 
 // CreateCustomPrompt
 //
-//	@Tags			tool
+//	@Tags			prompt
 //	@Summary		创建自定义Prompt
 //	@Description	创建自定义Prompt
 //	@Accept			json
@@ -28,7 +28,7 @@ func CreateCustomPrompt(ctx *gin.Context) {
 
 // GetCustomPrompt
 //
-//	@Tags			tool
+//	@Tags			prompt
 //	@Summary		获取自定义Prompt详情
 //	@Description	获取自定义Prompt详情
 //	@Accept			json
@@ -43,7 +43,7 @@ func GetCustomPrompt(ctx *gin.Context) {
 
 // DeleteCustomPrompt
 //
-//	@Tags			tool
+//	@Tags			prompt
 //	@Summary		删除自定义Prompt
 //	@Description	删除自定义Prompt
 //	@Accept			json
@@ -61,7 +61,7 @@ func DeleteCustomPrompt(ctx *gin.Context) {
 
 // UpdateCustomPrompt
 //
-//	@Tags			tool
+//	@Tags			prompt
 //	@Summary		更新自定义Prompt
 //	@Description	更新自定义Prompt
 //	@Accept			json
@@ -79,7 +79,7 @@ func UpdateCustomPrompt(ctx *gin.Context) {
 
 // GetCustomPromptList
 //
-//	@Tags			tool
+//	@Tags			prompt
 //	@Summary		获取自定义Prompt列表
 //	@Description	获取自定义Prompt列表
 //	@Accept			json
@@ -94,7 +94,7 @@ func GetCustomPromptList(ctx *gin.Context) {
 
 // CopyCustomPrompt
 //
-//	@Tags			tool
+//	@Tags			prompt
 //	@Summary		复制自定义Prompt
 //	@Description	复制自定义Prompt
 //	@Accept			json
@@ -113,7 +113,7 @@ func CopyCustomPrompt(ctx *gin.Context) {
 
 // CreatePromptByTemplate
 //
-//	@Tags			tool
+//	@Tags			prompt
 //	@Summary		复制提示词模板
 //	@Description	复制提示词模板
 //	@Accept			json
@@ -132,7 +132,7 @@ func CreatePromptByTemplate(ctx *gin.Context) {
 
 // GetPromptOptimize
 //
-//	@Tags			tool
+//	@Tags			prompt
 //	@Summary		获取提示词优化结果
 //	@Description	获取提示词优化结果
 //	@Accept			json

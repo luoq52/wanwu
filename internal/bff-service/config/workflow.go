@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	ConfigDir = "configs/microservice/bff-service/configs/workflow-temp"
+	ConfigDir = "configs/microservice/bff-service/configs/workflow-template"
 )
 
 type WorkflowTemplateConfig struct {

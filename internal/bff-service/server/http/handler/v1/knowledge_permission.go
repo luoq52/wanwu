@@ -9,7 +9,7 @@ import (
 
 // SelectKnowledgeOrg
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.permission
 //	@Summary		知识库组织列表
 //	@Description	知识库组织列表
 //	@Security		JWT
@@ -30,7 +30,7 @@ func SelectKnowledgeOrg(ctx *gin.Context) {
 
 // SelectKnowledgeUserPermit
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.permission
 //	@Summary		知识库用户权限列表
 //	@Description	知识库用户权限列表
 //	@Security		JWT
@@ -51,7 +51,7 @@ func SelectKnowledgeUserPermit(ctx *gin.Context) {
 
 // SelectKnowledgeUserNoPermit
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.permission
 //	@Summary		没有知识库用户列表
 //	@Description	没有知识库用户列表
 //	@Security		JWT
@@ -72,7 +72,7 @@ func SelectKnowledgeUserNoPermit(ctx *gin.Context) {
 
 // AddKnowledgeUser
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.permission
 //	@Summary		增加知识库用户
 //	@Description	增加知识库用户
 //	@Security		JWT
@@ -93,7 +93,7 @@ func AddKnowledgeUser(ctx *gin.Context) {
 
 // EditKnowledgeUser
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.permission
 //	@Summary		修改知识库用户
 //	@Description	修改知识库用户
 //	@Security		JWT
@@ -114,7 +114,7 @@ func EditKnowledgeUser(ctx *gin.Context) {
 
 // DeleteKnowledgeUser
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.permission
 //	@Summary		删除知识库用户
 //	@Description	删除知识库用户
 //	@Security		JWT
@@ -135,7 +135,7 @@ func DeleteKnowledgeUser(ctx *gin.Context) {
 
 // TransferKnowledgeUserAdmin
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.permission
 //	@Summary		转让管理员权限
 //	@Description	转让管理员权限
 //	@Security		JWT

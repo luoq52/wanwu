@@ -2,6 +2,7 @@ package knowledge_report
 
 import (
 	"context"
+
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	knowledgebase_report_service "github.com/UnicomAI/wanwu/api/proto/knowledgebase-report-service"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/model"

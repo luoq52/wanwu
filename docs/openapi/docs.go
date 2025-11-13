@@ -22,7 +22,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "OIDC"
+                    "openapi.OIDC"
                 ],
                 "summary": "动态客户端发现配置",
                 "responses": {
@@ -227,7 +227,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "OIDC"
+                    "openapi.OIDC"
                 ],
                 "summary": "授权码方式",
                 "parameters": [
@@ -287,7 +287,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "OIDC"
+                    "openapi.OIDC"
                 ],
                 "summary": "刷新令牌",
                 "parameters": [
@@ -318,7 +318,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "OIDC"
+                    "openapi.OIDC"
                 ],
                 "summary": "公钥获取链接",
                 "responses": {
@@ -341,7 +341,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "OIDC"
+                    "openapi.OIDC"
                 ],
                 "summary": "OAuth登录授权",
                 "parameters": [
@@ -397,7 +397,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "OIDC"
+                    "openapi.OIDC"
                 ],
                 "summary": "OAuth获取用户信息",
                 "responses": {

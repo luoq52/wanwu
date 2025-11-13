@@ -9,7 +9,7 @@ import (
 
 // CreateMCP
 //
-//	@Tags			tool
+//	@Tags			mcp
 //	@Summary		创建自定义MCP
 //	@Description	创建自定义MCP
 //	@Accept			json
@@ -27,7 +27,7 @@ func CreateMCP(ctx *gin.Context) {
 
 // UpdateMCP
 //
-//	@Tags			tool
+//	@Tags			mcp
 //	@Summary		修改自定义MCP
 //	@Description	修改自定义MCP
 //	@Accept			json
@@ -45,7 +45,7 @@ func UpdateMCP(ctx *gin.Context) {
 
 // GetMCP
 //
-//	@Tags			tool
+//	@Tags			mcp
 //	@Summary		获取自定义MCP详情
 //	@Description	获取自定义MCP详情
 //	@Accept			json
@@ -60,7 +60,7 @@ func GetMCP(ctx *gin.Context) {
 
 // DeleteMCP
 //
-//	@Tags			tool
+//	@Tags			mcp
 //	@Summary		删除自定义MCP
 //	@Description	删除自定义MCP
 //	@Accept			json
@@ -78,7 +78,7 @@ func DeleteMCP(ctx *gin.Context) {
 
 // GetMCPList
 //
-//	@Tags			tool
+//	@Tags			mcp
 //	@Summary		获取自定义MCP列表
 //	@Description	获取自定义MCP列表
 //	@Accept			json

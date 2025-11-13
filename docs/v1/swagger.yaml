@@ -806,19 +806,6 @@ definitions:
         description: Title is a human-readable title for the tool, useful for UI display
         type: string
     type: object
-  request.AddReportReq:
-    properties:
-      content:
-        type: string
-      knowledgeId:
-        type: string
-      title:
-        type: string
-    required:
-    - content
-    - knowledgeId
-    - title
-    type: object
   request.AnalysisUrlDocReq:
     properties:
       knowledgeId:
@@ -1181,12 +1168,17 @@ definitions:
     - toolId
     - toolType
     type: object
+  request.AssistantToolConfig:
+    properties:
+      rerankId:
+        type: string
+    type: object
   request.AssistantToolConfigRequest:
     properties:
       assistantId:
         type: string
       toolConfig:
-        $ref: '#/definitions/request.ToolConfig'
+        $ref: '#/definitions/request.AssistantToolConfig'
       toolId:
         type: string
     required:
@@ -1274,16 +1266,6 @@ definitions:
       path:
         description: 前端请求地址，例如：/v1/static/avatar/abc/def.png (请求非必填)
         type: string
-    type: object
-  request.BatchAddReportReq:
-    properties:
-      fileUploadId:
-        type: string
-      knowledgeId:
-        type: string
-    required:
-    - fileUploadId
-    - knowledgeId
     type: object
   request.BatchCreateDocSegmentReq:
     properties:
@@ -1856,16 +1838,6 @@ definitions:
     required:
     - clientId
     type: object
-  request.DeleteReportReq:
-    properties:
-      contentId:
-        type: string
-      knowledgeId:
-        type: string
-    required:
-    - contentId
-    - knowledgeId
-    type: object
   request.DeleteSensitiveVocabularyReq:
     properties:
       tableId:
@@ -2043,13 +2015,6 @@ definitions:
     - appId
     - appType
     type: object
-  request.GenerateReportReq:
-    properties:
-      knowledgeId:
-        type: string
-    required:
-    - knowledgeId
-    type: object
   request.GetModelRequest:
     properties:
       modelId:
@@ -2122,6 +2087,13 @@ definitions:
         description: 知识图谱开关
         type: boolean
     type: object
+  request.KnowledgeGraphReq:
+    properties:
+      knowledgeId:
+        type: string
+    required:
+    - knowledgeId
+    type: object
   request.KnowledgeHitReq:
     properties:
       knowledgeList:
@@ -2182,6 +2154,62 @@ definitions:
     required:
     - docIdList
     - knowledgeId
+    type: object
+  request.KnowledgeReportAddReq:
+    properties:
+      content:
+        type: string
+      knowledgeId:
+        type: string
+      title:
+        type: string
+    required:
+    - content
+    - knowledgeId
+    - title
+    type: object
+  request.KnowledgeReportBatchAddReq:
+    properties:
+      fileUploadId:
+        type: string
+      knowledgeId:
+        type: string
+    required:
+    - fileUploadId
+    - knowledgeId
+    type: object
+  request.KnowledgeReportDeleteReq:
+    properties:
+      contentId:
+        type: string
+      knowledgeId:
+        type: string
+    required:
+    - contentId
+    - knowledgeId
+    type: object
+  request.KnowledgeReportGenerateReq:
+    properties:
+      knowledgeId:
+        type: string
+    required:
+    - knowledgeId
+    type: object
+  request.KnowledgeReportUpdateReq:
+    properties:
+      content:
+        type: string
+      contentId:
+        type: string
+      knowledgeId:
+        type: string
+      title:
+        type: string
+    required:
+    - content
+    - contentId
+    - knowledgeId
+    - title
     type: object
   request.KnowledgeSelectReq:
     properties:
@@ -2788,11 +2816,6 @@ definitions:
     required:
     - tableId
     type: object
-  request.ToolConfig:
-    properties:
-      rerankId:
-        type: string
-    type: object
   request.ToolSquareAPIKeyReq:
     properties:
       apiKey:
@@ -2981,22 +3004,6 @@ definitions:
     required:
     - clientId
     type: object
-  request.UpdateReportReq:
-    properties:
-      content:
-        type: string
-      contentId:
-        type: string
-      knowledgeId:
-        type: string
-      title:
-        type: string
-    required:
-    - content
-    - contentId
-    - knowledgeId
-    - title
-    type: object
   request.UpdateSensitiveWordTableReplyReq:
     properties:
       reply:
@@ -3178,7 +3185,7 @@ definitions:
     properties:
       urlList:
         items:
-          $ref: '#/definitions/response.Url'
+          $ref: '#/definitions/response.DocUrl'
         type: array
     type: object
   response.ApiResponse:
@@ -3380,6 +3387,15 @@ definitions:
     required:
     - mcpType
     type: object
+  response.AssistantRequestFile:
+    properties:
+      fileUrl:
+        type: string
+      name:
+        type: string
+      size:
+        type: integer
+    type: object
   response.AssistantTemplateInfo:
     properties:
       appType:
@@ -3436,7 +3452,7 @@ definitions:
       enable:
         type: boolean
       toolConfig:
-        $ref: '#/definitions/response.ToolConfig'
+        $ref: '#/definitions/request.AssistantToolConfig'
       toolId:
         type: string
       toolName:
@@ -3609,7 +3625,7 @@ definitions:
         type: integer
       requestFiles:
         items:
-          $ref: '#/definitions/response.RequestFile'
+          $ref: '#/definitions/response.AssistantRequestFile'
         type: array
       response:
         type: string
@@ -4044,6 +4060,15 @@ definitions:
         description: 上传时间
         type: string
     type: object
+  response.DocUrl:
+    properties:
+      fileName:
+        type: string
+      fileSize:
+        type: integer
+      url:
+        type: string
+    type: object
   response.EmbeddingModelInfo:
     properties:
       modelId:
@@ -4169,6 +4194,81 @@ definitions:
       userName:
         type: string
     type: object
+  response.KnowledgeGraphEdge:
+    properties:
+      description:
+        type: string
+      source_entity:
+        type: string
+      source_id:
+        items:
+          type: string
+        type: array
+      target_entity:
+        type: string
+      weight:
+        type: number
+    type: object
+  response.KnowledgeGraphNode:
+    properties:
+      description:
+        type: string
+      entity_name:
+        type: string
+      entity_type:
+        type: string
+      pagerank:
+        type: number
+      rank:
+        type: integer
+      source_id:
+        items:
+          type: string
+        type: array
+    type: object
+  response.KnowledgeGraphResp:
+    properties:
+      failCount:
+        description: 失败数量
+        type: integer
+      graph:
+        allOf:
+        - $ref: '#/definitions/response.KnowledgeGraphSchema'
+        description: 知识图谱节点、边
+      processingCount:
+        description: 处理中
+        type: integer
+      successCount:
+        description: 成功数量
+        type: integer
+      total:
+        description: 总数
+        type: integer
+    type: object
+  response.KnowledgeGraphSchema:
+    properties:
+      directed:
+        type: boolean
+      edges:
+        items:
+          $ref: '#/definitions/response.KnowledgeGraphEdge'
+        type: array
+      graph:
+        $ref: '#/definitions/response.KnowledgeGraphSourceIdList'
+      mutigraph:
+        type: boolean
+      nodes:
+        items:
+          $ref: '#/definitions/response.KnowledgeGraphNode'
+        type: array
+    type: object
+  response.KnowledgeGraphSourceIdList:
+    properties:
+      source_id:
+        items:
+          type: string
+        type: array
+    type: object
   response.KnowledgeHitResp:
     properties:
       prompt:
@@ -4271,6 +4371,47 @@ definitions:
         type: array
       metaValueType:
         type: string
+    type: object
+  response.KnowledgeReportInfo:
+    properties:
+      content:
+        type: string
+      contentId:
+        type: string
+      title:
+        type: string
+    type: object
+  response.KnowledgeReportPageResult:
+    properties:
+      canAddReport:
+        description: 是否可新增社区报告：true.可新增 false.不可新增
+        type: boolean
+      canGenerate:
+        description: 是否可生成：true.可生成 false.不可生成
+        type: boolean
+      createdAt:
+        description: 生成时间：unix毫秒级时间戳，若为空串显示-
+        type: string
+      generateLabel:
+        description: '生成社区报告按钮文案: 生成/重新生成'
+        type: string
+      list:
+        description: 社区报告内容列表
+        items:
+          $ref: '#/definitions/response.KnowledgeReportInfo'
+        type: array
+      pageNo:
+        description: 当前页码
+        type: integer
+      pageSize:
+        description: 每页数量
+        type: integer
+      status:
+        description: 状态：0.未生成(-) 1.生成中 2.已生成 3.生成失败
+        type: integer
+      total:
+        description: 社区报告数量：如果为0显示-
+        type: integer
     type: object
   response.KnowledgeSplitter:
     properties:
@@ -4376,6 +4517,9 @@ definitions:
         type: string
       fileSize:
         description: 文件大小，预留
+        type: string
+      graphErrMsg:
+        description: 图谱错误信息
         type: string
       graphStatus:
         description: 图谱状态 0:待处理，1.解析中，2.解析成功，3.解析失败
@@ -4967,56 +5111,6 @@ definitions:
     - ragId
     - rerankConfig
     type: object
-  response.ReportInfo:
-    properties:
-      content:
-        type: string
-      contentId:
-        type: string
-      title:
-        type: string
-    type: object
-  response.ReportPageResult:
-    properties:
-      canAddReport:
-        description: 是否可新增社区报告：true.可新增 false.不可新增
-        type: boolean
-      canGenerate:
-        description: 是否可生成：true.可生成 false.不可生成
-        type: boolean
-      createdAt:
-        description: 生成时间：unix毫秒级时间戳，若为空串显示-
-        type: string
-      generateLabel:
-        description: '生成社区报告按钮文案: 生成/重新生成'
-        type: string
-      list:
-        description: 社区报告内容列表
-        items:
-          $ref: '#/definitions/response.ReportInfo'
-        type: array
-      pageNo:
-        description: 当前页码
-        type: integer
-      pageSize:
-        description: 每页数量
-        type: integer
-      status:
-        description: 状态：0.未生成(-) 1.生成中 2.已生成 3.生成失败
-        type: integer
-      total:
-        description: 社区报告数量：如果为0显示-
-        type: integer
-    type: object
-  response.RequestFile:
-    properties:
-      fileUrl:
-        type: string
-      name:
-        type: string
-      size:
-        type: integer
-    type: object
   response.Response:
     properties:
       code:
@@ -5206,11 +5300,6 @@ definitions:
           $ref: '#/definitions/protocol.Tool'
         type: array
     type: object
-  response.ToolConfig:
-    properties:
-      rerankId:
-        type: string
-    type: object
   response.ToolDetail4Workflow:
     properties:
       actionId:
@@ -5283,6 +5372,10 @@ definitions:
       actionSum:
         description: action总数
         type: integer
+      apiAuth:
+        allOf:
+        - $ref: '#/definitions/util.ApiAuthWebRequest'
+        description: apiAuth
       apiKey:
         description: apiKey
         type: string
@@ -5344,15 +5437,6 @@ definitions:
       status:
         description: 0:上传失败，1：上传成功
         type: integer
-    type: object
-  response.Url:
-    properties:
-      fileName:
-        type: string
-      fileSize:
-        type: integer
-      url:
-        type: string
     type: object
   response.User:
     properties:
@@ -5644,7 +5728,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 删除ApiKey
       tags:
-      - app
+      - app.key
     post:
       consumes:
       - application/json
@@ -5670,7 +5754,7 @@ paths:
               type: object
       summary: 生成ApiKey
       tags:
-      - app
+      - app.key
   /appspace/app/key/list:
     get:
       consumes:
@@ -5703,7 +5787,7 @@ paths:
               type: object
       summary: 获取ApiKey
       tags:
-      - app
+      - app.key
   /appspace/app/list:
     get:
       consumes:
@@ -5770,7 +5854,7 @@ paths:
       - JWT: []
       summary: 删除应用Url
       tags:
-      - app
+      - app.url
     post:
       consumes:
       - application/json
@@ -5793,7 +5877,7 @@ paths:
       - JWT: []
       summary: 创建应用Url
       tags:
-      - app
+      - app.url
     put:
       consumes:
       - application/json
@@ -5816,7 +5900,7 @@ paths:
       - JWT: []
       summary: 编辑应用Url
       tags:
-      - app
+      - app.url
   /appspace/app/openurl/list:
     get:
       consumes:
@@ -5856,7 +5940,7 @@ paths:
       - JWT: []
       summary: 获取应用Url列表
       tags:
-      - app
+      - app.url
   /appspace/app/openurl/status:
     put:
       consumes:
@@ -5880,7 +5964,7 @@ paths:
       - JWT: []
       summary: 启用/停用应用Url
       tags:
-      - app
+      - app.url
   /appspace/app/publish:
     delete:
       consumes:
@@ -5960,7 +6044,7 @@ paths:
       - JWT: []
       summary: 获取Api根地址
       tags:
-      - app
+      - app.key
   /appspace/chatflow:
     post:
       consumes:
@@ -5988,7 +6072,7 @@ paths:
       - JWT: []
       summary: 创建Chatflow
       tags:
-      - workflow
+      - chatflow
   /appspace/chatflow/copy:
     post:
       consumes:
@@ -6016,7 +6100,7 @@ paths:
       - JWT: []
       summary: 拷贝Chatflow
       tags:
-      - workflow
+      - chatflow
   /appspace/chatflow/export:
     get:
       consumes:
@@ -6039,7 +6123,7 @@ paths:
       - JWT: []
       summary: 导出Chatflow
       tags:
-      - workflow
+      - chatflow
   /appspace/chatflow/import:
     post:
       consumes:
@@ -6067,7 +6151,7 @@ paths:
       - JWT: []
       summary: 导入Chatflow
       tags:
-      - workflow
+      - chatflow
   /appspace/rag:
     delete:
       consumes:
@@ -7484,7 +7568,7 @@ paths:
       - JWT: []
       summary: 文件校验
       tags:
-      - common
+      - common.file
   /file/check/list:
     get:
       consumes:
@@ -7513,7 +7597,7 @@ paths:
       - JWT: []
       summary: 文件列表校验
       tags:
-      - common
+      - common.file
   /file/clean:
     post:
       consumes:
@@ -7542,7 +7626,7 @@ paths:
       - JWT: []
       summary: 文件清除
       tags:
-      - common
+      - common.file
   /file/delete:
     delete:
       consumes:
@@ -7571,7 +7655,7 @@ paths:
       - JWT: []
       summary: 文件删除
       tags:
-      - common
+      - common.file
   /file/merge:
     post:
       consumes:
@@ -7600,7 +7684,7 @@ paths:
       - JWT: []
       summary: 文件合并
       tags:
-      - common
+      - common.file
   /file/upload:
     post:
       consumes:
@@ -7643,7 +7727,7 @@ paths:
       - JWT: []
       summary: 文件上传
       tags:
-      - common
+      - common.file
   /knowledge:
     delete:
       consumes:
@@ -7744,7 +7828,7 @@ paths:
       - JWT: []
       summary: 删除文档
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/import:
     post:
       consumes:
@@ -7768,7 +7852,7 @@ paths:
       - JWT: []
       summary: 上传文档
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/import/tip:
     get:
       consumes:
@@ -7790,7 +7874,7 @@ paths:
       - JWT: []
       summary: 获取知识库异步上传任务提示
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/list:
     get:
       consumes:
@@ -7831,7 +7915,7 @@ paths:
       - JWT: []
       summary: 获取文档列表
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/meta:
     post:
       consumes:
@@ -7855,7 +7939,7 @@ paths:
       - JWT: []
       summary: 更新文档元数据
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/meta/batch:
     post:
       consumes:
@@ -7879,7 +7963,7 @@ paths:
       - JWT: []
       summary: 批量更新文档元数据
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/batch/create:
     post:
       consumes:
@@ -7903,7 +7987,7 @@ paths:
       - JWT: []
       summary: 批量新增文档切片
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/child/create:
     post:
       consumes:
@@ -7927,7 +8011,7 @@ paths:
       - JWT: []
       summary: 新增文档子分片
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/child/delete:
     delete:
       consumes:
@@ -7951,7 +8035,7 @@ paths:
       - JWT: []
       summary: 删除文档子切片
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/child/list:
     get:
       consumes:
@@ -7982,7 +8066,7 @@ paths:
       - JWT: []
       summary: 获取子分段列表
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/child/update:
     post:
       consumes:
@@ -8006,7 +8090,7 @@ paths:
       - JWT: []
       summary: 更新文档子切片
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/create:
     post:
       consumes:
@@ -8030,7 +8114,7 @@ paths:
       - JWT: []
       summary: 新增文档切片
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/delete:
     delete:
       consumes:
@@ -8054,7 +8138,7 @@ paths:
       - JWT: []
       summary: 删除文档切片
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/labels:
     post:
       consumes:
@@ -8078,7 +8162,7 @@ paths:
       - JWT: []
       summary: 更新文档切片标签
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/list:
     get:
       consumes:
@@ -8112,7 +8196,7 @@ paths:
       - JWT: []
       summary: 获取文档切分结果
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/status/update:
     post:
       consumes:
@@ -8136,7 +8220,7 @@ paths:
       - JWT: []
       summary: 更新文档切片启用状态
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/segment/update:
     post:
       consumes:
@@ -8160,7 +8244,7 @@ paths:
       - JWT: []
       summary: 更新文档切片
       tags:
-      - knowledge
+      - knowledge.doc
   /knowledge/doc/url/analysis:
     post:
       consumes:
@@ -8188,6 +8272,35 @@ paths:
       security:
       - JWT: []
       summary: 解析url
+      tags:
+      - knowledge.doc
+  /knowledge/graph:
+    get:
+      consumes:
+      - application/json
+      description: 查询知识图谱详情
+      parameters:
+      - description: 查询知识图谱详情
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.KnowledgeGraphReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.KnowledgeGraphResp'
+              type: object
+      security:
+      - JWT: []
+      summary: 查询知识图谱详情
       tags:
       - knowledge
   /knowledge/hit:
@@ -8444,7 +8557,7 @@ paths:
       - JWT: []
       summary: 知识库组织列表
       tags:
-      - knowledge
+      - knowledge.permission
   /knowledge/report/add:
     post:
       consumes:
@@ -8456,7 +8569,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.AddReportReq'
+          $ref: '#/definitions/request.KnowledgeReportAddReq'
       produces:
       - application/json
       responses:
@@ -8468,7 +8581,7 @@ paths:
       - JWT: []
       summary: 单条新增社区报告
       tags:
-      - knowledge
+      - knowledge.report
   /knowledge/report/batch/add:
     post:
       consumes:
@@ -8480,7 +8593,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.BatchAddReportReq'
+          $ref: '#/definitions/request.KnowledgeReportBatchAddReq'
       produces:
       - application/json
       responses:
@@ -8492,7 +8605,7 @@ paths:
       - JWT: []
       summary: 批量新增社区报告
       tags:
-      - knowledge
+      - knowledge.report
   /knowledge/report/delete:
     delete:
       consumes:
@@ -8504,7 +8617,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.DeleteReportReq'
+          $ref: '#/definitions/request.KnowledgeReportDeleteReq'
       produces:
       - application/json
       responses:
@@ -8516,7 +8629,7 @@ paths:
       - JWT: []
       summary: 删除社区报告
       tags:
-      - knowledge
+      - knowledge.report
   /knowledge/report/generate:
     post:
       consumes:
@@ -8528,7 +8641,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.GenerateReportReq'
+          $ref: '#/definitions/request.KnowledgeReportGenerateReq'
       produces:
       - application/json
       responses:
@@ -8540,7 +8653,7 @@ paths:
       - JWT: []
       summary: 生成社区报告
       tags:
-      - knowledge
+      - knowledge.report
   /knowledge/report/list:
     get:
       consumes:
@@ -8568,13 +8681,13 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/response.ReportPageResult'
+                  $ref: '#/definitions/response.KnowledgeReportPageResult'
               type: object
       security:
       - JWT: []
       summary: 获取社区报告
       tags:
-      - knowledge
+      - knowledge.report
   /knowledge/report/update:
     post:
       consumes:
@@ -8586,7 +8699,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.UpdateReportReq'
+          $ref: '#/definitions/request.KnowledgeReportUpdateReq'
       produces:
       - application/json
       responses:
@@ -8598,7 +8711,7 @@ paths:
       - JWT: []
       summary: 编辑社区报告
       tags:
-      - knowledge
+      - knowledge.report
   /knowledge/select:
     post:
       consumes:
@@ -8904,7 +9017,7 @@ paths:
       - JWT: []
       summary: 知识库用户权限列表
       tags:
-      - knowledge
+      - knowledge.permission
   /knowledge/user/add:
     post:
       consumes:
@@ -8928,7 +9041,7 @@ paths:
       - JWT: []
       summary: 增加知识库用户
       tags:
-      - knowledge
+      - knowledge.permission
   /knowledge/user/admin/transfer:
     post:
       consumes:
@@ -8952,7 +9065,7 @@ paths:
       - JWT: []
       summary: 转让管理员权限
       tags:
-      - knowledge
+      - knowledge.permission
   /knowledge/user/delete:
     delete:
       consumes:
@@ -8976,7 +9089,7 @@ paths:
       - JWT: []
       summary: 删除知识库用户
       tags:
-      - knowledge
+      - knowledge.permission
   /knowledge/user/edit:
     post:
       consumes:
@@ -9000,7 +9113,7 @@ paths:
       - JWT: []
       summary: 修改知识库用户
       tags:
-      - knowledge
+      - knowledge.permission
   /knowledge/user/no/permit:
     get:
       consumes:
@@ -9037,7 +9150,7 @@ paths:
       - JWT: []
       summary: 没有知识库用户列表
       tags:
-      - knowledge
+      - knowledge.permission
   /mcp:
     delete:
       consumes:
@@ -9059,7 +9172,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 删除自定义MCP
       tags:
-      - tool
+      - mcp
     get:
       consumes:
       - application/json
@@ -9084,7 +9197,7 @@ paths:
               type: object
       summary: 获取自定义MCP详情
       tags:
-      - tool
+      - mcp
     post:
       consumes:
       - application/json
@@ -9105,7 +9218,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 创建自定义MCP
       tags:
-      - tool
+      - mcp
     put:
       consumes:
       - application/json
@@ -9126,7 +9239,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 修改自定义MCP
       tags:
-      - tool
+      - mcp
   /mcp/action/list:
     get:
       consumes:
@@ -9190,7 +9303,7 @@ paths:
               type: object
       summary: 获取自定义MCP列表
       tags:
-      - tool
+      - mcp
   /mcp/select:
     get:
       consumes:
@@ -9244,7 +9357,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 删除MCP Server
       tags:
-      - tool
+      - mcp.server
     get:
       consumes:
       - application/json
@@ -9269,7 +9382,7 @@ paths:
               type: object
       summary: 获取MCP Server详情
       tags:
-      - tool
+      - mcp.server
     post:
       consumes:
       - application/json
@@ -9295,7 +9408,7 @@ paths:
               type: object
       summary: 创建MCP Server
       tags:
-      - tool
+      - mcp.server
     put:
       consumes:
       - application/json
@@ -9316,7 +9429,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 更新MCP Server
       tags:
-      - tool
+      - mcp.server
   /mcp/server/list:
     get:
       consumes:
@@ -9348,7 +9461,7 @@ paths:
               type: object
       summary: 获取MCP Server列表
       tags:
-      - tool
+      - mcp.server
   /mcp/server/tool:
     delete:
       consumes:
@@ -9370,7 +9483,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 删除MCP Server工具
       tags:
-      - tool
+      - mcp.server
     post:
       consumes:
       - application/json
@@ -9391,7 +9504,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 创建MCP Server工具
       tags:
-      - tool
+      - mcp.server
     put:
       consumes:
       - application/json
@@ -9412,7 +9525,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 更新MCP Server工具
       tags:
-      - tool
+      - mcp.server
   /mcp/server/tool/openapi:
     post:
       consumes:
@@ -10326,7 +10439,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 删除自定义Prompt
       tags:
-      - tool
+      - prompt
     get:
       consumes:
       - application/json
@@ -10351,7 +10464,7 @@ paths:
               type: object
       summary: 获取自定义Prompt详情
       tags:
-      - tool
+      - prompt
     post:
       consumes:
       - application/json
@@ -10377,7 +10490,7 @@ paths:
               type: object
       summary: 创建自定义Prompt
       tags:
-      - tool
+      - prompt
     put:
       consumes:
       - application/json
@@ -10398,7 +10511,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 更新自定义Prompt
       tags:
-      - tool
+      - prompt
   /prompt/custom/copy:
     post:
       consumes:
@@ -10425,7 +10538,7 @@ paths:
               type: object
       summary: 复制自定义Prompt
       tags:
-      - tool
+      - prompt
   /prompt/custom/list:
     get:
       consumes:
@@ -10457,7 +10570,7 @@ paths:
               type: object
       summary: 获取自定义Prompt列表
       tags:
-      - tool
+      - prompt
   /prompt/optimize:
     post:
       consumes:
@@ -10479,7 +10592,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 获取提示词优化结果
       tags:
-      - tool
+      - prompt
   /prompt/template:
     post:
       consumes:
@@ -10506,7 +10619,7 @@ paths:
               type: object
       summary: 复制提示词模板
       tags:
-      - tool
+      - prompt
   /prompt/template/detail:
     get:
       consumes:
@@ -10605,7 +10718,7 @@ paths:
       - JWT: []
       summary: 代理文件上传
       tags:
-      - common
+      - common.file
   /rag/chat:
     post:
       consumes:
@@ -11247,7 +11360,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 修改内置工具
       tags:
-      - tool
+      - tool.builtin
   /tool/custom:
     delete:
       consumes:
@@ -11269,7 +11382,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 删除自定义工具
       tags:
-      - tool
+      - tool.custom
     get:
       consumes:
       - application/json
@@ -11294,7 +11407,7 @@ paths:
               type: object
       summary: 获取自定义工具详情
       tags:
-      - tool
+      - tool.custom
     post:
       consumes:
       - application/json
@@ -11315,7 +11428,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 创建自定义工具
       tags:
-      - tool
+      - tool.custom
     put:
       consumes:
       - application/json
@@ -11336,7 +11449,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: 修改自定义工具
       tags:
-      - tool
+      - tool.custom
   /tool/custom/list:
     get:
       consumes:
@@ -11368,7 +11481,7 @@ paths:
               type: object
       summary: 获取自定义工具列表
       tags:
-      - tool
+      - tool.custom
   /tool/custom/schema:
     post:
       consumes:
@@ -11402,7 +11515,7 @@ paths:
               type: object
       summary: 获取可用API列表（根据Schema）
       tags:
-      - tool
+      - tool.custom
   /tool/select:
     get:
       consumes:
@@ -11493,7 +11606,7 @@ paths:
               type: object
       summary: 获取内置工具列表
       tags:
-      - tool.square
+      - tool.builtin
   /user:
     delete:
       consumes:

@@ -45,19 +45,15 @@ type AssistantMCPInfo struct {
 }
 
 type AssistantToolInfo struct {
-	UniqueId   string         `json:"uniqueId"`
-	ToolId     string         `json:"toolId"`
-	ToolType   string         `json:"toolType" validate:"required,oneof=builtin custom"`
-	ToolName   string         `json:"toolName"`
-	ActionName string         `json:"actionName"`
-	Enable     bool           `json:"enable"`
-	Valid      bool           `json:"valid"`
-	ToolConfig ToolConfig     `json:"toolConfig"`
-	Avatar     request.Avatar `json:"avatar"`
-}
-
-type ToolConfig struct {
-	RerankId string `json:"rerankId,omitempty"`
+	UniqueId   string                      `json:"uniqueId"`
+	ToolId     string                      `json:"toolId"`
+	ToolType   string                      `json:"toolType" validate:"required,oneof=builtin custom"`
+	ToolName   string                      `json:"toolName"`
+	ActionName string                      `json:"actionName"`
+	Enable     bool                        `json:"enable"`
+	Valid      bool                        `json:"valid"`
+	ToolConfig request.AssistantToolConfig `json:"toolConfig"`
+	Avatar     request.Avatar              `json:"avatar"`
 }
 
 type ConversationInfo struct {
@@ -68,22 +64,22 @@ type ConversationInfo struct {
 }
 
 type ConversationDetailInfo struct {
-	Id             string        `json:"id"`
-	AssistantId    string        `json:"assistantId"`
-	ConversationId string        `json:"conversationId"`
-	Prompt         string        `json:"prompt"`
-	SysPrompt      string        `json:"sysPrompt"`
-	Response       string        `json:"response"`
-	SearchList     interface{}   `json:"searchList"`
-	QaType         int32         `json:"qa_type"`
-	CreatedBy      string        `json:"createdBy"`
-	CreatedAt      int64         `json:"createdAt"`
-	UpdatedAt      int64         `json:"updatedAt"`
-	RequestFiles   []RequestFile `json:"requestFiles"`
-	FileSize       int64         `json:"fileSize"`
-	FileName       string        `json:"fileName"`
+	Id             string                 `json:"id"`
+	AssistantId    string                 `json:"assistantId"`
+	ConversationId string                 `json:"conversationId"`
+	Prompt         string                 `json:"prompt"`
+	SysPrompt      string                 `json:"sysPrompt"`
+	Response       string                 `json:"response"`
+	SearchList     interface{}            `json:"searchList"`
+	QaType         int32                  `json:"qa_type"`
+	CreatedBy      string                 `json:"createdBy"`
+	CreatedAt      int64                  `json:"createdAt"`
+	UpdatedAt      int64                  `json:"updatedAt"`
+	RequestFiles   []AssistantRequestFile `json:"requestFiles"`
+	FileSize       int64                  `json:"fileSize"`
+	FileName       string                 `json:"fileName"`
 }
-type RequestFile struct {
+type AssistantRequestFile struct {
 	FileName string `json:"name"`
 	FileSize int64  `json:"size"`
 	FileUrl  string `json:"fileUrl"`

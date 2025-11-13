@@ -302,7 +302,7 @@ func ProxyUploadFile(ctx *gin.Context, r *request.ProxyUploadFileReq) (*response
 	}
 	agentConfig := config.Cfg().Agent
 	url := "http://" + agentConfig.Host + ":" + agentConfig.UploadMinioUri.Port + agentConfig.UploadMinioUri.Uri
-	result, err := http_client.ProxyMinio().PostFile(ctx, &http_client.HttpRequestParams{
+	result, err := http_client.Default().PostFile(ctx, &http_client.HttpRequestParams{
 		Params: map[string]string{"file_name": r.FileName},
 		FileParams: []*http_client.HttpRequestFileParams{{
 			FileName: header.Filename,

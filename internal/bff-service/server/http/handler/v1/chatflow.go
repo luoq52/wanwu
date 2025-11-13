@@ -13,7 +13,7 @@ import (
 
 // CreateChatflow
 //
-//	@Tags		workflow
+//	@Tags		chatflow
 //	@Summary	创建Chatflow
 //	@Description
 //	@Security	JWT
@@ -33,7 +33,7 @@ func CreateChatflow(ctx *gin.Context) {
 
 // CopyChatflow
 //
-//	@Tags		workflow
+//	@Tags		chatflow
 //	@Summary	拷贝Chatflow
 //	@Description
 //	@Security	JWT
@@ -53,7 +53,7 @@ func CopyChatflow(ctx *gin.Context) {
 
 // ImportChatflow
 //
-//	@Tags			workflow
+//	@Tags			chatflow
 //	@Summary		导入Chatflow
 //	@Description	通过JSON文件导入工作流
 //	@Security		JWT
@@ -69,7 +69,7 @@ func ImportChatflow(ctx *gin.Context) {
 
 // ExportChatflow
 //
-//	@Tags			workflow
+//	@Tags			chatflow
 //	@Summary		导出Chatflow
 //	@Description	导出工作流的json文件
 //	@Security		JWT

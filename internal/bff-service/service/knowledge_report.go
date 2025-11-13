@@ -1,6 +1,8 @@
 package service
 
 import (
+	"path/filepath"
+
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	knowledgebase_report_service "github.com/UnicomAI/wanwu/api/proto/knowledgebase-report-service"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
@@ -9,7 +11,6 @@ import (
 	"github.com/UnicomAI/wanwu/pkg/log"
 	"github.com/UnicomAI/wanwu/pkg/minio"
 	"github.com/gin-gonic/gin"
-	"path/filepath"
 )
 
 func GetKnowledgeReport(ctx *gin.Context, userId, orgId string, req *request.KnowledgeReportSelectReq) (*response.KnowledgeReportPageResult, error) {

@@ -30,3 +30,17 @@ type UpdateCustomPrompt struct {
 func (req *UpdateCustomPrompt) Check() error {
 	return nil
 }
+
+type CreatePromptByTemplateReq struct {
+	TemplateId string `json:"templateId" validate:"required"`
+	AppBriefConfig
+}
+
+func (req *CreatePromptByTemplateReq) Check() error { return nil }
+
+type PromptOptimizeReq struct {
+	Prompt  string `json:"prompt" validate:"required"`
+	ModelId string `json:"modelId" validate:"required"`
+}
+
+func (req *PromptOptimizeReq) Check() error { return nil }

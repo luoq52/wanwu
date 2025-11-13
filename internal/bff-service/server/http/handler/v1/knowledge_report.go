@@ -9,14 +9,14 @@ import (
 
 // GetKnowledgeReport
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.report
 //	@Summary		获取社区报告
 //	@Description	获取社区报告
 //	@Security		JWT
 //	@Accept			json
 //	@Produce		json
 //	@Param			data	query		request.KnowledgeReportSelectReq	true	"获取社区报告请求参数"
-//	@Success		200		{object}	response.Response{data=response.ReportPageResult}
+//	@Success		200		{object}	response.Response{data=response.KnowledgeReportPageResult}
 //	@Router			/knowledge/report/list [get]
 func GetKnowledgeReport(ctx *gin.Context) {
 	userId, orgId := getUserID(ctx), getOrgID(ctx)
@@ -30,7 +30,7 @@ func GetKnowledgeReport(ctx *gin.Context) {
 
 // GenerateKnowledgeReport
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.report
 //	@Summary		生成社区报告
 //	@Description	生成社区报告
 //	@Security		JWT
@@ -51,7 +51,7 @@ func GenerateKnowledgeReport(ctx *gin.Context) {
 
 // DeleteKnowledgeReport
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.report
 //	@Summary		删除社区报告
 //	@Description	删除社区报告
 //	@Security		JWT
@@ -72,7 +72,7 @@ func DeleteKnowledgeReport(ctx *gin.Context) {
 
 // UpdateKnowledgeReport
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.report
 //	@Summary		编辑社区报告
 //	@Description	编辑社区报告
 //	@Security		JWT
@@ -93,7 +93,7 @@ func UpdateKnowledgeReport(ctx *gin.Context) {
 
 // AddKnowledgeReport
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.report
 //	@Summary		单条新增社区报告
 //	@Description	单条新增社区报告
 //	@Security		JWT
@@ -114,7 +114,7 @@ func AddKnowledgeReport(ctx *gin.Context) {
 
 // BatchAddKnowledgeReport
 //
-//	@Tags			knowledge
+//	@Tags			knowledge.report
 //	@Summary		批量新增社区报告
 //	@Description	批量新增社区报告
 //	@Security		JWT

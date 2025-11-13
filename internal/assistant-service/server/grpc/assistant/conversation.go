@@ -801,7 +801,7 @@ func (s *Service) buildWorkflowPluginListAlgParam(ctx context.Context, assistant
 	reqBody, _ := json.Marshal(map[string]interface{}{
 		"workflow_ids": workflowIDs,
 	})
-	result, err := http_client.Workflow().PostJson(ctx, &http_client.HttpRequestParams{
+	result, err := http_client.Default().PostJson(ctx, &http_client.HttpRequestParams{
 		Url:        url,
 		Body:       reqBody,
 		Timeout:    time.Minute,

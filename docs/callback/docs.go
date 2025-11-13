@@ -2715,6 +2715,14 @@ const docTemplate = `{
                     "description": "action总数",
                     "type": "integer"
                 },
+                "apiAuth": {
+                    "description": "apiAuth",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/util.ApiAuthWebRequest"
+                        }
+                    ]
+                },
                 "apiKey": {
                     "description": "apiKey",
                     "type": "string"

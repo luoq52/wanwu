@@ -902,6 +902,14 @@
                 }
             }
         },
+        "request.AssistantToolConfig": {
+            "type": "object",
+            "properties": {
+                "rerankId": {
+                    "type": "string"
+                }
+            }
+        },
         "request.Avatar": {
             "type": "object",
             "properties": {
@@ -1254,6 +1262,20 @@
                 }
             }
         },
+        "response.AssistantRequestFile": {
+            "type": "object",
+            "properties": {
+                "fileUrl": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.AssistantToolInfo": {
             "type": "object",
             "required": [
@@ -1270,7 +1292,7 @@
                     "type": "boolean"
                 },
                 "toolConfig": {
-                    "$ref": "#/definitions/response.ToolConfig"
+                    "$ref": "#/definitions/request.AssistantToolConfig"
                 },
                 "toolId": {
                     "type": "string"
@@ -1360,7 +1382,7 @@
                 "requestFiles": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/response.RequestFile"
+                        "$ref": "#/definitions/response.AssistantRequestFile"
                     }
                 },
                 "response": {
@@ -1401,20 +1423,6 @@
                 }
             }
         },
-        "response.RequestFile": {
-            "type": "object",
-            "properties": {
-                "fileUrl": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "size": {
-                    "type": "integer"
-                }
-            }
-        },
         "response.Response": {
             "type": "object",
             "properties": {
@@ -1423,14 +1431,6 @@
                 },
                 "data": {},
                 "msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "response.ToolConfig": {
-            "type": "object",
-            "properties": {
-                "rerankId": {
                     "type": "string"
                 }
             }
