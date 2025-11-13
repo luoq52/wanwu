@@ -72,9 +72,11 @@
 {"code":110000,"key":"bff_doc_center_file_md","langs":{"en":"no markdown files found: %v","zh":"未含有md文件: %v"}}
 {"code":0,"key":"------ oauth ------","langs":{}}
 {"code":110000,"key":"bff_oauth_status","langs":{"en":"client id (%v) has been disabled","zh":"客户端ID(%v)已被禁用"}}
-{"code":110000,"key":"bff_oauth_secret","langs":{"en":"client secret is incorrect.","zh":"客户端密钥输入错误"}}
+{"code":110000,"key":"bff_oauth_secret","langs":{"en":"client secret is incorrect.","zh":"客户端密钥错误"}}
 {"code":110000,"key":"bff_oauth_redirect_uri","langs":{"en":"redirect uri not registered","zh":"重定向地址未注册"}}
-{"code":110000,"key":"bff_oauth_client_id","langs":{"en":"the IDs of the two requests do not match.","zh":"两次请求的ID不匹配"}}
+{"code":110000,"key":"bff_oauth_client_id_mismatch","langs":{"en":"the IDs of the two requests do not match.","zh":"两次请求的ID不匹配"}}
+{"code":110000,"key":"bff_oauth_client_id","langs":{"en":"client id not registered","zh":"客户端ID(%v)未注册"}}
+{"code":110000,"key":"bff_oauth_err","langs":{"en":"OAuth err:%v","zh":"OAuth错误:%v"}}
 {"code":0,"key":"------ assistant ------","langs":{}}
 {"code":0,"key":"bff_assistant_template_name","langs":{"en":"%v_copy%v","zh":"%v_副本%v"}}
 {"code":0,"key":"------ sensitive ------","langs":{}}
