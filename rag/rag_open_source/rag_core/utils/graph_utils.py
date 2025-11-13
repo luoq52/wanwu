@@ -496,9 +496,10 @@ def get_graph_search_list(user_id, kb_names, question, top_k, kb_ids=[], filter_
             for s in search_list:
                 contents.append(s["content"])
             if contents:
-                report_texts = f"社区报告信息:({'|'.join(contents)}) "
+                newline = '\n'
+                report_texts = f"社区报告信息:{newline}({newline.join(contents)}) "
                 graph_list.append({"snippet": report_texts, "meta_data": {},
-                                          "title": "社区报告", "content_type": "community_report"})
+                                          "title": "知识图谱-社区报告", "content_type": "community_report"})
         if not all([not(ent) for ent in entities]):  # 如果有图关键词，则进行优先社区报告检索
             # ======= 构建 triple_text 生成一个chunk插入社区报告开头 =======
             triple_text_list = []

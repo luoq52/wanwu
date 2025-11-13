@@ -194,8 +194,6 @@ def del_konwledge_base(user_id, kb_name, kb_id=""):
             graph_redis_client = redis_utils.get_redis_connection()
             kb_id = kb_info["id"]
             redis_utils.delete_graph_vocabulary_set(graph_redis_client, kb_id)
-            # milvus_utils.del_milvus_kb_graph(user_id, kb_name, kb_id)
-            # logger.info(f"知识图谱删除成功, kb_name:{kb_name}")
         except Exception as e:
             logger.error(f"知识图谱删除失败, error: {repr(e)}")
 
@@ -242,6 +240,17 @@ def del_knowledge_base_files(user_id, kb_name, file_names, kb_id=""):
             continue
         else:
             success_files.append(file_name)
+
+     #删除 知识图谱
+    kb_info = milvus_utils.get_kb_info(user_id, kb_name)
+    if "enable_knowledge_graph" in kb_info and kb_info["enable_knowledge_graph"]:
+        try:
+            for file_name in success_files:
+                graph_utils.delete_file_from_graph(user_id, kb_name, file_name)
+                logger.info(f"知识图谱删除成功, file_name:{file_name}")
+        except Exception as e:
+            failed_files.append([file_name, f"知识图谱删除文件失败, error: {repr(e)}"])
+            logger.error(f"知识图谱删除失败, file_name:{file_name}, error: {repr(e)}")
 
     # --------------2、路径文档
     for file_name in success_files:

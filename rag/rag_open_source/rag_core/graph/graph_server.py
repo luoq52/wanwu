@@ -214,12 +214,12 @@ async def generate_community_reports(request: Request):
         config.construction.LLM_BASE_URL = llm_base_url
         config.construction.LLM_API_KEY = llm_api_key
 
-        # =========== 更新 graph =============
-        # new_graph = graph_processor.update_graph(user_id, kb_name, file_name, relationships)
         # =========== 生成社区报告 =============
         file_path = f"./data/graph/{user_id}/{kb_name}.json"
         new_graph = graph_processor.load_graph_from_json(file_path)
-        reports = graph_processor.extract_community(new_graph, config)
+        reports = []
+        if os.path.exists(file_path):
+            reports = graph_processor.extract_community(new_graph, config)
         await send_progress_update(client_id, "generate_community_reports", 10, "generate_community_reports completed successfully!")
 
         return CommunityReportsResponse(
