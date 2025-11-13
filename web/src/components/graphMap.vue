@@ -143,7 +143,12 @@ export default {
   watch: {
     data: {
       handler(newData) {
-        if (this.graph && newData && newData.graph) {
+        // 如果 graph 还没初始化，等待 mounted 后的 initGraph 处理
+        if (!this.graph) {
+          return
+        }
+        
+        if (newData && newData.graph) {
           const transformedData = transformGraphData(newData.graph)
           this.graphData = transformedData
           this.updateGraphData(transformedData)
@@ -284,7 +289,6 @@ export default {
           Array.isArray(this.data.graph.edges))
       ) {
         const transformedData = transformGraphData(this.data.graph)
-        console.log(transformedData,'transformedData')
         this.graph.data(transformedData)
         this.graph.render()
         
@@ -292,7 +296,7 @@ export default {
           this.fitView()
         }
       }
- 
+
       window.addEventListener('resize', this.handleResize)
     },
 
