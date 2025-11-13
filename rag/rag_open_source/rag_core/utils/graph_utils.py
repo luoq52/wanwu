@@ -14,6 +14,7 @@ from utils import timing
 
 from logging_config import setup_logging
 from settings import GRAPH_SERVER_URL
+from model_manager import get_model_configure, LlmModelConfig
 from utils.tools import generate_md5
 
 logger_name = 'rag_graph_utils'
@@ -89,9 +90,16 @@ def parse_excel_to_schema_json(file_path):
 
 
 @timing.timing_decorator(logger, include_args=False)
-def get_extrac_graph_data(user_id, kb_name, chunks, file_name, schema=None):
+def get_extrac_graph_data(user_id, kb_name, chunks, file_name, graph_model_id, schema=None):
     """获取知识图谱数据"""
     try:
+        llm_config = get_model_configure(graph_model_id)
+        llm_model = llm_config.model_name
+        llm_base_url = ""
+        llm_api_key = ""
+        if isinstance(llm_config, LlmModelConfig):
+            llm_base_url = llm_config.endpoint_url + "/chat/completions"
+            llm_api_key = llm_config.api_key
         start_time = datetime.now()
         headers = {
             "Content-Type": "application/json",
@@ -101,7 +109,10 @@ def get_extrac_graph_data(user_id, kb_name, chunks, file_name, schema=None):
             "kb_name": kb_name,
             "chunks": chunks,
             "schema": schema,
-            "file_name":file_name
+            "file_name": file_name,
+            "llm_model": llm_model,
+            "llm_base_url": llm_base_url,
+            "llm_api_key": llm_api_key
         }
         # 将JSON数据转换好格式
         json_data = json.dumps(data)

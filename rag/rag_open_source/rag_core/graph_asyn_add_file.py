@@ -7,6 +7,7 @@ from utils import mq_rel_utils
 from utils import redis_utils
 from utils import graph_utils
 from utils import knowledge_base_utils
+from model_manager import get_model_configure, LlmModelConfig
 
 from concurrent.futures import ThreadPoolExecutor
 from kafka import KafkaConsumer, TopicPartition, OffsetAndMetadata
@@ -181,7 +182,8 @@ def extrac_graph_data(user_id, kb_name, file_name, file_id, enable_knowledge_gra
             batch_num = int(i/batch_size) + 1
             temp_chunks = all_wait_extrac_chunks[i:i + batch_size]
             try:
-                result_data = graph_utils.get_extrac_graph_data(user_id, kb_name, temp_chunks, file_name, schema=schema)
+                result_data = graph_utils.get_extrac_graph_data(user_id, kb_name, temp_chunks, file_name, graph_model_id,
+                                                                schema=schema)
                 graph_chunks = result_data['graph_chunks']
                 all_graph_chunks.extend(graph_chunks)
                 all_graph_vocabulary_set.update(result_data['graph_vocabulary_set'])
