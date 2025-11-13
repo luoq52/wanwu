@@ -1,9 +1,7 @@
 package v1
 
 import (
-	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
 	"github.com/UnicomAI/wanwu/internal/bff-service/service"
@@ -32,18 +30,13 @@ func OAuthAuthorize(ctx *gin.Context) {
 		return
 	}
 	userID := getUserID(ctx)
-	callback, authCode, err := service.OAuthAuthorize(ctx, &req, userID)
+	callbackUri, err := service.OAuthAuthorize(ctx, &req, userID)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
 	}
-	redirectURI := fmt.Sprintf(
-		"%s?code=%s&state=%s",
-		callback,
-		url.QueryEscape(authCode),
-		url.QueryEscape(req.State), // 对state也进行编码
-	)
-	ctx.Redirect(http.StatusFound, redirectURI)
+
+	ctx.Redirect(http.StatusFound, callbackUri)
 }
 
 // CreateOauthApp
