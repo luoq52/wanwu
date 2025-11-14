@@ -9,8 +9,6 @@ export function transformGraphData(backendData, options = {}) {
   const {
     getNodeId = (node, index) => node.entity_name || `n${index}`,
     getNodeLabel = (node, index) => node.entity_name || '',
-    getNodeSize = (node, index) => node.pagerank ? Math.max(15, Math.min(30, node.pagerank * 100)) : 20,
-    getNodeColor = (node, index) => undefined,
     getEdgeId = (edge, index) => `e${index}`,
     getEdgeLabel = (edge, index) => edge.description || ''
   } = options
@@ -18,21 +16,19 @@ export function transformGraphData(backendData, options = {}) {
   const transformedNodes = nodes.map((node, index) => {
     const nodeId = getNodeId(node, index)
     const nodeLabel = getNodeLabel(node, index)
-    const nodeSize = getNodeSize(node, index)
-    const nodeColor = getNodeColor(node, index)
 
-    const nodeStyle = {}
-    if (nodeColor !== undefined) {
-      nodeStyle.fill = nodeColor
-    }
+    // 移除后端数据中的 size 和 style.fill 属性，让 graphMap 的 defaultNode 配置生效
+    const { size, style, ...nodeWithoutSizeAndStyle } = node
+    const nodeStyle = style && style.fill ? { ...style, fill: undefined } : style
+    const cleanedNode = nodeStyle && Object.keys(nodeStyle).length > 0 
+      ? { ...nodeWithoutSizeAndStyle, style: nodeStyle }
+      : nodeWithoutSizeAndStyle
 
     return {
       id: nodeId,
       label: nodeLabel,
       type: 'circle',
-      size: nodeSize,
-      ...(Object.keys(nodeStyle).length > 0 && { style: nodeStyle }),
-      ...node
+      ...cleanedNode
     }
   })
 

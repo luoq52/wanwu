@@ -313,7 +313,7 @@ export default {
           nodeSpacing: 60,
           linkDistance: 30,
           nodeStrength: -50,
-          edgeStrength: 0.5,
+          edgeStrength: 0.8,
           collideStrength: 0.8,
           alpha: 0.3,
           alphaDecay: 0.02,
