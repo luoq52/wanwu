@@ -16,6 +16,8 @@ from utils import file_utils
 from utils import mq_rel_utils
 from utils import knowledge_base_utils
 from utils.file_utils import SplitConfig
+from utils import schema_utils
+from utils import redis_utils
 import subprocess
 from kafka import KafkaConsumer, TopicPartition, OffsetAndMetadata
 import json
@@ -25,6 +27,7 @@ from datetime import datetime
 import re
 from settings import *
 from utils.constant import CONVERT_DIR, USER_DATA_PATH
+graph_redis_client = redis_utils.get_redis_connection()
 
 # 定义路径
 paths = ["./data", "./user_data"]
@@ -96,6 +99,8 @@ def kafkal():
             chunk_type = message_value["doc"].get("chunk_type", "default")
             separators = message_value["doc"].get("separators", ['。'])
             is_enhanced = message_value["doc"].get("is_enhanced", 'false')
+            enable_knowledge_graph = message_value["doc"].get("enable_knowledge_graph", "false")
+
             # 文件导入时选择解析方式，默认勾选文字提取，可选光学识别ocr当多选时此参数默认为["text"],当勾选ocr时传：["text","ocr"]
             parser_choices = message_value["doc"]["parser_choices"] if "parser_choices" in message_value["doc"] else [
                 "text"]
@@ -133,14 +138,14 @@ def kafkal():
                     # ============ 异步添加 =============
                     lock = threading.Lock()
                     thread = threading.Thread(target=add_files, args=(
-                    user_id, kb_name, filename, object_name, file_id, is_enhanced, pre_process, meta_data_rules, split_config))
+                    user_id, kb_name, filename, object_name, file_id, is_enhanced, enable_knowledge_graph, pre_process, meta_data_rules, split_config))
                     lock.acquire()
                     thread.start()
                     lock.release()
                     # ============ 异步添加 =============
                 else:
                     # ============ 顺序添加 =============
-                    add_files(user_id, kb_name, filename, object_name, file_id, is_enhanced, pre_process, meta_data_rules, split_config, kb_id=kb_id)
+                    add_files(user_id, kb_name, filename, object_name, file_id, is_enhanced, enable_knowledge_graph, pre_process, meta_data_rules, split_config, kb_id=kb_id)
                     # ============ 顺序添加 =============
                 logger.info('----->kafka异步消费完成：user_id=%s,kb_name=%s,filename=%s,file_id=%s,process finished' % (user_id, kb_name,filename,file_id))
                 master_control_logger.info('----->kafka异步消费完成：user_id=%s,kb_name=%s,filename=%s,file_id=%s,process finished' % (user_id, kb_name, filename, file_id))
@@ -267,7 +272,7 @@ def parse_meta_data(docs, parse_rules):
 
 
 def add_files(user_id, kb_name, file_name, object_name, file_id,
-              is_enhanced, pre_process_rules, meta_data_rules, split_config: SplitConfig , kb_id=""):
+              is_enhanced, enable_knowledge_graph, pre_process_rules, meta_data_rules, split_config: SplitConfig, kb_id=""):
     response_info = {'code': 0, "message": "成功"}
     user_data_path = USER_DATA_PATH
     convert_dir = CONVERT_DIR
@@ -337,7 +342,7 @@ def add_files(user_id, kb_name, file_name, object_name, file_id,
                     master_control_logger.error(f"{download_path} convert_office_file successfully => {res_filename}")
                 else:
                     master_control_logger.error(f"{download_path} convert_office_file failed")
-                    mq_rel_utils.update_doc_status(file_id, status=53, type=type)
+                    mq_rel_utils.update_doc_status(file_id, status=53)
                     return
             elif file_extension in CONVERT_OFFICE_FORMAT_MAP:
                 target_format = CONVERT_OFFICE_FORMAT_MAP[file_extension]  # 获取目标格式
@@ -453,7 +458,6 @@ def add_files(user_id, kb_name, file_name, object_name, file_id,
             master_control_logger.error('文档切分失败' + "user_id=%s,kb_name=%s,file_name=%s" % (user_id, kb_name, file_name) + repr(e))
             mq_rel_utils.update_doc_status(file_id, status=54)
             return
-
     try:
         logger.info('添加文档meta开始' + "user_id=%s,kb_name=%s,file_name=%s" % (user_id, kb_name, file_name))
         master_control_logger.info('添加文档meta开始' + "user_id=%s,kb_name=%s,file_name=%s" % (user_id, kb_name, file_name))
@@ -520,9 +524,11 @@ def add_files(user_id, kb_name, file_name, object_name, file_id,
         mq_rel_utils.update_doc_status(file_id, status=56)
         return
 
+    # --------------7、最终完成
+
     logger.info("user_id=%s,kb_name=%s,file_name=%s" % (user_id, kb_name, file_name) + '===== 文档上传成功且完成')
     master_control_logger.info("user_id=%s,kb_name=%s,file_name=%s,kb_id=%s" % (user_id, kb_name, file_name, kb_id) + '===== 文档上传成功且完成')
-    mq_rel_utils.update_doc_status(file_id, status=10, meta_datas=meta_parsed)
+    mq_rel_utils.update_doc_status(file_id, status=10)
 
 
 if __name__ == "__main__":

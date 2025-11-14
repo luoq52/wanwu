@@ -296,6 +296,71 @@ def get_all_chunk_labels(redis_client, kb_id):
         logger.error(traceback.format_exc())
         return []
 
+
+def delete_graph_vocabulary_set(redis_client, kb_id):
+    """
+    如果键不存在则跳过，存在则删除 Redis 中的 graph_vocabulary 集合
+    :param redis_client: Redis连接
+    :param kb_id: 知识库ID
+    """
+    try:
+        # 构造键名
+        graph_key = f"graph_vocabulary_{kb_id}"
+        # 如果键不存在，直接跳过
+        if not redis_client.exists(graph_key):
+            pass
+        else:
+            # 如果键存在，删除旧的集合
+            redis_client.delete(graph_key)
+    except Exception as e:
+        logger.error(f"Failed to delete {kb_id} graph vocabulary set: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+
+
+def update_graph_vocabulary_set(redis_client, kb_id, elements_to_add=None, elements_to_remove=None):
+    """
+    更新 Redis 中的 graph_vocabulary 集合
+    :param redis_client: Redis连接
+    :param kb_id: 知识库ID
+    :param elements_to_add: 要添加的元素列表
+    :param elements_to_remove: 要删除的元素列表
+    """
+    try:
+        # 构造键名
+        graph_key = f"graph_vocabulary_{kb_id}"
+        if elements_to_add:
+            redis_client.sadd(graph_key, *elements_to_add)  # 添加元素
+        if elements_to_remove:
+            redis_client.srem(graph_key, *elements_to_remove)  # 删除元素
+    except Exception as e:
+        logger.error(f"Failed to update {kb_id} graph vocabulary set: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+
+
+# 查询集合
+def query_graph_vocabulary_set(redis_client, kb_id):
+    """
+    查询 Redis 中的集合
+    :param redis_client: Redis连接
+    :param kb_id: 知识库ID
+    :return: 集合中的所有元素
+    """
+    try:
+        # 构造键名
+        graph_key = f"graph_vocabulary_{kb_id}"
+        if redis_client.exists(graph_key):
+            res_set = redis_client.smembers(graph_key)
+            return res_set
+        else:
+            return set()
+    except Exception as e:
+        logger.error(f"Failed to query {kb_id} graph vocabulary set: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+
+
 # 主程序
 if __name__ == "__main__":
     # 获取 Redis 连接

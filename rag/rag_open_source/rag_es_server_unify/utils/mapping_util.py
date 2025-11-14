@@ -1,77 +1,78 @@
 from utils.config_util import es
 from log.logger import logger
 
-mappings = {
-    "dynamic_templates": [
-        {
-            "vector_768": {
-                "match": "*_768_content_vector",
-                "mapping": {
-                    "type": "dense_vector",
-                    "dims": 768,
-                    "element_type": "float",
-                    "index": True,
-                    "similarity": "cosine",
-                    "index_options": {
-                        "type": "hnsw",
-                        "m": 16,
-                        "ef_construction": 100
-                    }
-                }
-            }
-        },
-        {
-            "vector_1024": {
-                "match": "*_1024_content_vector",
-                "mapping": {
-                    "type": "dense_vector",
-                    "dims": 1024,
-                    "element_type": "float",
-                    "index": True,
-                    "similarity": "cosine",
-                    "index_options": {
-                        "type": "hnsw",
-                        "m": 16,
-                        "ef_construction": 100
-                    }
-                }
-            }
-        },
-        {
-            "vector_1536": {
-                "match": "*_1536_content_vector",
-                "mapping": {
-                    "type": "dense_vector",
-                    "dims": 1536,
-                    "element_type": "float",
-                    "index": True,
-                    "similarity": "cosine",
-                    "index_options": {
-                        "type": "hnsw",
-                        "m": 16,
-                        "ef_construction": 100
-                    }
-                }
-            }
-        },
-        {
-            "vector_2048": {
-                "match": "*_2048_content_vector",
-                "mapping": {
-                    "type": "dense_vector",
-                    "dims": 2048,
-                    "element_type": "float",
-                    "index": True,
-                    "similarity": "cosine",
-                    "index_options": {
-                        "type": "hnsw",
-                        "m": 16,
-                        "ef_construction": 100
-                    }
+vector_dynamic_templates = [
+    {
+        "vector_768": {
+            "match": "*_768_content_vector",
+            "mapping": {
+                "type": "dense_vector",
+                "dims": 768,
+                "element_type": "float",
+                "index": True,
+                "similarity": "cosine",
+                "index_options": {
+                    "type": "hnsw",
+                    "m": 16,
+                    "ef_construction": 100
                 }
             }
         }
-    ],
+    },
+    {
+        "vector_1024": {
+            "match": "*_1024_content_vector",
+            "mapping": {
+                "type": "dense_vector",
+                "dims": 1024,
+                "element_type": "float",
+                "index": True,
+                "similarity": "cosine",
+                "index_options": {
+                    "type": "hnsw",
+                    "m": 16,
+                    "ef_construction": 100
+                }
+            }
+        }
+    },
+    {
+        "vector_1536": {
+            "match": "*_1536_content_vector",
+            "mapping": {
+                "type": "dense_vector",
+                "dims": 1536,
+                "element_type": "float",
+                "index": True,
+                "similarity": "cosine",
+                "index_options": {
+                    "type": "hnsw",
+                    "m": 16,
+                    "ef_construction": 100
+                }
+            }
+        }
+    },
+    {
+        "vector_2048": {
+            "match": "*_2048_content_vector",
+            "mapping": {
+                "type": "dense_vector",
+                "dims": 2048,
+                "element_type": "float",
+                "index": True,
+                "similarity": "cosine",
+                "index_options": {
+                    "type": "hnsw",
+                    "m": 16,
+                    "ef_construction": 100
+                }
+            }
+        }
+    }
+]
+mappings = {
+    "dynamic_templates": vector_dynamic_templates,
     "properties": {
         "content_id": {"type": "keyword"},  # 指定为 keyword，方便用于排序和聚合
         "file_name": {"type": "keyword"},  # 指定为 keyword，方便用于排序和聚合
@@ -88,6 +89,7 @@ uk_mappings = {
         "kb_name": {"type": "keyword"},  # 指定为 keyword，方便用于排序和聚合
         "kb_id": {"type": "keyword"},  # 指定为 keyword，方便用于排序和聚合
         "embedding_model_id": {"type": "keyword"},  # 指定为 keyword，方便用于排序和聚合"
+        "enable_graph": {"type": "boolean"},
     }
 }
 # ES 需提前 init_kb 添加 content中控部分索引
@@ -149,6 +151,20 @@ file_mappings = {
             "object_name" : {"type" : "keyword"}
           }
         }
+    }
+}
+
+community_report_mappings = {
+    "dynamic_templates": vector_dynamic_templates,
+    "properties": {
+        "content_id": {"type": "keyword"},
+        "file_name": {"type": "keyword"},
+        "kb_name": {"type": "keyword"},
+        "content": {"type": "text", "analyzer": "ik_max_word", "search_analyzer": "ik_smart"},
+        "embedding_content": {"type": "text", "analyzer": "ik_max_word", "search_analyzer": "ik_smart"},
+        "chunk_id": {"type": "keyword"},
+        "status": {"type": "boolean"},
+        "create_time": {"type": "keyword"},
     }
 }
 

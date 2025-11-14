@@ -3,7 +3,7 @@ import json
 import time
 import os
 from logging_config import setup_logging
-from settings import MQ_REL_URL, MQ_URL_URL, MQ_URLINSERT_URL
+from settings import MQ_REL_URL, MQ_URL_URL, MQ_URLINSERT_URL, MQ_KB_STATUS_URL
 logger_name='rag_mq_rel_utils'
 app_name = os.getenv("LOG_FILE")
 logger = setup_logging(app_name,logger_name)
@@ -131,3 +131,28 @@ def update_urlinsert_status(doc_id, status, api_url=MQ_URLINSERT_URL):
         time.sleep(1)  # 每次重试前等待一段时间，例如1秒  
     return {"code": -1,"message":"文档状态更新回调错误"}
 
+
+def update_kb_status(kb_id, status, api_url=MQ_KB_STATUS_URL):
+    payload = {
+        "knowledgeId": kb_id,
+        "reportStatus": status
+    }
+    # 请求头
+    headers = {'Content-Type': 'application/json'}
+    retries = 0
+    max_retries = 5
+    while retries < max_retries:
+        try:
+            # 发送POST请求
+            response = requests.post(api_url, data=json.dumps(payload), headers=headers)
+            logger.info(f"---->回调Mass平台返回结果: {response}")
+            logger.info('----->已回调Maas平台接口-同步状态：' + repr(api_url) + repr(json.dumps(payload)))
+            # 处理响应
+            if response.status_code == 200:
+                return {"code": 0, "message": "文档状态更新回调成功"}
+
+        except Exception as e:
+            logger.error(f"文档状态更新回调错误：{e}，正在重试...")
+        retries += 1
+        time.sleep(1)  # 每次重试前等待一段时间，例如1秒
+    return {"code": -1, "message": "文档状态更新回调错误"}

@@ -15,6 +15,7 @@ from utils import redis_utils
 from utils import file_utils
 from utils import kafka_utils
 from utils import chunk_utils
+from utils import graph_utils
 import utils.knowledge_base_utils as kb_utils
 from utils.constant import CHUNK_SIZE
 import urllib.parse
@@ -60,12 +61,16 @@ def init_kb():
         kb_name = init_info.get("knowledgeBase", "")
         kb_id = init_info.get("kb_id", "")
         embedding_model_id = init_info.get("embedding_model_id", "")
+        enable_knowledge_graph = init_info.get("enable_knowledge_graph", False)
         logger.info(repr(init_info))
         assert len(user_id) > 0
         assert len(kb_name) > 0 or len(kb_id) > 0
         assert len(embedding_model_id) > 0
 
-        result_data = kb_utils.init_knowledge_base(user_id, kb_name, kb_id=kb_id, embedding_model_id=embedding_model_id)
+        result_data = kb_utils.init_knowledge_base(user_id, kb_name,
+                                                   kb_id=kb_id,
+                                                   embedding_model_id=embedding_model_id,
+                                                   enable_knowledge_graph=enable_knowledge_graph)
         headers = {'Access-Control-Allow-Origin': '*'}
         response = make_response(json.dumps(result_data, ensure_ascii=False))
         # response = make_response(json.dumps(result_data, ensure_ascii=False),headers)
@@ -206,7 +211,8 @@ def del_kb():
         # 在批量删除文件中补充增加删除reids逻辑 end
         # ========== chunk labels 删除的逻辑 ==========
         try:
-            kb_id = kb_utils.get_kb_name_id(user_id, kb_name)  # 获取kb_id
+            if not kb_id:
+                kb_id = kb_utils.get_kb_name_id(user_id, kb_name)  # 获取kb_id
             # 删除chunk_labels
             redis_utils.delete_chunk_labels(chunk_label_redis_client, kb_id)
         except Exception as err:
@@ -393,6 +399,7 @@ def search_knowledge_base():
         auto_citation = init_info.get("auto_citation", False)
         # 是否query改写
         rewrite_query = init_info.get("rewrite_query", False)
+        use_graph = init_info.get("use_graph", False)
         filter_file_name_list = init_info.get("filter_file_name_list", [])
         rerank_mod = init_info.get("rerank_mod", "rerank_model")
         # Dify开源版本问答时需指定rerank模型
@@ -454,7 +461,7 @@ def search_knowledge_base():
                                                    filter_file_name_list=filter_file_name_list,
                                                    rerank_model_id=rerank_model_id, rerank_mod=rerank_mod,
                                                    weights=weights, metadata_filtering_conditions=metadata_filtering_conditions,
-                                                   knowledge_base_info=knowledge_base_info)
+                                                   knowledge_base_info=knowledge_base_info, use_graph=use_graph)
         json_str = json.dumps(response_info, ensure_ascii=False)
 
         response = make_response(json_str)
@@ -1192,6 +1199,116 @@ def proper_noun():
 
     return response
 
+
+@app.route("/rag/batch-add-reports", methods=['POST'])
+def batchAddReports():
+    logger.info('---------------批量新增社区报告---------------')
+    try:
+        data = request.get_json()
+        user_id = data['userId']
+        kb_name = data.get("knowledgeBase", "")
+        kb_id = data.get("kb_id", "")
+        reports = data.get("reports", None)
+
+        if not reports or not isinstance(reports, list):
+            raise ValueError("reports must be a list and not empty")
+
+        response_info = graph_utils.batch_add_community_reports(user_id, kb_name, reports, kb_id=kb_id)
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    except Exception as e:
+        logger.info(repr(e))
+        response_info = {'code': 1, "message": repr(e), "data": {"success_count": 0}}
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    return response
+
+@app.route("/rag/update-report", methods=['POST'])
+def updateReport():
+    logger.info('---------------更新community report---------------')
+    try:
+        data = request.get_json()
+        user_id = data['userId']
+        kb_name = data.get("knowledgeBase", "")
+        kb_id = data.get("kb_id", "")
+        report = data.get('reports', None)
+
+        if not report or not isinstance(report, dict):
+            raise ValueError("reports must be a dict and not empty")
+
+        response_info = graph_utils.update_community_reports(user_id, kb_name, report, kb_id=kb_id)
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    except Exception as e:
+        logger.info(repr(e))
+        response_info = {'code': 1, "message": repr(e), "data": {"success_count": 0}}
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    return response
+
+@app.route("/rag/batch-delete-reports", methods=['POST'])
+def batchDeleteReports():
+    logger.info('---------------批量删除community reports---------------')
+    try:
+        data = request.get_json()
+        user_id = data['userId']
+        kb_name = data.get("knowledgeBase", "")
+        kb_id = data.get("kb_id", "")
+        report_ids = data.get('report_ids', [])
+
+        if not report_ids or not isinstance(report_ids, list):
+            raise ValueError("report_ids must be a list and not empty")
+        response_info = graph_utils.batch_delete_community_reports(user_id, kb_name, report_ids, kb_id=kb_id)
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    except Exception as e:
+        logger.info(repr(e))
+        response_info = {'code': 1, "message": repr(e), "data": {"success_count": 0}}
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    return response
+
+
+@app.route("/rag/get-community-report-list", methods=['POST'])
+def getReportsList():
+    logger.info('---------------获取community reports列表---------------')
+    try:
+        data = request.get_json()
+        user_id = data['userId']
+        kb_name = data.get("knowledgeBase", "")
+        kb_id = data.get("kb_id", "")
+        page_size = data['page_size']
+        search_after = data['search_after']
+        # 获取分页文件内容列表
+        response_info = graph_utils.get_community_report_list(user_id, kb_name, page_size, search_after, kb_id=kb_id)
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    except Exception as e:
+        logger.info(repr(e))
+        response_info = {'code': 1, "message": repr(e)}
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    return response
+
+@app.route("/rag/knowledgeBase-graph", methods=['POST'])
+def knowledgeBaseGraph():
+    logger.info('---------------获取知识库知识图谱---------------')
+    try:
+        data = request.get_json()
+        user_id = data['userId']
+        kb_name = data.get("knowledgeBase", "")
+        kb_id = data.get("kb_id", "")
+
+        graph_data = graph_utils.get_kb_graph_data(user_id, kb_name, kb_id=kb_id)
+        response_info = {'code': 0, "message": "", "data": graph_data}
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    except Exception as e:
+        logger.info(repr(e))
+        response_info = {'code': 1, "message": repr(e)}
+        headers = {'Access-Control-Allow-Origin': '*'}
+        response = make_response(json.dumps(response_info, ensure_ascii=False), headers)
+    return response
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

@@ -34,11 +34,11 @@ def add_file(user_id, kb_name, file_name, file_meta, kb_id=""):
         return {'code': 1, "message": f"{e}"}
 
 
-def allocate_chunks(user_id, kb_name, file_name, count, kb_id=""):
+def allocate_chunks(user_id, kb_name, file_name, count, chunk_type="text", kb_id=""):
     url = ES_BASE_URL + '/api/v1/rag/es/allocate_chunks'
     headers = {'Content-Type': 'application/json'}
 
-    req_data = {'user_id': user_id, 'kb_name': kb_name, 'kb_id': kb_id, 'file_name': file_name, 'count': count}
+    req_data = {'user_id': user_id, 'kb_name': kb_name, 'kb_id': kb_id, 'file_name': file_name, 'count': count, "chunk_type":chunk_type}
 
     try:
         response = requests.post(url, headers=headers, json=req_data, timeout=TIME_OUT)
@@ -100,10 +100,20 @@ def add_es(user_id, kb_name, docs, file_name, kb_id=""):
         for doc in docs[i:i + batch_size]:
             chunk_dict = {
                 "title": file_name,
-                "snippet": doc["text"],
                 "source_type": "RAG_KB",
                 "meta_data": doc["meta_data"]
             }
+            # 普通文档切片
+            if "text" in doc:
+                chunk_dict["snippet"] = doc["text"]
+
+            if "graph_data_text" in doc:  # 图谱数据切片
+                chunk_dict["graph_data_text"] = doc["graph_data_text"]
+                chunk_dict["graph_data"] = doc["graph_data"]
+
+            # 图谱数据切片和社区报告
+            if "chunk_type" in doc:
+                chunk_dict["chunk_type"] = doc["chunk_type"]
 
             if "parent_text" in doc:
                  chunk_dict["parent_snippet"] = doc["parent_text"]
@@ -222,6 +232,34 @@ def search_es(user_id, kb_names, query, top_k, kb_ids=[], filter_file_name_list=
                 logger.error("知识库：" + repr(kb_name) + "es检索请求失败：" + repr(response.text))
         except Exception as e:
             logger.error("知识库：" + repr(kb_name) + "es检索请求异常：" + repr(e))
+    return search_list
+
+
+def search_graph_es(user_id, kb_names, query, top_k, kb_ids=[], filter_file_name_list=[]):
+    search_list = []
+    for kb_name in kb_names:
+        es_data = {}
+        es_data['user_id'] = user_id
+        es_data['kb_name'] = kb_name
+        es_data['query'] = query
+        es_data['top_k'] = top_k
+        es_data['search_by'] = "graph_data_text"
+        es_data['min_score'] = 0
+        es_data['filter_file_name_list'] = filter_file_name_list[:10]  # 限制最多10个，以免掉蹦
+        es_url = ES_BASE_URL + "/api/v1/rag/es/search"
+        headers = {'Content-Type': 'application/json'}
+        try:
+            response = requests.post(es_url, headers=headers, json=es_data, timeout=TIME_OUT)
+            if response.status_code == 200:
+                tmp_sl = json.loads(response.text)['result']['search_list']
+                for x in range(len(tmp_sl)):
+                    tmp_sl[x]['kb_name'] = kb_name
+                search_list = search_list + tmp_sl
+                logger.info("知识库：" + repr(kb_name) + f" query:{query}" + "graph_es检索请求成功")
+            else:
+                logger.error("知识库：" + repr(kb_name) + f" query:{query}" + "graph_es检索请求失败：" + repr(response.text))
+        except Exception as e:
+            logger.error("知识库：" + repr(kb_name) + f" query:{query}" + "graph_es检索请求异常：" + repr(e))
     return search_list
 
 

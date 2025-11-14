@@ -39,11 +39,14 @@ from utils import file_utils
 from utils import rerank_utils
 from utils import minio_utils
 from utils import redis_utils
+from utils import graph_utils
+from utils import timing
 import time
 
 from logging_config import setup_logging
 from settings import REPLACE_MINIO_DOWNLOAD_URL
 from settings import USE_POST_FILTER
+from settings import GRAPH_SERVER_URL
 from utils.constant import USER_DATA_PATH
 
 logger_name = 'rag_kb_utils'
@@ -57,7 +60,7 @@ chunk_label_redis_client = redis_utils.get_redis_connection(redis_db=5)
 
 # -----------------
 # 初始化知识库
-def init_knowledge_base(user_id, kb_name, kb_id="", embedding_model_id=""):
+def init_knowledge_base(user_id, kb_name, kb_id="", embedding_model_id="", enable_knowledge_graph = False):
     response_info = {'code': 0, "message": "成功"}
     # ----------------1、检测向量库名称是否合法
     kb_is_legal = is_valid_string(user_id + kb_name)
@@ -80,7 +83,10 @@ def init_knowledge_base(user_id, kb_name, kb_id="", embedding_model_id=""):
         response_info['message'] = '已存在相同名字的向量知识库'
         return response_info
     # ----------------2、建立向量库
-    milvus_init_result = milvus_utils.init_knowledge_base(user_id, kb_name, kb_id, embedding_model_id)
+    milvus_init_result = milvus_utils.init_knowledge_base(user_id, kb_name,
+                                                          kb_id = kb_id,
+                                                          embedding_model_id = embedding_model_id,
+                                                          enable_knowledge_graph = enable_knowledge_graph)
     logger.info('向量库初始化结果：')
     logger.info(repr(milvus_init_result))
 
@@ -160,6 +166,19 @@ def del_konwledge_base(user_id, kb_name, kb_id=""):
         response_info['code'] = 1
         response_info['message'] = f'{kb_name},知识库不存在'
         return response_info
+
+     #删除 知识图谱
+    kb_info = milvus_utils.get_kb_info(user_id, kb_name)
+    if "enable_knowledge_graph" in kb_info and kb_info["enable_knowledge_graph"]:
+        try:
+            graph_utils.delete_kb_graph(user_id, kb_name)
+            logger.info(f"知识图谱删除成功, kb_name:{kb_name}")
+            graph_redis_client = redis_utils.get_redis_connection()
+            kb_id = kb_info["id"]
+            redis_utils.delete_graph_vocabulary_set(graph_redis_client, kb_id)
+        except Exception as e:
+            logger.error(f"知识图谱删除失败, error: {repr(e)}")
+
     # --------------1、删除es库 (必须先删除es库，否则会报错)
     del_es_result = es_utils.del_es_kb(user_id, kb_name, kb_id=kb_id)
     logger.info('用户es库删除结果：' + repr(del_es_result))
@@ -223,6 +242,17 @@ def del_knowledge_base_files(user_id, kb_name, file_names, kb_id=""):
             continue
         else:
             success_files.append(file_name)
+
+     #删除 知识图谱
+    kb_info = milvus_utils.get_kb_info(user_id, kb_name)
+    if "enable_knowledge_graph" in kb_info and kb_info["enable_knowledge_graph"]:
+        try:
+            for file_name in success_files:
+                graph_utils.delete_file_from_graph(user_id, kb_name, file_name)
+                logger.info(f"知识图谱删除成功, file_name:{file_name}")
+        except Exception as e:
+            failed_files.append([file_name, f"知识图谱删除文件失败, error: {repr(e)}"])
+            logger.error(f"知识图谱删除失败, file_name:{file_name}, error: {repr(e)}")
 
     # --------------2、路径文档
     for file_name in success_files:
@@ -489,7 +519,7 @@ def get_knowledge_based_answer(user_id, kb_names, question, rate, top_k, chunk_c
                                auto_citation=False, retrieve_method="hybrid_search", kb_ids=[],
                                filter_file_name_list=[], rerank_model_id='', rerank_mod="rerank_model",
                                weights: Optional[dict] | None = None, term_weight_coefficient=1,
-                               metadata_filtering_conditions=[], knowledge_base_info={}):
+                               metadata_filtering_conditions=[], knowledge_base_info={}, use_graph=False):
     """ knowledge_base_info: {"user_id1": [{ "kb_id": "","kb_name": ""}, { "kb_id": "","kb_name": ""}]}"""
     try:
         if search_field == 'emc':
@@ -512,11 +542,14 @@ def get_knowledge_based_answer(user_id, kb_names, question, rate, top_k, chunk_c
         milvus_useful_list = []  # 后过滤有效的知识片段
         es_useful_list = []  # 后过滤有效的知识片段
         label_useful_list = []  # 后过滤有效的知识片段
+        graph_search_list = []  # 知识图谱关联增强片段
+        graph_data_list = []  # SPO及社区报告置顶片段
+
         for user_id, kb_names in knowledge_base_info.items():
             if retrieve_method in {"semantic_search", "hybrid_search"}:
                 # 向量召回
                 search_result = milvus_utils.search_milvus(user_id, kb_names, top_k, question, threshold=rate,
-                                                           search_field=search_field, kb_ids=kb_ids,
+                                                           search_field=search_field, kb_ids=[],
                                                            filter_file_name_list=filter_file_name_list,
                                                            metadata_filtering_conditions = metadata_filtering_conditions)
 
@@ -542,8 +575,9 @@ def get_knowledge_based_answer(user_id, kb_names, question, rate, top_k, chunk_c
             if retrieve_method in {"full_text_search", "hybrid_search"}:
                 # es召回
                 es_search_list = []
-                es_search_list = es_utils.search_es(user_id, kb_names, question, top_k, kb_ids=kb_ids,
-                                                    filter_file_name_list=filter_file_name_list, metadata_filtering_conditions = metadata_filtering_conditions)
+                es_search_list = es_utils.search_es(user_id, kb_names, question, top_k, kb_ids=[],
+                                                    filter_file_name_list=filter_file_name_list,
+                                                    metadata_filtering_conditions=metadata_filtering_conditions)
                 logger.info(repr(user_id) + repr(kb_names) + repr(question) + '问题es库查询结果：' + json.dumps(repr(es_search_list), ensure_ascii=False))
                 if retrieve_method == "full_text_search" and search_field == "content":  # 只召回es库
                     tmp_content = []
@@ -572,7 +606,8 @@ def get_knowledge_based_answer(user_id, kb_names, question, rate, top_k, chunk_c
             if label_counts:
                 label_scores = []
                 # label_search_list = []
-                label_search_list = es_utils.search_keyword(user_id, kb_names, label_counts, top_k, metadata_filtering_conditions = metadata_filtering_conditions)
+                label_search_list = es_utils.search_keyword(user_id, kb_names, label_counts, top_k,
+                                                            metadata_filtering_conditions=metadata_filtering_conditions)
             else:
                 label_scores = []
                 label_search_list = []
@@ -617,6 +652,15 @@ def get_knowledge_based_answer(user_id, kb_names, question, rate, top_k, chunk_c
                 es_useful_list.extend(es_search_list)
                 label_useful_list.extend(label_search_list)
 
+            # ========= 图谱召回---增强关联片段以及三元组以及社区报告 start =========
+            if use_graph:  # 如果使用图检索
+                # ======== 将graph检索的结果 和 两路检索的结果进行融合，并重新再过一遍rerank ========
+                temp_graph_search_list, temp_graph_dat_list = graph_utils.get_graph_search_list(user_id, kb_names, question, top_k,
+                                                                             kb_ids=[],
+                                                                             filter_file_name_list=filter_file_name_list)
+                graph_search_list.extend(temp_graph_search_list)  # 直接放进去先
+                graph_data_list.extend(temp_graph_dat_list)  # 直接放进去先
+
         # 多路召回融合
         # reank重排
         if not milvus_useful_list and not es_useful_list:  # 都为空不走重排,直接返回
@@ -632,6 +676,8 @@ def get_knowledge_based_answer(user_id, kb_names, question, rate, top_k, chunk_c
                                                                              milvus_useful_list, es_useful_list, top_k)
         else:
             raise Exception("rerank_mod is not valid")
+
+
         # ========= 标签召回的结果需要置顶到最前面---去重并取topK start =========
         if label_useful_list:
             new_search_list = []
@@ -646,6 +692,7 @@ def get_knowledge_based_answer(user_id, kb_names, question, rate, top_k, chunk_c
                     new_search_list.append(item)
                     new_scores.append(1)
                     tmp_sl_content[item['content_id']] = item['snippet']
+
             for s, x in zip(sorted_scores, sorted_search_list):
                 if x['content_id'] not in tmp_sl_content:
                     tmp_sl_content[x['content_id']] = x['snippet']
@@ -661,6 +708,19 @@ def get_knowledge_based_answer(user_id, kb_names, question, rate, top_k, chunk_c
 
         sorted_scores, sorted_search_list, has_child = aggregate_chunks(user_id, sorted_scores, sorted_search_list)
         logger.info(f"aggregate_chunks result, has_child: {has_child}, sorted_scores: {sorted_scores}, sorted_search_list: {sorted_search_list}")
+        # ======= 将SPO及社区报告置顶 start =======
+        if graph_data_list:
+            new_search_list = []
+            new_scores = []
+            for item in graph_data_list:  # 将SPO及社区报告置顶
+                new_search_list.append(item)
+                new_scores.append(1)
+            for s, x in zip(sorted_scores, sorted_search_list):
+                new_search_list.append(x)
+                new_scores.append(s)
+            sorted_search_list = new_search_list[:top_k]
+            sorted_scores = new_scores[:top_k]
+
         rerank_result = rerank_utils.rerank_search(question, sorted_scores, sorted_search_list, rate, return_meta,
                                                    prompt_template, default_answer, auto_citation)
 
@@ -791,6 +851,7 @@ def replace_minio_ip(rerank_result):
 
 
     return rerank_result
+
 
 def convert_office_file(file_path, target_dir, target_format):
     # 检查文件夹是否存在，如果不存在则创建

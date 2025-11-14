@@ -33,6 +33,7 @@ def init_kb():
     kb_name = data.get("kb_name")
     kb_id = data["kb_id"]  # 必须字段
     embedding_model_id = data["embedding_model_id"]  # 必须字段
+    enable_knowledge_graph = data.get("enable_knowledge_graph", False)
     userId_kb_names = []
     dense_dim = 1024
     try:
@@ -73,7 +74,8 @@ def init_kb():
                 formatted_time = utc_now.strftime('%Y-%m-%d %H:%M:%S')
                 uk_data = [
                     {"index_name": index_name, "userId": userId, "kb_name": kb_name,
-                     "creat_time": formatted_time, "kb_id": kb_id, "embedding_model_id": embedding_model_id}
+                     "creat_time": formatted_time, "kb_id": kb_id, "embedding_model_id": embedding_model_id,
+                     "enable_graph": enable_knowledge_graph}
                 ]
                 es_ops.bulk_add_uk_index_data(KBNAME_MAPPING_INDEX, uk_data)
                 # ====== 新建完成，需要获取一下 kb_id,看看是否新建成功 ======
@@ -245,6 +247,36 @@ def add_vector_data():
     finally:
         logger.info(f"{userId},{kb_name},bulk_add end")
 
+@app.route('/rag/kn/get_kb_info', methods=['POST'])
+def get_kb_info():
+    """ 查询知识库是否开启知识图谱"""
+    logger.info("-----------------------启动知识库info查询-------------------\n")
+    data = request.get_json()
+    userId = data.get("userId")
+    kb_name = data.get("kb_name")
+    try:
+        # ******** 先检查 是否有新建 index ***********
+        es_ops.create_index_if_not_exists(KBNAME_MAPPING_INDEX, mappings=es_mapping.uk_mappings)  # 确保 KBNAME_MAPPING_INDEX 已创建
+        kb_info = es_ops.get_uk_kb_info(userId, kb_name)
+        logger.info(f"当前用户:{userId},知识库:{kb_name}, kb_info: {kb_info}")
+        result = {
+            "code": 0,
+            "message": "success",
+            "data": {
+                "kb_info": kb_info
+            }
+        }
+        jsonarr = json.dumps(result, ensure_ascii=False)
+        logger.info(f"当前用户:{userId},知识库info查询接口返回结果为：{jsonarr}")
+        return jsonarr
+    except Exception as e:
+        result = {
+            "code": 1,
+            "message": str(e)
+        }
+        jsonarr = json.dumps(result, ensure_ascii=False)
+        logger.info(f"当前用户:{userId},知识库是否开启知识图谱查询的接口返回结果为：{jsonarr}")
+        return jsonarr
 
 @app.route('/rag/kn/list_kb_names', methods=['POST'])
 def list_kb_names():
@@ -514,13 +546,15 @@ def del_kb():
     display_kb_name = data.get("kb_name")  # 显示的名字
     content_index_name = 'content_control_' + index_name
     file_index_name = 'file_control_' + index_name
+    community_report_name = 'community_report_' + index_name
     try:
         kb_name = es_ops.get_uk_kb_id(userId, display_kb_name)  # 从映射表中获取 kb_id ，这是真正的名字
         es_result = es_ops.delete_data_by_kbname(index_name, kb_name)
         es_cc_result = es_ops.delete_data_by_kbname(content_index_name, kb_name)  # 主控表也需要删除
         es_file_result = es_ops.delete_data_by_kbname(file_index_name, kb_name)
         es_uk_result = es_ops.delete_uk_data_by_kbname(userId, display_kb_name)  # uid索引映射表需要删除,传display_kb_name
-        if es_result["success"] and es_cc_result["success"] and es_uk_result["success"] and es_file_result["success"]:  # delete_data_by_kbname 成功了则返回
+        es_cr_result = es_ops.delete_data_by_kbname(community_report_name, kb_name)
+        if es_result["success"] and es_cc_result["success"] and es_uk_result["success"] and es_file_result["success"] and es_cr_result["success"]:  # delete_data_by_kbname 成功了则返回
             logger.info(f"用户{index_name},对应的{kb_name}记录删除成功")
             result = {
                 "code": 0,
@@ -528,14 +562,14 @@ def del_kb():
             }
             jsonarr = json.dumps(result, ensure_ascii=False)
             logger.info(
-                f"当前用户:{userId},知识库:{kb_name},知识库删除的接口返回结果为：{jsonarr},{es_result},{es_cc_result},{es_uk_result}")
+                f"当前用户:{userId},知识库:{kb_name},知识库删除的接口返回结果为：{jsonarr},{es_result},{es_cc_result},{es_uk_result},{es_cr_result}")
             return jsonarr
         else:
             logger.info(
-                f"当前用户:{userId},知识库:{kb_name},知识库删除时发生错误：{es_result},{es_cc_result},{es_uk_result},{es_file_result}")
+                f"当前用户:{userId},知识库:{kb_name},知识库删除时发生错误：{es_result},{es_cc_result},{es_uk_result},{es_file_result},{es_cr_result}")
             result = {
                 "code": 1,
-                "message": es_result.get("error", "") + es_cc_result.get("error", "") + es_file_result.get("error", "")
+                "message": es_result.get("error", "") + es_cc_result.get("error", "") + es_file_result.get("error", "") + es_cr_result.get("error", "")
             }
             jsonarr = json.dumps(result, ensure_ascii=False)
             logger.info(f"当前用户:{userId},知识库:{kb_name},知识库删除的接口返回结果为：{jsonarr}")
@@ -629,12 +663,17 @@ def get_content_list():
     file_name = data.get("file_name")
     page_size = data.get("page_size")
     search_after = data.get("search_after")
-    content_index_name = 'content_control_' + index_name
+    content_type = data.get("content_type", "text")
     try:
         kb_name = es_ops.get_uk_kb_id(userId, display_kb_name)  # 从映射表中获取 kb_id ，这是真正的名字
         logger.info(
             f"用户:{userId},请求的kb_name为:{kb_name},file_name:{file_name},page_size:{page_size},search_after:{search_after}")
-        content_result = es_ops.get_cc_file_content_list(content_index_name, kb_name, file_name, page_size, search_after)
+        searched_index_name = ""
+        if content_type == "text":
+            searched_index_name = 'content_control_' + index_name
+        elif content_type == "community_report":
+            searched_index_name = 'community_report_' + index_name
+        content_result = es_ops.get_file_content_list(searched_index_name, kb_name, file_name, page_size, search_after)
         content_list = content_result["content_list"]
         for content in content_list:
             if "is_parent" in content and content["is_parent"]:
@@ -957,13 +996,18 @@ def get_content_by_ids():
     display_kb_name = data.get("kb_name")  # 显示的名字
     content_ids = data.get("content_ids")
     kb_id = data.get("kb_id")
-    content_index_name = 'content_control_' + index_name
+    content_type = data.get("content_type", "text")
     try:
         if not kb_id:  # 如果没有传入 kb_id,则从映射表中获取
             kb_id = es_ops.get_uk_kb_id(userId, display_kb_name)
         logger.info(
             f"用户:{userId},请求的kb_name为:{kb_id},content_ids:{content_ids}")
-        contents = es_ops.get_cc_contents(content_index_name, kb_id, content_ids)
+        searched_index_name = ""
+        if content_type == "text":
+            searched_index_name = 'content_control_' + index_name
+        elif content_type == "community_report":
+            searched_index_name = 'community_report_' + index_name
+        contents = es_ops.get_contents_by_ids(searched_index_name, kb_id, content_ids)
         for item in contents:  # 将 kb_id 转换为 kb_name
             item["kb_name"] = display_kb_name
         result = {
@@ -1191,16 +1235,23 @@ def allocate_chunks():
     display_kb_name = data.get("kb_name")  # 显示的名字
     file_name = data.get("file_name")
     count = data.get("count")
+    chunk_type = data.get("chunk_type", "text")
     content_index_name = 'content_control_' + index_name
     file_index_name = 'file_control_' + index_name
+    report_index_name = 'community_report_' + index_name
     try:
         kb_name = es_ops.get_uk_kb_id(user_id, display_kb_name)  # 从映射表中获取 kb_id ，这是真正的名字
         logger.info(
             f"用户:{user_id},display_kb_name: {display_kb_name},请求的kb_name为:{kb_name},file_name:{file_name}, insert chunk count: {count}")
 
-        es_ops.create_index_if_not_exists(content_index_name, mappings=es_mapping.cc_mappings)
         es_ops.create_index_if_not_exists(file_index_name, mappings=es_mapping.file_mappings)
-        result = es_ops.allocate_chunk_nums(file_index_name, content_index_name, kb_name, file_name, count)
+        result = {}
+        if chunk_type == "text":
+            es_ops.create_index_if_not_exists(content_index_name, mappings=es_mapping.cc_mappings)
+            result = es_ops.allocate_chunk_nums(file_index_name, content_index_name, kb_name, file_name, count)
+        elif chunk_type == "community_report":
+            es_ops.create_index_if_not_exists(report_index_name, mappings=es_mapping.community_report_mappings)
+            result = es_ops.allocate_chunk_nums(file_index_name, report_index_name, kb_name, file_name, count)
         jsonarr = json.dumps(result, ensure_ascii=False)
         logger.info(
             f"当前用户:{user_id},知识库:{kb_name},file_name:{file_name},新增分段分配chunk的接口返回结果为：{jsonarr}")
@@ -1539,6 +1590,173 @@ def snippet_delete_index_kb_name():
         return Response(response, mimetype='application/json', status=400)
     finally:
         logger.info("request: /api/v1/rag/es/delete_index end")
+
+
+@app.route('/rag/kn/add_community_reports', methods=['POST'])
+def add_community_reports_data():
+    logger.info("--------------------------启动community reports数据添加---------------------------\n")
+    data = request.get_json()
+    index_name = INDEX_NAME_PREFIX + data.get('userId')
+    report_index_name = 'community_report_' + index_name
+    file_index_name = 'file_control_' + index_name
+    user_id = data.get("userId")
+    kb_name = data.get("kb_name")
+    kb_id = data.get("kb_id")
+    embedding_model_id = es_ops.get_uk_kb_emb_model_id(user_id, kb_name)
+    doc_list = data.get("data")
+    try:
+        if not kb_id:  # 如果没有传入 kb_id,则从映射表中获取
+            kb_id = es_ops.get_uk_kb_id(user_id, kb_name)  # 从映射表中获取 kb_id ,添加往里传 kb_id
+        if not kb_id:  # 如果映射表中没有，则返回错误
+            raise RuntimeError(f"{kb_name}知识库不存在")
+
+        es_ops.create_index_if_not_exists(report_index_name, mappings=es_mapping.community_report_mappings)
+        es_ops.create_index_if_not_exists(file_index_name, mappings=es_mapping.file_mappings)
+
+        # 初始化启停状态
+        for doc in doc_list:
+            doc["status"] = True  # 初始化启停状态
+
+        # ========= 将 embedding_content 编码好向量 =============
+        for batch_doc in batch_list(doc_list, batch_size=EMBEDDING_BATCH_SIZE):
+            res = es_ops.get_embs([x["embedding_content"] for x in batch_doc], embedding_model_id=embedding_model_id)
+            dense_vector_dim = len(res["result"][0]["dense_vec"]) if res["result"] else 1024
+            field_name = f"q_{dense_vector_dim}_content_vector"
+
+            for i, x in enumerate(batch_doc):
+                if len(batch_doc) != len(res["result"]):
+                    raise RuntimeError(f"Error getting embeddings:{batch_doc}")
+                x[field_name] = res["result"][i]["dense_vec"]
+        es_result = es_ops.bulk_add_index_data(report_index_name, kb_id, doc_list)  # 注意 存储的时候传入 kb_id
+        if not es_result["success"]:
+            logger.info(f"当前用户:{user_id},知识库:{kb_name},add_community_report失败：{es_result}")
+            raise RuntimeError(es_result.get("error", ""))
+        file_name = "社区报告"
+        file_result = es_ops.add_file(file_index_name, kb_id, file_name, doc_list[0]["meta_data"])
+        jsonarr = json.dumps(file_result, ensure_ascii=False)
+        logger.info(f"当前用户:{user_id},知识库:{kb_name},add_community_reports的接口返回结果为：{jsonarr}")
+        return jsonarr
+    except Exception as e:
+        result = {
+            "code": 1,
+            "message": str(e)
+        }
+        jsonarr = json.dumps(result, ensure_ascii=False)
+        logger.info(f"当前用户:{user_id},知识库:{kb_name},add_community_reports的接口返回结果为：{jsonarr}")
+        return jsonarr
+    finally:
+        logger.info(f"{user_id},{kb_name},add_community_reports end")
+
+
+@app.route('/rag/kn/del_community_reports', methods=['POST'])
+def del_community_reports():
+    logger.info("--------------------------启动community reports删除---------------------------\n")
+    data = request.get_json()
+    index_name = INDEX_NAME_PREFIX + data.get('userId')
+    user_id = data.get("userId")
+    kb_id = data.get("kb_id")
+    kb_name = data.get("kb_name")  # 显示的名字
+    report_index_name = 'community_report_' + index_name
+    file_index_name = 'file_control_' + index_name
+    clear_reports = data.get("clear_reports", False)
+    content_ids = data.get("content_ids", [])
+
+    try:
+        if not kb_id:  # 如果没有传入 kb_id,则从映射表中获取
+            kb_id = es_ops.get_uk_kb_id(user_id, kb_name)  # 从映射表中获取 kb_id ,添加往里传 kb_id
+        if not kb_id:  # 如果映射表中没有，则返回错误
+            raise RuntimeError(f"{kb_name}知识库不存在")
+
+        es_ops.create_index_if_not_exists(report_index_name, mappings=es_mapping.community_report_mappings)
+        es_ops.create_index_if_not_exists(file_index_name, mappings=es_mapping.file_mappings)
+
+        file_name = "社区报告"
+        if clear_reports:
+            er_result = es_ops.delete_data_by_kbname_file_name(report_index_name, kb_id, file_name)
+        else:
+            er_result = es_ops.delete_chunks_by_content_ids(report_index_name, kb_id, content_ids)
+        if not er_result["success"]:
+            logger.info(
+                f"当前用户:{user_id},知识库:{kb_name},community reports删除时发生错误：{er_result}")
+            raise RuntimeError(er_result.get("error", ""))
+        if clear_reports:
+            es_file_result = es_ops.delete_data_by_kbname_file_name(file_index_name, kb_id, file_name)
+            if not es_file_result["success"]:
+                logger.info(
+                    f"当前用户:{user_id},知识库:{kb_name},file index删除社区报告时发生错误：{es_file_result}")
+                raise RuntimeError(es_file_result.get("error", ""))
+        result = {
+            "code": 0,
+            "message": "success"
+        }
+        jsonarr = json.dumps(result, ensure_ascii=False)
+        logger.info(
+            f"当前用户:{user_id},知识库:{kb_name},community reports删除的接口返回结果为：{jsonarr}")
+        return jsonarr
+    except Exception as e:
+        result = {
+            "code": 1,
+            "message": str(e)
+        }
+        jsonarr = json.dumps(result, ensure_ascii=False)
+        logger.info(f"当前用户:{user_id},知识库:{kb_name},community reports删除的接口返回结果为：{jsonarr}")
+        return jsonarr
+
+@app.route('/rag/kn/search_community_reports', methods=['POST'])
+def search_community_reports():
+    """ 多知识库 KNN检索 """
+    logger.info("--------------------------启动community reports检索---------------------------\n")
+    data = request.get_json()
+    index_name = INDEX_NAME_PREFIX + data.get('userId')
+    report_index_name = 'community_report_' + index_name
+    userId = data.get("userId")
+    display_kb_names = data.get("kb_names")  # list
+    kb_names = []
+    top_k = data.get("topk", 10)
+    query = data.get("question")
+    min_score = data.get("threshold", 0)
+    kb_id_2_kb_name = {}
+    embedding_model_id = es_ops.get_uk_kb_emb_model_id(userId, display_kb_names[0])
+    logger.info(f"用户:{index_name},请求查询的kb_names为:{display_kb_names},embedding_model_id:{embedding_model_id}")
+    logger.info(f"用户请求的query为:{query}")
+    try:
+        exists_kb_names = es_ops.get_uk_kb_name_list(KBNAME_MAPPING_INDEX, userId)  # 从映射表中获取
+        for kb_name in display_kb_names:
+            if kb_name not in exists_kb_names:
+                raise RuntimeError(f"用户:{index_name}里,{kb_name}知识库不存在")
+            # ======== kb_name 是存在的，则往 kb_names 里添加=======
+            kb_id = es_ops.get_uk_kb_id(userId, kb_name)
+            kb_names.append(kb_id)  # 从映射表中获取 kb_id ，这是真正的名字
+            kb_id_2_kb_name[kb_id] = kb_name
+
+        # ============= 开始检索召回 ===============
+        es_ops.create_index_if_not_exists(report_index_name, mappings=es_mapping.community_report_mappings)
+        result_dict = es_ops.search_data_knn_recall(report_index_name, kb_names, query, top_k, min_score, embedding_model_id=embedding_model_id)
+        search_list = result_dict["search_list"]
+        scores = result_dict["scores"]
+        for item in search_list:  # 将 kb_id 转换为 kb_name
+            item["kb_name"] = kb_id_2_kb_name[item["kb_name"]]
+        result = {
+            "code": 0,
+            "message": "success",
+            "data": {
+                "search_list": search_list,
+                "scores": scores
+            }
+        }
+        jsonarr = json.dumps(result, ensure_ascii=False)
+        logger.info(f"当前用户:{userId},知识库:{kb_names},query:{query},向量库检索的接口返回结果为：{jsonarr}")
+        return jsonarr
+
+    except Exception as e:
+        logger.info(f"查询知识库时发生错误：{e}")
+        result = {
+            "code": 1,
+            "message": str(e)
+        }
+        jsonarr = json.dumps(result, ensure_ascii=False)
+        logger.info(f"当前用户:{userId},知识库:{kb_names},query:{query},向量库检索的接口返回结果为：{jsonarr}")
+        return jsonarr
 
 
 # ********************* 重启服务后，检查uk映射表索引的mappping，进行一些处理 *********************

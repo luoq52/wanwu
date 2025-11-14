@@ -10,6 +10,7 @@ rag_core/logs/*
 rag_core/data/*
 rag_core/parser_data/*
 rag_core/user_data/*
+rag_core/graph/data/*
 rag_core/url_parser/temp_url_files/*
 
 rag_es_server_unify/logs/*

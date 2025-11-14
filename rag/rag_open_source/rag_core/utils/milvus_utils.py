@@ -62,13 +62,19 @@ def generate_chunks_bacth(chunks: list, batch_size=1000):
         yield batch_data
 
 
-def init_knowledge_base(user_id, kb_name, kb_id="", embedding_model_id=""):
+def init_knowledge_base(user_id, kb_name, kb_id="", embedding_model_id="", enable_knowledge_graph = False):
     response_info = {'code': 0, "message": '成功'}
     url = MILVUS_BASE_URL + '/rag/kn/init_kb'
     headers = {'Content-Type': 'application/json'}
     if not kb_id:
         kb_id = str(uuid.uuid4())
-    data = {'userId': user_id, 'kb_name': kb_name, "kb_id": kb_id, "embedding_model_id": embedding_model_id}
+    data = {
+        "userId": user_id,
+        "kb_name": kb_name,
+        "kb_id": kb_id,
+        "embedding_model_id": embedding_model_id,
+        "enable_knowledge_graph": enable_knowledge_graph
+    }
     try:
         response = requests.post(url, headers=headers, data=json.dumps(data, ensure_ascii=False).encode('utf-8'), timeout=TIME_OUT)
         if response.status_code != 200:
@@ -185,8 +191,10 @@ def list_knowledge_file_download_link(user_id, kb_name, kb_id=""):
         return response_info
 
 
+KNN_SEARCH_URL = MILVUS_BASE_URL + '/rag/kn/search'
+KNN_COMMUNITY_SEARCH_URL = MILVUS_BASE_URL + '/rag/kn/search_community_reports'
 def search_milvus(user_id, kb_names, top_k, question, threshold, search_field, emb_model="bge", kb_ids=[],
-                  filter_file_name_list=[], metadata_filtering_conditions = []):
+                  filter_file_name_list=[], metadata_filtering_conditions = [], milvus_url = KNN_SEARCH_URL):
     """
     :param emb_model:  "bge", "bce", "conna"
     """
@@ -202,11 +210,9 @@ def search_milvus(user_id, kb_names, top_k, question, threshold, search_field, e
     post_data["metadata_filtering_conditions"] = metadata_filtering_conditions
 
     response_info = {'code': 0, "message": "成功", "data": {"prompt": "", "search_list": []}}
-    # url='http://localhost:6098/search'
-    url = MILVUS_BASE_URL + '/rag/kn/search'
     headers = {'Content-Type': 'application/json'}
     try:
-        response = requests.post(url, headers=headers, data=json.dumps(post_data, ensure_ascii=False).encode('utf-8'), timeout=TIME_OUT)
+        response = requests.post(milvus_url, headers=headers, data=json.dumps(post_data, ensure_ascii=False).encode('utf-8'), timeout=TIME_OUT)
         if response.status_code != 200:
             response_info['code'] = 1
             response_info['message'] = str(response.text)
@@ -254,10 +260,12 @@ def search_milvus(user_id, kb_names, top_k, question, threshold, search_field, e
         return response_info
 
 
-def add_milvus(user_id, kb_name, sub_chunk, add_file_name, add_file_path, kb_id=""):
+ADD_URL = MILVUS_BASE_URL + '/rag/kn/add'
+ADD_COMMUNItY_REPORT_URL = MILVUS_BASE_URL + '/rag/kn/add_community_reports'
+
+def add_milvus(user_id, kb_name, sub_chunk, add_file_name, add_file_path, kb_id="", milvus_url = ADD_URL):
     batch_size = 200
     response_info = {'code': 0, "message": "成功"}
-    url = MILVUS_BASE_URL + '/rag/kn/add'
     batch_count = 0
     success_count = 0
     fail_count = 0
@@ -280,6 +288,9 @@ def add_milvus(user_id, kb_name, sub_chunk, add_file_name, add_file_path, kb_id=
                 "meta_data": chunk['meta_data']
             }
 
+            if "create_time" in chunk:
+                chunk_dict["create_time"] = chunk["create_time"]
+
             if "is_parent" in chunk:
                 chunk_dict["is_parent"] = chunk["is_parent"]
 
@@ -290,7 +301,7 @@ def add_milvus(user_id, kb_name, sub_chunk, add_file_name, add_file_path, kb_id=
         headers = {"Content-Type": "application/json"}
         batch_count = batch_count + 1
         try:
-            response = requests.post(url, headers=headers, json=insert_data, timeout=TIME_OUT)
+            response = requests.post(milvus_url, headers=headers, json=insert_data, timeout=TIME_OUT)
             logger.info(repr(add_file_name) + '批量写入milvus请求结果:' + repr(batch_count) + repr(response.text))
             if response.status_code != 200:
                 logger.error(repr(add_file_name) + repr(batch_count) + '批量写入milvus请求失败')
@@ -394,7 +405,7 @@ def del_milvus_files(user_id, kb_name, file_names, kb_id=""):
 
 
 def get_milvus_file_content_list(user_id: str, kb_name: str, file_name: str, page_size: int,
-                                 search_after: int, kb_id=""):
+                                 search_after: int, kb_id="", content_type="text"):
     """
         获取知识库文件片段列表,用于分页展示
     """
@@ -405,7 +416,8 @@ def get_milvus_file_content_list(user_id: str, kb_name: str, file_name: str, pag
         'file_name': file_name,
         'page_size': page_size,
         'search_after': search_after,
-        'kb_id': kb_id
+        'kb_id': kb_id,
+        "content_type": content_type
     }
 
     return make_request(url, data)
@@ -494,7 +506,7 @@ def update_chunk_labels(user_id, kb_name, file_name, chunk_id, labels, kb_id="")
     return make_request(url, data)
 
 
-def get_content_by_ids(user_id, kb_name, content_ids, kb_id=""):
+def get_content_by_ids(user_id, kb_name, content_ids, content_type= "text", kb_id=""):
     """
         根据file_name和chunk_id获取分段信息
     """
@@ -504,7 +516,8 @@ def get_content_by_ids(user_id, kb_name, content_ids, kb_id=""):
         'userId': user_id,
         'kb_name': kb_name,
         'content_ids': content_ids,
-        'kb_id': kb_id
+        'kb_id': kb_id,
+        "content_type": content_type
     }
 
     return make_request(url, data)
@@ -573,6 +586,46 @@ def update_milvus_content_status(user_id: str, kb_name: str, file_name: str, con
         }
 
     return make_request(url, data)
+
+
+def del_community_reports(user_id, kb_name, clear_reports=False, content_ids= [], kb_id=""):
+    """
+        根据chunk_id和child_chunk_current_nums删除子分段
+    """
+    url = MILVUS_BASE_URL + '/rag/kn/del_community_reports'
+
+    data = {
+        'userId': user_id,
+        'kb_name': kb_name,
+        'kb_id': kb_id,
+        "clear_reports": clear_reports,
+        "content_ids": content_ids
+    }
+
+    return make_request(url, data)
+
+
+def get_kb_info(user_id, kb_name):
+    error_message = ""
+    url = MILVUS_BASE_URL + '/rag/kn/get_kb_info'
+    headers = {'Content-Type': 'application/json'}
+    data = {'userId': user_id, "kb_name": kb_name}
+    try:
+        response = requests.post(url, headers=headers, data=json.dumps(data, ensure_ascii=False).encode('utf-8'), timeout=TIME_OUT)
+        if response.status_code != 200:
+            error_message = str(response.text)
+        else:
+            result_data = json.loads(response.text)
+            if result_data['code'] != 0:
+                error_message = result_data['message']
+            else:
+                logger.info("milvus查询知识库graph状态请求成功")
+                return result_data['data']["kb_info"]
+    except Exception as e:
+        error_message = str(e)
+
+    logger.error(f"milvus查询知识库graph状态请求失败：{error_message}")
+    return {}
 
 
 def get_milvus_content_status(user_id: str, kb_name: str, content_id_list: list):

@@ -194,7 +194,7 @@ def update_chunk(user_id: str, kb_name: str, file_name: str, max_sentence_size: 
         "text": chunk_info["content"],
     }
 
-    content_response = milvus_utils.get_content_by_ids(user_id, kb_name, [old_content_id], kb_id)
+    content_response = milvus_utils.get_content_by_ids(user_id, kb_name, [old_content_id], kb_id=kb_id)
     logger.info(f"content_id: {old_content_id}, 分段信息结果: {content_response}")
     if content_response['code'] != 0:
         logger.error(f"获取分段信息失败， user_id: {user_id},kb_name: {kb_name}, file_name: {file_name}, content_id: {old_content_id}")

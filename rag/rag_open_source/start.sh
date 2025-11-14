@@ -27,6 +27,10 @@ cd /model_extend/minio_project
 bash minio_start.sh
 sleep 2
 
+cd /model_extend/rag_core/graph
+bash start_server.sh
+sleep 2
+
 # ================== hhh use ===================
 
 sleep 99999d
