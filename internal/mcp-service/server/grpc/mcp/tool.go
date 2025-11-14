@@ -65,12 +65,19 @@ func (s *Service) GetToolSelect(ctx context.Context, req *mcp_service.GetToolSel
 		if info.Type == model.ApiAuthNone {
 			needApiKeyInput = false
 		}
+
+		// apikey
+		apiAuth := &common.ApiAuthWebRequest{}
+		if err := json.Unmarshal([]byte(info.AuthJSON), apiAuth); err != nil {
+			return nil, errStatus(errs.Code_MCPGetCustomToolListErr, toErrStatus("mcp_get_custom_tool_list_err", err.Error()))
+		}
+
 		list = append(list, &mcp_service.GetToolItem{
 			ToolId:          util.Int2Str(info.ID),
 			ToolName:        info.Name,
 			Desc:            info.Description,
+			ApiKey:          apiAuth.ApiKeyValue,
 			ToolType:        constant.ToolTypeCustom,
-			ApiKey:          info.APIKey,
 			NeedApiKeyInput: needApiKeyInput,
 			AvatarPath:      info.AvatarPath,
 		})
