@@ -211,7 +211,8 @@ def del_kb():
         # 在批量删除文件中补充增加删除reids逻辑 end
         # ========== chunk labels 删除的逻辑 ==========
         try:
-            kb_id = kb_utils.get_kb_name_id(user_id, kb_name)  # 获取kb_id
+            if not kb_id:
+                kb_id = kb_utils.get_kb_name_id(user_id, kb_name)  # 获取kb_id
             # 删除chunk_labels
             redis_utils.delete_chunk_labels(chunk_label_redis_client, kb_id)
         except Exception as err:
