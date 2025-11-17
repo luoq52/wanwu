@@ -4,7 +4,7 @@
       <div class="smart rl smart-create" v-if="isShowTool && validateAgnet()">
         <div class="app-card-create" @click="showCreate">
           <div class="create-img-wrap">
-            <img v-if="type" class="create-type" :src="require(`@/assets/imgs/create_${type}.png`)" alt="" />
+            <img v-if="imgObj[type]" class="create-type" :src="imgObj[type]" alt="" />
             <img class="create-img" src="@/assets/imgs/create_icon.png" alt="" />
             <div class="create-filter"></div>
           </div>
@@ -75,9 +75,13 @@
             />
           </div>
         </div>
-        <div v-if="isShowPublished && n.publishType && type !== 'workflow'" class="publishType">
-            <span v-if="n.publishType === 'private'" class="publishType-tag"><span class="el-icon-lock"></span> 私密</span>
-            <span v-else class="publishType-tag"><span class="el-icon-unlock"></span> 公开</span>
+        <div v-if="isShowPublished && n.publishType && ![workflow, chat].includes(type)" class="publishType">
+          <span v-if="n.publishType === 'private'" class="publishType-tag">
+            <span class="el-icon-lock"></span> {{$t('appSpace.private')}}
+          </span>
+          <span v-else class="publishType-tag">
+            <span class="el-icon-unlock"></span> {{$t('appSpace.public')}}
+          </span>
         </div>
         <div
           class="editor"
@@ -102,7 +106,6 @@
               </el-dropdown-item>
               <el-dropdown-item
                 command="delete"
-                v-if="n.appId !== 'example'"
               >
                 {{$t('common.button.delete')}}
               </el-dropdown-item>
@@ -111,26 +114,27 @@
               >
                 {{$t('common.button.copy')}}
               </el-dropdown-item>
-              <el-dropdown-item
+              <!--不在卡片进行发布-->
+              <!--<el-dropdown-item
                 command="publish"
-                v-if="n.appType === 'workflow' && !n.publishType && n.appId !== 'example'"
+                v-if="n.appType === workflow && !n.publishType"
               >
                 {{$t('common.button.publish')}}
-              </el-dropdown-item>
+              </el-dropdown-item>-->
               <el-dropdown-item
                 command="cancelPublish"
-                v-if="n.publishType && n.appId !== 'example'"
+                v-if="n.publishType"
               >
                 {{$t('common.button.cancelPublish')}}
               </el-dropdown-item>
                <el-dropdown-item
                 command="publishSet"
               >
-                发布配置
+                {{$t('appSpace.publishSet')}}
               </el-dropdown-item>
               <el-dropdown-item
                 command="export"
-                v-if="n.appType === 'workflow'"
+                v-if="[workflow, chat].includes(n.appType)"
               >
                 {{$t('common.button.export')}}
               </el-dropdown-item>
@@ -139,7 +143,7 @@
         </div>
         <div class="copy-editor" v-if="n.appType === 'agentTemplate' && n.isShowCopy" @click.stop="copyTemplate(n)">
           <span class="el-icon-plus add"></span>
-          <span>复制</span>
+          <span>{{$t('common.button.copy')}}</span>
         </div>
       </div>
     </div>
@@ -167,9 +171,11 @@
 
 <script>
 import { AppType } from "@/utils/commonSet";
-import { deleteApp, appCancelPublish, copyAgnetTemplate, appPublish,copyTextQues,copyAgentApp } from "@/api/appspace";
-import { copyWorkFlow, publishWorkFlow, copyExample, exportWorkflow } from "@/api/workflow";
+import { deleteApp, appCancelPublish, copyAgnetTemplate, appPublish, copyTextQues, copyAgentApp } from "@/api/appspace";
+import { copyWorkFlow, exportWorkflow } from "@/api/workflow";
 import { setFavorite } from "@/api/explore";
+import { AGENT, RAG, CHAT, WORKFLOW } from "@/utils/commonSet";
+
 export default {
   props:{
     type: String,
@@ -201,6 +207,8 @@ export default {
     return {
       apptype: AppType,
       basePath: this.$basePath,
+      workflow: WORKFLOW,
+      chat: CHAT,
       listData: [],
       row: {},
       publishType: 'private',
@@ -209,14 +217,20 @@ export default {
         {key: 'private', value: this.$t('workflow.publishText')},
         {key: 'organization', value: this.$t('workflow.publicOrgText')},
         {key: 'public', value: this.$t('workflow.publicTotalText')}
-      ]
+      ],
+      imgObj: {
+        [WORKFLOW]: require(`@/assets/imgs/create_workflow.png`),
+        [CHAT]: require(`@/assets/imgs/create_chatflow.svg`),
+        [AGENT]: require(`@/assets/imgs/create_agent.png`),
+        [RAG]: require(`@/assets/imgs/create_rag.png`),
+      }
     };
   },
   methods: {
     copyTemplate(n){
       copyAgnetTemplate({assistantTemplateId:n.assistantTemplateId}).then(res =>{
         if(res.code === 0){
-          this.$message.success('复制成功')
+          this.$message.success(this.$t('list.copySuccess'))
           const id = res.data.assistantId
           this.$router.push({path:`/agent/test?id=${id}`})
         }
@@ -243,7 +257,7 @@ export default {
       this.dialogVisible = false
     },
     isCanClick(n) {
-      return this.isShowTool ? ((n.appType === 'workflow' && !n.publishType && n.appId !== 'example') || n.appType !== 'workflow') : true
+      return this.isShowTool ? (([WORKFLOW, CHAT].includes(n.appType) && !n.publishType) || ![WORKFLOW, CHAT].includes(n.appType)) : true
     },
     // 公用删除方法
     async handleDelete() {
@@ -275,30 +289,16 @@ export default {
       });
     },
     async workflowCopy(row) {
-      const params = {
-        workflow_id: row.appId,
-      }
-
-      const isExample = false // row.appId === 'example' 新版工作流无模板copy接口，暂定统一走工作流copy接口
-      const exampleParams = {
-        configName: row.name + '_' + this.$t('common.copy.copyText'),
-        configENName: "",
-        configDesc: row.desc,
-        isStream: false
-      }
-
-      const res = isExample
-        ? await copyExample({...params, ...exampleParams})
-        : await copyWorkFlow(params);
+      const params = { workflow_id: row.appId }
+      const res = await copyWorkFlow(params, row.appType);
 
       if (res.code === 0) {
         this.$router.push({
           path: "/workflow",
-          query: { id: isExample ? res.data.workflowID : res.data.workflow_id },
+          query: { id: res.data.workflow_id },
         });
       }
     },
-
     workflowPublish(row) {
       this.row = row
       this.dialogVisible = true
@@ -325,8 +325,8 @@ export default {
       };
       
       //工作流取消发布，需弹窗提示
-      if(row.appType === 'workflow'){
-        confirmed = await this.showDeleteConfirm('取消发布后，历史引用了本工作流的智能体将自动取消引用，且此操作不可撤回');
+      if(row.appType === WORKFLOW){
+        confirmed = await this.showDeleteConfirm(this.$t('list.cancelHint'));
       }
       
       if(confirmed){
@@ -338,7 +338,7 @@ export default {
       }
     },
     workflowExport(row) {
-      exportWorkflow({workflow_id: row.appId}).then(response => {
+      exportWorkflow({workflow_id: row.appId}, row.appType).then(response => {
         const blob = new Blob([response], { type: response.type })
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a")
@@ -347,6 +347,9 @@ export default {
         link.click()
         window.URL.revokeObjectURL(link.href)
       })
+    },
+    jumpToWorkflowPublicSet(row) {
+      this.$router.push({path:`/workflow/publishSet`, query: {appId: row.appId, appType: row.appType, name: row.name}})
     },
     workflowOperation(method, row) {
       switch (method) {
@@ -366,7 +369,39 @@ export default {
           this.cancelPublish(row);
           break;
         case "publishSet":
-          this.$router.push({path:`/workflow/publishSet`, query: {appId: row.appId, appType: row.appType, name: row.name}})
+          this.jumpToWorkflowPublicSet(row);
+          break;
+        case 'export':
+          this.workflowExport(row)
+      }
+    },
+    chatDelete(row) {
+      this.row = row;
+      this.$alert(this.$t("list.deleteChatTips"), this.$t("list.tips"), {
+        confirmButtonText: this.$t("list.confirm"),
+        callback: (action) => {
+          if (action === "confirm") {
+            this.handleDelete();
+          }
+        },
+      });
+    },
+    chatOperation(method, row) {
+      switch (method) {
+        case "edit":
+          this.workflowEdit(row);
+          break;
+        case "delete":
+          this.chatDelete(row);
+          break;
+        case "copy":
+          this.workflowCopy(row);
+          break;
+        case "cancelPublish":
+          this.cancelPublish(row);
+          break;
+        case "publishSet":
+          this.jumpToWorkflowPublicSet(row);
           break;
         case 'export':
           this.workflowExport(row)
@@ -399,7 +434,7 @@ export default {
       copyAgentApp({assistantId:row.appId}).then(res=>{
         if(res.code === 0){
           const id = res.data.assistantId;
-          this.$message.success('复制成功');
+          this.$message.success(this.$t('list.copySuccess'));
           this.$router.push({path:`/agent/test?id=${id}`})
         }
       }).catch(()=>{})
@@ -444,7 +479,7 @@ export default {
       copyTextQues({ragId:row.appId}).then(res=>{
         if(res.code === 0){
           const id = res.data.ragId;
-          this.$message.success('复制成功');
+          this.$message.success(this.$t('list.copySuccess'));
           this.$router.push({path:`/rag/test?id=${id}`})
         }
       }).catch(()=>{})
@@ -474,13 +509,13 @@ export default {
     commonToChat(row){
       const type = row.appType;
       switch (type) {
-        case "agent":
+        case AGENT:
           this.$router.push({path:'/explore/agent', query:{id:row.appId}});
           break;
-        case "rag":
+        case RAG:
           this.$router.push({path:'/explore/rag', query:{id:row.appId}});
           break;
-        case "workflow":
+        case WORKFLOW:
           this.$router.push({path:'/explore/workflow', query:{id:row.appId}});
           break;
       }
@@ -488,14 +523,17 @@ export default {
     commonMethods(method, row) {
       const type = row.appType;
       switch (type) {
-        case "agent":
+        case AGENT:
           this.intelligentOperation(method, row);
           break;
-        case "rag":
+        case RAG:
           this.txtQuesOperation(method, row);
           break;
-        case "workflow":
+        case WORKFLOW:
           this.workflowOperation(method, row);
+          break;
+        case CHAT:
+          this.chatOperation(method, row);
           break;
       }
     },

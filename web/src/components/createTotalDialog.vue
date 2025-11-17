@@ -24,15 +24,19 @@
     <CreateIntelligent ref="createIntelligentDialog" />
     <CreateTxtQues ref="createTxtQuesDialog" />
     <CreateWorkflow ref="createWorkflowDialog" />
+    <CreateChat ref="createChatDialog" />
   </div>
 </template>
 
 <script>
 import CreateWorkflow from "./createApp/createWorkflow.vue"
+import CreateChat from "./createApp/createChat.vue"
 import CreateIntelligent from "./createApp/createIntelligent"
 import CreateTxtQues from "./createApp/createRag.vue"
+import { CHAT, RAG, AGENT } from "@/utils/commonSet"
+
 export default {
-  components: { CreateWorkflow, CreateIntelligent, CreateTxtQues },
+  components: { CreateWorkflow, CreateChat, CreateIntelligent, CreateTxtQues },
   data() {
     return {
       dialogVisible: false,
@@ -65,13 +69,20 @@ export default {
       // 显示创建工作流
       this.$refs.createWorkflowDialog.openDialog()
     },
+    showCreateChat() {
+      // 显示创建对话流
+      this.$refs.createChatDialog.openDialog()
+    },
     showCreateDialog(key) {
       switch (key) {
-        case 'agent':
+        case AGENT:
           this.showCreateIntelligent()
           break
-        case 'rag':
+        case RAG:
           this.showCreateTxtQues()
+          break
+        case CHAT:
+          this.showCreateChat()
           break
         default:
           this.showCreateWorkflow()

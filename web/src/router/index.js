@@ -219,7 +219,7 @@ const constantRoutes = [
             },
             {
                 path:'/workflow/publishSet',
-                component:resolve =>require(['@/views/agent/web-URL'],resolve),
+                component:resolve => require(['@/views/agent/web-URL'],resolve),
                 meta:{perm: [PERMS.WORKFLOW]},
             },
             {

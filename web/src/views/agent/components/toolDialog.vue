@@ -68,7 +68,6 @@
     </div>
 </template>
 <script>
-import { getList } from '@/api/workflow.js';
 import { addWorkFlowInfo, addMcp,addCustomBuiltIn,toolList,toolActionList,mcptoolList,mcpActionList } from "@/api/agent";
 import { getExplorationFlowList} from "@/api/workflow";
 export default {

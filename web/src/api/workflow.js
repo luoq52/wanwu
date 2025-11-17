@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import {MODEL_API, SERVICE_API, USER_API, WORKFLOW_API} from "@/utils/requestConstants"
+import { SERVICE_API, USER_API, WORKFLOW_API } from "@/utils/requestConstants"
 
 export const getWorkFlowParams = (params) => {
     return request({
@@ -23,36 +23,6 @@ export const getExplorationFlowList = (params)=>{
         params
     })
 };
-export const createWorkFlow = (data)=>{
-    return request({
-        url: `${USER_API}/appspace/workflow`, //`${WORKFLOW_API}/workflow/create`,
-        method: 'post',
-        data
-    })
-};
-export const copyExample = (data)=>{
-    return request({
-        url: `${WORKFLOW_API}/workflow/example_clone`,
-        method: 'post',
-        data
-    })
-};
-export const publishWorkFlow = (data)=>{
-    return request({
-        url: `${WORKFLOW_API}/plugin/api/publish`,
-        method: 'post',
-        data
-    })
-};
-//复制
-export const copyWorkFlow = (data)=>{
-    return request({
-        url: `${USER_API}/appspace/workflow/copy`, //`${WORKFLOW_API}/workflow/clone`,
-        method: 'post',
-        data
-    })
-};
-//chakan
 export const readWorkFlow = (data)=>{
     return request({
         url: `${WORKFLOW_API}/workflow/openapi_schema`,
@@ -62,7 +32,6 @@ export const readWorkFlow = (data)=>{
 };
 export const externalUpload = (data, config) => {
     return request({
-        // url: "/proxyupload/upload",
         url: `${SERVICE_API}/proxy/file/upload`,
         method: "post",
         data,
@@ -70,15 +39,8 @@ export const externalUpload = (data, config) => {
         isHandleRes: false
     });
 };
-export const getList = (data)=>{
-    return request({
-        url: `${MODEL_API}/mcp/select`,
-        method: 'get',
-        params: data
-    })
-};
 
-// 工作流图片上传
+// 图片上传
 export const uploadFile = (data) => {
     return request({
         url: `/api/bot/upload_file`,
@@ -87,20 +49,38 @@ export const uploadFile = (data) => {
     })
 }
 
-// 导入工作流
-export const importWorkflow = (data, config) => {
+// 创建
+export const createWorkFlow = (data, appType)=>{
     return request({
-        url: `${USER_API}/appspace/workflow/import`,
+        url: `${USER_API}/appspace/${appType || 'workflow'}`,
+        method: 'post',
+        data
+    })
+};
+
+// 复制
+export const copyWorkFlow = (data, appType)=>{
+    return request({
+        url: `${USER_API}/appspace/${appType || 'workflow'}/copy`,
+        method: 'post',
+        data
+    })
+};
+
+// 导入
+export const importWorkflow = (data, config, appType) => {
+    return request({
+        url: `${USER_API}/appspace/${appType || 'workflow'}/import`,
         method: 'post',
         data,
         config
     });
 };
 
-// 导出工作流
-export const exportWorkflow = (params) => {
+// 导出
+export const exportWorkflow = (params, appType) => {
     return request({
-        url: `${USER_API}/appspace/workflow/export`,
+        url: `${USER_API}/appspace/${appType || 'workflow'}/export`,
         method: "get",
         params,
         responseType: 'blob'

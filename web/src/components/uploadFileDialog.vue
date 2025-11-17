@@ -49,7 +49,8 @@ import Pagination from "@/components/pagination.vue"
 import { importWorkflow } from "@/api/workflow"
 export default {
   props: {
-    title: ''
+    title: '',
+    appType: ''
   },
   components: { Pagination },
   data() {
@@ -102,7 +103,7 @@ export default {
             formData.append(key, this.uploadForm[key])
           }
           this.uploading = true
-          importWorkflow(formData, config).then(() => {
+          importWorkflow(formData, config, this.appType).then(() => {
             this.uploading = false
             this.$message.success(this.$t('common.message.success'))
             this.handleClose()

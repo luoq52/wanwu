@@ -1,15 +1,22 @@
+import {i18n} from "@/lang"
+
+export const CHAT = 'chatflow'
+export const WORKFLOW = 'workflow'
+export const RAG = 'rag'
+export const AGENT = 'agent'
 export const AppType = {
-    workflow: '工作流',
-    rag: '文本问答',
-    agent: '智能体',
-    agentTemplate:'智能体模版'
+    [WORKFLOW]: i18n.t('appSpace.workflow'),
+    [CHAT]: i18n.t('appSpace.chat'),
+    [RAG]: i18n.t('appSpace.rag'),
+    [AGENT]: i18n.t('appSpace.agent'),
+    agentTemplate: i18n.t('appSpace.agentTemp'),
 }
 export const SafetyType = {
-    Political:'涉政',
-    Revile:'辱骂',
-    Pornography:'涉黄',
-    ViolentTerror:'暴恐',
-    Illegal:'违禁',
-    InformationSecurity:'信息安全',
-    Other:'其他'
+    Political: i18n.t('safetyType.political'),
+    Revile: i18n.t('safetyType.revile'),
+    Pornography: i18n.t('safetyType.pornography'),
+    ViolentTerror: i18n.t('safetyType.violentTerror'),
+    Illegal: i18n.t('safetyType.illegal'),
+    InformationSecurity: i18n.t('safetyType.informationSecurity'),
+    Other: i18n.t('safetyType.other'),
 }

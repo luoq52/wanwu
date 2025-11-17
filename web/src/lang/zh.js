@@ -223,6 +223,15 @@ export default {
             publish:'发布成功',
             publishErr:'发布失败',
         },
+        safetyType: {
+            political: '涉政',
+            revile: '辱骂',
+            pornography: '涉黄',
+            violentTerror: '暴恐',
+            illegal: '违禁',
+            informationSecurity: '信息安全',
+            other: '其他'
+        }
     },
     docDownload: {
         title: '文档下载',
@@ -254,7 +263,16 @@ export default {
     appSpace: {
         title: '应用空间',
         search: '按照应用名称搜索',
-        workflowExport: '文件导入'
+        workflowExport: '文件导入',
+        workflow: '工作流',
+        chat: '对话流',
+        rag: '文本问答',
+        agent: '智能体',
+        agentTemp: '智能体模板',
+        agentAuto: '自定义智能体',
+        publishSet: '发布配置',
+        public: '公开',
+        private: '私密',
     },
     uploadDialog: {
         title: '文件上传',
@@ -510,7 +528,7 @@ export default {
         promptDesc: '提示词模板描述',
         namePlaceholder: '输入提示词名称，仅支持中文、英文、数字、下划线、中划线、英文（.）',
         descPlaceholder: '输入提示词描述',
-        promptPlaceholder: '输入提示词',
+        promptPlaceholder: '请输入提示词模板内容，变量可用{}输入',
         promptText: '提示词',
         nameRules: '请填写提示词名称',
         descRules: '请填写提示词描述',
@@ -524,8 +542,19 @@ export default {
         optimize: '优化',
         replace: '替换'
     },
-    // 工作流
+
+    // 工作流/对话流
     list:{
+        chatCreate: '对话流创建',
+        chatNameHint: '输入对话流名称，仅支持字母、数字和下划线，并以字母开头',
+        noChatName: '请输入对话流名称',
+        chatNameLimit: '名称须在30字符以内',
+        noChatDesc: '请输入对话流描述',
+        chatDescLimit: '对话流描述须在600字符以内',
+        chatPic: '对话流图标',
+        chatName: '对话流名称',
+        chatDesc: '对话流描述',
+        // 工作流
         pluginPic: '工作流图标',
         pluginName: '工作流名称',
         pluginNameRules:' 工作流名称须在30字符以内',
@@ -547,6 +576,8 @@ export default {
         delete:'删除',
         view:'查看自定义',
         copyDemo:'复制样例并查看',
+        cancelHint: '取消发布后，历史引用了本工作流的智能体将自动取消引用，且此操作不可撤回',
+        deleteChatTips: '确认删除该对话流吗？',
         deleteTips:'删除后，历史引用了本工作流的智能体将自动取消引用，且此操作不可撤回，是否确认删除？',
         tips:'提示',
         confirm:'确 定',
@@ -558,7 +589,7 @@ export default {
         enNameRules:'请填写工作流英文名',
         enNameErrorRules:'仅支持英文、数字、下划线，并以英文字母开头',
         pluginDescRules:'请填写工作流描述',
-        pluginLimitRules:'工作流描述须在500字符以内',
+        pluginLimitRules:'工作流描述须在600字符以内',
         createSuccess:'创建成功',
         publishPlugins:'发布工作流',
         pluginField:'工作流领域',
