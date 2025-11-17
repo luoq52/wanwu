@@ -485,10 +485,6 @@ func (s *Service) setKnowledgebaseParams(ctx context.Context, sseReq *config.Age
 	log.Debugf("Assistant服务解析知识库成功，knowledgeBaseConfig: %+v", knowledgeBaseConfig)
 
 	if len(knowledgeBaseConfig.KnowledgeBaseIds) > 0 {
-		rerankEndpoint, err := buildRerank(req, knowledgeBaseConfig, assistant)
-		if err != nil {
-			return err
-		}
 		knowledgeInfoList, err := Knowledge.SelectKnowledgeDetailByIdList(ctx, &knowledgebase_service.KnowledgeDetailSelectListReq{
 			KnowledgeIds: knowledgeBaseConfig.KnowledgeBaseIds,
 		})
@@ -496,16 +492,22 @@ func (s *Service) setKnowledgebaseParams(ctx context.Context, sseReq *config.Age
 			log.Errorf("Assistant服务获取知识库详情失败, err: %v", err)
 			return err
 		}
-		log.Infof("knowledgeInfoList = %+v", knowledgeInfoList)
 
 		var knowNames []string
+		knowledgeIDToName := make(map[string]string)
 		for _, v := range knowledgeInfoList.List {
-			knowNames = append(knowNames, v.Name)
+			knowNames = append(knowNames, v.RagName)
+			if _, exists := knowledgeIDToName[v.KnowledgeId]; !exists {
+				knowledgeIDToName[v.KnowledgeId] = v.RagName
+			}
 		}
-
-		params, err := buildMetaDataFilterParams(knowledgeBaseConfig.AppKnowledgeBaseList)
+		params, err := buildMetaDataFilterParams(knowledgeBaseConfig.AppKnowledgeBaseList, knowledgeIDToName)
 		if err != nil {
 			log.Errorf("Assistant buildMetaDataFilterParams, err: %v", err)
+			return err
+		}
+		rerankEndpoint, err := buildRerank(req, knowledgeBaseConfig, assistant)
+		if err != nil {
 			return err
 		}
 		sseReq.KnParams = &config.KnParams{
@@ -1141,7 +1143,7 @@ func extractFileUrlsFromModel(fileInfos []model.FileInfo) []string {
 }
 
 // buildMetaDataFilterParams 构造元数据过滤参数
-func buildMetaDataFilterParams(knowledgeInfos []*AppKnowledgeBaseInfo) ([]*config.MetadataFilterParam, error) {
+func buildMetaDataFilterParams(knowledgeInfos []*AppKnowledgeBaseInfo, knowledgeIDToName map[string]string) ([]*config.MetadataFilterParam, error) {
 	if len(knowledgeInfos) == 0 {
 		return nil, nil
 	}
@@ -1157,7 +1159,7 @@ func buildMetaDataFilterParams(knowledgeInfos []*AppKnowledgeBaseInfo) ([]*confi
 			return nil, err
 		}
 		ragMetaDataFilterParams = append(ragMetaDataFilterParams, &config.MetadataFilterParam{
-			FilterKnowledgeName: k.KnowledgeBaseName,
+			FilterKnowledgeName: knowledgeIDToName[k.KnowledgeBaseId],
 			LogicalOperator:     k.MetaDataFilterParams.FilterLogicType,
 			MetaList:            item,
 		})

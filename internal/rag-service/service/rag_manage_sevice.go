@@ -186,9 +186,9 @@ func BuildChatConsultParams(req *rag_service.ChatRagReq, rag *model.RagInfo, kno
 	var kbNameList []string
 	knowledgeIDToName := make(map[string]string)
 	for _, v := range knowledgeInfoList.List {
-		kbNameList = append(kbNameList, v.Name)
+		kbNameList = append(kbNameList, v.RagName)
 		if _, exists := knowledgeIDToName[v.KnowledgeId]; !exists {
-			knowledgeIDToName[v.KnowledgeId] = v.Name
+			knowledgeIDToName[v.KnowledgeId] = v.RagName
 		}
 	}
 	ragChatParams.KnowledgeBase = kbNameList

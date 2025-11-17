@@ -171,7 +171,7 @@ func (s *Service) KnowledgeHit(ctx context.Context, req *knowledgebase_service.K
 	knowledgeIDToName := make(map[string]string)
 	for _, k := range list {
 		if _, exists := knowledgeIDToName[k.KnowledgeId]; !exists {
-			knowledgeIDToName[k.KnowledgeId] = k.Name
+			knowledgeIDToName[k.KnowledgeId] = k.RagName
 		}
 	}
 	// 2.RAG请求
