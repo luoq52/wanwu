@@ -7,7 +7,7 @@
         style="margin-right: 10px; font-size: 20px; cursor: pointer"
       >
       </i>
-      {{$t('knowledgeManage.hitTest')}}
+      {{$t('knowledgeManage.hitTest.name')}}
       <LinkIcon type="knowledge-hit" />
     </div>
     <div class="block wrap-fullheight">
@@ -33,10 +33,7 @@
           <metaSet ref="metaSet" class="metaSet" :knowledgeId="knowledgeId" />
         </div>
         <div class="test_form">
-          <searchConfig ref="searchConfig" @sendConfigInfo="sendConfigInfo" />
-        </div>
-        <div class="hitTest_input graph_box" v-if="graphSwitch">
-          <graphSwitch ref="graphSwitch" @graphSwitchchange="graphSwitchchange" :label="'知识图谱'"/>
+          <searchConfig ref="searchConfig" @sendConfigInfo="sendConfigInfo" :showGraphSwitch="graphSwitch"/>
         </div>
       </div>
       <div class="test-right test-box">
@@ -135,10 +132,9 @@ import { formatScore } from "@/utils/util";
 import searchConfig from '@/components/searchConfig.vue';
 import LinkIcon from "@/components/linkIcon.vue";
 import metaSet from "@/components/metaSet";
-import graphSwitch from "@/components/graphSwitch.vue"
 import sectionShow from "./sectionShow.vue";
 export default {
-  components:{LinkIcon, searchConfig, metaSet, sectionShow,graphSwitch}, 
+  components:{LinkIcon, searchConfig, metaSet, sectionShow}, 
   data() {
     return {
       md: md,
@@ -159,9 +155,6 @@ export default {
     formatScore,
     goBack() {
       this.$router.go(-1);
-    },
-    graphSwitchchange(val){
-      this.useGraph = val
     },
     sendConfigInfo(data){
       this.formInline = data;

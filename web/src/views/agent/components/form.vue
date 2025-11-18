@@ -369,10 +369,6 @@
             </span>
           </p>
         </div>
-        <!-- 知识图谱开关 -->
-        <div class="block prompt-box link-box" v-if="showGraphSwitch">
-            <graphSwitch ref="graphSwitch" @graphSwitchchange="graphSwitchchange" :label="$t('knowledgeManage.create.knowledgeGraph')" :graphSwitch="editForm.knowledgeConfig.useGraph"/>
-        </div>
       </div>
       <div class="drawer-test">
         <Chat
@@ -411,6 +407,7 @@
     <knowledgeSetDialog
       ref="knowledgeSetDialog"
       @setKnowledgeSet="setKnowledgeSet"
+      :showGraphSwitch="showGraphSwitch"
     />
     <!-- 知识库选择 -->
     <knowledgeSelect
@@ -488,7 +485,6 @@ import knowledgeSetDialog from "./knowledgeSetDialog";
 import { readWorkFlow } from "@/api/workflow";
 import Chat from "./chat";
 import LinkIcon from "@/components/linkIcon.vue";
-import graphSwitch from "@/components/graphSwitch.vue"
 import promptTemplate from "./prompt/index.vue";
 import createPrompt from "@/components/createApp/createPrompt.vue"
 import knowledgeSelect from "@/components/knowledgeSelect.vue";
@@ -508,7 +504,6 @@ export default {
     ToolDeatail,
     promptTemplate,
     createPrompt,
-    graphSwitch,
     PromptOptimize
   },
   provide() {
@@ -697,9 +692,6 @@ export default {
   },
   methods: {
     ...mapActions("app", ["setMaxPicNum","clearMaxPicNum"]),
-    graphSwitchchange(val){
-      this.editForm.knowledgeConfig.useGraph = val;
-    },
     updatePrompt(){
         this.$refs.promptTemplate.getPromptTemplateList()
     },

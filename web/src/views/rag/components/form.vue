@@ -146,9 +146,6 @@
             </span>
           </p>
         </div>
-        <div class="block prompt-box safety-box" v-if="showGraphSwitch">
-          <graphSwitch ref="graphSwitch" @graphSwitchchange="graphSwitchchange" :label="'知识图谱'" :graphSwitch="editForm.knowledgeConfig.useGraph"/>
-        </div>
       </div>
       <div class="drawer-test">
         <Chat :chatType="'test'" :editForm="editForm"/>
@@ -159,7 +156,7 @@
     <!-- 模型设置 -->
     <ModelSet @setModelSet="setModelSet" ref="modelSetDialog" :modelConfig="editForm.modelConfig" />
     <!-- 知识库设置 -->
-    <knowledgeSet @setKnowledgeSet="setKnowledgeSet" ref="knowledgeSetDialog" :knowledgeConfig="editForm.knowledgeConfig" />
+    <knowledgeSet @setKnowledgeSet="setKnowledgeSet" ref="knowledgeSetDialog" :knowledgeConfig="editForm.knowledgeConfig" :showGraphSwitch="showGraphSwitch" />
     <!-- apikey -->
     <ApiKeyDialog ref="apiKeyDialog" :appId="editForm.appId" :appType="'rag'" />
     <setSafety ref="setSafety" @sendSafety="sendSafety" />
@@ -199,7 +196,6 @@ import { getRagInfo,updateRagConfig } from "@/api/rag";
 import Chat from "./chat";
 import searchConfig from '@/components/searchConfig.vue';
 import LinkIcon from "@/components/linkIcon.vue";
-import graphSwitch from "@/components/graphSwitch.vue"
 import knowledgeSelect from "@/components/knowledgeSelect.vue"
 export default {
   components: {
@@ -212,8 +208,7 @@ export default {
     setSafety,
     searchConfig,
     knowledgeSelect,
-    metaSet,
-    graphSwitch
+    metaSet
   },
   data() {
     return {
@@ -333,9 +328,6 @@ export default {
     }
   },
   methods: {
-    graphSwitchchange(val){
-      this.editForm.knowledgeConfig.useGraph = val;
-    },
     submitMeta(){
       const metaData  = this.$refs.metaSet.getMetaData();
       if(this.$refs.metaSet.validateRequiredFields(metaData['metaDataFilterParams']['metaFilterParams'])){
