@@ -67,8 +67,8 @@ type IClient interface {
 
 	// --- perm ---
 
-	CheckUserOK(ctx context.Context, userID uint32, genTokenAt int64) (bool, string, *errs.Status)
-	CheckUserPerm(ctx context.Context, userID uint32, genTokenAt int64, orgID uint32, oneOfPerms []perm.Perm) (bool, bool, string, *errs.Status)
+	CheckUserOK(ctx context.Context, userID uint32, genTokenAt int64) (bool, string, int64, *errs.Status)
+	CheckUserPerm(ctx context.Context, userID uint32, genTokenAt int64, orgID uint32, oneOfPerms []perm.Perm) (bool, bool, string, int64, *errs.Status)
 
 	// --- captcha ---
 

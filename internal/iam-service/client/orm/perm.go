@@ -14,11 +14,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func (c *Client) CheckUserOK(ctx context.Context, userID uint32, genTokenAt int64) (bool, string, *errs.Status) {
+func (c *Client) CheckUserOK(ctx context.Context, userID uint32, genTokenAt int64) (bool, string, int64, *errs.Status) {
 	var needLogin bool
 	var language string
+	var lastUpdatePasswordAt int64
 
-	return needLogin, language, c.transaction(ctx, func(tx *gorm.DB) *errs.Status {
+	return needLogin, language, lastUpdatePasswordAt, c.transaction(ctx, func(tx *gorm.DB) *errs.Status {
 		// user
 		user := &model.User{}
 		if err := sqlopt.WithID(userID).Apply(tx).First(user).Error; err != nil {
@@ -40,15 +41,17 @@ func (c *Client) CheckUserOK(ctx context.Context, userID uint32, genTokenAt int6
 			return toErrStatus("iam_perm_check_user_ok", util.Int2Str(userID), err.Error())
 		}
 		language = user.Language
+		lastUpdatePasswordAt = user.LastUpdatePasswordAt
 		return nil
 	})
 
 }
 
-func (c *Client) CheckUserPerm(ctx context.Context, userID uint32, genTokenAt int64, orgID uint32, oneOfPerms []perm.Perm) (bool, bool, string, *errs.Status) {
+func (c *Client) CheckUserPerm(ctx context.Context, userID uint32, genTokenAt int64, orgID uint32, oneOfPerms []perm.Perm) (bool, bool, string, int64, *errs.Status) {
 	var needLogin, isAdmin bool
 	var language string
-	return needLogin, isAdmin, language, c.transaction(ctx, func(tx *gorm.DB) *errs.Status {
+	var lastUpdatePasswordAt int64
+	return needLogin, isAdmin, language, lastUpdatePasswordAt, c.transaction(ctx, func(tx *gorm.DB) *errs.Status {
 		// user
 		user := &model.User{}
 		if err := sqlopt.WithID(userID).Apply(tx).First(user).Error; err != nil {
@@ -135,6 +138,7 @@ func (c *Client) CheckUserPerm(ctx context.Context, userID uint32, genTokenAt in
 				util.Int2Str(orgID), fmt.Sprintf("%v", oneOfPerms), err.Error())
 		}
 		language = user.Language
+		lastUpdatePasswordAt = user.LastUpdatePasswordAt
 		return nil
 	})
 
