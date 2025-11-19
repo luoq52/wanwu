@@ -35,6 +35,7 @@ message GetReportResp{
   bool canAddReport = 5; // 是否可新增社区报告：true.可新增 false.不可新增
   string generateLabel = 6; // 生成社区报告按钮文案: 生成/重新生成
   repeated ReportInfo list = 7; // 社区报告列表
+  int32 lastImportStatus = 8;// 最近一次导入状态
 }
 
 message ReportInfo{

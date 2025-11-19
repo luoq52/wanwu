@@ -36,7 +36,8 @@ func (s *Service) GetKnowledgeReport(ctx context.Context, req *knowledgebase_rep
 	if !graphSuccess {
 		return &knowledgebase_report_service.GetReportResp{}, nil
 	}
-	//id, err := orm.SelectReportLatestImportTaskByKnowledgeID(ctx, req.KnowledgeInfo.KnowledgeId)
+	lastImportTask, _ := orm.SelectReportLatestImportTaskByKnowledgeID(ctx, req.KnowledgeInfo.KnowledgeId)
+	status := buildLastImportStatus(lastImportTask)
 	// 判断报告状态
 	switch knowledge.ReportStatus {
 	case model.ReportInit:
@@ -49,7 +50,7 @@ func (s *Service) GetKnowledgeReport(ctx context.Context, req *knowledgebase_rep
 		return &knowledgebase_report_service.GetReportResp{Status: ReportProcessing}, nil
 
 	case model.ReportSuccess:
-		return handleSuccessReport(ctx, knowledge, req)
+		return handleSuccessReport(ctx, knowledge, req, status)
 
 	default: // 生成失败状态
 		if model.ErrorReportStatus(knowledge.ReportStatus) {
@@ -153,7 +154,7 @@ func (s *Service) BatchAddKnowledgeReport(ctx context.Context, req *knowledgebas
 	return &emptypb.Empty{}, nil
 }
 
-func handleSuccessReport(ctx context.Context, knowledge *model.KnowledgeBase, req *knowledgebase_report_service.GetReportReq) (*knowledgebase_report_service.GetReportResp, error) {
+func handleSuccessReport(ctx context.Context, knowledge *model.KnowledgeBase, req *knowledgebase_report_service.GetReportReq, lastImportStatus int32) (*knowledgebase_report_service.GetReportResp, error) {
 	resp, err := service.RagGetReport(ctx, &service.RagGetReportParams{
 		UserId:            knowledge.UserId,
 		KnowledgeBaseName: knowledge.RagName,
@@ -165,7 +166,7 @@ func handleSuccessReport(ctx context.Context, knowledge *model.KnowledgeBase, re
 		log.Errorf("获取社区报告失败 错误(%v) 参数(%v)", err, req)
 		return nil, util.ErrCode(errs.Code_KnowledgeGetReportFailed)
 	}
-	return buildReportSuccessResp(resp), nil
+	return buildReportSuccessResp(resp, lastImportStatus), nil
 }
 
 func getGraphStatus(ctx context.Context, req *knowledgebase_report_service.GetReportReq) (bool, error) {
@@ -187,7 +188,7 @@ func getGraphStatus(ctx context.Context, req *knowledgebase_report_service.GetRe
 	return graphSuccess, nil
 }
 
-func buildReportSuccessResp(resp *service.RagReportListResp) *knowledgebase_report_service.GetReportResp {
+func buildReportSuccessResp(resp *service.RagReportListResp, lastImportStatus int32) *knowledgebase_report_service.GetReportResp {
 	retList := make([]*knowledgebase_report_service.ReportInfo, 0)
 	for _, item := range resp.List {
 		retList = append(retList, &knowledgebase_report_service.ReportInfo{
@@ -197,13 +198,14 @@ func buildReportSuccessResp(resp *service.RagReportListResp) *knowledgebase_repo
 		})
 	}
 	return &knowledgebase_report_service.GetReportResp{
-		Total:         int32(resp.ChunkTotalNum),
-		CreatedAt:     buildCreatedAt(resp),
-		Status:        ReportSuccess,
-		CanGenerate:   true,
-		CanAddReport:  true,
-		GenerateLabel: Regenerate,
-		List:          retList,
+		Total:            int32(resp.ChunkTotalNum),
+		CreatedAt:        buildCreatedAt(resp),
+		Status:           ReportSuccess,
+		CanGenerate:      true,
+		CanAddReport:     true,
+		GenerateLabel:    Regenerate,
+		List:             retList,
+		LastImportStatus: lastImportStatus,
 	}
 }
 
@@ -212,4 +214,11 @@ func buildCreatedAt(resp *service.RagReportListResp) string {
 		return ""
 	}
 	return resp.List[0].CreateTime
+}
+
+func buildLastImportStatus(importTask *model.KnowledgeReportImportTask) int32 {
+	if importTask == nil {
+		return -1
+	}
+	return int32(importTask.Status)
 }

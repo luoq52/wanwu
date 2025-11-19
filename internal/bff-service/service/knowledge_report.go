@@ -109,15 +109,17 @@ func buildKnowledgeReportList(req *request.KnowledgeReportSelectReq, resp *knowl
 			Title:     v.Title,
 		})
 	}
+
 	return &response.KnowledgeReportPageResult{
-		List:          retList,
-		Total:         resp.Total,
-		PageNo:        req.PageNo,
-		PageSize:      req.PageSize,
-		CreatedAt:     resp.CreatedAt,
-		Status:        resp.Status,
-		CanGenerate:   resp.CanGenerate,
-		CanAddReport:  resp.CanAddReport,
-		GenerateLabel: resp.GenerateLabel,
+		List:             retList,
+		Total:            resp.Total,
+		PageNo:           req.PageNo,
+		PageSize:         req.PageSize,
+		CreatedAt:        resp.CreatedAt,
+		Status:           resp.Status,
+		CanGenerate:      resp.CanGenerate,
+		CanAddReport:     resp.CanAddReport,
+		GenerateLabel:    resp.GenerateLabel,
+		LastImportStatus: resp.LastImportStatus,
 	}
 }
