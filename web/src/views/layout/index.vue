@@ -226,7 +226,7 @@ import { mapActions, mapGetters } from 'vuex'
 import { checkPerm, PERMS } from "@/router/permission"
 import { menuList } from './menu'
 import { changeLang } from "@/api/user"
-import { fetchPermFirPath, fetchCurrentPathIndex, replaceIcon, replaceTitle } from "@/utils/util"
+import { fetchPermFirPath, fetchCurrentPathIndex, replaceIcon, replaceTitle, redirectUserInfoPage } from "@/utils/util"
 import ChangeLang from "@/components/changeLang.vue"
 import DocDownloadDialog from "@/components/docDownloadDialog.vue"
 import CreateTotalDialog from "@/components/createTotalDialog.vue"
@@ -361,10 +361,9 @@ export default {
       return currentOrg.name
     },
     redirectUserInfo() {
-      if (this.permission.isUpdatePassword !== undefined && !this.permission.isUpdatePassword) {
-        this.$router.push('/userInfo?showPwd=1')
+      redirectUserInfoPage(this.permission.isUpdatePassword, () => {
         return null
-      }
+      })
     },
     justifyDocPages(val) {
       const path = `${this.$basePath}/aibase` + val

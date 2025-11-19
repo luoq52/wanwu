@@ -1,6 +1,6 @@
 import {login, getPermission, getCommonInfo, login2FA2new, login2FA2exist, login2FA1} from '@/api/user'
 import { fetchOrgs } from "@/api/permission/org"
-import {jumpOAuth, redirectUrl} from "@/utils/util"
+import {jumpOAuth, redirectUrl, redirectUserInfoPage} from "@/utils/util"
 import { formatPerms } from "@/router/permission"
 import { replaceRouter } from "@/router"
 
@@ -37,8 +37,8 @@ const processLogin = (res, commit, params) => {
 
         // 更新权限路由
         replaceRouter(permission.orgPermission)
-        // 重定向到有权限的页面
-        redirectUrl()
+        // 重定向到修改密码或者有权限的页面
+        redirectUserInfoPage(res.data.isUpdatePassword, null, true)
     }
 }
 

@@ -75,6 +75,15 @@ export const redirectUrl = () => {
     jumpPermUrl()
 }
 
+export const redirectUserInfoPage = (isUpdatePassword, callback, isRedirectUrl) => {
+    if (isUpdatePassword !== undefined && !isUpdatePassword) {
+        router.push('/userInfo?showPwd=1')
+        callback && callback()
+    } else {
+        if (isRedirectUrl) jumpPermUrl()
+    }
+}
+
 export const replaceIcon = (logoPath) => {
     let link = document.querySelector("link[rel*='icon']") || document.createElement("link")
     link.type = "image/x-icon"
