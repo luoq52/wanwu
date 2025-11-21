@@ -520,6 +520,9 @@ export default {
                                                 }
                                                 // this.$refs['session-com'].replaceLastData(lastIndex, fillData)
                                                 sessionCom.replaceLastData(lastIndex, fillData)
+                                                this.$nextTick(() => {
+                                                    sessionCom.scrollBottom()
+                                                })
                                             }
                                             this.setStoreSessionStatus(-1)
                                         }
@@ -528,10 +531,10 @@ export default {
                                        }
                                     })
 
-                            this.$nextTick(()=>{
+                            /*this.$nextTick(()=>{
                                 // this.$refs['session-com'].scrollBottom()
                                 sessionCom.scrollBottom()
-                            })
+                            })*/
 
                         }else if(data.code === 7 || data.code === -1 || data.code === 1){
                             this.setStoreSessionStatus(-1)

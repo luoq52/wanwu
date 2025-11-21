@@ -2,7 +2,7 @@
   <div class="session rl">
     <div
       class="history-box showScroll"
-      id="timeScroll"
+      :id="scrollContainerId"
       v-loading="loading"
       ref="timeScroll"
     >
@@ -377,6 +377,7 @@ export default {
       audioConfig: ["mp3", "wav"],
       fileScrollStateMap: {},
       resizeTimer: null,
+      scrollContainerId:`timeScroll-${this._uid}`
     };
   },
   computed: {
@@ -412,7 +413,7 @@ export default {
     if(this.handleCitationClick) {
       document.removeEventListener('click', this.handleCitationClick);
     }
-    const container = document.getElementById("timeScroll");
+    const container = document.getElementById(this.scrollContainerId);
     if (container) {
       container.removeEventListener("scroll", this.handleScroll);
     }
@@ -504,7 +505,7 @@ export default {
         sessionStatus: this.sessionStatus,
         sessionData: this.session_data,
         citationSelector: '.citation',
-        scrollElementId: 'timeScroll',
+        scrollElementId: this.scrollContainerId,
         onToggleCollapse: (item, collapse) => {
           this.$set(item, 'collapse', collapse);
         }
@@ -573,11 +574,11 @@ export default {
       }
     },
     setupScrollListener() {
-      const container = document.getElementById("timeScroll");
+      const container = document.getElementById(this.scrollContainerId);
       container.addEventListener("scroll", this.handleScroll);
     },
     handleScroll(e) {
-      const container = document.getElementById("timeScroll");
+      const container = document.getElementById(this.scrollContainerId);
       const { scrollTop, clientHeight, scrollHeight } = container;
       // 检测是否接近底部（5px容差）
       const nearBottom = scrollHeight - (scrollTop + clientHeight) < 5;
@@ -695,8 +696,8 @@ export default {
       this.loading = false;
       if (!this.autoScroll) return;
       this.$nextTick(() => {
-        document.getElementById("timeScroll").scrollTop =
-          document.getElementById("timeScroll").scrollHeight;
+        document.getElementById(this.scrollContainerId).scrollTop =
+          document.getElementById(this.scrollContainerId).scrollHeight;
       });
     },
     codeScrollBottom() {
