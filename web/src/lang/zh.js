@@ -920,6 +920,9 @@ export default {
       name: '问答库名称',
       editInfo: '编辑问答库',
       createKnowledge: '新建问答库',
+      question: '问题',
+      answer: '回答',
+      metaData: '元数据',
     }
   },
   knowledgeSelect: {

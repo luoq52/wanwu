@@ -132,7 +132,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="docName"
-                  :label="$t('knowledgeManage.fileName')"
+                  :label="$t('knowledgeManage.qaDatabase.question')"
                   min-width="180"
                 >
                   <template slot-scope="scope">
@@ -152,12 +152,12 @@
                 </el-table-column>
                 <el-table-column
                   prop="docType"
-                  :label="$t('knowledgeManage.fileStyle')"
+                  :label="$t('knowledgeManage.qaDatabase.answer')"
                 >
                 </el-table-column>
                 <el-table-column
                   prop="segmentMethod"
-                  :label="$t('knowledgeManage.docList.segmentMode')"
+                  :label="$t('knowledgeManage.qaDatabase.metaData')"
                 >
                   <template slot-scope="scope">
                     <span>{{
@@ -171,14 +171,8 @@
                 >
                 </el-table-column>
                 <el-table-column
-                  prop="uploadTime"
-                  :label="$t('knowledgeManage.importTime')"
-                  width="200"
-                >
-                </el-table-column>
-                <el-table-column
                   prop="status"
-                  :label="$t('knowledgeManage.currentStatus')"
+                  :label="$t('user.table.status')"
                   width="150"
                 >
                   <template slot-scope="scope">
@@ -202,6 +196,12 @@
                       ></span>
                     </el-tooltip>
                   </template>
+                </el-table-column>
+                <el-table-column
+                  prop="uploadTime"
+                  :label="$t('knowledgeManage.importTime')"
+                  width="200"
+                >
                 </el-table-column>
                 <el-table-column
                   v-if="graphSwitch"
