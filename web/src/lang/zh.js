@@ -616,7 +616,9 @@ export default {
         author: '作者',
         noData: '暂无数据',
         searchPlaceholder: '按照知识库名称搜索',
+        searchPlaceholderQa: '按照问答库名称搜索',
         docPlaceholder: '按照文件名称搜索',
+        createQaDatabase: '新建问答库',
         desc: '描述',
         title: '文档知识库',
         tips: '您可单独或批量上传以下格式的文档:txt、pdf、docx、doc、xlsx、xls、zip、tar.gz、csv、pptx、html',
@@ -762,6 +764,13 @@ export default {
         keyWordTip: '知识库问答场景，可配置问题中使用的口语化关键词与知识库文档中词语的映射规则，便于提升知识库内容的召回效果及回答准确率 。',
         keyWordPlaceholder: '输入问题中的关键词或文档中的词语搜索',
         newKeyWord: '新建关键词',
+        addTag: '添加标签',
+        selectTag: '请选择标签',
+        createTag:'创建标签',
+        docCountUnit: '个文档',
+        qaCountUnit: '个问答对',
+        public: '公开',
+        private: '私密',
         create: {
             knowledgeGraph: '知识图谱',
             modelSelect: '模型选择',
@@ -879,9 +888,9 @@ export default {
             rowKey: "第",
             rowKeyTips: "行的Key不能为空",
             rowValueTips: "行的Value不能为空",
-            noNeedUpdate: "没有需要更新的数据"
+            noNeedUpdate: "没有需要更新的数据",
+            metaInfoIncomplete: '存在未填信息,请补充',
         },
-
         hitTest: {
             name: '命中测试',
             title: '命中分段测试',
@@ -909,16 +918,24 @@ export default {
             pleaseSelectDocFirst: '请先选中要编辑的文档',
             maxSelect100Files: '最多只能选择100个文件',
             communityReportTips: '社区报告在上传文件或删除文件时不会自动触发构建,如需更新报告需要点击生成/重新生成构建'
+        },
+        qaDatabase: {
+            name: '问答库',
+            editInfo: '编辑问答库',
+            createKnowledge: '新建问答库',
+            question: '问题',
+            answer: '回答',
+            metaData:'元数据'
         }
     },
     knowledgeSelect: {
         title: '选择知识库',
         searchPlaceholder: '输入知识库名称搜索',
-        public: '公开',
-        private: '私密',
         createTime: '创建时间',
         add: '添加',
         added: '已添加',
+        power: '权限',
+        noOperationPermission: '无操作权限',
     },
     metaData: {
         batchEdit: '批量编辑元数据值',
