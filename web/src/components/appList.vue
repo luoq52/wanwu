@@ -75,7 +75,7 @@
             />
           </div>
         </div>
-        <div v-if="isShowPublished && n.publishType && ![workflow, chat].includes(type)" class="publishType">
+        <div v-if="isShowPublished && n.publishType" class="publishType">
           <span v-if="n.publishType === 'private'" class="publishType-tag">
             <span class="el-icon-lock"></span> {{$t('appSpace.private')}}
           </span>
@@ -358,7 +358,7 @@ export default {
       this.$router.push({path:`/workflow/publishSet`, query: {appId: row.appId, appType: row.appType, name: row.name}})
     },
     workflowTransform(row) {
-      transformWorkflow({appId: row.appId, appType: row.appType}).then(() => {
+      transformWorkflow({workflow_id: row.appId}, row.appType).then(() => {
         this.$emit('reloadData')
       })
     },

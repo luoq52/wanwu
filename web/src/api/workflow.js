@@ -88,9 +88,9 @@ export const exportWorkflow = (params, appType) => {
 };
 
 // 工作流/对话流互转
-export const transformWorkflow = (data) => {
+export const transformWorkflow = (data, appType) => {
     return request({
-        url: `${USER_API}/appspace/workflow/transform`,
+        url: `${USER_API}/appspace/${appType || 'workflow'}/convert`,
         method: "post",
         data,
     });
