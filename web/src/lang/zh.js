@@ -535,6 +535,7 @@ export default {
     promptRules: "请填写提示词",
     promptLimitRules: "提示词描述须在50字符以内",
     copySuccess: "复制成功",
+    copyFailed: "复制失败",
     selectModel: "选模型，可输入名称搜索",
     loadingText: "加载中...",
     promptOptimize: "提示词优化",

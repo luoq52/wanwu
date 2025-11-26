@@ -108,8 +108,8 @@ export default {
         this.startUpload();
       }
     },
-    uploadFile(chunkFileName) {
-      this.$emit("uploadFile", chunkFileName);
+    uploadFile(chunkFileName, fileName, filePath) {
+      this.$emit("uploadFile", chunkFileName, fileName, filePath);
     },
     clearFileList() {
       this.fileList = [];

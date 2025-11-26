@@ -43,7 +43,7 @@
                   type="primary"
                   icon="el-icon-refresh"
                   @click="reload"
-                  >
+                >
                   {{ $t("common.gpuDialog.reload") }}
                 </el-button>
                 <el-button
@@ -55,9 +55,9 @@
                     )
                   "
                   v-if="showGraphReport"
-                  >
+                >
                   {{ $t("knowledgeManage.hitTest.graph") }}
-                  </el-button>
+                </el-button>
                 <el-button
                   size="mini"
                   type="primary"
@@ -85,7 +85,7 @@
                   type="primary"
                   @click="showMeta"
                   v-if="[10, 20, 30].includes(permissionType)"
-                  >
+                >
                   {{ $t("knowledgeManage.docList.metaDataManagement") }}
                 </el-button>
                 <el-button
@@ -96,7 +96,7 @@
                       `/knowledge/hitTest?knowledgeId=${docQuery.knowledgeId}&graphSwitch=${graphSwitch}`
                     )
                   "
-                  >
+                >
                   {{ $t("knowledgeManage.hitTest.name") }}
                 </el-button>
                 <el-button
@@ -105,7 +105,7 @@
                   :underline="false"
                   @click="handleUpload"
                   v-if="[10, 20, 30].includes(permissionType)"
-                  >
+                >
                   {{ $t("knowledgeManage.fileUpload") }}
                 </el-button>
               </div>
@@ -191,9 +191,9 @@
                       :class="[
                         [4, 5].includes(scope.row.status) ? 'error' : '',
                       ]"
-                      >
+                    >
                       {{ filterStatus(scope.row.status) }}
-                      </span>
+                    </span>
                     <el-tooltip
                       class="item"
                       effect="light"
@@ -216,7 +216,7 @@
                 >
                   <template slot-scope="scope">
                     <span>
-                      {{ knowledgeGraphStatus[scope.row.graphStatus]}}
+                      {{ knowledgeGraphStatus[scope.row.graphStatus] }}
                     </span>
                     <el-tooltip
                       class="item"
@@ -249,9 +249,9 @@
                       :type="
                         [2, 3].includes(Number(scope.row.status)) ? 'info' : ''
                       "
-                      >
-                        {{ $t("common.button.delete") }}
-                      </el-button>
+                    >
+                      {{ $t("common.button.delete") }}
+                    </el-button>
                     <el-button
                       size="mini"
                       round
@@ -262,9 +262,9 @@
                       "
                       :disabled="[0, 3, 5].includes(Number(scope.row.status))"
                       @click="handleView(scope.row)"
-                      >
-                        {{ $t("knowledgeManage.view") }}
-                      </el-button>
+                    >
+                      {{ $t("knowledgeManage.view") }}
+                    </el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -297,13 +297,13 @@
       />
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleClose">
-          {{ $t("common.button.cancel")}}
+          {{ $t("common.button.cancel") }}
         </el-button>
         <el-button type="primary" @click="createMeta">
-          {{ $t("common.button.create")}}
+          {{ $t("common.button.create") }}
         </el-button>
         <el-button type="primary" @click="submitMeta" :disabled="isDisabled">
-          {{ $t("common.button.confirm")}}
+          {{ $t("common.button.confirm") }}
         </el-button>
       </span>
     </el-dialog>

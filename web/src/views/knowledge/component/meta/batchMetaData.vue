@@ -49,9 +49,9 @@
             </div>
 
             <div class="field-group type-group">
-              <span class="type-label"
-                >{{ $t("knowledgeManage.meta.type") }}:</span
-              >
+              <span class="type-label">
+                {{ $t("knowledgeManage.meta.type") }}:
+              </span>
               <span class="type-value">[{{ item.metaValueType }}]</span>
             </div>
 
@@ -125,7 +125,7 @@
 
     <span slot="footer" class="dialog-footer">
       <el-button @click="handleClose" class="cancel-btn">
-        {{ $t("common.confirm.cancel")}}
+        {{ $t("common.confirm.cancel") }}
       </el-button>
       <el-button
         type="primary"

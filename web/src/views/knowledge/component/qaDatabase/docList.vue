@@ -435,7 +435,6 @@ export default {
     this.clearTimer();
   },
   methods: {
-    exportData() {},
     exportRecord() {
       this.$refs.exportRecord.showDialog();
     },

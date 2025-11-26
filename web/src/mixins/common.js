@@ -385,7 +385,7 @@ export default {
       try {
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(text);
-          this.$success("复制成功");
+          this.$success(i18n.t("tempSquare.copySuccess"));
         } else {
           // 兼容旧浏览器
           const textArea = document.createElement("textarea");
@@ -394,11 +394,10 @@ export default {
           textArea.select();
           document.execCommand("copy");
           document.body.removeChild(textArea);
-          this.$success("复制成功");
+          this.$success(i18n.t("tempSquare.copySuccess"));
         }
       } catch (error) {
-        this.$error("复制失败");
-        console.error("复制失败:", error);
+        this.$error(i18n.t("tempSquare.copyFailed"));
       }
     },
 
@@ -498,8 +497,4 @@ export default {
       };
     },
   },
-
-  mounted() {},
-
-  beforeDestroy() {},
 };
