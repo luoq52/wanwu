@@ -147,6 +147,7 @@ export default {
       reset: "重置",
       import: "导入",
       export: "导出",
+      transform: "转化为",
       view: "查看",
       cancelPublish: "取消发布",
       add: "创建",
