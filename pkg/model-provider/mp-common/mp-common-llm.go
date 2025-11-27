@@ -411,12 +411,13 @@ func chatCompletionsUnary(ctx context.Context, provider, apiKey, url string, req
 	resp, err := request.Post(url)
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v chat completions unary err: %v", url, provider, err)
-	} else if resp.StatusCode() >= 300 {
-		return nil, fmt.Errorf("request %v %v chat completions unary http status %v msg: %v", url, provider, resp.StatusCode(), resp.String())
 	}
 	b, err := io.ReadAll(resp.RawResponse.Body)
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v chat completions unary read response body err: %v", url, provider, err)
+	}
+	if resp.StatusCode() >= 300 {
+		return nil, fmt.Errorf("request %v %v chat completions unary http status %v msg: %v", url, provider, resp.StatusCode(), string(b))
 	}
 	return respConverter(false, string(b)), nil
 }
@@ -453,7 +454,12 @@ func chatCompletionsStream(ctx context.Context, provider, apiKey, url string, re
 			log.Errorf("request %v %v chat completions stream err: %v", url, provider, err)
 			return
 		} else if resp.StatusCode() >= 300 {
-			log.Errorf("request %v %v chat completions stream http status %v msg: %v", url, provider, resp.StatusCode(), resp.String())
+			b, err := io.ReadAll(resp.RawResponse.Body)
+			if err != nil {
+				log.Errorf("request %v %v chat completions stream read response body err: %v", url, provider, err)
+				return
+			}
+			log.Errorf("request %v %v chat completions stream http status %v msg: %v", url, provider, resp.StatusCode(), string(b))
 			return
 		}
 		scan := bufio.NewScanner(resp.RawResponse.Body)

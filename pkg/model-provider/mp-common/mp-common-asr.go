@@ -4,13 +4,13 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io"
 	"mime/multipart"
 	"strings"
 
 	"github.com/UnicomAI/wanwu/pkg/log"
 	"github.com/UnicomAI/wanwu/pkg/util"
+	"github.com/gin-gonic/gin"
 	"github.com/go-resty/resty/v2"
 )
 
@@ -178,13 +178,13 @@ func Asr(ctx *gin.Context, provider, apiKey, url string, req *AsrReq, headers ..
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v asr err: %v", url, provider, err)
 	}
-	bodyBytes, err := io.ReadAll(resp.RawResponse.Body)
+	b, err := io.ReadAll(resp.RawResponse.Body)
 	if err != nil {
-		return nil, fmt.Errorf("read response body failed: %v", err)
+		return nil, fmt.Errorf("request %v %v asr read response body err: %v", url, provider, err)
 	}
 	if resp.StatusCode() >= 300 {
-		return nil, fmt.Errorf("request %v %v asr http status %v msg: %v", url, provider, resp.StatusCode(), string(bodyBytes))
+		return nil, fmt.Errorf("request %v %v asr http status %v msg: %v", url, provider, resp.StatusCode(), string(b))
 	}
 
-	return bodyBytes, nil
+	return b, nil
 }

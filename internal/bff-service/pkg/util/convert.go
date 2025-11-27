@@ -38,6 +38,6 @@ func Base64ToFileHeader(b64, filename string) (*multipart.FileHeader, error) {
 	if len(files) == 0 {
 		return nil, http.ErrMissingFile
 	}
-	
+
 	return files[0], nil
 }

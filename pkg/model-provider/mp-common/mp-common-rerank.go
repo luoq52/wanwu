@@ -157,13 +157,12 @@ func Rerank(ctx context.Context, provider, apiKey, url string, req map[string]in
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v rerank err: %v", url, provider, err)
 	}
-	bodyBytes, err := io.ReadAll(resp.RawResponse.Body)
+	b, err := io.ReadAll(resp.RawResponse.Body)
 	if err != nil {
-		return nil, fmt.Errorf("rerank read response body failed: %v", err)
+		return nil, fmt.Errorf("request %v %v rerank read response body failed: %v", url, provider, err)
 	}
 	if resp.StatusCode() >= 300 {
-		return nil, fmt.Errorf("request %v %v rerank http status %v msg: %v", url, provider, resp.StatusCode(), string(bodyBytes))
+		return nil, fmt.Errorf("request %v %v rerank http status %v msg: %v", url, provider, resp.StatusCode(), string(b))
 	}
-
-	return bodyBytes, nil
+	return b, nil
 }

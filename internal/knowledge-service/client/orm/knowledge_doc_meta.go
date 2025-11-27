@@ -260,7 +260,7 @@ func UpdateDocStatusMetaData(ctx context.Context, metaDataList []*model.Knowledg
 		for _, meta := range metaDataList {
 			err := tx.Model(&model.KnowledgeDocMeta{}).
 				Where("meta_id = ?", meta.MetaId). // 匹配metaId
-				Update("value", meta.Value).Error // 仅更新value
+				Update("value", meta.Value).Error  // 仅更新value
 			if err != nil {
 				return err
 			}
