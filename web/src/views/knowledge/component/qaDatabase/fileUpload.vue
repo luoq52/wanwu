@@ -94,8 +94,9 @@ export default {
         }
       });
     },
-    handleUploadFile(fileId) {
-      this.uploadedFileId = fileId;
+    handleUploadFile(...args) {
+      const [, , filePath] = args;
+      this.uploadedFileId = filePath;
     },
     handleConfirm() {
       if (!this.uploadedFileId) {
@@ -106,9 +107,9 @@ export default {
       this.loading = true;
       const data = {
         knowledgeId: this.knowledgeId,
-        docInfoList: {
+        docInfoList: [{
           docUrl: this.uploadedFileId,
-        },
+        }],
       };
 
       qaDocImport(data)

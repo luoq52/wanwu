@@ -58,15 +58,11 @@
                   </span>
                   <span
                     v-if="
-                      ['graph', 'community_report'].includes(item.contentType)
+                      ['graph', 'community_report','qa'].includes(item.contentType)
                     "
                     class="segment-type"
                   >
-                    {{
-                      item.contentType === "graph"
-                        ? "#" + $t("knowledgeManage.graphTag")
-                        : "#" + $t("knowledgeManage.communityReportTag")
-                    }}
+                    {{ getTitle(item.contentType)}}
                   </span>
                   <span v-else>
                     <span class="segment-type">
@@ -100,11 +96,23 @@
               </div>
               <div>
                 <div class="resultContent">
-                  {{ item.snippet.slice(0, 100) }}...
+                  <template v-if="item.contentType !== 'qa'">
+                    {{ item.snippet.slice(0, 100) }}...
+                  </template>
+                  <template v-else>
+                    <div>
+                      <span>{{$t('knowledgeManage.qaDatabase.question')}} :</span>
+                      {{item.question}}
+                    </div>
+                    <div>
+                      <span>{{$t('knowledgeManage.qaDatabase.answer')}} :</span>
+                      {{item.answer}}
+                    </div>
+                  </template>
                 </div>
                 <div
                   class="resultChildContent"
-                  v-if="item.childContentList.length > 0"
+                  v-if="item.childContentList && item.childContentList.length > 0"
                 >
                   <el-collapse
                     v-model="activeNames"
@@ -170,6 +178,7 @@
 </template>
 <script>
 import { hitTest } from "@/api/knowledge";
+import { qaHitTest } from "@/api/qaDatabase";
 import { md } from "@/mixins/marksown-it";
 import { formatScore } from "@/utils/util";
 import searchConfig from "@/components/searchConfig.vue";
@@ -190,6 +199,7 @@ export default {
       knowledgeId: this.$route.query.knowledgeId,
       name: this.$route.query.name,
       graphSwitch: this.$route.query.graphSwitch || false,
+      type:this.$route.query.type || '',
       activeNames: [],
     };
   },
@@ -197,6 +207,14 @@ export default {
     formatScore,
     goBack() {
       this.$router.go(-1);
+    },
+    getTitle(contentType) {
+      const map = {
+        qa: "knowledgeManage.qaDatabase.name",
+        graph: "knowledgeManage.graphTag",
+        community_report: "knowledgeManage.communityReportTag",
+      };
+      return "#" + this.$t(map[contentType]);
     },
     sendConfigInfo(data) {
       this.formInline = data;
@@ -251,6 +269,30 @@ export default {
       this.resultLoading = true;
       this.searchList = [];
       this.score = [];
+      if (this.type === "qa") {
+        this.qaHitTest(data);
+      } else {
+        this.knowledgeHitTest(data);
+      }
+    },
+    qaHitTest(data){
+      qaHitTest(data)
+        .then((res) => {
+          if (res.code === 0) {
+            this.searchList = res.data !== null ? res.data.searchList : [];
+            this.score = res.data !== null ? res.data.score : [];
+            this.resultLoading = false;
+          }else{
+            this.searchList = [];
+            this.resultLoading = false;
+          }
+        })
+        .catch(() => {
+          this.searchList = [];
+          this.resultLoading = false;
+        });
+    },
+    knowledgeHitTest(data) {
       hitTest(data)
         .then((res) => {
           if (res.code === 0) {
@@ -272,9 +314,8 @@ export default {
         })
         .catch(() => {
           this.resultLoading = false;
-        });
+      });
     },
-
     // 显示分段详情弹框
     showSectionDetail(index) {
       const currentItem = this.searchList[index];

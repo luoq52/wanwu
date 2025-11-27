@@ -70,6 +70,7 @@
 <script>
 import { getKnowledgeList } from "@/api/knowledge";
 export default {
+  props:['category'],
   data() {
     return {
       dialogVisible: false,
@@ -84,7 +85,7 @@ export default {
   },
   methods: {
     getKnowledgeList(name) {
-      getKnowledgeList({ name })
+      getKnowledgeList({ name,category:this.category })
         .then((res) => {
           if (res.code === 0) {
             this.knowledgeData = (res.data.knowledgeList || []).map((m) => ({
