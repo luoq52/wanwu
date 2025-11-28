@@ -571,12 +571,12 @@ export default {
         ) {
           this.editForm.knowledgeBaseConfig.config.rerankModelId = "";
         }
-        const rerankInfo = this.rerankOptions.find(
+        const rerankInfo = this.editForm.knowledgeBaseConfig.knowledgebases.length ? this.rerankOptions.find(
           (item) => item.modelId === this.editForm.knowledgeBaseConfig.config.rerankModelId
-        );
-        const qaRerankInfo = this.rerankOptions.find(
+        ):{};
+        const qaRerankInfo = this.editForm.qaKnowledgeBaseConfig.knowledgebases.length ? this.rerankOptions.find(
           (item) => item.modelId === this.editForm.qaKnowledgeBaseConfig.config.rerankModelId
-        );
+        ):{};
         let fromParams = {
           ragId: this.editForm.appId,
           knowledgeBaseConfig:this.editForm.knowledgeBaseConfig,
