@@ -82,7 +82,7 @@ func BuildQaHitParams(req *rag_service.ChatRagReq, rag *model.RagInfo, knowledge
 	ragChatParams.Weight = buildQAWeight(ragQAConfig)
 
 	ragChatParams.KnowledgeIdList = qaIds
-	ragChatParams.RerankModelId = buildRerankId(ragQAConfig.PriorityMatch, rag.RerankConfig.ModelId)
+	ragChatParams.RerankModelId = buildRerankId(ragQAConfig.PriorityMatch, rag.QARerankConfig.ModelId)
 	// RAG属性参数
 	ragChatParams.Question = req.Question
 	ragChatParams.ReturnMeta = true
