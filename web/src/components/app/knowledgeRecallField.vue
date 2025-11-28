@@ -32,14 +32,13 @@ export default {
     return{
       dialogVisible:false,
       knowledgeConfig:{},
-      recallConfig:{}
     }
   },
   watch:{
     config:{
       handler(val){
         if(val){
-          this.recallConfig = val
+          this.knowledgeConfig = {...val}
         }
       },
       deep:true
@@ -49,9 +48,8 @@ export default {
     sendConfigInfo(data){
       this.knowledgeConfig = { ...data.knowledgeMatchParams };
     },
-    showDialog(row){
+    showDialog(){
       this.dialogVisible = true;
-      this.knowledgeConfig = row || {};
     },
     handleClose(){
       this.dialogVisible = false;

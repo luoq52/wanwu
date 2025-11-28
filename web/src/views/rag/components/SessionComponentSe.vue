@@ -135,7 +135,7 @@
                 <img
                   :src="require('@/assets/imgs/think-icon.png')"
                   class="think_icon"
-                  />
+                />
                 <div
                   v-if="showDSBtn(n.response)"
                   class="deepseek"
