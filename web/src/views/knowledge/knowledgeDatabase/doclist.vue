@@ -315,8 +315,8 @@
       @reLoadDocList="reLoadDocList"
     />
     <!-- 批量编辑元数据值操作框 -->
-    <BatchMetatButton
-      ref="BatchMetatButton"
+    <BatchMetaButton
+      ref="BatchMetaButton"
       :selectedCount="selectedTableData.length"
       @showBatchMeta="showBatchMeta"
       @handleBatchDelete="handleBatchDelete"
@@ -328,9 +328,9 @@
 <script>
 import Pagination from "@/components/pagination.vue";
 import SearchInput from "@/components/searchInput.vue";
-import mataData from "./metadata.vue";
-import batchMetaData from "./meta/batchMetaData.vue";
-import BatchMetatButton from "./meta/batchMetatButton.vue";
+import mataData from "../component/metadata.vue";
+import batchMetaData from "../component/meta/batchMetaData.vue";
+import BatchMetaButton from "../component/meta/batchMetaButton.vue";
 import {
   getDocList,
   delDocItem,
@@ -345,7 +345,7 @@ export default {
     SearchInput,
     mataData,
     batchMetaData,
-    BatchMetatButton,
+    BatchMetaButton,
   },
   data() {
     return {

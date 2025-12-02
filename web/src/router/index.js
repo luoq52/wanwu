@@ -174,17 +174,17 @@ const constantRoutes = [
       },
       {
         path: '/knowledge/doclist/:id',
-        component: resolve => require(['@/views/knowledge/component/doclist.vue'], resolve),
+        component: resolve => require(['@/views/knowledge/knowledgeDatabase/doclist.vue'], resolve),
         meta: { perm: [PERMS.KNOWLEDGE] },
       },
       {
         path: '/knowledge/qa/docList/:id',
-        component: resolve => require(['@/views/knowledge/component/qaDatabase/docList.vue'], resolve),
+        component: resolve => require(['@/views/knowledge/qaDatabase/docList.vue'], resolve),
         meta: { perm: [PERMS.KNOWLEDGE] },
       },
       {
         path: '/knowledge/fileUpload',
-        component: resolve => require(['@/views/knowledge/component/fileUpload.vue'], resolve),
+        component: resolve => require(['@/views/knowledge/knowledgeDatabase/fileUpload.vue'], resolve),
         meta: { perm: [PERMS.KNOWLEDGE] },
       },
       {

@@ -431,7 +431,7 @@
   </div>
 </template>
 <script>
-import urlAnalysis from "./urlAnalysis.vue";
+import urlAnalysis from "../component/urlAnalysis.vue";
 import uploadChunk from "@/mixins/uploadChunk";
 import {
   docImport,
@@ -444,8 +444,8 @@ import {
 } from "@/api/knowledge";
 import { delfile } from "@/api/chunkFile";
 import LinkIcon from "@/components/linkIcon.vue";
-import splitterDialog from "./splitterDialog.vue";
-import mataData from "./metadata.vue";
+import splitterDialog from "../component/splitterDialog.vue";
+import mataData from "../component/metadata.vue";
 import {USER_API} from "@/utils/requestConstants"
 import {
   SEGMENT_COMMON_LIST,

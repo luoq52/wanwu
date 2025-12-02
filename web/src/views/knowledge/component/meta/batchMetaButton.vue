@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: 'BatchMetatButton',
+  name: 'BatchMetaButton',
   props: {
     selectedCount: {
       type: Number,

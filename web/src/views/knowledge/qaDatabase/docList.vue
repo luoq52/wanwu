@@ -305,8 +305,8 @@
       :type="batchMetaType"
     />
     <!-- 批量编辑元数据值操作框 -->
-    <BatchMetatButton
-      ref="BatchMetatButton"
+    <BatchMetaButton
+      ref="BatchMetaButton"
       :selectedCount="selectedTableData.length"
       @showBatchMeta="showBatchMeta"
       @handleBatchDelete="handleBatchDelete"
@@ -333,9 +333,9 @@
 <script>
 import Pagination from "@/components/pagination.vue";
 import SearchInput from "@/components/searchInput.vue";
-import mataData from "../metadata.vue";
-import batchMetaData from "../meta/batchMetaData.vue";
-import BatchMetatButton from "../meta/batchMetatButton.vue";
+import mataData from "../component/metadata.vue";
+import batchMetaData from "../component/meta/batchMetaData.vue";
+import BatchMetaButton from "../component/meta/batchMetaButton.vue";
 import createQa from "./createQa.vue";
 import fileUpload from "./fileUpload.vue";
 import exportRecord from "./exportRecord.vue";
@@ -348,14 +348,14 @@ import {
   qaTips
 } from "@/api/qaDatabase";
 import { mapGetters } from "vuex";
-import { COMMUNITY_IMPORT_STATUS, DROPDOWN_GROUPS } from "../../config";
+import { COMMUNITY_IMPORT_STATUS, DROPDOWN_GROUPS } from "../config";
 export default {
   components: {
     Pagination,
     SearchInput,
     mataData,
     batchMetaData,
-    BatchMetatButton,
+    BatchMetaButton,
     createQa,
     fileUpload,
     exportRecord,
