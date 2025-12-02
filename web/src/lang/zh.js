@@ -992,6 +992,19 @@ export default {
       finished: "导出成功",
       failed: "导出失败",
     },
+    power: {
+      all: "全选",
+      org: "选择组织",
+      user: "搜索用户名",
+      permission: {
+        label: "权限:",
+        placeholder: "请选择权限",
+        read: "可读",
+        edit: "可编辑",
+        admin: "管理员",
+      },
+      warning: "请先选择组织",
+    }
   },
   knowledgeSelect: {
     title: "选择知识库",

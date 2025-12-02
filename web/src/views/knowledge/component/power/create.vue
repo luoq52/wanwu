@@ -3,9 +3,19 @@
     <div class="content-wrapper" :class="{ 'transfer-mode': transferMode }">
       <div class="left-panel">
         <div class="search-section">
+          <span style="margin-top: 3px;">
+            <el-checkbox
+              v-if="!transferMode"
+              v-model="checkAll"
+              :indeterminate="isIndeterminate"
+              :disabled="treeData.length === 0"
+              @change="handleCheckAllChange"
+            />
+            {{ $t('knowledgeManage.power.all') }}
+          </span>
           <el-select
             v-model="selectedOrganization"
-            placeholder="选择组织"
+            :placeholder="$t('knowledgeManage.power.org')"
             filterable
             clearable
             class="org-select"
@@ -21,7 +31,7 @@
           </el-select>
           <el-input
             v-model="searchKeyword"
-            placeholder="搜索用户名"
+            :placeholder="$t('knowledgeManage.power.user')"
             class="search-input"
             :disabled="!selectedOrganization"
             @focus="handleInputFocus"
@@ -55,11 +65,11 @@
       
       <div class="right-panel" v-if="!transferMode">
         <div class="permission-section">
-          <div class="permission-label">权限:</div>
-          <el-select v-model="selectedPermission" placeholder="请选择权限" class="permission-select">
-            <el-option label="可读" :value="0"></el-option>
-            <el-option label="可编辑" :value="10"></el-option>
-            <el-option label="管理员" :value="20"></el-option>
+          <div class="permission-label">{{ $t('knowledgeManage.power.permission.label') }}</div>
+          <el-select v-model="selectedPermission" :placeholder="$t('knowledgeManage.power.permission.placeholder')" class="permission-select">
+            <el-option :label="$t('knowledgeManage.power.permission.read')" :value="0"></el-option>
+            <el-option :label="$t('knowledgeManage.power.permission.edit')" :value="10"></el-option>
+            <el-option :label="$t('knowledgeManage.power.permission.admin')" :value="20"></el-option>
           </el-select>
         </div>
         
@@ -112,7 +122,7 @@ export default {
   },
   computed: {
     defaultPermission() {
-      return this.transferMode ? '管理员' : '可读'
+      return this.transferMode ? this.$t('knowledgeManage.power.permission.admin') : this.$t('knowledgeManage.power.permission.read')
     },
     groupedSelectedUsers() {
       // 按组织分组选中的用户
@@ -144,14 +154,16 @@ export default {
       },
       treeData: [],
       selectedUsers: [],
-      isSettingChecked: false
+      isSettingChecked: false,
+      checkAll: false,
+      isIndeterminate: false,
     }
   },
   watch: {
     transferMode: {
       handler(newVal) {
         if (newVal) {
-          this.selectedPermission = '管理员'
+          this.selectedPermission = this.$t('knowledgeManage.power.permission.admin')
         }
       },
       immediate: true
@@ -188,13 +200,36 @@ export default {
       }
       return false;
     },
+    handleCheckAllChange(checkAll) {
+      this.isIndeterminate = false;
+      if (checkAll) {
+        this.$refs.tree.setCheckedNodes(this.treeData);
+
+        // 触发check事件更新selectedUsers
+        this.handleTreeCheck(null, {
+          checkedNodes: this.treeData,
+          checkedKeys: this.treeData.map(node => node.id)
+        });
+      } else {
+        this.$refs.tree.setCheckedKeys([]);
+
+        // 清空当前组织的选中用户
+        const currentOrgId = this.selectedOrganization;
+        this.selectedUsers = this.selectedUsers.filter(user => user.orgId !== currentOrgId);
+      }
+    },
     handleOrgChange(orgId) {
+      // 清空全选
+      this.checkAll = false;
+      this.isIndeterminate = false;
+
       // 当组织选择改变时，过滤树形数据
       this.getOrgUser(orgId);
       
       // 如果清空了组织选择，同时清空用户名搜索
       if (!orgId) {
         this.searchKeyword = '';
+        this.treeData = [];
       }
     },
     getOrgUser(orgId){
@@ -262,7 +297,7 @@ export default {
     handleInputFocus() {
       // 当用户名输入框获得焦点时，如果没有选择组织，给出提示
       if (!this.selectedOrganization) {
-        this.$message.warning('请先选择组织');
+        this.$message.warning(this.$t('knowledgeManage.power.warning'));
       }
     },
     filterTreeByOrganization(orgId) {
@@ -281,6 +316,24 @@ export default {
       }
       
       const checkedNodes = checkedInfo.checkedNodes || [];
+
+      // 更新全选状态
+      const totalLeafCount = this.treeData.length;
+      const checkedLeafCount = checkedNodes.length;
+
+      if (checkedLeafCount === 0) {
+        // 无选中
+        this.checkAll = false;
+        this.isIndeterminate = false;
+      } else if (checkedLeafCount === totalLeafCount) {
+        // 全选
+        this.checkAll = true;
+        this.isIndeterminate = false;
+      } else {
+        // 部分选中
+        this.checkAll = false;
+        this.isIndeterminate = true;
+      }
       
       const currentOrg = this.organizationList.find(function(org) {
         return org.orgId === this.selectedOrganization;
