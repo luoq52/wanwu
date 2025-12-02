@@ -388,9 +388,7 @@ export default {
       selectedTableData: [],
       selectedDocIds: [],
       qaImportStatus: COMMUNITY_IMPORT_STATUS,
-      dropdownGroups: DROPDOWN_GROUPS,
-      refreshCount:0,
-      timer:null,
+      dropdownGroups: DROPDOWN_GROUPS
     };
   },
   watch: {
