@@ -370,7 +370,7 @@ export default {
       return val && path.includes(`${this.$basePath}/aibase/docCenter/pages`)
     },
     justifyIsShowNav(path) {
-      const notShowArr = ['/userInfo', '/permission', '/workflow', '/explore/workflow']
+      const notShowArr = ['/userInfo', '/permission', '/workflow']
       let isShowNav = true
       if (this.justifyDocPages(path)) {
         isShowNav = false
