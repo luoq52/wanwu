@@ -18,7 +18,8 @@ const (
 type DocListReq struct {
 	KnowledgeId string `json:"knowledgeId" form:"knowledgeId" validate:"required"`
 	DocName     string `json:"docName" form:"docName"`
-	Status      int    `json:"status" form:"status"` // 当前状态  -1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败
+	Status      int    `json:"status" form:"status"` // 当前状态  -1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败、
+	MetaValue   string `json:"metaValue" form:"metaValue"`
 	PageSearch
 	CommonCheck
 }
@@ -159,6 +160,13 @@ type DeleteDocChildSegmentReq struct {
 	ParentId         string  `json:"parentId"  validate:"required"`         // 父分段id
 	ParentChunkNo    int32   `json:"parentChunkNo"`                         // 父分段序列号
 	ChildChunkNoList []int32 `json:"ChildChunkNoList"  validate:"required"` // 子分段序列号列表
+	CommonCheck
+}
+
+type KnowledgeDocListByMetaReq struct {
+	KnowledgeId string `json:"knowledgeId" form:"knowledgeId" validate:"required"`
+	MetaValue   string `json:"metaValue" form:"metaValue"`
+	PageSearch
 	CommonCheck
 }
 
