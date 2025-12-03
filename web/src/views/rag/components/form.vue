@@ -476,7 +476,6 @@ export default {
       this.showOperation = !this.showOperation;
     },
     savePublish() {
-      
       const { matchType, priorityMatch, rerankModelId } =
         this.editForm.qaKnowledgeBaseConfig.config;
       const isMixPriorityMatch = matchType === "mix" && priorityMatch;
