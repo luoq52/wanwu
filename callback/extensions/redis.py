@@ -1,6 +1,7 @@
 import redis
 
 from configs.config import config
+from utils.log import logger
 
 redis_client: redis.Redis = None
 
@@ -18,8 +19,8 @@ def init_redis():
     # 测试连接（可选）
     try:
         redis_client.ping()
-        print("Redis connected.")
+        logger.info("Redis connected.")
     except redis.ConnectionError:
-        print("Redis connection failed!")
+        logger.info("Redis connection failed!")
 
     return redis_client

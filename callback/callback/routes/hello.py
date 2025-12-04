@@ -1,13 +1,13 @@
-from flask import Blueprint, request
+from flask import request
 
 from callback.services.hello_demo import get_message
 from utils.log import logger
 from utils.response import BizError, response_err, response_ok
 
-hello_demo = Blueprint("hello", __name__)
+from . import callback_bp
 
 
-@hello_demo.route("/hello", methods=["GET"])
+@callback_bp.route("/hello", methods=["GET"])
 def get_hello():
     """
     API 示例
@@ -37,7 +37,7 @@ def get_hello():
     return response_ok(get_message(username))
 
 
-@hello_demo.route("/hello", methods=["POST"])
+@callback_bp.route("/hello", methods=["POST"])
 def post_hello():
     """
     API 示例
@@ -74,7 +74,7 @@ def post_hello():
     return response_ok(get_message(username))
 
 
-@hello_demo.route("/hello", methods=["PUT"])
+@callback_bp.route("/hello", methods=["PUT"])
 def put_hello():
     """
     API 示例

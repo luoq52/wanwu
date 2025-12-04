@@ -411,7 +411,8 @@ services:
       REDIS_HOST: ${WANWU_REDIS_HOST}
       REDIS_PORT: ${WANWU_REDIS_PORT}
       REDIS_PASSWORD: ${WANWU_REDIS_PASSWORD}
-      URL_RAG: http://rag-wanwu
+      URL_RAG_DOC_PARSER: http://rag-wanwu:8681/rag/doc_parser
+      URL_MINIO_DOWNLOAD: ${WANWU_WEB_BASE_URL}/minio/download/api/
 
   # agentscope:
   #   restart: always

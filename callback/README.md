@@ -18,6 +18,7 @@ callback/
 ├── utils/
 │   ├── response.py                  # 响应封装工具，例如统一返回格式
 │   └── router_trace.py              # 路由追踪工具，可能用于日志或调试
+├── static/                          # 全局静态文件
 ├── .gitignore                       # Git 忽略文件配置
 ├── README.md                        # 项目说明文档
 ├── requirements.txt                 # Python 依赖包清单

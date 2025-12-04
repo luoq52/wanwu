@@ -32,8 +32,8 @@ def create_app():
     register_error_handlers(app)
 
     # 注册蓝图
-    from callback.routes.hello import hello_demo
+    from callback.routes import callback_bp
 
-    app.register_blueprint(hello_demo, url_prefix="/v1")
+    app.register_blueprint(callback_bp, url_prefix="/v1")
 
     return app
