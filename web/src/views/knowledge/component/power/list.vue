@@ -212,7 +212,7 @@ export default {
     handleTransfer(row) {
       this.$confirm('确定要转让管理员权限吗？转让后您将失去管理员权限。', '转让确认', {
         confirmButtonText: '确定转让',
-        cancelButtonText: '取消',
+        cancelButtonText: this.$t('common.confirm.cancel'),
         type: 'warning'
       }).then(() => {
         this.$emit('transfer', row)
@@ -222,8 +222,8 @@ export default {
     },
     handleDelete(row) {
       this.$confirm('确定要删除这条数据吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('common.confirm.confirm'),
+        cancelButtonText: this.$t('common.confirm.cancel'),
         type: 'warning'
       }).then(() => {
         delUserPower({knowledgeId: this.knowledgeId, permissionId: row.permissionId}).then(res => {

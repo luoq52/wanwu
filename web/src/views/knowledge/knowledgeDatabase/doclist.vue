@@ -35,6 +35,12 @@
                   ref="searchInput"
                   @handleSearch="handleSearch"
                 />
+                <search-input
+                  class="cover-input-icon"
+                  :placeholder="$t('knowledgeManage.metaPlaceholder')"
+                  ref="searchInputMeta"
+                  @handleSearch="handleSearchByMeta"
+                />
               </div>
 
               <div class="content_title">
@@ -84,7 +90,7 @@
                   size="mini"
                   type="primary"
                   @click="showMeta"
-                  v-if="[POWER_TYPE_EDIT, POWER_TYPE_ADMIN, POWER_TYPE_SYSTEM_ADMIN].includes(permissionType)"
+                  v-if="hasManagePerm"
                 >
                   {{ $t("knowledgeManage.docList.metaDataManagement") }}
                 </el-button>
@@ -104,10 +110,32 @@
                   type="primary"
                   :underline="false"
                   @click="handleUpload"
-                  v-if="[POWER_TYPE_EDIT, POWER_TYPE_ADMIN, POWER_TYPE_SYSTEM_ADMIN].includes(permissionType)"
+                  v-if="hasManagePerm"
                 >
                   {{ $t("knowledgeManage.fileUpload") }}
                 </el-button>
+                <template v-if="hasManagePerm">
+                  <el-dropdown
+                    v-for="(group,index) in dropdownGroups"
+                    :key="group.label"
+                    @command="handleCommand"
+                    :style="{ margin: index === 0 ? '0 10px' : '' }"
+                  >
+                    <el-button size="mini" type="primary">
+                      {{ group.label }}
+                      <i :class="['el-icon--right', group.icon]"></i>
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item
+                        v-for="item in group.items"
+                        :key="item.command"
+                        :command="item.command"
+                      >
+                        {{ item.label }}
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </template>
               </div>
             </el-header>
             <el-main class="noPadding" v-loading="tableLoading">
@@ -129,7 +157,7 @@
                 <el-table-column
                   type="selection"
                   reserve-selection
-                  v-if="[POWER_TYPE_EDIT, POWER_TYPE_ADMIN, POWER_TYPE_SYSTEM_ADMIN].includes(permissionType)"
+                  v-if="hasManagePerm"
                   width="55"
                 >
                 </el-table-column>
@@ -245,7 +273,7 @@
                       round
                       @click="handleDel(scope.row)"
                       :disabled="[KNOWLEDGE_STATUS_CHECKING, KNOWLEDGE_STATUS_ANALYSING].includes(Number(scope.row.status))"
-                      v-if="[POWER_TYPE_EDIT, POWER_TYPE_ADMIN, POWER_TYPE_SYSTEM_ADMIN].includes(permissionType)"
+                      v-if="hasManagePerm"
                       :type="
                         [KNOWLEDGE_STATUS_CHECKING, KNOWLEDGE_STATUS_ANALYSING].includes(Number(scope.row.status)) ? 'info' : ''
                       "
@@ -318,10 +346,14 @@
     <BatchMetaButton
       ref="BatchMetaButton"
       :selectedCount="selectedTableData.length"
+      type="knowledge"
       @showBatchMeta="showBatchMeta"
       @handleBatchDelete="handleBatchDelete"
+      @handleBatchExport="handleBatchExport"
       @handleMetaCancel="handleMetaCancel"
     />
+    <!-- 导出记录 -->
+    <exportRecord ref="exportRecord" :knowledgeId="docQuery.knowledgeId"/>
   </div>
 </template>
 
@@ -336,9 +368,10 @@ import {
   delDocItem,
   uploadFileTips,
   updateDocMeta,
+  exportDoc,
 } from "@/api/knowledge";
 import {mapGetters} from "vuex";
-import {KNOWLEDGE_GRAPH_STATUS, KNOWLEDGE_STATUS_OPTIONS} from "../config";
+import {DROPDOWN_GROUPS, KNOWLEDGE_GRAPH_STATUS, KNOWLEDGE_STATUS_OPTIONS} from "../config";
 import {
   INITIAL,
   POWER_TYPE_EDIT,
@@ -353,9 +386,11 @@ import {
   KNOWLEDGE_STATUS_CHECK_FAIL,
   KNOWLEDGE_STATUS_FAIL,
 } from "@/views/knowledge/constants";
+import exportRecord from "@/views/knowledge/qaDatabase/exportRecord.vue";
 
 export default {
   components: {
+    exportRecord,
     Pagination,
     SearchInput,
     mataData,
@@ -369,6 +404,7 @@ export default {
       tableLoading: false,
       docQuery: {
         docName: "",
+        metaValue: "",
         knowledgeId: this.$route.params.id,
         status: KNOWLEDGE_STATUS_ALL,
       },
@@ -391,6 +427,7 @@ export default {
       graphSwitch: false,
       showGraphReport: false,
       knowledgeGraphStatus: KNOWLEDGE_GRAPH_STATUS,
+      dropdownGroups: DROPDOWN_GROUPS.slice(0, 1),
       POWER_TYPE_EDIT,
       POWER_TYPE_ADMIN,
       POWER_TYPE_SYSTEM_ADMIN,
@@ -427,6 +464,9 @@ export default {
   },
   computed: {
     ...mapGetters("app", ["permissionType"]),
+    hasManagePerm() {
+      return [POWER_TYPE_EDIT, POWER_TYPE_ADMIN, POWER_TYPE_SYSTEM_ADMIN].includes(this.permissionType);
+    }
   },
   mounted() {
     this.getTableData(this.docQuery);
@@ -453,6 +493,46 @@ export default {
     this.clearTimer();
   },
   methods: {
+    handleCommand(command) {
+      const actions = {
+        exportData: this.exportData,
+        exportRecord: this.exportRecord,
+      };
+      (actions[command] || this.exportData)();
+    },
+    exportData(docIdList) {
+      if (!this.docQuery.knowledgeId) {
+        this.$message.warning(this.$t("common.noData"));
+        return;
+      }
+      if (this.loading) return;
+      const params = {
+        knowledgeId: this.docQuery.knowledgeId,
+        docIdList: docIdList
+      };
+      this.loading = true;
+      exportDoc(params)
+        .then((res) => {
+          if (res.code === 0) {
+            this.$message.success(this.$t("common.message.success"));
+            const data = res.data || {};
+            const url = data.fileUrl || data.downloadUrl;
+            if (url) {
+              window.open(url, "_blank");
+            } else if (data.recordCreated) {
+              this.exportRecord();
+            }
+          }
+        })
+        .catch(() => {
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    exportRecord() {
+      this.$refs.exportRecord.showDialog();
+    },
     handleMetaCancel() {
       this.selectedTableData = [];
       this.selectedDocIds = [];
@@ -583,6 +663,10 @@ export default {
       this.docQuery.docName = val;
       this.getTableData(this.docQuery);
     },
+    handleSearchByMeta(val) {
+      this.docQuery.metaValue = val;
+      this.getTableData(this.docQuery);
+    },
     submitDocname(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -651,6 +735,9 @@ export default {
       }).catch(() => {
       });
     },
+    handleBatchExport() {
+      this.exportData(this.selectedDocIds)
+    },
     async getTableData(data) {
       this.tableLoading = true;
       this.tableData = await this.$refs["pagination"].getTableData(data);
@@ -679,6 +766,9 @@ export default {
       this.getTableData({...this.docQuery, pageNo: 1});
     },
     filterStatus(status) {
+      if (status === KNOWLEDGE_STATUS_UPLOADED) {
+        return this.$t("knowledgeManage.beUploaded");
+      }
       const statusOption = KNOWLEDGE_STATUS_OPTIONS.find(option => option.value === status);
       return statusOption ? statusOption.label : this.$t("knowledgeManage.noStatus");
     },

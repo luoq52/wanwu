@@ -25,7 +25,6 @@
                 <el-select
                   @change="changeOption($event)"
                   v-model="docQuery.status"
-                  clearable
                   :placeholder="$t('knowledgeManage.please')"
                   style="width: 150px"
                   class="marginRight no-border-select cover-input-icon"
@@ -42,6 +41,12 @@
                   :placeholder="$t('knowledgeManage.questionPlaceholder')"
                   ref="searchInput"
                   @handleSearch="handleSearch"
+                />
+                <search-input
+                  class="cover-input-icon"
+                  :placeholder="$t('knowledgeManage.metaPlaceholder')"
+                  ref="searchInputMeta"
+                  @handleSearch="handleSearchByMeta"
                 />
               </div>
 
@@ -310,10 +315,10 @@
     <BatchMetaButton
       ref="BatchMetaButton"
       :selectedCount="selectedTableData.length"
+      type="qa"
       @showBatchMeta="showBatchMeta"
       @handleBatchDelete="handleBatchDelete"
       @handleMetaCancel="handleMetaCancel"
-      :type="batchMetaType"
     />
     <!-- 新建/编辑问答对 -->
     <createQa
@@ -385,6 +390,7 @@ export default {
       tableLoading: false,
       docQuery: {
         name: "",
+        metaValue: "",
         knowledgeId: this.$route.params.id,
         status: QA_STATUS_ALL,
       },
@@ -483,17 +489,6 @@ export default {
       const params = {
         knowledgeId: this.docQuery.knowledgeId,
       };
-      if (
-        this.docQuery.status !== undefined &&
-        this.docQuery.status !== null &&
-        this.docQuery.status !== "" &&
-        this.docQuery.status !== QA_STATUS_ALL
-      ) {
-        params.status = this.docQuery.status;
-      }
-      if (this.docQuery.name) {
-        params.name = this.docQuery.name.trim();
-      }
       this.loading = true;
       qaDocExport(params)
         .then((res) => {
@@ -658,6 +653,10 @@ export default {
     },
     handleSearch(val) {
       this.docQuery.name = val;
+      this.getTableData(this.docQuery);
+    },
+    handleSearchByMeta(val) {
+      this.docQuery.metaValue = val;
       this.getTableData(this.docQuery);
     },
     async handleDelete(QAPairIdList) {

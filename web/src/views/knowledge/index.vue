@@ -70,6 +70,7 @@
       <knowledgeList
         :appData="knowledgeData"
         @editItem="editItem"
+        @exportItem="exportItem"
         @reloadData="tabClick"
         ref="knowledgeList"
         v-loading="tableLoading"
@@ -88,7 +89,7 @@ import {getKnowledgeList, tagList} from "@/api/knowledge";
 import SearchInput from "@/components/searchInput.vue";
 import knowledgeList from "./component/knowledgeList.vue";
 import createKnowledge from "./component/create.vue";
-
+import {qaDocExport} from "@/api/qaDatabase";
 export default {
   components: {SearchInput, knowledgeList, createKnowledge},
   provide() {
@@ -165,6 +166,16 @@ export default {
     },
     editItem(row) {
       this.$refs.createKnowledge.showDialog(row);
+    },
+    exportItem(row) {
+      const params = {
+        knowledgeId: row.knowledgeId,
+      };
+      qaDocExport(params).then((res) => {
+        if (res.code === 0) {
+          this.$message.success(this.$t("common.message.success"));
+        }
+      })
     },
     showCreate(row) {
       this.$refs.createKnowledge.showDialog(row);

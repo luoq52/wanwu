@@ -121,6 +121,9 @@
                 >
                   {{ $t("common.button.delete") }}
                 </el-dropdown-item>
+                <el-dropdown-item command="export">
+                  {{ $t("common.button.export") }}
+                </el-dropdown-item>
                 <el-dropdown-item command="power">
                   {{ $t("knowledgeSelect.power") }}
                 </el-dropdown-item>
@@ -137,7 +140,7 @@
     ></el-empty>
     <tagDialog
       ref="tagDialog"
-      @relodaData="relodaData"
+      @reloadData="reloadData"
       type="knowledge"
       :title="title"
     />
@@ -231,15 +234,21 @@ export default {
         case "delete":
           this.deleteItem(n.knowledgeId);
           break;
+        case "export":
+          this.exportItem(n);
+          break;
         case "power":
           this.showPowerManagement(n);
           break;
       }
     },
+    exportItem(row) {
+      this.$emit("exportItem", row);
+    },
     editItem(row) {
       this.$emit("editItem", row);
     },
-    relodaData(category) {
+    reloadData(category) {
       this.$emit("reloadData", category);
     },
     deleteItem(knowledgeId) {

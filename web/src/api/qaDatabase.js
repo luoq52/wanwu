@@ -13,7 +13,7 @@ export const qaDocExport = (data) => {
 //删除问答库记录
 export const delQaRecord = (data) => {
   return service({
-    url: `${USER_API}/knowledge/qa/export/record`,
+    url: `${USER_API}/knowledge/export/record`,
     method: "delete",
     data,
   });
@@ -22,7 +22,7 @@ export const delQaRecord = (data) => {
 //获取问答库导出记录列表
 export const getQaExportRecordList = (data) => {
   return service({
-    url: `${USER_API}/knowledge/qa/export/record/list`,
+    url: `${USER_API}/knowledge/export/record/list`,
     method: "get",
     params: data,
   });

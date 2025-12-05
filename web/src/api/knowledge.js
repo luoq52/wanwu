@@ -213,6 +213,14 @@ export const delDocItem = (data) => {
     data
   })
 };
+// 知识库文档导出
+export const exportDoc = (data) => {
+  return service({
+    url: `${USER_API}/knowledge/doc/export`,
+    method: 'post',
+    data
+  })
+};
 // 上传文件提示接口
 export const uploadFileTips = (params) => {
   return service({

@@ -4,25 +4,24 @@
       title="API密钥"
       :visible.sync="dialogVisible"
       width="50%"
-      :before-close="handleClose">
-      <el-table
-        :data="tableData"
-        style="width: 100%">
-        <el-table-column label="密钥"  prop="apiKey"  width="300" >
+      :before-close="handleClose"
+    >
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column label="密钥" prop="apiKey" width="300">
           <template slot-scope="scope">
-            <span>{{scope.row.apiKey.slice(0,6) + '******'}}</span>
+            <span>{{ scope.row.apiKey.slice(0, 6) + "******" }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间"  prop="createdAt"  />
+        <el-table-column label="创建时间" prop="createdAt" />
         <el-table-column label="操作" width="200">
-        <template slot-scope="scope">
-          <el-button
-          size="mini"
-          @click="handleCopy(scope.row) && copycb()">复制</el-button>
-          <el-button
-          size="mini"
-          @click="handleDelete(scope.row)">删除</el-button>
-        </template>
+          <template slot-scope="scope">
+            <el-button size="mini" @click="handleCopy(scope.row) && copycb()"
+              >复制</el-button
+            >
+            <el-button size="mini" @click="handleDelete(scope.row)"
+              >删除</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
@@ -33,90 +32,92 @@
   </div>
 </template>
 <script>
-import {createApiKey,delApiKey,getApiKeyList} from "@/api/appspace";
+import { createApiKey, delApiKey, getApiKeyList } from "@/api/appspace"
 export default {
   props: {
     appType: {
       type: String,
-      required: true
+      required: true,
     },
     appId: {
       type: String,
-      required: true
+      required: true,
     },
-    type:{
-      type: String, 
-      default:''
+    type: {
+      type: String,
+      default: "",
+    },
+  },
+  data() {
+    return {
+      tableData: [],
+      dialogVisible: false,
     }
   },
-  data(){
-    return{
-      tableData:[],
-      dialogVisible:false
-    }
-  },
-  created(){
-    if(this.type !== 'webChat'){
+  created() {
+    if (this.type !== "webChat") {
       this.getTableData()
     }
   },
-  methods:{
-    showDialog(){
-      this.dialogVisible = true;
+  methods: {
+    showDialog() {
+      this.dialogVisible = true
     },
-    handleClose(){
-      this.dialogVisible = false;
+    handleClose() {
+      this.dialogVisible = false
     },
-    handleCopy(row){
-      let text = row.apiKey;
-      var textareaEl = document.createElement('textarea');
-      textareaEl.setAttribute('readonly', 'readonly');
-      textareaEl.value = text;
-      document.body.appendChild(textareaEl);
-      textareaEl.select();
-      var res = document.execCommand('copy');
-      document.body.removeChild(textareaEl);
-      return res;
+    handleCopy(row) {
+      let text = row.apiKey
+      var textareaEl = document.createElement("textarea")
+      textareaEl.setAttribute("readonly", "readonly")
+      textareaEl.value = text
+      document.body.appendChild(textareaEl)
+      textareaEl.select()
+      var res = document.execCommand("copy")
+      document.body.removeChild(textareaEl)
+      return res
     },
-    copycb(){
-      this.$message.success('内容已复制到粘贴板')
+    copycb() {
+      this.$message.success("内容已复制到粘贴板")
     },
-    handleCreate(){
-      const data = {appId:this.appId,appType:this.appType}
-      createApiKey(data).then(res =>{
-          if(res.code === 0){
-            this.tableData.push(res.data);
-          }
+    handleCreate() {
+      const data = { appId: this.appId, appType: this.appType }
+      createApiKey(data).then((res) => {
+        if (res.code === 0) {
+          this.tableData.push(res.data)
+        }
       })
     },
-    getTableData(){
-      const data = {appId:this.appId,appType:this.appType}
-      getApiKeyList(data).then(res =>{
-        if(res.code === 0){
+    getTableData() {
+      const data = { appId: this.appId, appType: this.appType }
+      getApiKeyList(data).then((res) => {
+        if (res.code === 0) {
           this.tableData = res.data || []
         }
       })
     },
-    handleDelete(row){
-      this.$confirm('确定要删除当前APIkey吗？',this.$t('knowledgeManage.tip'),
+    handleDelete(row) {
+      this.$confirm(
+        "确定要删除当前APIkey吗？",
+        this.$t("knowledgeManage.tip"),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: "warning"
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         }
       )
-      .then(() => {
-        delApiKey({apiId:row.apiId}).then(res =>{
-          if(res.code === 0){
-            this.$message.success('删除成功')
-            this.getTableData()
-          }
+        .then(() => {
+          delApiKey({ apiId: row.apiId }).then((res) => {
+            if (res.code === 0) {
+              this.$message.success("删除成功")
+              this.getTableData()
+            }
+          })
         })
-      })
-      .catch((error) => {
-        this.getTableData()
-      });
-    }
-  }
+        .catch((error) => {
+          this.getTableData()
+        })
+    },
+  },
 }
 </script>

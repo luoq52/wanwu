@@ -168,7 +168,6 @@ export const DROPDOWN_GROUPS = [
 ]
 
 export const KNOWLEDGE_STATUS_OPTIONS = [
-  {label: i18n.t("knowledgeManage.beUploaded"), value: KNOWLEDGE_STATUS_UPLOADED},
   {label: i18n.t("knowledgeManage.all"), value: KNOWLEDGE_STATUS_ALL},
   {label: i18n.t("knowledgeManage.finish"), value: KNOWLEDGE_STATUS_FINISH},
   {label: i18n.t("knowledgeManage.fail"), value: KNOWLEDGE_STATUS_FAIL},

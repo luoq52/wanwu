@@ -1,5 +1,5 @@
 <template>
-  <div class="batch-operation-toolbar" v-if="selectedCount > 0 && type === 'multiple'">
+  <div class="batch-operation-toolbar" v-if="selectedCount > 0">
     <div class="toolbar-container">
       <div class="toolbar-item selected-item">
         <span class="selected-badge">{{ selectedCount }}</span>
@@ -20,6 +20,10 @@
         </div>
         <span class="item-text">{{ $t('metaData.batchDelete') }}</span>
       </div>
+      <div class="toolbar-divider" v-if="type === 'knowledge'"></div>
+      <div class="toolbar-item"  v-if="type === 'knowledge'" @click="handleBatchExport">
+        <span class="item-text">{{ $t('metaData.batchExport') }}</span>
+      </div>
       <div class="toolbar-divider"></div>
       <div class="toolbar-item" @click="handleCancel">
         <span class="item-text">{{ $t('common.confirm.cancel') }}</span>
@@ -38,7 +42,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'multiple'
+      default: ''
     }
   },
   methods: {
@@ -47,6 +51,9 @@ export default {
     },
     handleBatchDelete() {
       this.$emit('handleBatchDelete');
+    },
+    handleBatchExport() {
+      this.$emit('handleBatchExport');
     },
     handleCancel() {
       this.$emit('handleMetaCancel');

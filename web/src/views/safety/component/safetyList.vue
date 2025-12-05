@@ -93,7 +93,7 @@ export default {
     editItem(row) {
       this.$emit('editItem', row)
     },
-    relodaData(){
+    reloadData(){
       this.$emit('reloadData');
     },
     deleteItem(tableId){

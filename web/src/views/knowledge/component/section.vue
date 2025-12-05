@@ -287,7 +287,7 @@
         <el-button type="primary" @click="handleSubmit" :loading="submitLoading"
                    v-if="!cardObj[0]['isParent']">确定</el-button>
         <el-button type="primary" @click="createChunk(true)"
-                   v-if="cardObj[0]['isParent'] && [POWER_TYPE_EDIT, POWER_TYPE_ADMIN, POWER_TYPE_SYSTEM_ADMIN].includes(permissionType)"" :disabled="submitLoading">新增子分段</el-button>
+                   v-if="cardObj[0]['isParent'] && [POWER_TYPE_EDIT, POWER_TYPE_ADMIN, POWER_TYPE_SYSTEM_ADMIN].includes(permissionType)" :disabled="submitLoading">新增子分段</el-button>
         <el-button type="primary" @click="handleClose"
                    :disabled="submitLoading">{{ $t('knowledgeManage.close') }}</el-button>
       </span>
@@ -466,8 +466,8 @@ export default {
     },
     deleteSegment(row, index) {
       this.$confirm('确定要删除这个子分段吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('common.confirm.confirm'),
+        cancelButtonText: this.$t('common.confirm.cancel'),
         type: 'warning'
       }).then(() => {
         delSegmentChild({
