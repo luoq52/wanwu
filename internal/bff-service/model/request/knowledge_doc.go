@@ -3,9 +3,6 @@ package request
 import (
 	"errors"
 	"regexp"
-
-	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
-	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
 )
 
 const (
@@ -13,6 +10,7 @@ const (
 	DocAnalyzerPdfParser = "model"
 	CommonSplitMethod    = "0" //通用分段
 	ParentSplitMethod    = "1" //父子分段
+	UrlFileUpload        = 2   //url文件上传
 )
 
 type DocListReq struct {
@@ -26,7 +24,7 @@ type DocListReq struct {
 
 type DocImportReq struct {
 	KnowledgeId   string         `json:"knowledgeId" validate:"required"` //知识库id
-	DocImportType int            `json:"docImportType"`                   //文档导入类型，0：文件上传，1：url上传，2.批量url上传
+	DocImportType int            `json:"docImportType"`                   //文档导入类型，0：文件上传，1：单条url上传，2.文件url上传
 	DocInfo       []*DocInfo     `json:"docInfoList" validate:"required"` //上传文档列表
 	DocSegment    *DocSegment    `json:"docSegment" validate:"required"`  //文档分段配置
 	DocAnalyzer   []string       `json:"docAnalyzer" validate:"required"` //文档解析类型 text / ocr  / model
@@ -184,31 +182,30 @@ func (c *DocImportReq) Check() error {
 		seenKeys := make(map[string]bool)
 		for _, meta := range c.DocMetaData {
 			if meta.MetaKey == "" {
-				return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "key为空")
+				return errors.New("key为空")
 			}
 			// 检查Key是否重复
 			if seenKeys[meta.MetaKey] {
-				return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "key重复")
+				return errors.New("key重复")
 			}
 			seenKeys[meta.MetaKey] = true
 			if meta.MetaRule != "" {
 				// 检查rule和key传参
 				if meta.MetaValue != "" {
-					return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "常量和正则表达式重复")
+					return errors.New("常量和正则表达式重复")
 				}
 				// 检查正则合法性
 				_, err := regexp.Compile(meta.MetaRule)
 				if err != nil {
-					return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "非法正则表达式")
+					return errors.New("非法正则表达式")
 				}
 				// 检查key合法性
 				if !isValidKey(meta.MetaKey) {
-					return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "非法key")
+					return errors.New("非法key")
 				}
 			}
 		}
 	}
-
 	if c.DocSegment != nil {
 		if c.DocSegment.SegmentMethod != CommonSplitMethod && c.DocSegment.SegmentMethod != ParentSplitMethod {
 			return errors.New("segmentMethod error")
@@ -220,7 +217,11 @@ func (c *DocImportReq) Check() error {
 			return errors.New("subMaxSplitter error")
 		}
 	}
-
+	if c.DocImportType == UrlFileUpload {
+		if len(c.DocInfo) > 1 {
+			return errors.New("url文件仅可上传一个")
+		}
+	}
 	return nil
 }
 
@@ -238,7 +239,7 @@ func (c *DocMetaDataReq) Check() error {
 			if meta != nil {
 				if len(meta.MetaKey) > 0 {
 					if !isValidKey(meta.MetaKey) {
-						return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "非法key")
+						return errors.New("非法key")
 					}
 				}
 			}
