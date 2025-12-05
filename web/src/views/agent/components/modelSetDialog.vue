@@ -4,7 +4,8 @@
     title="模型配置"
     :visible.sync="dialogVisible"
     width="50%"
-    :before-close="handleClose">
+    :before-close="handleClose"
+    >
       <span>
         <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item :label="item.label" :prop="item.props" v-for="(item,index) in modelSet" :key="index">

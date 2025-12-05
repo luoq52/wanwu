@@ -35,7 +35,6 @@
   </el-dialog>
 </template>
 <script>
-import { sensitiveSelect } from "@/api/safety"
 export default {
   data() {
     return {

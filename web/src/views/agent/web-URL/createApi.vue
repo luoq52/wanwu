@@ -45,11 +45,15 @@
           <el-button
             size="mini"
             @click="handleCopy(scope.row) && copycb()"
-          >复制</el-button>
+          >
+            复制
+          </el-button>
           <el-button
             size="mini"
             @click="handleDelete(scope.row)"
-          >删除</el-button>
+          >
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -156,38 +160,37 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .header{
-    width:100%;
-    display:flex;
-    justify-content:flex-start;
-    align-items:flex-start;
-    height:60px;
-    .show-doc {
-      margin-left: 20px;
-      line-height: 60px;
+.header {
+  width:100%;
+  display:flex;
+  justify-content:flex-start;
+  align-items:flex-start;
+  height:60px;
+  .show-doc {
+    margin-left: 20px;
+    line-height: 60px;
+    color: $color;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .header-api {
+    padding: 6px 10px;
+    box-shadow: 1px 2px 2px #ddd;
+    background-color: #fff;
+    border-radius: 6px;
+    .root-url {
+      background-color: #eceefe;
       color: $color;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .header-api {
-      padding: 6px 10px;
-      box-shadow: 1px 2px 2px #ddd;
-      background-color: #fff;
-      border-radius: 6px;
-      .root-url {
-        background-color: #eceefe;
-        color: $color;
-        border: none;
-      }
-    }
-    .apikeyBtn{
-      margin-left:10px;
-      border:1px solid $btn_bg;
-      padding:12px;
-      color: $btn_bg;
-      display:flex;
-      align-items:center;
+      border: none;
     }
   }
-
+  .apikeyBtn {
+    margin-left:10px;
+    border:1px solid $btn_bg;
+    padding:12px;
+    color: $btn_bg;
+    display:flex;
+    align-items:center;
+  }
+}
 </style>

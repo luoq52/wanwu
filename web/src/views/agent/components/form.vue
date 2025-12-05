@@ -14,12 +14,13 @@
             />
           </div>
           <div class="basicInfo-desc">
-            <span class="basicInfo-title">{{
-              (editForm.name || $t("agent.form.noInfo")).length > 12
-                ? (editForm.name || $t("agent.form.noInfo")).substring(0, 12) +
-                  "..."
-                : editForm.name || $t("agent.form.noInfo")
-            }}</span>
+            <span class="basicInfo-title">
+              {{
+                (editForm.name || $t("agent.form.noInfo")).length > 12
+                  ? (editForm.name || $t("agent.form.noInfo")).substring(0, 12) + "..."
+                  : editForm.name || $t("agent.form.noInfo")
+              }}
+            </span>
             <span
               class="el-icon-edit-outline editIcon"
               @click="editAgent"
@@ -44,9 +45,10 @@
           type="primary"
           @click="handlePublish"
           style="padding: 13px 12px"
-          >{{ $t("agent.form.publish")
-          }}<span class="el-icon-arrow-down" style="margin-left: 5px"></span
-        ></el-button>
+        >
+          {{ $t("agent.form.publish") }}
+          <span class="el-icon-arrow-down" style="margin-left: 5px"></span>
+        </el-button>
         <div class="popover-operation" v-if="showOperation">
           <div>
             <el-radio :label="'private'" v-model="scope">
@@ -104,8 +106,8 @@
               placement="top-start"
             >
               <span class="tool-icon" @click="showPromptCompare">
-                <img :src="require('@/assets/imgs/temp-compare.png')"
-              /></span>
+                <img :src="require('@/assets/imgs/temp-compare.png')" />
+              </span>
             </el-tooltip>
           </div>
         </div>
@@ -168,8 +170,9 @@
                         v-for="(tag, tagIdx) in item.tags"
                         :key="tagIdx"
                         class="model-select-tag"
-                        >{{ tag.text }}</span
                       >
+                        {{ tag.text }}
+                      </span>
                     </div>
                   </div>
                 </el-option>
@@ -201,9 +204,7 @@
                 :placeholder="$t('agent.form.prologuePlaceholder')"
                 type="textarea"
               ></el-input>
-              <span class="el-input__count"
-                >{{ editForm.prologue.length }}/100</span
-              >
+              <span class="el-input__count">{{ editForm.prologue.length }}/100</span>
             </div>
           </div>
           <div class="block recommend-box">
@@ -339,9 +340,9 @@
             <span class="common-add">
               <span @click="showSafety">
                 <span class="el-icon-s-operation"></span>
-                <span class="handleBtn" style="margin-right: 10px">{{
-                  $t("agent.form.config")
-                }}</span>
+                <span class="handleBtn" style="margin-right: 10px">
+                  {{ $t("agent.form.config") }}
+                </span>
               </span>
               <el-switch
                 v-model="editForm.safetyConfig.enable"

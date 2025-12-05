@@ -11,55 +11,55 @@
       @click="closeMobileMenu"
       v-if="isMobile"
     ></div>
-  <CommonLayout
-    :aside-title="asideTitle"
-    :isButton="true"
-    :asideWidth="asideWidth"
-    @handleBtnClick="handleBtnClick"
-    :isBtnDisabled="sessionStatus === 0"
-    :class="[chatType==='webChat'?'chatBg':'']"
-    :showAside="showAside"
-  >
-    <template #aside-content>
-      <transition name="fade">
-        <div class="explore-aside-app">
-          <div
-            v-for="(n,i) in historyList "
-            class="appList"
-            :class="['appList',{'disabled':sessionStatus === 0},{'active':n.active}]"
-            @click="historyClick(n)"
-            @touchstart="historyClick(n)"
-            @mouseenter="mouseEnter(n)"
-            @mouseleave="mouseLeave(n)"
-            :key="'history'+ i"
-          >
-            <span class="appName">
-              <span class="appTag"></span>
-              {{n.title}}
-            </span>
-            <span
-              class="el-icon-delete appDelete"
-              v-if="n.hover || n.active"
-              @click.stop="deleteConversation(n)"
-            ></span>
+    <CommonLayout
+      :aside-title="asideTitle"
+      :isButton="true"
+      :asideWidth="asideWidth"
+      @handleBtnClick="handleBtnClick"
+      :isBtnDisabled="sessionStatus === 0"
+      :class="[chatType==='webChat'?'chatBg':'']"
+      :showAside="showAside"
+    >
+      <template #aside-content>
+        <transition name="fade">
+          <div class="explore-aside-app">
+            <div
+              v-for="(n,i) in historyList "
+              class="appList"
+              :class="['appList',{'disabled':sessionStatus === 0},{'active':n.active}]"
+              @click="historyClick(n)"
+              @touchstart="historyClick(n)"
+              @mouseenter="mouseEnter(n)"
+              @mouseleave="mouseLeave(n)"
+              :key="'history'+ i"
+            >
+              <span class="appName">
+                <span class="appTag"></span>
+                {{n.title}}
+              </span>
+              <span
+                class="el-icon-delete appDelete"
+                v-if="n.hover || n.active"
+                @click.stop="deleteConversation(n)"
+              ></span>
+            </div>
           </div>
+        </transition>
+      </template>
+      <template #main-content>
+        <div class="app-content">
+          <Chat
+            :chatType="'chat'"
+            :editForm="editForm"
+            :appUrlInfo="appUrlInfo"
+            :type="chatType"
+            ref="agentChat"
+            @reloadList="reloadList"
+            @setHistoryStatus="setHistoryStatus"
+          />
         </div>
-      </transition>
-    </template>
-    <template #main-content>
-      <div class="app-content">
-        <Chat
-          :chatType="'chat'"
-          :editForm="editForm"
-          :appUrlInfo="appUrlInfo"
-          :type="chatType"
-          ref="agentChat"
-          @reloadList="reloadList"
-          @setHistoryStatus="setHistoryStatus"
-        />
-      </div>
-    </template>
-  </CommonLayout>
+      </template>
+    </CommonLayout>
   </div>
 </template>
 <script>

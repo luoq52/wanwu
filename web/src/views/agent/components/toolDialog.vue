@@ -105,11 +105,12 @@
                           type="text"
                           @click="openTool($event, item, type, tool)"
                           v-if="!tool.checked"
-                          >添加</el-button
                         >
-                        <el-button type="text" v-else style="color: #ccc"
-                          >已添加</el-button
-                        >
+                          添加
+                        </el-button>
+                        <el-button type="text" v-else style="color: #ccc">
+                          已添加
+                        </el-button>
                       </div>
                     </div>
                   </template>

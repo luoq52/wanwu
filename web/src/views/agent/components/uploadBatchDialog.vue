@@ -82,15 +82,15 @@
                             }}
                           </span>
                         </el-tooltip>
-                        <span
-                          >[
-                          {{
-                            f.size > 1024
-                              ? (f.size / (1024 * 1024)).toFixed(2) + " MB"
-                              : f.size + " bytes"
-                          }}
-                          ]</span
-                        >
+                        <span>
+                          [
+                            {{
+                              f.size > 1024
+                                ? (f.size / (1024 * 1024)).toFixed(2) + " MB"
+                                : f.size + " bytes"
+                            }}
+                          ]
+                        </span>
                       </p>
                     </div>
                   </div>

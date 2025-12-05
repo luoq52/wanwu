@@ -21,25 +21,25 @@ const DefaultRetryInterval = 1000
 const LastEventId = "last-event-id"
 export function fetchEventSource(input, _a) {
   var {
-      signal: inputSignal,
-      headers: inputHeaders,
-      onopen: inputOnOpen,
-      onmessage,
-      onclose,
-      onerror,
-      openWhenHidden,
-      fetch: inputFetch,
-    } = _a,
-    rest = __rest(_a, [
-      "signal",
-      "headers",
-      "onopen",
-      "onmessage",
-      "onclose",
-      "onerror",
-      "openWhenHidden",
-      "fetch",
-    ])
+    signal: inputSignal,
+    headers: inputHeaders,
+    onopen: inputOnOpen,
+    onmessage,
+    onclose,
+    onerror,
+    openWhenHidden,
+    fetch: inputFetch,
+  } = _a,
+  rest = __rest(_a, [
+    "signal",
+    "headers",
+    "onopen",
+    "onmessage",
+    "onclose",
+    "onerror",
+    "openWhenHidden",
+    "fetch",
+  ])
 
   return new Promise((resolve, reject) => {
     const headers = Object.assign({}, inputHeaders)

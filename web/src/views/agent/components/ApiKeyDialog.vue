@@ -15,12 +15,8 @@
         <el-table-column label="创建时间" prop="createdAt" />
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleCopy(scope.row) && copycb()"
-              >复制</el-button
-            >
-            <el-button size="mini" @click="handleDelete(scope.row)"
-              >删除</el-button
-            >
+            <el-button size="mini" @click="handleCopy(scope.row) && copycb()">复制</el-button>
+            <el-button size="mini" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -36,23 +36,23 @@
     <div class="api-key-section rerank-section" v-if="currentItem && currentItem.toolId === 'bochawebsearch'">
     <div class="api-key-label">Rerank</div>
       <el-select
-          v-model="rerankId"
-          :placeholder="$t('agent.toolDetail.selectRerank')"
-          @visible-change="rerankVisible"
-          @change="rerankChange"
-          :loading-text="$t('agent.toolDetail.modelLoadingText')"
-          class="cover-input-icon"
-          style="width:100%;"
-          filterable
-          clearable
+        v-model="rerankId"
+        :placeholder="$t('agent.toolDetail.selectRerank')"
+        @visible-change="rerankVisible"
+        @change="rerankChange"
+        :loading-text="$t('agent.toolDetail.modelLoadingText')"
+        class="cover-input-icon"
+        style="width:100%;"
+        filterable
+        clearable
       >
-          <el-option
+        <el-option
           v-for="item in rerankOptions"
           :key="item.modelId"
           :label="item.displayName"
           :value="item.modelId"
-          >
-          </el-option>
+        >
+        </el-option>
       </el-select>
     </div>
 

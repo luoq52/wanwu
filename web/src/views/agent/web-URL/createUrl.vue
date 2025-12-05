@@ -39,12 +39,12 @@
         </el-table-column>
         <el-table-column :label="$t('knowledgeManage.operate')" width="260">
           <template slot-scope="scope">
-            <el-button size="mini" round @click="showDialog(scope.row)"
-              >编辑</el-button
-            >
-            <el-button size="mini" round @click="handleDel(scope.row)">{{
-              $t("common.button.delete")
-            }}</el-button>
+            <el-button size="mini" round @click="showDialog(scope.row)">
+              编辑
+            </el-button>
+            <el-button size="mini" round @click="handleDel(scope.row)">
+              {{ $t("common.button.delete") }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -82,18 +82,20 @@
           >
           </el-date-picker>
         </el-form-item>
-        <!-- <el-form-item label="知识库出处详情">
-              <el-switch
-                v-model="value"
-                active-color="var(--color)">
-              </el-switch>
-            </el-form-item> -->
-        <!-- <el-form-item label="工作流详情">
-              <el-switch
-                v-model="value"
-                active-color="var(--color)">
-              </el-switch>
-            </el-form-item> -->
+        <!--<el-form-item label="知识库出处详情">
+          <el-switch
+            v-model="value"
+            active-color="var(&#45;&#45;color)"
+          >
+          </el-switch>
+        </el-form-item>
+        <el-form-item label="工作流详情">
+          <el-switch
+            v-model="value"
+            active-color="var(&#45;&#45;color)"
+          >
+          </el-switch>
+        </el-form-item>-->
         <div class="online-item">
           <el-form-item prop="copyright">
             <template #label>

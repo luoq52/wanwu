@@ -27,8 +27,8 @@
               <span class="mdl">{{$t('agent.stop')}}</span>
             </span>
             <span v-show="sessionStatus !== 0" class="stop" @click="refresh">
-                <img class="stop-icon mdl" :src="require('@/assets/imgs/refresh.png')"/>
-                <span class="mdl">{{$t('agent.refresh')}}</span>
+              <img class="stop-icon mdl" :src="require('@/assets/imgs/refresh.png')"/>
+              <span class="mdl">{{$t('agent.refresh')}}</span>
             </span>
           </div>
           <EditableDivV3
@@ -64,9 +64,9 @@ import {md} from '@/mixins/marksown-it'
 import {mapGetters} from 'vuex'
 export default {
   inject:{
-      getHeaderConfig:{
-          default:() => null
-      }
+    getHeaderConfig:{
+      default:() => null
+    }
   },
   props:{
     editForm:{

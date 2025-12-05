@@ -226,8 +226,9 @@
                     :data-parents-index="i"
                     :data-collapse="m.collapse ? 'true' : 'false'"
                     v-if="n.qa_type === 1"
-                    >{{ j + 1 }}</sub
                   >
+                    {{ j + 1 }}
+                  </sub>
                   {{ m.title }}
                 </span>
                 <!-- <span @click="goPreview($event,m)" class="search-doc">查看全文</span> -->
