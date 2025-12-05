@@ -38,8 +38,8 @@ def register_tracing(app: Flask):
     @app.after_request
     def end_trace(response):
         request = g.get("request_log", {})
-        if "/apidocs" in request.get("full_path", ""):
-            return response  # 跳过 apidocs 的日志记录
+        # if "/apidocs" in request.get("full_path", ""):
+        #     return response  # 跳过 apidocs 的日志记录
 
         # 耗时ms
         cost = round((time.time() - g.get("start_time", time.time())) * 1000, 2)

@@ -2,7 +2,7 @@ import logging
 import time
 from typing import List, Union
 
-logger = logging.getLogger(__name__)
+from utils.log import logger
 
 
 class CustomTokenizer:

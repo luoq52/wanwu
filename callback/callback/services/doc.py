@@ -5,29 +5,29 @@ import logging
 import os
 import posixpath
 import textwrap
-from datetime import datetime, timedelta, timezone
 
 import requests
 from docx import Document
-from flask import config, current_app
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
+from callback.services import minio as minio_service
 from configs.config import config
 from extensions.minio import minio_client
 from utils.build_prompt import build_docqa_prompt_from_search_list
 from utils.log import logger
+from utils.response import BizError
 
 
 def process_documents(query, file_urls, sentence_size, overlap_size):
     """
-    解析文档并构建 Prompt
+    解析文档并生成 Prompt
     """
     if not file_urls:
-        return None, "No file URLs provided"
+        raise BizError("No file URLs provided.")
 
     # 统一处理为列表
     file_urls = [file_urls] if isinstance(file_urls, str) else file_urls
@@ -46,10 +46,10 @@ def process_documents(query, file_urls, sentence_size, overlap_size):
                 all_docs.extend(docs)
             except Exception as e:
                 # 这里可以记录日志
-                current_app.logger.error(f"解析文档失败 {url}: {str(e)}")
+                logger.error(f"解析文档失败 {url}: {str(e)}")
 
     if not all_docs:
-        return None, "No document content parsed."
+        raise BizError("No document content parsed.")
 
     # 构建文档列表
     doc_list = [
@@ -62,22 +62,16 @@ def process_documents(query, file_urls, sentence_size, overlap_size):
 
     # 构建提示词
     prompt = build_docqa_prompt_from_search_list(query, doc_list)
-    return prompt, None
+    return prompt
 
 
-def generate_file_to_minio(formatted_markdown, to_format, filename):
+def generate_file_to_minio(formatted_markdown, filename, to_format="txt"):
 
     pdfmetrics.registerFont(TTFont("SimHei", "callback/static/simhei.ttf"))
 
     with io.BytesIO() as file_buffer:
-        # 初始化变量
-        download_link = None
-        full_filename = filename
-
-        # 1. 定义时区和时间
-        cst_tz = timezone(timedelta(hours=8))
-        timestamp = datetime.now(cst_tz).strftime("%Y%m%d%H%M%S")
-        bucket_name = config.callback_cfg["MINIO"]["BUCKET_NAME"]
+        # 1. 初始化变量
+        full_filename = filename + ".txt"
 
         # 2. 根据格式生成文件内容
         if to_format == "pdf":
@@ -123,21 +117,14 @@ def generate_file_to_minio(formatted_markdown, to_format, filename):
             file_buffer.write(formatted_markdown.encode("utf-8"))
 
         # 3. 上传逻辑
-        # 注意：使用 posixpath 处理 MinIO/S3 的路径，避免 Windows 下出现反斜杠
-        object_name = posixpath.join(timestamp, full_filename)
-
-        # 调用之前定义的 put_object_from_stream (它会自动 seek(0))
-        minio_client.put_object_from_stream(bucket_name, object_name, file_buffer)
+        object_path = minio_service.upload_file_to_minio(file_buffer, full_filename)
 
         download_link = posixpath.join(
-            config.callback_cfg["URL"]["MINIO_DOWNLOAD"], bucket_name, object_name
+            config.callback_cfg["URL"]["MINIO_DOWNLOAD"], object_path
         )
 
-        logger.info("File uploaded successfully")
-        logger.info(f"Download link: {download_link}")
-
         # 4. 返回结果
-        return full_filename, download_link
+        return full_filename, object_path, download_link
 
 
 def parse_doc(file_url, sentence_size, overlap_size):
@@ -155,7 +142,6 @@ def parse_doc(file_url, sentence_size, overlap_size):
     """
 
     url = config.callback_cfg["URL"]["RAG_DOC_PARSER"]
-    logger.info(f"RAG服务{url}")
     payload = json.dumps(
         {
             "url": file_url,
@@ -180,7 +166,5 @@ def parse_doc(file_url, sentence_size, overlap_size):
     headers = {"Content_Type": "application/json;charset=utf-8"}
     response = requests.post(url, headers=headers, data=payload, verify=False)
     result_dict = json.loads(response.text)
-    logger.info(f"result_dict:{result_dict}")
     docs = response.json().get("docs", [])
-    logger.info(f"docs:{docs}")
     return docs

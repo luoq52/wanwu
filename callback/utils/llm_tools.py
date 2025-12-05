@@ -3,7 +3,7 @@ from pathlib import Path
 
 from langchain_core.prompts import PromptTemplate  # type: ignore
 
-logger = logging.getLogger(__name__)
+from utils.log import logger
 
 prompts_base_path = "static/prompts"
 

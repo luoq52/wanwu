@@ -4,17 +4,13 @@ from re import sub
 
 from configs.config import config
 from utils.llm_tools import format_prompt_template, prompts_base_path
+from utils.log import logger
 from utils.tokenizers import CustomTokenizer
-
-# 日志对象初始化
-logger = logging.getLogger(__name__)
-
 
 # 常量定义
 MAX_INPUT_TOKENS = int(
     config.callback_cfg["MODEL"]["MAX_INPUT_TOKENS"]
 )  # 从配置读取的最大模型输入 token 数
-DEFAULT_TIMEZONE = "Asia/Shanghai"  # 默认的时区设置
 
 # 拼接文本时的截断阈值（单位：token）
 # 搜索内容拼接时如果剩余token数量低于该值，则舍弃该chunk，否则将chunk截断后再拼接
@@ -66,11 +62,11 @@ def assemble_search_context(
             if leftover > TRUNCATION_THRESHOLD:
                 truncated = tokenizer.truncate_text(segment, leftover)
                 search_context += "\n\n" + truncated
-                logger.info(
+                logger.warn(
                     f"超出token限制，终止拼接，使用chunk数量: {idx+1}（最后一项已截断）"
                 )
             else:
-                logger.info(f"超出token限制，终止拼接，使用chunk数量: {idx}")
+                logger.warn(f"超出token限制，终止拼接，使用chunk数量: {idx}")
             break
 
         search_context += "\n\n" + segment
@@ -122,8 +118,6 @@ def build_prompt_from_search_list(
     prompt = format_prompt_template(
         template_name, question=query, context=search_contents, **kwargs
     )
-
-    logger.info(f"{template_prefix}_prompt token数: {tokenizer.count_tokens(prompt)}")
     return prompt
 
 

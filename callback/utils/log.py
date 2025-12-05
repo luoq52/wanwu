@@ -7,7 +7,7 @@ def init_logger(
     log_name="callback_logger", log_file="log/app.log", log_level=logging.DEBUG
 ):
     formatter = logging.Formatter(
-        "[%(asctime)s][%(levelname)s][%(module)s] %(message)s [%(pathname)s:%(lineno)d|%(funcName)s]"
+        "[%(asctime)s] [%(process)-2d] [%(levelname)s] [%(module)s] %(message)s [%(pathname)s:%(lineno)d|%(funcName)s]"
     )
 
     # 确保日志目录存在

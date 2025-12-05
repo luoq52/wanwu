@@ -13,9 +13,8 @@ from . import callback_bp
 @callback_bp.route("/doc_pra", methods=["POST"])
 def req_chat_doc():
     """
-    文档解析Prompt 生成
+    解析文档并生成 Prompt
     ---
-    summary:
     description: |
       接收用户 query 和文档 URL，对文档进行切块解析并根据 RAG 生成 Prompt。
     tags:
@@ -40,26 +39,14 @@ def req_chat_doc():
                 description: 已上传文档的下载 URL
                 example: "https://example.com/upload/file.pdf"
     responses:
-      '200':
+      200:
         description: 生成并上传成功
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                code:
-                  type: integer
-                  example: 0
-                msg:
-                  type: string
-                  example: "success"
-                data:
-                  type: object
-                  properties:
-                    download_link:
-                      type: string
-                      description: 生成文件的 MinIO 下载链接
-                      example: "http://minio-url/bucket/my-document.docx"
+        schema:
+          type: object
+          properties:
+            prompt:
+              type: string
+              description: 根据文档内容生成的 Prompt
     """
     data = request.get_json()
 
@@ -68,16 +55,9 @@ def req_chat_doc():
     sentence_size = int(config.callback_cfg["DOC"]["CHUNK_SIZE"])
     overlap_size = float(config.callback_cfg["DOC"]["OVERLAP_RATIO"])
 
-    prompt, error = doc_service.process_documents(
-        query, file_url, sentence_size, overlap_size
-    )
-    if error:
-        raise BizError(error)
+    prompt = doc_service.process_documents(query, file_url, sentence_size, overlap_size)
 
-    return Response(
-        json.dumps({"prompt": prompt}, ensure_ascii=False),
-        content_type="application/json;charset=utf-8",
-    )
+    return jsonify({"prompt": prompt})
 
 
 @callback_bp.route("/generate_file", methods=["POST"])
@@ -85,9 +65,8 @@ def generate_file_to_minio():
     """
     将 Markdown 内容生成为指定格式文件并获取下载链接
     ---
-    summary: 将 Markdown 内容生成为指定格式文件并获取下载链接
     tags:
-      - DOC
+      - doc
     requestBody:
       required: true
       content:
@@ -114,27 +93,38 @@ def generate_file_to_minio():
                 description: 生成文件的标题(不包含后缀)
                 default: "Untitled"
     responses:
-      '200':
+      200:
         description: 生成并上传成功
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                download_link:
-                  type: string
-                  description: 生成文件的 MinIO 下载链接
-                  example: "http://minio-url/bucket/my-document.docx"
-      '500':
-        description: 生成失败或服务内部错误
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                  example: "Error converting markdown to docx"
+        schema:
+          type: object
+          properties:
+            download_link:
+              type: string
+              description: 生成文件的 MinIO 下载链接
+              example: "http://minio-url/bucket/my-document.docx"
+      400:
+        description: 业务逻辑错误
+        schema:
+          type: object
+          properties:
+            code:
+              type: integer
+              description: 错误码
+            msg:
+              type: string
+              description: 错误描述信息
+      500:
+        description: 服务内部错误
+        schema:
+          type: object
+          properties:
+            code:
+              type: integer
+              description: 错误码
+              example: 200000
+            msg:
+              type: string
+              description: 错误描述信息
     """
 
     formatted_markdown = request.form.get("formatted_markdown")
@@ -144,12 +134,11 @@ def generate_file_to_minio():
     # 参数校验
     if not formatted_markdown:
         raise BizError("formatted_markdown cannot be empty")
-
     if not to_format:
         raise BizError("to_format cannot be empty")
 
-    _, download_link = doc_service.generate_file_to_minio(
-        formatted_markdown, to_format, filename
+    _, _, download_link = doc_service.generate_file_to_minio(
+        formatted_markdown, filename, to_format
     )
 
     return jsonify({"download_link": download_link})
