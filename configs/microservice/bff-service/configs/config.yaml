@@ -110,9 +110,9 @@ doc-center:
     - key: model
       val: 模型导入方式-详细版.md
     - key: knowledge
-      val: 2.知识库/创建知识库.md
+      val: 2.知识库/创建知识库、问答库/创建知识库/创建知识库.md
     - key: knowledge-hit
-      val: 2.知识库/命中测试.md
+      val: 2.知识库/命中测试/创建命中测试.md
     - key: knowledge-keywords
       val: 2.知识库/关键词管理.md
     - key: mcp
