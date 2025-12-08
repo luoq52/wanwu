@@ -26,8 +26,7 @@
               :key="org.orgId"
               :label="org.orgName"
               :value="org.orgId"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
           <el-input
             v-model="searchKeyword"
@@ -35,8 +34,7 @@
             class="search-input"
             :disabled="!selectedOrganization"
             @focus="handleInputFocus"
-          >
-          </el-input>
+          ></el-input>
         </div>
 
         <div class="selection-tree">

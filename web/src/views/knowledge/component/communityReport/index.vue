@@ -5,8 +5,8 @@
         class="el-icon-arrow-left"
         @click="$router.go(-1)"
         style="margin-right: 20px; font-size: 20px; cursor: pointer"
-      ></i
-      >{{ obj.name }}
+      ></i>
+      {{ obj.name }}
     </div>
     <div class="container">
       <el-descriptions
@@ -33,12 +33,14 @@
         </el-descriptions-item>
         <el-descriptions-item
           :label="$t('knowledgeManage.communityReport.segmentType')"
-          >{{ communityReportStatus[res.status] }}
+        >
+          {{ communityReportStatus[res.status] }}
         </el-descriptions-item>
         <el-descriptions-item
           :label="$t('knowledgeManage.communityReport.lastImportStatus')"
           v-if="res.status === STATUS_FINISHED"
-          >{{ communityImportStatus[res.lastImportStatus] }}
+        >
+          {{ communityImportStatus[res.lastImportStatus] }}
         </el-descriptions-item>
       </el-descriptions>
 
@@ -49,7 +51,8 @@
           @click="refreshData"
           size="mini"
           :loading="loading.itemStatus"
-          >{{ $t('common.gpuDialog.reload') }}
+        >
+          {{ $t('common.gpuDialog.reload') }}
         </el-button>
         <el-button
           type="primary"
@@ -57,7 +60,8 @@
           size="mini"
           :loading="loading.stop"
           :disabled="!res.canGenerate || permissionType === POWER_TYPE_READ"
-          >{{
+        >
+          {{
             res.generateLabel === ''
               ? $t('knowledgeManage.communityReport.generate')
               : res.generateLabel
@@ -69,7 +73,8 @@
           size="mini"
           :loading="loading.stop"
           :disabled="!res.canAddReport || permissionType === POWER_TYPE_READ"
-          >{{ $t('knowledgeManage.communityReport.addCommunityReport') }}
+        >
+          {{ $t('knowledgeManage.communityReport.addCommunityReport') }}
         </el-button>
       </div>
 
@@ -88,11 +93,13 @@
                   placement="top"
                   :disabled="item.title.length <= 10"
                 >
-                  <span>{{
-                    item.title.length > 10
-                      ? item.title.substring(0, 10) + '...'
-                      : item.title
-                  }}</span>
+                  <span>
+                    {{
+                      item.title.length > 10
+                        ? item.title.substring(0, 10) + '...'
+                        : item.title
+                    }}
+                  </span>
                 </el-tooltip>
                 <div>
                   <el-dropdown
@@ -134,8 +141,7 @@
           :page-size="page.pageSize"
           layout="total, prev, pager, next, jumper"
           :total="page.total"
-        >
-        </el-pagination>
+        ></el-pagination>
       </div>
     </div>
     <createReport ref="createReport" @refreshData="refreshData"></createReport>

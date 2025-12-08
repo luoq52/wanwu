@@ -33,24 +33,25 @@
         size="mini"
         style="margin-left: 30px"
         @click="showPwd"
-        >{{ $t('userInfo.resetPwd') }}</el-button
       >
+        {{ $t('userInfo.resetPwd') }}
+      </el-button>
     </div>
     <div class="row">
-      <label>{{ $t('userInfo.company') }}</label
-      ><span>{{ form.company || '--' }}</span>
+      <label>{{ $t('userInfo.company') }}</label>
+      <span>{{ form.company || '--' }}</span>
     </div>
     <div class="row">
-      <label>{{ $t('userInfo.phone') }}</label
-      ><span>{{ form.phone || '--' }}</span>
+      <label>{{ $t('userInfo.phone') }}</label>
+      <span>{{ form.phone || '--' }}</span>
     </div>
     <div class="row">
-      <label>{{ $t('userInfo.email') }}</label
-      ><span>{{ form.email || '--' }}</span>
+      <label>{{ $t('userInfo.email') }}</label>
+      <span>{{ form.email || '--' }}</span>
     </div>
     <div class="row">
-      <label>{{ $t('userInfo.remark') }}</label
-      ><span>{{ form.remark || '--' }}</span>
+      <label>{{ $t('userInfo.remark') }}</label>
+      <span>{{ form.remark || '--' }}</span>
     </div>
     <el-dialog
       :title="$t('resetPwd.title')"

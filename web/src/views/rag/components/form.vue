@@ -175,8 +175,7 @@
               <el-switch
                 v-model="editForm.safetyConfig.enable"
                 :disabled="!(editForm.safetyConfig.tables || []).length"
-              >
-              </el-switch>
+              ></el-switch>
             </span>
           </p>
         </div>

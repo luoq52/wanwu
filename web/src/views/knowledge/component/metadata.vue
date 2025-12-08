@@ -6,7 +6,8 @@
       size="mini"
       @click="createMetaData"
       v-if="type !== 'create'"
-      >创建
+    >
+      创建
     </el-button>
     <div class="docMetaData" v-loading="loading">
       <div
@@ -48,8 +49,7 @@
               :key="meta.metaKey"
               :label="meta.metaKey"
               :value="meta.metaKey"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </div>
         <el-divider direction="vertical"></el-divider>
@@ -66,8 +66,7 @@
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
           <span v-else class="metaValueType">[{{ item.metaValueType }}]</span>
         </div>
@@ -85,8 +84,7 @@
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
           <el-input
             v-model="item.metaValue"
@@ -121,8 +119,7 @@
             value-format="timestamp"
             type="datetime"
             placeholder="选择日期时间"
-          >
-          </el-date-picker>
+          ></el-date-picker>
         </div>
         <el-divider direction="vertical" v-if="type !== 'create'"></el-divider>
         <div class="docItem_data docItem_data_btn">

@@ -11,9 +11,9 @@
       {{ $t('docDownload.name') }}
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleDownload">{{
-        $t('common.button.confirm')
-      }}</el-button>
+      <el-button type="primary" @click="handleDownload">
+        {{ $t('common.button.confirm') }}
+      </el-button>
     </span>
   </el-dialog>
 </template>

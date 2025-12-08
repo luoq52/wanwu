@@ -49,12 +49,12 @@
                 <i class="el-icon-more icon edit-icon" @click.stop></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="edit">{{
-                  $t('common.button.edit')
-                }}</el-dropdown-item>
-                <el-dropdown-item command="delete">{{
-                  $t('common.button.delete')
-                }}</el-dropdown-item>
+                <el-dropdown-item command="edit">
+                  {{ $t('common.button.edit') }}
+                </el-dropdown-item>
+                <el-dropdown-item command="delete">
+                  {{ $t('common.button.delete') }}
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>

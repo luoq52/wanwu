@@ -31,9 +31,9 @@
         <el-table-column prop="permissionType" label="权限">
           <template slot-scope="scope">
             <div class="type-cell">
-              <span v-if="!scope.row.editing" class="type-text">{{
-                powerType[scope.row.permissionType]
-              }}</span>
+              <span v-if="!scope.row.editing" class="type-text">
+                {{ powerType[scope.row.permissionType] }}
+              </span>
               <el-select
                 v-else
                 v-model="scope.row.permissionType"

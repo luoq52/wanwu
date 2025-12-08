@@ -25,8 +25,7 @@
           :max="ruleForm.visionConfig.maxPicNum"
           :step="1"
           show-input
-        >
-        </el-slider>
+        ></el-slider>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

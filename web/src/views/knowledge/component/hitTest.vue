@@ -5,8 +5,7 @@
         class="el-icon-arrow-left"
         @click="goBack"
         style="margin-right: 10px; font-size: 20px; cursor: pointer"
-      >
-      </i>
+      ></i>
       {{ $t('knowledgeManage.hitTest.name') }}
       <LinkIcon type="knowledge-hit" />
     </div>
@@ -104,15 +103,15 @@
                   </template>
                   <template v-else>
                     <div>
-                      <span
-                        >{{ $t('knowledgeManage.qaDatabase.question') }} :</span
-                      >
+                      <span>
+                        {{ $t('knowledgeManage.qaDatabase.question') }} :
+                      </span>
                       {{ item.question }}
                     </div>
                     <div>
-                      <span
-                        >{{ $t('knowledgeManage.qaDatabase.answer') }} :</span
-                      >
+                      <span>
+                        {{ $t('knowledgeManage.qaDatabase.answer') }} :
+                      </span>
                       {{ item.answer }}
                     </div>
                   </template>
@@ -149,9 +148,9 @@
                         >
                           <div class="child-header">
                             <span class="child-header-content">
-                              <span class="segment-badge"
-                                >C-{{ childIndex + 1 }}</span
-                              >
+                              <span class="segment-badge">
+                                C-{{ childIndex + 1 }}
+                              </span>
                               <span class="segment-content">
                                 {{ child.childSnippet }}
                               </span>

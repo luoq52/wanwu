@@ -1,8 +1,8 @@
 <template>
   <div class="mcp-detail" id="timeScroll">
-    <span class="back" @click="back">{{
-      $t('menu.back') + $t('menu.tool')
-    }}</span>
+    <span class="back" @click="back">
+      {{ $t('menu.back') + $t('menu.tool') }}
+    </span>
     <div class="mcp-title">
       <img
         class="logo"
@@ -84,8 +84,8 @@
                   :name="i"
                 >
                   <div class="desc" v-if="n.description">
-                    {{ $t('tool.builtIn.desc')
-                    }}<span v-html="parseTxt(n.description)" />
+                    {{ $t('tool.builtIn.desc') }}
+                    <span v-html="parseTxt(n.description)" />
                   </div>
                   <div class="params">
                     <p>{{ $t('tool.builtIn.params') }}</p>

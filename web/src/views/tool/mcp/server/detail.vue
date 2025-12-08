@@ -1,8 +1,8 @@
 <template>
   <div class="mcp-detail" id="timeScroll">
-    <span class="back" @click="back">{{
-      $t('menu.back') + $t('menu.tool')
-    }}</span>
+    <span class="back" @click="back">
+      {{ $t('menu.back') + $t('menu.tool') }}
+    </span>
     <div class="mcp-title">
       <img
         class="logo"
@@ -112,12 +112,14 @@
               <el-button
                 size="mini"
                 @click="$refs.toolDialog.showDialog(detail)"
-                >{{ $t('tool.server.bind.action') }}
+              >
+                {{ $t('tool.server.bind.action') }}
               </el-button>
               <el-button
                 size="mini"
                 @click="$refs.addDialog.showToolDialog(mcpServerId)"
-                >{{ $t('common.button.add') }}
+              >
+                {{ $t('common.button.add') }}
               </el-button>
             </div>
             <el-table :data="detail.tools" style="width: 100%">
@@ -181,8 +183,8 @@
                   >
                     {{ $t('common.button.edit') }}
                   </el-button>
-                  <el-button size="mini" @click="handleDeleteTool(scope.row)"
-                    >{{ $t('common.button.delete') }}
+                  <el-button size="mini" @click="handleDeleteTool(scope.row)">
+                    {{ $t('common.button.delete') }}
                   </el-button>
                 </template>
               </el-table-column>
@@ -207,8 +209,7 @@
                 :label="$t('tool.server.detail.key')"
                 prop="apiKey"
                 width="300"
-              >
-              </el-table-column>
+              ></el-table-column>
               <el-table-column
                 :label="$t('tool.server.detail.createTime')"
                 prop="createdAt"
@@ -223,8 +224,8 @@
                     :showIcon="false"
                     size="mini"
                   />
-                  <el-button size="mini" @click="handleDeleteApiKey(scope.row)"
-                    >{{ $t('common.button.delete') }}
+                  <el-button size="mini" @click="handleDeleteApiKey(scope.row)">
+                    {{ $t('common.button.delete') }}
                   </el-button>
                 </template>
               </el-table-column>

@@ -5,7 +5,10 @@
       style="margin-left: 22px; color: #fff; cursor: pointer"
       @command="handleChangeLang"
     >
-      <span> {{ langValue }} <i class="el-icon-arrow-down"></i> </span>
+      <span>
+        {{ langValue }}
+        <i class="el-icon-arrow-down"></i>
+      </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item
           v-for="(item, index) in langOptions"

@@ -5,8 +5,7 @@
         class="el-icon-arrow-left"
         @click="goBack"
         style="margin-right: 10px; font-size: 20px; cursor: pointer"
-      >
-      </i>
+      ></i>
       {{ $t('knowledgeManage.keyWordManage') }}
       <LinkIcon type="knowledge-keywords" />
       <div class="keyWordTip">{{ $t('knowledgeManage.keyWordTip') }}</div>
@@ -49,37 +48,42 @@
                 style="width: 100%"
                 :header-cell-style="{ background: '#F9F9F9', color: '#999999' }"
               >
-                <el-table-column prop="name" :label="$t('keyword.quesKeyword')">
-                </el-table-column>
-                <el-table-column prop="alias" :label="$t('keyword.docWord')">
-                </el-table-column>
+                <el-table-column
+                  prop="name"
+                  :label="$t('keyword.quesKeyword')"
+                ></el-table-column>
+                <el-table-column
+                  prop="alias"
+                  :label="$t('keyword.docWord')"
+                ></el-table-column>
                 <el-table-column
                   prop="knowledgeBaseNames"
                   :label="$t('keyword.linkKnowledge')"
                 >
                   <template slot-scope="scope">
-                    <span>{{
-                      scope.row.knowledgeBaseNames
-                        ? scope.row.knowledgeBaseNames.join(',')
-                        : ''
-                    }}</span>
+                    <span>
+                      {{
+                        scope.row.knowledgeBaseNames
+                          ? scope.row.knowledgeBaseNames.join(',')
+                          : ''
+                      }}
+                    </span>
                   </template>
                 </el-table-column>
                 <el-table-column
                   prop="updatedAt"
                   :label="$t('keyword.undateTime')"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   :label="$t('knowledgeManage.operate')"
                   width="260"
                 >
                   <template slot-scope="scope">
-                    <el-button size="mini" round @click="editItem(scope.row)"
-                      >{{ $t('common.button.edit') }}
+                    <el-button size="mini" round @click="editItem(scope.row)">
+                      {{ $t('common.button.edit') }}
                     </el-button>
-                    <el-button size="mini" round @click="handleDel(scope.row)"
-                      >{{ $t('common.button.delete') }}
+                    <el-button size="mini" round @click="handleDel(scope.row)">
+                      {{ $t('common.button.delete') }}
                     </el-button>
                   </template>
                 </el-table-column>

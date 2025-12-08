@@ -33,9 +33,9 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose" size="mini">{{
-          $t('common.button.cancel')
-        }}</el-button>
+        <el-button @click="handleClose" size="mini">
+          {{ $t('common.button.cancel') }}
+        </el-button>
         <el-button
           type="primary"
           size="mini"

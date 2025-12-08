@@ -23,10 +23,10 @@
           <i
             class="el-icon-upload"
             :title="assistantId ? $t('createApp.knowledgeConfigTips') : ''"
-          ></i
-          ><span style="margin-left: 4px">{{
-            $t('createApp.knowledgeConfigUploud')
-          }}</span>
+          ></i>
+          <span style="margin-left: 4px">
+            {{ $t('createApp.knowledgeConfigUploud') }}
+          </span>
         </el-upload>
         <p v-if="!assistantId" class="disabled-tip">
           {{ $t('createApp.knowledgeConfigTips1') }}
@@ -40,7 +40,8 @@
           @mouseenter="fileMouseEnter(n)"
           @mouseleave="fileMouseLeave(n)"
         >
-          <span>{{ i + 1 }}&nbsp;&nbsp;</span><span>{{ n.name }}</span>
+          <span>{{ i + 1 }}&nbsp;&nbsp;</span>
+          <span>{{ n.name }}</span>
           <i
             v-show="!n.hover || n.status === 'loading'"
             :class="['file-icon', fileStatus[n.status]]"

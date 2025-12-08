@@ -5,8 +5,7 @@
         class="el-icon-arrow-left"
         @click="goBack"
         style="margin-right: 10px; font-size: 20px; cursor: pointer"
-      >
-      </i>
+      ></i>
       {{ knowledgeName }}
     </div>
     <div class="block table-wrap list-common wrap-fullheight">
@@ -56,8 +55,7 @@
                   type="primary"
                   icon="el-icon-refresh"
                   @click="reload"
-                >
-                </el-button>
+                ></el-button>
                 <el-button
                   size="mini"
                   type="primary"
@@ -116,8 +114,7 @@
                   :key="'selection-' + hasManagePerm"
                   v-if="hasManagePerm"
                   width="55"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   prop="question"
                   :label="$t('knowledgeManage.qaDatabase.question')"
@@ -179,8 +176,7 @@
                 <el-table-column
                   prop="author"
                   :label="$t('knowledgeManage.author')"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   prop="switch"
                   :label="$t('user.table.status')"
@@ -215,8 +211,7 @@
                   prop="uploadTime"
                   :label="$t('knowledgeManage.importTime')"
                   width="150"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   :label="$t('knowledgeManage.operate')"
                   width="200"
@@ -331,7 +326,8 @@
     <BatchMetaButton
       ref="BatchMetaButton"
       :selectedCount="selectedTableData.length"
-      type="qa"
+      :type="'qa'"
+      :batchMetaType="batchMetaType"
       @showBatchMeta="showBatchMeta"
       @handleBatchDelete="handleBatchDelete"
       @handleMetaCancel="handleMetaCancel"

@@ -110,9 +110,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="handleClose">{{
-          $t('common.button.cancel')
-        }}</el-button>
+        <el-button size="small" @click="handleClose">
+          {{ $t('common.button.cancel') }}
+        </el-button>
         <el-button
           size="small"
           type="primary"

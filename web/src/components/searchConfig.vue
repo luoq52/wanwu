@@ -65,8 +65,7 @@
                 :step="0.1"
                 :max="1"
                 @change="rangeChage($event)"
-              >
-              </el-slider>
+              ></el-slider>
             </el-col>
           </el-row>
           <el-row v-if="showRerank(item)">
@@ -98,8 +97,7 @@
                   :key="item.modelId"
                   :label="item.displayName"
                   :value="item.modelId"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </el-col>
           </el-row>
@@ -122,8 +120,7 @@
                 :step="1"
                 v-model="formInline.knowledgeMatchParams.topK"
                 show-input
-              >
-              </el-slider>
+              ></el-slider>
             </el-col>
           </el-row>
           <el-row v-if="showHistory(item)">
@@ -145,8 +142,7 @@
                 :step="1"
                 v-model="formInline.knowledgeMatchParams.maxHistory"
                 show-input
-              >
-              </el-slider>
+              ></el-slider>
             </el-col>
           </el-row>
           <el-row>
@@ -168,8 +164,7 @@
                 :step="0.1"
                 v-model="formInline.knowledgeMatchParams.threshold"
                 show-input
-              >
-              </el-slider>
+              ></el-slider>
             </el-col>
           </el-row>
         </div>
@@ -181,8 +176,7 @@
           {{ $t('knowledgeManage.graph.useGraph') }}
         </span>
       </template>
-      <el-switch v-model="formInline.knowledgeMatchParams.useGraph">
-      </el-switch>
+      <el-switch v-model="formInline.knowledgeMatchParams.useGraph"></el-switch>
     </el-form-item>
   </el-form>
 </template>

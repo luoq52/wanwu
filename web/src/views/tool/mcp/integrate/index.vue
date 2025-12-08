@@ -14,9 +14,9 @@
             ref="searchInput"
             @handleSearch="fetchList"
           />
-          <el-button size="mini" type="primary" @click="handleAddMCP"
-            >导入</el-button
-          >
+          <el-button size="mini" type="primary" @click="handleAddMCP">
+            导入
+          </el-button>
         </div>
       </div>
 

@@ -14,7 +14,8 @@
         v-model="tagName"
       ></el-input>
       <div class="add" @click="addTag">
-        <span class="el-icon-plus add-icon"></span>{{ title }}
+        <span class="el-icon-plus add-icon"></span>
+        {{ title }}
       </div>
       <div class="tag-box">
         <div
@@ -27,11 +28,12 @@
           <el-checkbox
             v-model="item.selected"
             v-if="!item.showIpt && type !== 'section'"
-            >{{ item.tagName }}
+          >
+            {{ item.tagName }}
           </el-checkbox>
-          <span v-if="!item.showIpt && type === 'section'">{{
-            item.tagName
-          }}</span>
+          <span v-if="!item.showIpt && type === 'section'">
+            {{ item.tagName }}
+          </span>
           <el-input
             v-model="item.tagName"
             v-if="item.showIpt"
@@ -49,9 +51,9 @@
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submitDialog">{{
-        $t('common.button.confirm')
-      }}</el-button>
+      <el-button type="primary" @click="submitDialog">
+        {{ $t('common.button.confirm') }}
+      </el-button>
     </span>
   </el-dialog>
 </template>

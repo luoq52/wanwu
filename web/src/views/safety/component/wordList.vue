@@ -5,8 +5,7 @@
         class="el-icon-arrow-left"
         @click="goBack"
         style="margin-right: 10px; font-size: 20px; cursor: pointer"
-      >
-      </i>
+      ></i>
       {{ $t('safety.wordList.title') }}
       <LinkIcon type="safety" />
     </div>
@@ -20,12 +19,12 @@
               </div>
 
               <div class="content_title">
-                <el-button size="mini" type="primary" @click="showCreate">{{
-                  $t('safety.wordList.create')
-                }}</el-button>
-                <el-button size="mini" type="primary" @click="showReply">{{
-                  $t('safety.wordList.reply')
-                }}</el-button>
+                <el-button size="mini" type="primary" @click="showCreate">
+                  {{ $t('safety.wordList.create') }}
+                </el-button>
+                <el-button size="mini" type="primary" @click="showReply">
+                  {{ $t('safety.wordList.reply') }}
+                </el-button>
               </div>
             </el-header>
             <el-main class="noPadding" v-loading="tableLoading">
@@ -37,8 +36,7 @@
                 <el-table-column
                   prop="word"
                   :label="$t('safety.wordList.word')"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   prop="sensitiveType"
                   :label="$t('safety.wordList.type')"
@@ -57,7 +55,8 @@
                       round
                       @click="handleDel(scope.row)"
                       type="primary"
-                      >{{ $t('common.button.delete') }}
+                    >
+                      {{ $t('common.button.delete') }}
                     </el-button>
                   </template>
                 </el-table-column>

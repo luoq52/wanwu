@@ -15,18 +15,19 @@
             v-if="
               ['graph', 'community_report'].includes(parentSegment.contentType)
             "
-            >{{
-              parentSegment.contentType === 'graph' ? '知识图谱' : '社区报告'
-            }}</span
           >
-          <span class="parent-badge" v-else>{{
-            segmentList.length > 0 ? '父分段' : '通用分段'
-          }}</span>
+            {{
+              parentSegment.contentType === 'graph' ? '知识图谱' : '社区报告'
+            }}
+          </span>
+          <span class="parent-badge" v-else>
+            {{ segmentList.length > 0 ? '父分段' : '通用分段' }}
+          </span>
           <div class="parent-score">
             <span class="score-label">命中得分:</span>
-            <span class="score-value">{{
-              formatScore(parentSegment.score)
-            }}</span>
+            <span class="score-value">
+              {{ formatScore(parentSegment.score) }}
+            </span>
           </div>
         </div>
         <div
@@ -61,9 +62,9 @@
               <span class="segment-badge">C-{{ index + 1 }}</span>
               <span class="segment-score">
                 <span class="score-label">命中得分:</span>
-                <span class="score-value">{{
-                  formatScore(childscore[index])
-                }}</span>
+                <span class="score-value">
+                  {{ formatScore(childscore[index]) }}
+                </span>
               </span>
             </template>
             <div

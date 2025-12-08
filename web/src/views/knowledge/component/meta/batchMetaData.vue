@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="dialogVisible"
-    width="60%"
+    width="65%"
     :before-close="handleClose"
     class="batch-meta-dialog"
   >

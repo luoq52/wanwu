@@ -114,7 +114,8 @@
 
         <!-- 回答故障  code:7-->
         <div class="session-error" v-if="n.error">
-          <i class="el-icon-warning"></i>&nbsp;{{ n.response }}
+          <i class="el-icon-warning"></i>
+          &nbsp;{{ n.response }}
         </div>
 
         <!--回答 文字+图片-->
@@ -169,7 +170,8 @@
           <div v-else class="session-answer-wrapper">
             <img class="logo" :src="'/user/api/' + defaultUrl" />
             <div v-if="n.code === 7" class="answer-content session-error">
-              <i class="el-icon-warning"></i> &nbsp;{{ n.response }}
+              <i class="el-icon-warning"></i>
+              &nbsp;{{ n.response }}
             </div>
             <div v-else class="answer-content" v-html="n.response"></div>
           </div>
@@ -207,8 +209,7 @@
                         ? 'el-icon-caret-bottom'
                         : 'el-icon-caret-right',
                     ]"
-                  >
-                  </i>
+                  ></i>
                   出处：
                 </span>
                 <a
@@ -311,8 +312,11 @@
           <!--仅图片时只有 重新生成-->
           <div class="answer-operation">
             <div class="opera-left">
-              <span v-if="i === session_data.history.length - 1" class="restart"
-                ><i class="el-icon-refresh" @click="refresh">
+              <span
+                v-if="i === session_data.history.length - 1"
+                class="restart"
+              >
+                <i class="el-icon-refresh" @click="refresh">
                   &nbsp;
                   {{ $t('agent.refresh') }}
                 </i>

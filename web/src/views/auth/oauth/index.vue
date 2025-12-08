@@ -17,12 +17,12 @@
         </ul>
       </div>
       <div class="popup-footer">
-        <el-button type="primary" @click="handleCancel">{{
-          $t('common.button.cancel')
-        }}</el-button>
-        <el-button type="success" @click="handleConfirm">{{
-          $t('common.button.confirm')
-        }}</el-button>
+        <el-button type="primary" @click="handleCancel">
+          {{ $t('common.button.cancel') }}
+        </el-button>
+        <el-button type="success" @click="handleConfirm">
+          {{ $t('common.button.confirm') }}
+        </el-button>
       </div>
     </div>
   </div>

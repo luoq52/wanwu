@@ -5,8 +5,7 @@
         class="el-icon-arrow-left"
         @click="goBack"
         style="margin-right: 10px; font-size: 20px; cursor: pointer"
-      >
-      </i>
+      ></i>
       {{ knowledgeName }}
     </div>
     <div class="block table-wrap list-common wrap-fullheight">
@@ -49,8 +48,7 @@
                   type="primary"
                   icon="el-icon-refresh"
                   @click="reload"
-                >
-                </el-button>
+                ></el-button>
                 <template v-if="showGraphReport">
                   <el-dropdown
                     v-for="(group, index) in graphDropdownGroups"
@@ -147,8 +145,7 @@
                   reserve-selection
                   v-if="hasManagePerm"
                   width="55"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   prop="docName"
                   :label="$t('knowledgeManage.fileName')"
@@ -174,8 +171,7 @@
                 <el-table-column
                   prop="docType"
                   :label="$t('knowledgeManage.fileStyle')"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   prop="segmentMethod"
                   :label="$t('knowledgeManage.docList.segmentMode')"
@@ -189,14 +185,12 @@
                 <el-table-column
                   prop="author"
                   :label="$t('knowledgeManage.author')"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   prop="uploadTime"
                   :label="$t('knowledgeManage.importTime')"
                   width="200"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
                   prop="status"
                   :label="$t('knowledgeManage.currentStatus')"

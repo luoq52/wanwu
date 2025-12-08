@@ -24,4 +24,5 @@ module.exports = {
       options: { trailingComma: 'none' },
     },
   ],
+  htmlWhitespaceSensitivity: 'ignore',
 };

@@ -71,11 +71,12 @@
                 class="operation"
                 type="text"
                 @click="preUpdate(scope.row)"
-                >{{ $t('common.button.edit') }}</el-button
               >
-              <el-button type="text" @click="preDel(scope.row)">{{
-                $t('common.button.delete')
-              }}</el-button>
+                {{ $t('common.button.edit') }}
+              </el-button>
+              <el-button type="text" @click="preDel(scope.row)">
+                {{ $t('common.button.delete') }}
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -136,16 +137,17 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="handleClose">{{
-          $t('common.button.cancel')
-        }}</el-button>
+        <el-button size="small" @click="handleClose">
+          {{ $t('common.button.cancel') }}
+        </el-button>
         <el-button
           size="small"
           type="primary"
           :loading="submitLoading"
           @click="handleSubmit"
-          >{{ $t('common.button.confirm') }}</el-button
         >
+          {{ $t('common.button.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

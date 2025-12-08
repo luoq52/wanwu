@@ -16,9 +16,9 @@
           style="padding-left: 22px; padding-bottom: 10px"
           v-if="data.length"
         >
-          <el-checkbox @change="handleAllChange" v-model="allChecked">{{
-            $t('role.tree.all')
-          }}</el-checkbox>
+          <el-checkbox @change="handleAllChange" v-model="allChecked">
+            {{ $t('role.tree.all') }}
+          </el-checkbox>
         </div>
         <el-option :value="valueName" style="height: auto; background: #fff">
           <el-tree

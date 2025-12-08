@@ -27,8 +27,8 @@
           class="url_txt"
           @change="handleChange(domain, index)"
           :disabled="loading.url"
-        ></el-input
-        >&nbsp;
+        ></el-input>
+        &nbsp;
         <i
           class="el-icon-loading"
           v-if="urlConut > 1 && domain.urlLoading === true"
@@ -54,14 +54,16 @@
           icon="el-icon-plus"
           size="mini"
           :disabled="loading.url"
-          >{{ $t('knowledgeManage.addOnePiece') }}
+        >
+          {{ $t('knowledgeManage.addOnePiece') }}
         </el-button>
         <el-button
           @click="submitForm('dynamicValidateForm')"
           type="primary"
           size="mini"
           :loading="loading.url"
-          >{{ $t('knowledgeManage.startAnalysis') }}
+        >
+          {{ $t('knowledgeManage.startAnalysis') }}
         </el-button>
       </el-form-item>
     </el-form>

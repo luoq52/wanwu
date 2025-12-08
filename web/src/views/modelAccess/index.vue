@@ -72,9 +72,9 @@
                 src="@/assets/imgs/modelImport.png"
                 alt=""
               />
-              <span style="display: inline-block; vertical-align: middle">{{
-                $t('modelAccess.import')
-              }}</span>
+              <span style="display: inline-block; vertical-align: middle">
+                {{ $t('modelAccess.import') }}
+              </span>
             </el-button>
           </div>
         </div>

@@ -31,18 +31,17 @@
               :key="item.knowledgeId"
               :label="item.name"
               :value="item.knowledgeId"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{
-          $t('common.button.cancel')
-        }}</el-button>
-        <el-button type="primary" @click="submit('form')">{{
-          $t('common.button.confirm')
-        }}</el-button>
+        <el-button @click="dialogVisible = false">
+          {{ $t('common.button.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="submit('form')">
+          {{ $t('common.button.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

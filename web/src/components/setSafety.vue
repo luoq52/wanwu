@@ -32,19 +32,18 @@
             :key="item.tableId"
             :label="item.tableName"
             :value="item"
-          >
-          </el-option>
+          ></el-option>
         </el-select>
-        <span @click="goCreate" class="goSafety"
-          ><span class="el-icon-d-arrow-right"></span
-          >{{ $t('safety.setSafety.create') }}</span
-        >
+        <span @click="goCreate" class="goSafety">
+          <span class="el-icon-d-arrow-right"></span>
+          {{ $t('safety.setSafety.create') }}
+        </span>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submit('ruleForm')">{{
-        $t('common.button.confirm')
-      }}</el-button>
+      <el-button type="primary" @click="submit('ruleForm')">
+        {{ $t('common.button.confirm') }}
+      </el-button>
     </span>
   </el-dialog>
 </template>

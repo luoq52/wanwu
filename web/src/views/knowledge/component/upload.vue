@@ -32,12 +32,12 @@
       </el-form-item>
       <el-form-item :label="$t('knowledgeManage.analyticMethod')" required>
         <el-checkbox-group v-model="uplodForm.plugin">
-          <el-checkbox label="text" disabled>{{
-            $t('knowledgeManage.textExtraction')
-          }}</el-checkbox>
-          <el-checkbox label="ocr">{{
-            $t('knowledgeManage.OCRAnalysis')
-          }}</el-checkbox>
+          <el-checkbox label="text" disabled>
+            {{ $t('knowledgeManage.textExtraction') }}
+          </el-checkbox>
+          <el-checkbox label="ocr">
+            {{ $t('knowledgeManage.OCRAnalysis') }}
+          </el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item :label="$t('knowledgeManage.importDoc')" required>
@@ -69,9 +69,9 @@
             :file-list="fileList"
             :disabled="!uplodForm.knowValue"
           >
-            <el-button size="small" :disabled="!uplodForm.knowValue">{{
-              $t('knowledgeManage.selectFile')
-            }}</el-button>
+            <el-button size="small" :disabled="!uplodForm.knowValue">
+              {{ $t('knowledgeManage.selectFile') }}
+            </el-button>
             <p class="fileNumber">
               {{ $t('knowledgeManage.uploadFileNum') }}：{{ fileList.length }}
               {{ $t('knowledgeManage.successNum') }}：{{ fileIndex
@@ -91,10 +91,10 @@
                 <ul class="document_lise">
                   <li v-for="(file, index) in fileList" :key="index">
                     <div style="padding: 8px 0">
-                      <span class="size"
-                        >{{ file.name
-                        }}<span>{{ filterSize(file.size) }}</span></span
-                      >
+                      <span class="size">
+                        {{ file.name }}
+                        <span>{{ filterSize(file.size) }}</span>
+                      </span>
                       <span>
                         <span v-if="file.percentage === 100">
                           <i
@@ -130,7 +130,8 @@
                         :underline="false"
                         v-if="file.showRetry === 'true'"
                         @click="refreshFile(index)"
-                        >重试
+                      >
+                        重试
                       </el-link>
                       <el-link
                         type="success"
@@ -138,7 +139,8 @@
                         style="margin-left: 10px"
                         v-if="file.showResume === 'true' && file.percentage > 0"
                         @click="resumeFile(index)"
-                        >续传
+                      >
+                        续传
                       </el-link>
                       <el-link
                         type="success"
@@ -146,7 +148,8 @@
                         style="margin-left: 10px"
                         v-if="file.showRemerge === 'true'"
                         @click="remergeFile(index)"
-                        >续传
+                      >
+                        续传
                       </el-link>
                     </div>
                   </li>
@@ -194,8 +197,9 @@
         size="mini"
         :loading="saveLoading"
         @click="saveUpload"
-        >{{ $t('knowledgeManage.confirmImport') }}</el-button
       >
+        {{ $t('knowledgeManage.confirmImport') }}
+      </el-button>
       <el-button
         type="primary"
         v-if="upLoadType === '2' && urlActive === 'first'"
@@ -203,8 +207,9 @@
         :disabled="urlSave"
         @click="handleSave"
         :loading="urlLoading"
-        >{{ $t('knowledgeManage.confirmImport') }}</el-button
       >
+        {{ $t('knowledgeManage.confirmImport') }}
+      </el-button>
       <!-- url上传批量添加按钮 -->
       <el-button
         type="primary"
@@ -213,11 +218,12 @@
         :disabled="urlBatchDis"
         @click="handlebatchSave"
         :loading="urlLoading"
-        >{{ $t('knowledgeManage.confirmImport') }}</el-button
       >
-      <el-button @click="reset" size="mini">{{
-        $t('createApp.cancel')
-      }}</el-button>
+        {{ $t('knowledgeManage.confirmImport') }}
+      </el-button>
+      <el-button @click="reset" size="mini">
+        {{ $t('createApp.cancel') }}
+      </el-button>
     </span>
   </el-dialog>
 </template>

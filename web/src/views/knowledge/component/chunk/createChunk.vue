@@ -13,12 +13,12 @@
     >
       <el-form-item class="itemCenter" v-if="!isChildChunk">
         <el-radio-group v-model="createType" @input="typeChange($event)">
-          <el-radio-button :label="'single'">{{
-            $t('knowledgeManage.create.single')
-          }}</el-radio-button>
-          <el-radio-button :label="'file'">{{
-            $t('knowledgeManage.create.file')
-          }}</el-radio-button>
+          <el-radio-button :label="'single'">
+            {{ $t('knowledgeManage.create.single') }}
+          </el-radio-button>
+          <el-radio-button :label="'file'">
+            {{ $t('knowledgeManage.create.file') }}
+          </el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item
@@ -81,35 +81,36 @@
             size="small"
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm"
-          >
-          </el-input>
+          ></el-input>
           <el-button
             v-else
             class="button-new-tag"
             size="small"
             @click="showInput"
-            >+ {{ $t('knowledgeManage.create.chunkKeywords') }}
+          >
+            + {{ $t('knowledgeManage.create.chunkKeywords') }}
           </el-button>
         </el-form-item>
         <el-form-item :label="$t('knowledgeManage.create.typeTitle')">
           <el-checkbox-group v-model="checkType">
-            <el-checkbox label="more" name="type"
-              >{{ $t('knowledgeManage.create.continue') }}
+            <el-checkbox label="more" name="type">
+              {{ $t('knowledgeManage.create.continue') }}
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </template>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">{{
-        $t('common.confirm.cancel')
-      }}</el-button>
+      <el-button @click="dialogVisible = false">
+        {{ $t('common.confirm.cancel') }}
+      </el-button>
       <el-button
         type="primary"
         @click="submit('ruleForm')"
         :loading="btnLoading"
-        >{{ $t('common.confirm.confirm') }}</el-button
       >
+        {{ $t('common.confirm.confirm') }}
+      </el-button>
     </span>
   </el-dialog>
 </template>

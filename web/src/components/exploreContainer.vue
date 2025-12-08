@@ -5,10 +5,10 @@
         <div class="aside-title" v-if="showTitle">
           <span class="title" v-if="!isButton">{{ asideTitle }}</span>
           <div v-else class="title">
-            <el-button type="primary" @click="handleClick" size="mini"
-              ><span class="el-icon-circle-plus-outline addIcon"></span
-              >{{ asideTitle }}</el-button
-            >
+            <el-button type="primary" @click="handleClick" size="mini">
+              <span class="el-icon-circle-plus-outline addIcon"></span>
+              {{ asideTitle }}
+            </el-button>
           </div>
         </div>
         <div class="aside-content">

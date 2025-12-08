@@ -116,12 +116,13 @@
                       <span
                         style="display: inline-block; width: 150px"
                         class="menu--popover-item-name"
-                        >{{ item.name }}</span
                       >
+                        {{ item.name }}
+                      </span>
                     </el-tooltip>
-                    <span v-if="!item.isTip" class="menu--popover-item-name">{{
-                      item.name
-                    }}</span>
+                    <span v-if="!item.isTip" class="menu--popover-item-name">
+                      {{ item.name }}
+                    </span>
                     <img
                       v-if="item.icon"
                       class="menu--popover-item-icon"

@@ -39,12 +39,12 @@
         </el-form-item>
       </el-form>
       <div class="form-footer">
-        <el-button size="small" @click="cancel">{{
-          $t('common.button.cancel')
-        }}</el-button>
-        <el-button size="small" type="primary" @click="doSubmit">{{
-          $t('common.button.confirm')
-        }}</el-button>
+        <el-button size="small" @click="cancel">
+          {{ $t('common.button.cancel') }}
+        </el-button>
+        <el-button size="small" type="primary" @click="doSubmit">
+          {{ $t('common.button.confirm') }}
+        </el-button>
       </div>
     </div>
 
@@ -65,10 +65,9 @@
         ></i>
       </p>
       <p style="margin: 20px 0 30px 0; text-align: center">
-        {{ $t('resetPwd.dialog.success') }}&nbsp;<span
-          style="color: #5a9600; font-weight: bold"
-          >{{ jumpTimer }}</span
-        >&nbsp;{{ $t('resetPwd.dialog.jumpText') }}
+        {{ $t('resetPwd.dialog.success') }}&nbsp;
+        <span style="color: #5a9600; font-weight: bold">{{ jumpTimer }}</span>
+        &nbsp;{{ $t('resetPwd.dialog.jumpText') }}
       </p>
     </el-dialog>
   </div>

@@ -18,12 +18,12 @@
       >
         <el-form-item class="itemCenter">
           <el-radio-group v-model="ruleForm.importType">
-            <el-radio-button :label="'single'">{{
-              $t('safety.createWord.single')
-            }}</el-radio-button>
-            <el-radio-button :label="'file'">{{
-              $t('safety.createWord.file')
-            }}</el-radio-button>
+            <el-radio-button :label="'single'">
+              {{ $t('safety.createWord.single') }}
+            </el-radio-button>
+            <el-radio-button :label="'file'">
+              {{ $t('safety.createWord.file') }}
+            </el-radio-button>
           </el-radio-group>
         </el-form-item>
         <el-form-item
@@ -51,8 +51,7 @@
               :key="item.value"
               :label="item.name"
               :value="item.value"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item
@@ -78,16 +77,17 @@
                 />
                 <p class="click-text">
                   {{ $t('common.fileUpload.uploadText') }}
-                  <span class="clickUpload">{{
-                    $t('common.fileUpload.uploadClick')
-                  }}</span>
+                  <span class="clickUpload">
+                    {{ $t('common.fileUpload.uploadClick') }}
+                  </span>
                   <a
                     class="clickUpload template"
                     :href="`/user/api/v1/static/docs/sensitive.xlsx`"
                     download
                     @click.stop
-                    >{{ $t('common.fileUpload.templateClick') }}</a
                   >
+                    {{ $t('common.fileUpload.templateClick') }}
+                  </a>
                 </p>
               </div>
             </div>
@@ -150,9 +150,9 @@
         <el-button @click="handleClose()">
           {{ $t('common.confirm.cancel') }}
         </el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">{{
-          $t('common.confirm.confirm')
-        }}</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">
+          {{ $t('common.confirm.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

@@ -38,8 +38,7 @@
               :key="item.key"
               :label="item.name"
               :value="item.key"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
           <div
             v-if="
@@ -87,7 +86,7 @@
             <!--<span style="margin-left: 12px; color: #606266 !important;" v-if="createForm.avatar && createForm.avatar.path">
               {{createForm.avatar.path}}
             </span>-->
-            <span class="upload-hint"> 可上传 .png、jpg、jpeg 文件 </span>
+            <span class="upload-hint">可上传 .png、jpg、jpeg 文件</span>
           </el-upload>
         </el-form-item>
         <el-form-item
@@ -114,8 +113,7 @@
               :key="item.key"
               :label="item.name"
               :value="item.key"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item
@@ -133,8 +131,7 @@
               :key="item.key"
               :label="item.name"
               :value="item.key"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item
@@ -170,8 +167,7 @@
             :placeholder="
               $t('common.hint.apiKey') + (typeObj.apiKey[provider.key] || '--')
             "
-          >
-          </el-input>
+          ></el-input>
         </el-form-item>
         <el-form-item
           :label="$t('modelAccess.table.inferUrl')"
@@ -191,8 +187,7 @@
                 typeObj.inferUrl[provider.key] ||
                 '--')
             "
-          >
-          </el-input>
+          ></el-input>
         </el-form-item>
         <!--<el-form-item :label="$t('modelAccess.table.publishTime')" prop="publishDate">
           <el-date-picker
@@ -205,12 +200,12 @@
         </el-form-item>-->
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">{{
-          $t('common.button.cancel')
-        }}</el-button>
-        <el-button :loading="loading" type="primary" @click="handleSubmit">{{
-          $t('common.button.confirm')
-        }}</el-button>
+        <el-button @click="handleClose">
+          {{ $t('common.button.cancel') }}
+        </el-button>
+        <el-button :loading="loading" type="primary" @click="handleSubmit">
+          {{ $t('common.button.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

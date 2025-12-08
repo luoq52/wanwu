@@ -12,9 +12,9 @@
         <div class="title-content">
           <i class="el-icon-s-custom title-icon"></i>
           <span class="title-text">{{ dialogTitle }}</span>
-          <span class="title-tip" v-if="currentView === 'transfer'"
-            >[ 转移后您的权限将变为'可编辑' ]</span
-          >
+          <span class="title-tip" v-if="currentView === 'transfer'">
+            [ 转移后您的权限将变为'可编辑' ]
+          </span>
         </div>
         <div class="title-subtitle" v-if="knowledgeName">
           <span class="knowledge-name">[ {{ knowledgeName }} ]</span>
@@ -26,8 +26,8 @@
           v-model="userName"
           style="width: 200px; margin-right: 10px"
         ></el-input>
-        <el-button type="primary" size="small" @click="confirmSearch"
-          >确定
+        <el-button type="primary" size="small" @click="confirmSearch">
+          确定
         </el-button>
         <el-button
           type="primary"
@@ -37,7 +37,8 @@
           :disabled="
             [POWER_TYPE_READ, POWER_TYPE_EDIT].includes(permissionType)
           "
-          >新增
+        >
+          新增
         </el-button>
       </div>
       <PowerList
@@ -62,22 +63,25 @@
         <el-button
           v-if="currentView === 'create' || currentView === 'transfer'"
           @click="showList"
-          >返回
+        >
+          返回
         </el-button>
         <el-button
           v-if="currentView === 'create'"
           type="primary"
           @click="handleConfirm"
-          >确定
+        >
+          确定
         </el-button>
         <el-button
           v-if="currentView === 'transfer'"
           type="primary"
           @click="handleTransferConfirm"
-          >确定转让
+        >
+          确定转让
         </el-button>
-        <el-button v-if="currentView === 'list'" @click="handleDialogClose"
-          >关闭
+        <el-button v-if="currentView === 'list'" @click="handleDialogClose">
+          关闭
         </el-button>
       </div>
     </el-dialog>

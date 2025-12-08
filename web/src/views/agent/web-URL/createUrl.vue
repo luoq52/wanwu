@@ -14,8 +14,8 @@
         style="width: 100%; margin-top: 15px"
         :header-cell-style="{ background: '#F9F9F9', color: '#999999' }"
       >
-        <el-table-column prop="name" label="应用名称"> </el-table-column>
-        <el-table-column prop="description" label="描述"> </el-table-column>
+        <el-table-column prop="name" label="应用名称"></el-table-column>
+        <el-table-column prop="description" label="描述"></el-table-column>
         <el-table-column prop="suffix" label="访问Url">
           <template slot-scope="scope">
             <span>{{ scope.row.suffix }}</span>
@@ -25,16 +25,18 @@
             ></span>
           </template>
         </el-table-column>
-        <el-table-column prop="expiredAt" label="过期时间" width="180">
-        </el-table-column>
+        <el-table-column
+          prop="expiredAt"
+          label="过期时间"
+          width="180"
+        ></el-table-column>
         <el-table-column prop="status" label="状态" width="180">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.status"
               @change="statusChange($event, scope.row)"
               active-color="var(--color)"
-            >
-            </el-switch>
+            ></el-switch>
           </template>
         </el-table-column>
         <el-table-column :label="$t('knowledgeManage.operate')" width="260">
@@ -79,8 +81,7 @@
             type="datetime"
             value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="url生效时间"
-          >
-          </el-date-picker>
+          ></el-date-picker>
         </el-form-item>
         <!--<el-form-item label="知识库出处详情">
           <el-switch
@@ -119,8 +120,7 @@
               :disabled="!form.copyright"
               v-model="form.copyrightEnable"
               active-color="var(--color)"
-            >
-            </el-switch>
+            ></el-switch>
           </el-form-item>
         </div>
         <div class="online-item">
@@ -147,8 +147,7 @@
               :disabled="!form.privacyPolicy"
               v-model="form.privacyPolicyEnable"
               active-color="var(--color)"
-            >
-            </el-switch>
+            ></el-switch>
           </el-form-item>
         </div>
         <div class="online-item">
@@ -176,8 +175,7 @@
               :disabled="!form.disclaimer"
               v-model="form.disclaimerEnable"
               active-color="var(--color)"
-            >
-            </el-switch>
+            ></el-switch>
           </el-form-item>
         </div>
       </el-form>

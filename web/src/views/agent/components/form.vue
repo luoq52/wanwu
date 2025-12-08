@@ -212,9 +212,9 @@
                 :placeholder="$t('agent.form.prologuePlaceholder')"
                 type="textarea"
               ></el-input>
-              <span class="el-input__count"
-                >{{ editForm.prologue.length }}/100</span
-              >
+              <span class="el-input__count">
+                {{ editForm.prologue.length }}/100
+              </span>
             </div>
           </div>
           <div class="block recommend-box">

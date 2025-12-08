@@ -7,8 +7,7 @@
     :end-placeholder="$t('common.datePicker.endPlaceholder')"
     value-format="yyyy-MM-dd HH:mm:ss"
     align="right"
-  >
-  </el-date-picker>
+  ></el-date-picker>
 </template>
 <script>
 export default {

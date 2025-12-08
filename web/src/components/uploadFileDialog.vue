@@ -36,9 +36,9 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">{{
-          $t('common.button.cancel')
-        }}</el-button>
+        <el-button @click="handleClose">
+          {{ $t('common.button.cancel') }}
+        </el-button>
         <el-button :loading="uploading" type="primary" @click="handleSubmit">
           {{ $t('common.button.confirm') }}
         </el-button>

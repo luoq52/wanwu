@@ -56,9 +56,9 @@
         >
           {{ $t('tool.integrate.publish') }}
         </el-button>
-        <el-button @click="handleCancel" size="mini">{{
-          $t('common.button.cancel')
-        }}</el-button>
+        <el-button @click="handleCancel" size="mini">
+          {{ $t('common.button.cancel') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

@@ -53,8 +53,7 @@
               :key="item.modelId"
               :label="item.displayName"
               :value="item.modelId"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="knowledgeGraph.switch" v-if="category === 0">
@@ -117,8 +116,9 @@
                     v-for="(tag, tagIdx) in item.tags"
                     :key="tagIdx"
                     class="model-select-tag"
-                    >{{ tag.text }}</span
                   >
+                    {{ tag.text }}
+                  </span>
                 </div>
               </div>
             </el-option>
@@ -161,8 +161,9 @@
                     class="template_downLoad"
                     href="#"
                     @click.prevent.stop="downloadTemplate"
-                    >{{ $t('knowledgeManage.create.templateDownload') }}</a
                   >
+                    {{ $t('knowledgeManage.create.templateDownload') }}
+                  </a>
                 </p>
                 <p>
                   <span class="red">*</span>

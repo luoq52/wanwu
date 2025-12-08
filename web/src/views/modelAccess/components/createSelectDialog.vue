@@ -35,19 +35,20 @@
                 class="provider-card-tag"
                 v-for="it in item.children"
                 :key="it.key"
-                >{{ it.name }}</span
               >
+                {{ it.name }}
+              </span>
             </div>
           </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">{{
-          $t('common.button.cancel')
-        }}</el-button>
-        <el-button type="primary" @click="handleConfirm">{{
-          $t('common.button.confirm')
-        }}</el-button>
+        <el-button @click="handleClose">
+          {{ $t('common.button.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="handleConfirm">
+          {{ $t('common.button.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

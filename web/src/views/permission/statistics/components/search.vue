@@ -3,15 +3,15 @@
     <label>{{ $t('common.datePicker.data') }}:</label>
     <div class="search_content">
       <el-radio-group v-model="radio" size="mini" @change="handleRadio">
-        <el-radio-button :label="'day'">{{
-          $t('common.datePicker.day')
-        }}</el-radio-button>
-        <el-radio-button :label="'week'">{{
-          $t('common.datePicker.week')
-        }}</el-radio-button>
-        <el-radio-button :label="'month'">{{
-          $t('common.datePicker.oneMonth')
-        }}</el-radio-button>
+        <el-radio-button :label="'day'">
+          {{ $t('common.datePicker.day') }}
+        </el-radio-button>
+        <el-radio-button :label="'week'">
+          {{ $t('common.datePicker.week') }}
+        </el-radio-button>
+        <el-radio-button :label="'month'">
+          {{ $t('common.datePicker.oneMonth') }}
+        </el-radio-button>
       </el-radio-group>
       <el-date-picker
         ref="time"
@@ -28,8 +28,7 @@
         :picker-options="pickerOptions"
         :disabled-date="handleFilterTime"
         @change="handleDateChange"
-      >
-      </el-date-picker>
+      ></el-date-picker>
       <el-button
         type="primary"
         size="mini"

@@ -1,5 +1,5 @@
 <template>
-  <div class="batch-operation-toolbar" v-if="selectedCount > 0">
+  <div class="batch-operation-toolbar" v-if="selectedCount > 0  && batchMetaType === 'multiple'">
     <div class="toolbar-container">
       <div class="toolbar-item selected-item">
         <span class="selected-badge">{{ selectedCount }}</span>
@@ -48,6 +48,10 @@ export default {
       type: String,
       default: '',
     },
+    batchMetaType: {
+      type: String,
+      default: 'multiple',
+    },
   },
   methods: {
     handleMetadata() {
@@ -76,6 +80,7 @@ export default {
   padding: 12px 20px;
   margin-bottom: 16px;
   border-radius: 8px;
+  background: #fff;
 
   .toolbar-container {
     display: flex;
@@ -84,7 +89,6 @@ export default {
     border: 1px solid $color;
     border-radius: 8px;
     padding: 6px 26px;
-    flex-wrap: wrap;
 
     .toolbar-item {
       display: flex;
@@ -100,7 +104,8 @@ export default {
 
       &.selected-item {
         cursor: default;
-
+        white-space: nowrap;
+        min-width: fit-content;
         .selected-badge {
           display: inline-flex;
           align-items: center;

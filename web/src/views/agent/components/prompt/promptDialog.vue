@@ -55,9 +55,9 @@
               class="template-actions"
               @click.stop="handleInsertPrompt(item)"
             >
-              <el-button type="text" size="mini">{{
-                $t('agent.promptTemplate.insertPrompt')
-              }}</el-button>
+              <el-button type="text" size="mini">
+                {{ $t('agent.promptTemplate.insertPrompt') }}
+              </el-button>
             </div>
           </div>
         </div>

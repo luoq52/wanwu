@@ -123,14 +123,13 @@
                       type="selection"
                       width="55"
                       align="center"
-                    >
-                    </el-table-column>
-                    <el-table-column prop="name" label="Name">
-                    </el-table-column>
-                    <el-table-column prop="method" label="Method">
-                    </el-table-column>
-                    <el-table-column prop="path" label="Path">
-                    </el-table-column>
+                    ></el-table-column>
+                    <el-table-column prop="name" label="Name"></el-table-column>
+                    <el-table-column
+                      prop="method"
+                      label="Method"
+                    ></el-table-column>
+                    <el-table-column prop="path" label="Path"></el-table-column>
                   </el-table>
                 </el-form-item>
               </div>
@@ -254,20 +253,20 @@
           </el-form>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="beforeApiAuthClose">{{
-            $t('common.button.cancel')
-          }}</el-button>
-          <el-button type="primary" @click="listenerApiKey">{{
-            $t('common.button.confirm')
-          }}</el-button>
+          <el-button @click="beforeApiAuthClose">
+            {{ $t('common.button.cancel') }}
+          </el-button>
+          <el-button type="primary" @click="listenerApiKey">
+            {{ $t('common.button.confirm') }}
+          </el-button>
         </span>
       </el-dialog>
     </div>
     <span slot="footer" class="dialog-footer" v-show="!dialogDetailVisible">
       <el-button @click="cancel">{{ $t('common.button.cancel') }}</el-button>
-      <el-button type="primary" @click="submit" :loading="loading">{{
-        $t('common.button.confirm')
-      }}</el-button>
+      <el-button type="primary" @click="submit" :loading="loading">
+        {{ $t('common.button.confirm') }}
+      </el-button>
     </span>
     <span slot="footer" class="dialog-footer" v-show="dialogDetailVisible">
       <el-button
@@ -276,8 +275,9 @@
           dialogDetailVisible = false;
           title = $t('tool.custom.editTitle');
         "
-        >{{ $t('common.button.edit') }}</el-button
       >
+        {{ $t('common.button.edit') }}
+      </el-button>
     </span>
   </el-dialog>
 </template>

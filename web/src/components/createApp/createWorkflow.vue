@@ -16,7 +16,8 @@
             :show-file-list="false"
             :http-request="handleUploadImage"
             accept=".png,.jpg,.jpeg"
-            ><!--:on-error="handleUploadError"-->
+          >
+            <!--:on-error="handleUploadError"-->
             <img
               class="upload-img"
               :src="
@@ -56,12 +57,12 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{
-          $t('list.cancel')
-        }}</el-button>
-        <el-button type="primary" @click="doPublish">{{
-          $t('list.confirm')
-        }}</el-button>
+        <el-button @click="dialogVisible = false">
+          {{ $t('list.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="doPublish">
+          {{ $t('list.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

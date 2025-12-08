@@ -54,12 +54,12 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{
-          $t('list.cancel')
-        }}</el-button>
-        <el-button type="primary" @click="doPublish">{{
-          $t('list.confirm')
-        }}</el-button>
+        <el-button @click="dialogVisible = false">
+          {{ $t('list.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="doPublish">
+          {{ $t('list.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

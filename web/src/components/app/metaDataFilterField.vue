@@ -8,11 +8,13 @@
     <template #title>
       <div class="metaHeader">
         <h3>{{ $t('agent.form.configMetaDataFilter') }}</h3>
-        <span>{{
-          category === 0
-            ? $t('agent.form.metaDataFilterDesc')
-            : $t('agent.form.metaDataQaFilterDesc')
-        }}</span>
+        <span>
+          {{
+            category === 0
+              ? $t('agent.form.metaDataFilterDesc')
+              : $t('agent.form.metaDataQaFilterDesc')
+          }}
+        </span>
       </div>
     </template>
     <metaSet

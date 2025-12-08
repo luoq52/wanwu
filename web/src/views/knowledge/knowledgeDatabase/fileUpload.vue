@@ -24,16 +24,14 @@
         <div v-if="active === 1">
           <div class="fileBtn">
             <el-radio-group v-model="fileType" @change="fileTypeChage">
-              <el-radio-button label="file"
-                >{{ $t('knowledgeManage.knowledgeDatabase.fileUpload.file') }}
+              <el-radio-button label="file">
+                {{ $t('knowledgeManage.knowledgeDatabase.fileUpload.file') }}
               </el-radio-button>
-              <el-radio-button label="fileUrl"
-                >{{
-                  $t('knowledgeManage.knowledgeDatabase.fileUpload.fileUrl')
-                }}
+              <el-radio-button label="fileUrl">
+                {{ $t('knowledgeManage.knowledgeDatabase.fileUpload.fileUrl') }}
               </el-radio-button>
-              <el-radio-button label="url"
-                >{{ $t('knowledgeManage.knowledgeDatabase.fileUpload.url') }}
+              <el-radio-button label="url">
+                {{ $t('knowledgeManage.knowledgeDatabase.fileUpload.url') }}
               </el-radio-button>
             </el-radio-group>
           </div>
@@ -64,46 +62,51 @@
                         $t(
                           'knowledgeManage.knowledgeDatabase.fileUpload.clickText',
                         )
-                      }}<span class="clickUpload">{{
-                        $t(
-                          'knowledgeManage.knowledgeDatabase.fileUpload.clickUpload',
-                        )
-                      }}</span>
+                      }}
+                      <span class="clickUpload">
+                        {{
+                          $t(
+                            'knowledgeManage.knowledgeDatabase.fileUpload.clickUpload',
+                          )
+                        }}
+                      </span>
                     </p>
                   </div>
                   <div class="tips">
                     <p v-if="fileType === 'file'">
-                      <span class="red">*</span
-                      >{{
+                      <span class="red">*</span>
+                      {{
                         $t(
                           'knowledgeManage.knowledgeDatabase.fileUpload.uploadTips1',
                         )
                       }}
                     </p>
                     <p v-if="fileType === 'file'">
-                      <span class="red">*</span
-                      >{{
+                      <span class="red">*</span>
+                      {{
                         $t(
                           'knowledgeManage.knowledgeDatabase.fileUpload.uploadTips2',
                         )
                       }}
                     </p>
                     <p v-if="fileType === 'fileUrl'">
-                      <span class="red">*</span
-                      >{{
+                      <span class="red">*</span>
+                      {{
                         $t(
                           'knowledgeManage.knowledgeDatabase.fileUpload.uploadTips3',
                         )
-                      }}<a
+                      }}
+                      <a
                         class="template_downLoad"
                         href="#"
                         @click.prevent.stop="downloadTemplate"
-                        >{{ $t('common.fileUpload.templateClick') }}</a
                       >
+                        {{ $t('common.fileUpload.templateClick') }}
+                      </a>
                     </p>
                     <p v-if="fileType === 'fileUrl'">
-                      <span class="red">*</span
-                      >{{
+                      <span class="red">*</span>
+                      {{
                         $t(
                           'knowledgeManage.knowledgeDatabase.fileUpload.uploadTips4',
                         )
@@ -206,11 +209,13 @@
                 "
               >
                 <template #label>
-                  <span>{{
-                    $t(
-                      'knowledgeManage.knowledgeDatabase.fileUpload.segmentTips',
-                    )
-                  }}</span>
+                  <span>
+                    {{
+                      $t(
+                        'knowledgeManage.knowledgeDatabase.fileUpload.segmentTips',
+                      )
+                    }}
+                  </span>
                   <el-tooltip
                     :content="$t('knowledgeManage.splitOptionsTips')"
                     placement="right"
@@ -230,7 +235,8 @@
                   class="button-new-tag"
                   size="small"
                   @click="showSplitterSet('splitter')"
-                  >{{
+                >
+                  {{
                     $t(
                       'knowledgeManage.knowledgeDatabase.fileUpload.segmentTipsSetting',
                     )
@@ -315,7 +321,10 @@
                 :key="item.level"
                 class="commonSet"
               >
-                <h3 class="title"><span class="bar"></span>{{ item.title }}</h3>
+                <h3 class="title">
+                  <span class="bar"></span>
+                  {{ item.title }}
+                </h3>
                 <el-form-item
                   :prop="item.splitterProp"
                   :rules="[
@@ -328,11 +337,13 @@
                   ]"
                 >
                   <template #label>
-                    <span>{{
-                      $t(
-                        'knowledgeManage.knowledgeDatabase.fileUpload.segmentTips',
-                      )
-                    }}</span>
+                    <span>
+                      {{
+                        $t(
+                          'knowledgeManage.knowledgeDatabase.fileUpload.segmentTips',
+                        )
+                      }}
+                    </span>
                     <el-tooltip
                       :content="$t('knowledgeManage.splitOptionsTips')"
                       placement="right"
@@ -352,7 +363,8 @@
                     class="button-new-tag"
                     size="small"
                     @click="showSplitterSet(item.key)"
-                    >{{
+                  >
+                    {{
                       $t(
                         'knowledgeManage.knowledgeDatabase.fileUpload.segmentTipsSetting',
                       )
@@ -402,12 +414,12 @@
               v-if="ruleForm.docSegment.segmentType == '1'"
             >
               <el-checkbox-group v-model="ruleForm.docPreprocess">
-                <el-checkbox label="replaceSymbols">{{
-                  $t('knowledgeManage.replaceSymbols')
-                }}</el-checkbox>
-                <el-checkbox label="deleteLinks">{{
-                  $t('knowledgeManage.deleteLinks')
-                }}</el-checkbox>
+                <el-checkbox label="replaceSymbols">
+                  {{ $t('knowledgeManage.replaceSymbols') }}
+                </el-checkbox>
+                <el-checkbox label="deleteLinks">
+                  {{ $t('knowledgeManage.deleteLinks') }}
+                </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
             <el-form-item
@@ -430,7 +442,8 @@
                   <el-checkbox
                     :label="analyzerItem.label"
                     :disabled="analyzerDisabled(analyzerItem.label)"
-                    >{{ analyzerItem.text }}
+                  >
+                    {{ analyzerItem.text }}
                   </el-checkbox>
                   <h3 class="analyzerItem_desc">{{ analyzerItem.desc }}</h3>
                 </div>
@@ -451,9 +464,9 @@
               ]"
             >
               <template #label>
-                <span>{{
-                  modelTypeTip[ruleForm.docAnalyzer[1]]['label']
-                }}</span>
+                <span>
+                  {{ modelTypeTip[ruleForm.docAnalyzer[1]]['label'] }}
+                </span>
                 <el-tooltip
                   :content="modelTypeTip[ruleForm.docAnalyzer[1]]['desc']"
                   placement="right"
@@ -471,8 +484,7 @@
                   :key="item.modelId"
                   :label="item.displayName"
                   :value="item.modelId"
-                >
-                </el-option>
+                ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item
@@ -545,7 +557,8 @@
             size="mini"
             @click="preStep"
             v-if="active === 2"
-            >{{ $t('knowledgeManage.prevStep') }}
+          >
+            {{ $t('knowledgeManage.prevStep') }}
           </el-button>
           <el-button
             type="primary"
@@ -553,17 +566,19 @@
             @click="nextStep"
             v-if="active === 1"
             :loading="urlLoading"
-            >{{ $t('knowledgeManage.nextStep') }}
+          >
+            {{ $t('knowledgeManage.nextStep') }}
           </el-button>
           <el-button
             type="primary"
             size="mini"
             @click="submitInfo"
             v-if="active === 2"
-            >{{ $t('common.button.confirm') }}
+          >
+            {{ $t('common.button.confirm') }}
           </el-button>
-          <el-button size="mini" @click="formReset" v-if="active === 2"
-            >{{ $t('common.button.restore') }}
+          <el-button size="mini" @click="formReset" v-if="active === 2">
+            {{ $t('common.button.restore') }}
           </el-button>
         </div>
       </div>

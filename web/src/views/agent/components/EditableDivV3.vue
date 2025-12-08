@@ -128,7 +128,8 @@
           </el-popover>
         </div>
         <span class="refresh" @click="getReminderList">
-          <i class="el-icon-loading" v-show="refreshLoading"></i>&nbsp;
+          <i class="el-icon-loading" v-show="refreshLoading"></i>
+          &nbsp;
           {{ $t('agent.next') }}
         </span>
       </div>

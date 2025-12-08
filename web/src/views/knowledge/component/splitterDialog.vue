@@ -13,7 +13,8 @@
         v-model="tagName"
       ></el-input>
       <div class="add" @click="addTag">
-        <span class="el-icon-plus add-icon"></span>{{ title }}
+        <span class="el-icon-plus add-icon"></span>
+        {{ title }}
       </div>
       <div class="tag-box">
         <div
@@ -24,8 +25,8 @@
           @mouseleave="mouseLeave(item)"
           @dblclick="handleDoubleClick(item)"
         >
-          <el-checkbox v-model="item.checked" v-if="!item.showIpt"
-            >{{ item.splitterName.replace(/\n/g, '\\n') }}
+          <el-checkbox v-model="item.checked" v-if="!item.showIpt">
+            {{ item.splitterName.replace(/\n/g, '\\n') }}
           </el-checkbox>
           <el-input
             v-model="item.splitterName"

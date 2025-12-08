@@ -68,10 +68,10 @@
               {{ $t('editavleDiv.connectInternect') }}
             </el-button>
             <!-- <img class="editable--send" :src="require('@/assets/imgs/send.png')" @click="preSend" /> -->
-            <el-button type="primary" class="editable--send" @click="preSend"
-              ><span>{{ $t('agent.send') }}</span>
-              <img :src="require('@/assets/imgs/sendIcon.png')"
-            /></el-button>
+            <el-button type="primary" class="editable--send" @click="preSend">
+              <span>{{ $t('agent.send') }}</span>
+              <img :src="require('@/assets/imgs/sendIcon.png')" />
+            </el-button>
           </div>
         </div>
         <!-- 覆盖层，模型下线禁止点击 -->
@@ -106,9 +106,8 @@
           </el-popover>
         </div>
         <span class="refresh" @click="getReminderList">
-          <i class="el-icon-loading" v-show="refreshLoading"></i>&nbsp;{{
-            $t('agent.next')
-          }}
+          <i class="el-icon-loading" v-show="refreshLoading"></i>
+          &nbsp;{{ $t('agent.next') }}
         </span>
       </div>
     </transition>

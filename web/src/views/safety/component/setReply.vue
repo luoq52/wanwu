@@ -43,9 +43,9 @@
         <el-button @click="handleClose()">
           {{ $t('common.confirm.cancel') }}
         </el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">{{
-          $t('common.confirm.confirm')
-        }}</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">
+          {{ $t('common.confirm.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

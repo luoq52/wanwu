@@ -44,8 +44,7 @@
               :key="item.tagId"
               :label="item.tagName"
               :value="item.tagId"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
         </div>
         <div>

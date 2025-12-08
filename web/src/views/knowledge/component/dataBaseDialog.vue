@@ -6,12 +6,11 @@
   >
     <template #title>
       <span class="dialog-title">元数据管理</span>
-      <span
-        >[ 元数据key为空时，去<span class="link" @click="goCreate"
-          >创建元数据</span
-        >
-        ]</span
-      >
+      <span>
+        [ 元数据key为空时，去
+        <span class="link" @click="goCreate">创建元数据</span>
+        ]
+      </span>
     </template>
     <div>
       <el-table :data="filteredTableData" style="width: 100%; margin-top: 20px">
@@ -33,8 +32,7 @@
                 :key="item.metaKey"
                 :label="item.metaKey"
                 :value="item.metaKey"
-              >
-              </el-option>
+              ></el-option>
             </el-select>
           </template>
         </el-table-column>
@@ -104,8 +102,9 @@
         type="primary"
         @click="submitDialog('submit')"
         :disabled="isDisabled"
-        >确 定</el-button
       >
+        确 定
+      </el-button>
     </span>
   </el-dialog>
 </template>

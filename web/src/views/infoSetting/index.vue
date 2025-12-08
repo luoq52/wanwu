@@ -241,9 +241,9 @@
         >
           <el-radio-group v-model="radio">
             <el-radio label="0">{{ $t('infoSetting.hint.oneColor') }}</el-radio>
-            <el-radio label="1">{{
-              $t('infoSetting.hint.linearColor')
-            }}</el-radio>
+            <el-radio label="1">
+              {{ $t('infoSetting.hint.linearColor') }}
+            </el-radio>
           </el-radio-group>
           <div v-if="radio === '0'">
             <el-color-picker

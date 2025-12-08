@@ -17,12 +17,12 @@
         />
       </span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{
-          $t('common.button.cancel')
-        }}</el-button>
-        <el-button type="primary" @click="submit">{{
-          $t('common.button.confirm')
-        }}</el-button>
+        <el-button @click="dialogVisible = false">
+          {{ $t('common.button.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="submit">
+          {{ $t('common.button.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>

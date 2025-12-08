@@ -5,8 +5,8 @@
         class="el-icon-arrow-left"
         @click="$router.go(-1)"
         style="margin-right: 20px; font-size: 20px; cursor: pointer"
-      ></i
-      >{{ obj.name }}
+      ></i>
+      {{ obj.name }}
     </div>
     <div class="container">
       <el-descriptions
@@ -16,27 +16,27 @@
         :size="''"
         border
       >
-        <el-descriptions-item :label="$t('knowledgeManage.fileName')"
-          >{{ res.fileName }}
+        <el-descriptions-item :label="$t('knowledgeManage.fileName')">
+          {{ res.fileName }}
         </el-descriptions-item>
         <el-descriptions-item :label="$t('knowledgeManage.splitNum')">
           {{ res.segmentTotalNum }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('knowledgeManage.importTime')"
-          >{{ res.uploadTime }}
+        <el-descriptions-item :label="$t('knowledgeManage.importTime')">
+          {{ res.uploadTime }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('knowledgeManage.chunkType')"
-          >{{
+        <el-descriptions-item :label="$t('knowledgeManage.chunkType')">
+          {{
             Number(res.segmentType) === 0
               ? $t('knowledgeManage.autoChunk')
               : $t('knowledgeManage.autoConfigChunk')
           }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('knowledgeManage.setMaxLength')"
-          >{{ String(res.maxSegmentSize) }}
+        <el-descriptions-item :label="$t('knowledgeManage.setMaxLength')">
+          {{ String(res.maxSegmentSize) }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('knowledgeManage.markSplit')"
-          >{{ String(res.splitter).replace(/\n/g, '\\n') }}
+        <el-descriptions-item :label="$t('knowledgeManage.markSplit')">
+          {{ String(res.splitter).replace(/\n/g, '\\n') }}
         </el-descriptions-item>
         <el-descriptions-item label="元数据">
           <template v-if="metaDataList && metaDataList.length > 0">
@@ -81,9 +81,8 @@
               :key="index"
               class="metaItem"
             >
-              {{ item.metaKey }}: {{ item.metaRule
-              }}<span v-if="index < metaRuleList.slice(0, 3).length - 1">
-              </span>
+              {{ item.metaKey }}: {{ item.metaRule }}
+              <span v-if="index < metaRuleList.slice(0, 3).length - 1"></span>
             </span>
             <el-tooltip
               v-if="metaRuleList.length > 3"
@@ -113,7 +112,8 @@
               POWER_TYPE_SYSTEM_ADMIN,
             ].includes(permissionType)
           "
-          >新增分段
+        >
+          新增分段
         </el-button>
         <el-button
           type="primary"
@@ -127,7 +127,8 @@
               POWER_TYPE_SYSTEM_ADMIN,
             ].includes(permissionType)
           "
-          >{{ $t('knowledgeManage.allRun') }}
+        >
+          {{ $t('knowledgeManage.allRun') }}
         </el-button>
         <el-button
           type="primary"
@@ -141,7 +142,8 @@
               POWER_TYPE_SYSTEM_ADMIN,
             ].includes(permissionType)
           "
-          >{{ $t('knowledgeManage.allStop') }}
+        >
+          {{ $t('knowledgeManage.allStop') }}
         </el-button>
       </div>
 
@@ -157,16 +159,16 @@
               <div slot="header" class="clearfix">
                 <span>
                   {{ $t('knowledgeManage.split') + ':' + item.contentNum }}
-                  <span class="segment-type"
-                    >#{{ item.isParent ? '父子分段' : '通用分段' }}</span
-                  >
-                  <span class="segment-length" v-if="!item.isParent"
-                    >#{{ item.content.length
-                    }}{{ $t('knowledgeManage.character') }}</span
-                  >
-                  <span class="segment-child" v-if="item.childNum"
-                    >#{{ item.childNum || 0 }}个子分段</span
-                  >
+                  <span class="segment-type">
+                    #{{ item.isParent ? '父子分段' : '通用分段' }}
+                  </span>
+                  <span class="segment-length" v-if="!item.isParent">
+                    #{{ item.content.length
+                    }}{{ $t('knowledgeManage.character') }}
+                  </span>
+                  <span class="segment-child" v-if="item.childNum">
+                    #{{ item.childNum || 0 }}个子分段
+                  </span>
                 </span>
                 <div>
                   <el-switch
@@ -181,8 +183,7 @@
                       ].includes(permissionType)
                     "
                     @change="handleStatusChange(item, index)"
-                  >
-                  </el-switch>
+                  ></el-switch>
                   <el-dropdown
                     @command="handleCommand"
                     placement="bottom"
@@ -234,8 +235,9 @@
                   class="tagList-item"
                   @click.stop="addTag(item.labels, item.contentId)"
                   v-else
-                  >{{ formattedTagNames(item.labels) }}</span
                 >
+                  {{ formattedTagNames(item.labels) }}
+                </span>
               </div>
             </el-card>
           </el-col>
@@ -253,8 +255,7 @@
           :page-size="page.pageSize"
           layout="total, prev, pager, next, jumper"
           :total="page.total"
-        >
-        </el-pagination>
+        ></el-pagination>
       </div>
     </div>
 
@@ -268,9 +269,9 @@
       class="section-dialog"
     >
       <div slot="title">
-        <span style="font-size: 16px">{{
-          $t('knowledgeManage.detailView')
-        }}</span>
+        <span style="font-size: 16px">
+          {{ $t('knowledgeManage.detailView') }}
+        </span>
         <el-switch
           @change="handleDetailStatusChange"
           style="float: right; padding: 3px 0"
@@ -283,8 +284,7 @@
               POWER_TYPE_SYSTEM_ADMIN,
             ].includes(permissionType)
           "
-        >
-        </el-switch>
+        ></el-switch>
       </div>
       <div class="dialog-content">
         <el-table
@@ -308,8 +308,7 @@
                 :autosize="{ minRows: 3, maxRows: 5 }"
                 class="full-width-textarea"
                 :disabled="[POWER_TYPE_READ].includes(permissionType)"
-              >
-              </el-input>
+              ></el-input>
               <div
                 v-if="
                   cardObj[0]['isParent'] &&
@@ -329,7 +328,8 @@
                   type="primary"
                   @click="handleSubmit"
                   :loading="submitLoading"
-                  >保存并重新解析子分段
+                >
+                  保存并重新解析子分段
                 </el-button>
               </div>
               <div
@@ -360,7 +360,8 @@
                           class="action-btn edit-btn"
                           @click.stop="editSegment(scope.row, index)"
                         >
-                          <i class="el-icon-edit-outline"></i>编辑
+                          <i class="el-icon-edit-outline"></i>
+                          编辑
                         </span>
                         <span
                           v-if="
@@ -376,7 +377,8 @@
                           class="action-btn delete-btn"
                           @click.stop="deleteSegment(scope.row, index)"
                         >
-                          <i class="el-icon-delete"></i>删除
+                          <i class="el-icon-delete"></i>
+                          删除
                         </span>
                         <span
                           v-if="
@@ -385,7 +387,8 @@
                           class="action-btn save-btn"
                           @click.stop="confirmEdit(scope.row, index)"
                         >
-                          <i class="el-icon-check"></i>保存
+                          <i class="el-icon-check"></i>
+                          保存
                         </span>
                         <span
                           v-if="
@@ -394,7 +397,8 @@
                           class="action-btn cancel-btn"
                           @click.stop="cancelEdit(scope.row, index)"
                         >
-                          <i class="el-icon-close"></i>取消
+                          <i class="el-icon-close"></i>
+                          取消
                         </span>
                       </div>
                     </template>
@@ -433,8 +437,9 @@
           @click="handleSubmit"
           :loading="submitLoading"
           v-if="!cardObj[0]['isParent']"
-          >确定</el-button
         >
+          确定
+        </el-button>
         <el-button
           type="primary"
           @click="createChunk(true)"
@@ -447,14 +452,16 @@
             ].includes(permissionType)
           "
           :disabled="submitLoading"
-          >新增子分段</el-button
         >
+          新增子分段
+        </el-button>
         <el-button
           type="primary"
           @click="handleClose"
           :disabled="submitLoading"
-          >{{ $t('knowledgeManage.close') }}</el-button
         >
+          {{ $t('knowledgeManage.close') }}
+        </el-button>
       </span>
     </el-dialog>
     <dataBaseDialog

@@ -10,9 +10,9 @@
       <div class="graph-toolbar" v-if="showToolBar">
         <span class="graphStatus">
           <span class="statusNum">{{ data.processingCount || 0 }}</span>
-          <span class="statusText">{{
-            $t('knowledgeManage.graph.processing')
-          }}</span>
+          <span class="statusText">
+            {{ $t('knowledgeManage.graph.processing') }}
+          </span>
         </span>
         <span class="graphStatus">
           <span class="statusNum">{{ data.successCount || 0 }}</span>
@@ -22,16 +22,16 @@
             :content="$t('knowledgeManage.graph.successGraphTips')"
             placement="top"
           >
-            <span class="statusText">{{
-              $t('knowledgeManage.graph.finished')
-            }}</span>
+            <span class="statusText">
+              {{ $t('knowledgeManage.graph.finished') }}
+            </span>
           </el-tooltip>
         </span>
         <span class="graphStatus">
           <span class="statusNum">{{ data.failCount || 0 }}</span>
-          <span class="statusText">{{
-            $t('knowledgeManage.graph.failed')
-          }}</span>
+          <span class="statusText">
+            {{ $t('knowledgeManage.graph.failed') }}
+          </span>
         </span>
         <el-divider direction="vertical"></el-divider>
         <el-tooltip

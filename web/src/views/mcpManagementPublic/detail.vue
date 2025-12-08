@@ -1,8 +1,8 @@
 <template>
   <div class="mcp-detail" id="timeScroll">
-    <span class="back" @click="back">{{
-      $t('menu.back') + (isFromSquare ? $t('menu.mcp') : $t('menu.tool'))
-    }}</span>
+    <span class="back" @click="back">
+      {{ $t('menu.back') + (isFromSquare ? $t('menu.mcp') : $t('menu.tool')) }}
+    </span>
     <div class="mcp-title">
       <img
         class="logo"
@@ -112,8 +112,9 @@
                 type="primary"
                 :disabled="detail.hasCustom"
                 @click="preSendToCustomize"
-                >{{ $t('tool.square.sendButton') }}</el-button
               >
+                {{ $t('tool.square.sendButton') }}
+              </el-button>
             </div>
             <p style="line-height: 40px; color: #666">
               {{
@@ -134,8 +135,8 @@
                   :name="i"
                 >
                   <div class="desc">
-                    {{ $t('tool.square.tool.desc')
-                    }}<span v-html="parseTxt(n.description)"></span>
+                    {{ $t('tool.square.tool.desc') }}
+                    <span v-html="parseTxt(n.description)"></span>
                   </div>
                   <div class="params">
                     <p>{{ $t('tool.square.tool.params') }}</p>

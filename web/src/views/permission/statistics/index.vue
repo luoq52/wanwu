@@ -60,16 +60,14 @@
               :content="echartContent.client ? echartContent.client.lines : []"
               :name="echartContent.client ? echartContent.client.tableName : ''"
               v-loading="loading"
-            >
-            </UserEchart>
+            ></UserEchart>
           </div>
           <div class="data_echart">
             <PcuEchart
               :content="echartContent.browse ? echartContent.browse.lines : []"
               :name="echartContent.browse ? echartContent.browse.tableName : ''"
               v-loading="loading"
-            >
-            </PcuEchart>
+            ></PcuEchart>
           </div>
         </div>
       </div>

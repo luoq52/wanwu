@@ -45,10 +45,9 @@
                 v-if="!docLoading && !(searchList && searchList.length)"
                 style="text-align: center; padding: 50px 0"
               >
-                <span
-                  style="font-size: 14px; font-weight: normal; color: #999"
-                  >{{ $t('header.noData') }}</span
-                >
+                <span style="font-size: 14px; font-weight: normal; color: #999">
+                  {{ $t('header.noData') }}
+                </span>
               </div>
               <div
                 v-if="!docLoading && searchList && searchList.length"
@@ -133,8 +132,9 @@
                         v-else
                         :index="p.index"
                         @click="menuClick(p)"
-                        >{{ p.name }}</el-menu-item
                       >
+                        {{ p.name }}
+                      </el-menu-item>
                     </div>
                   </el-submenu>
                   <el-menu-item
@@ -142,8 +142,9 @@
                     :index="m.index"
                     @click="menuClick(m)"
                     class="menu-indent-item"
-                    >{{ m.name }}</el-menu-item
                   >
+                    {{ m.name }}
+                  </el-menu-item>
                 </div>
               </el-submenu>
               <!--没有下一级-->

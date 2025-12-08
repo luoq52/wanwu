@@ -66,8 +66,7 @@
           :key="item.modelId"
           :label="item.displayName"
           :value="item.modelId"
-        >
-        </el-option>
+        ></el-option>
       </el-select>
     </div>
 

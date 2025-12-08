@@ -99,10 +99,12 @@
         </div>
         <div v-if="isShowPublished && n.publishType" class="publishType">
           <span v-if="n.publishType === 'private'" class="publishType-tag">
-            <span class="el-icon-lock"></span> {{ $t('appSpace.private') }}
+            <span class="el-icon-lock"></span>
+            {{ $t('appSpace.private') }}
           </span>
           <span v-else class="publishType-tag">
-            <span class="el-icon-unlock"></span> {{ $t('appSpace.public') }}
+            <span class="el-icon-unlock"></span>
+            {{ $t('appSpace.public') }}
           </span>
         </div>
         <div class="editor" v-if="isShowTool">

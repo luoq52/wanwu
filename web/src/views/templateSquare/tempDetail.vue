@@ -3,9 +3,9 @@
     class="tempSquare-detail"
     :style="`background: ${isPublic ? bgColor : 'none'}`"
   >
-    <span class="back" @click="back">{{
-      $t('menu.back') + $t('menu.templateSquare')
-    }}</span>
+    <span class="back" @click="back">
+      {{ $t('menu.back') + $t('menu.templateSquare') }}
+    </span>
     <div class="tempSquare-title">
       <img
         class="logo"

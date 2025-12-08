@@ -31,16 +31,16 @@
               v-if="fileList.length > 0 && fileList[0].back === 'true'"
             ></i>
             <div class="el-upload__text" v-if="fileList.length <= 0">
-              {{ $t('common.fileUpload.uploadText')
-              }}<em>&nbsp;{{ $t('common.fileUpload.uploadClick') }}</em>
+              {{ $t('common.fileUpload.uploadText') }}
+              <em>&nbsp;{{ $t('common.fileUpload.uploadClick') }}</em>
             </div>
           </div>
 
           <div class="el-upload__tip" slot="tip" style="color: red">
             {{ $t('knowledgeManage.clickUploadTips') }}&nbsp;&nbsp;
-            <a :href="templateUrl">{{
-              $t('common.fileUpload.templateClick')
-            }}</a>
+            <a :href="templateUrl">
+              {{ $t('common.fileUpload.templateClick') }}
+            </a>
             <br />
             {{ $t('knowledgeManage.notReshContent') }}
           </div>
@@ -54,26 +54,29 @@
             :loading="loading.start"
             v-if="fileList[0].agin !== true"
             @click="handleClick('start')"
-            >{{ $t('knowledgeManage.startAnalysis') }}
+          >
+            {{ $t('knowledgeManage.startAnalysis') }}
           </el-button>
           <el-button
             type="primary"
             :loading="loading.agin"
             v-if="fileList[0].agin === true"
             @click="handleClick('agin')"
-            >{{ $t('knowledgeManage.refreshAnalysis') }}
+          >
+            {{ $t('knowledgeManage.refreshAnalysis') }}
           </el-button>
           <div>
-            {{ $t('knowledgeManage.total')
-            }}<span>{{
-              Number(batchRes.fail_count) + Number(batchRes.success_count) || 0
-            }}</span
-            >{{ $t('knowledgeManage.Piece') }}，<span>{{
-              batchRes.success_count || 0
-            }}</span>
-            {{ $t('knowledgeManage.analysisFinish') }}，<span>{{
-              batchRes.fail_count || 0
-            }}</span>
+            {{ $t('knowledgeManage.total') }}
+            <span>
+              {{
+                Number(batchRes.fail_count) + Number(batchRes.success_count) ||
+                0
+              }}
+            </span>
+            {{ $t('knowledgeManage.Piece') }}，
+            <span>{{ batchRes.success_count || 0 }}</span>
+            {{ $t('knowledgeManage.analysisFinish') }}，
+            <span>{{ batchRes.fail_count || 0 }}</span>
             {{
               $t('knowledgeManage.analysisFail')
             }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -83,8 +86,9 @@
               href="#"
               v-if="fileList.length > 0 && fileList[0].agin === true"
               @click.prevent="drawer = true"
-              >{{ $t('knowledgeManage.viewDetail') }}</a
             >
+              {{ $t('knowledgeManage.viewDetail') }}
+            </a>
           </div>
           <div>{{ $t('knowledgeManage.analysisFailTips') }}</div>
         </div>
@@ -92,9 +96,9 @@
           class="aginUp"
           v-if="fileList.length > 0 && fileList[0].back === 'error'"
         >
-          <el-button type="primary" @click="submitVisible">{{
-            $t('knowledgeManage.reUpload')
-          }}</el-button>
+          <el-button type="primary" @click="submitVisible">
+            {{ $t('knowledgeManage.reUpload') }}
+          </el-button>
         </div>
         <transition name="el-zoom-in-top">
           <ul class="document_lises">
@@ -150,10 +154,12 @@
               :label="$t('knowledgeManage.ID')"
               align="center"
               width="50"
-            >
-            </el-table-column>
-            <el-table-column prop="url" label="URL" align="center">
-            </el-table-column>
+            ></el-table-column>
+            <el-table-column
+              prop="url"
+              label="URL"
+              align="center"
+            ></el-table-column>
           </el-table>
         </div>
         <div class="item">
@@ -173,24 +179,22 @@
               :label="$t('knowledgeManage.ID')"
               width="50"
               align="center"
-            >
-            </el-table-column>
+            ></el-table-column>
             <el-table-column
               prop="url"
               label="URL"
               show-overflow-tooltip
               align="center"
-            >
-            </el-table-column>
+            ></el-table-column>
           </el-table>
         </div>
       </div>
       <div class="demo-drawer__footer">
-        <el-button @click="handleClose">{{
-          $t('knowledgeManage.backAnalysis')
-        }}</el-button>
-        <el-button type="primary" @click="handleSave" :loading="loading.btn"
-          >{{ $t('knowledgeManage.saveIntoData') }}
+        <el-button @click="handleClose">
+          {{ $t('knowledgeManage.backAnalysis') }}
+        </el-button>
+        <el-button type="primary" @click="handleSave" :loading="loading.btn">
+          {{ $t('knowledgeManage.saveIntoData') }}
         </el-button>
       </div>
     </el-drawer>

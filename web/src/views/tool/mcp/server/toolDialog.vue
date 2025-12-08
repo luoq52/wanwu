@@ -28,7 +28,8 @@
       </div>
       <div class="toolContent">
         <div @click="goCreate" class="createTool">
-          <span class="el-icon-plus add"></span>{{ createText() }}
+          <span class="el-icon-plus add"></span>
+          {{ createText() }}
         </div>
         <template v-for="(items, type) in contentMap">
           <div

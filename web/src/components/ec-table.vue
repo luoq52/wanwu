@@ -35,8 +35,7 @@
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
         layout="total, sizes, prev, pager, next, jumper"
-      >
-      </el-pagination>
+      ></el-pagination>
     </div>
   </div>
 </template>
