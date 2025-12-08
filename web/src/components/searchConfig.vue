@@ -361,8 +361,12 @@ export default {
         ...item,
         showContent: item.value === n.value ? !item.showContent : false,
       }));
-      this.formInline.knowledgeMatchParams.priorityMatch =
+      if (this.category === 0) {
+        this.formInline.knowledgeMatchParams.priorityMatch =
         n.value !== 'mix' ? 0 : 1;
+      } else {
+        this.formInline.knowledgeMatchParams.priorityMatch = 0;
+      }
       this.clear();
     },
     clear() {
