@@ -37,6 +37,51 @@ func (s *Service) ImportQAPair(ctx context.Context, req *knowledgebase_qa_servic
 	return &emptypb.Empty{}, nil
 }
 
+func (s *Service) GetQAImportTip(ctx context.Context, req *knowledgebase_qa_service.QAImportTipReq) (*knowledgebase_qa_service.QAImportTipResp, error) {
+	//1.查询知识库详情,前置参数校验
+	knowledge, err := orm.SelectKnowledgeById(ctx, req.KnowledgeId, "", "")
+	if err != nil {
+		log.Errorf("select QA knowledge failed err: (%v) req:(%v)", err, req)
+		return nil, util.ErrCode(errs.Code_KnowledgeQABaseSelectFailed)
+	}
+	//2.查询第一个异步任务信息
+	taskList, err := orm.SelectKnowledgeQALatestImportTask(ctx, req.KnowledgeId)
+	if err != nil {
+		log.Errorf("select QA import task info failed err: (%v)", err)
+		return nil, util.ErrCode(errs.Code_KnowledgeQAPairImportTaskSelectFailed)
+	}
+	if len(taskList) == 0 {
+		return &knowledgebase_qa_service.QAImportTipResp{
+			KnowledgeId:   req.KnowledgeId,
+			KnowledgeName: knowledge.Name,
+			UploadStatus:  model.KnowledgeQAPairImportSuccess,
+		}, nil
+	}
+	if len(taskList) > 0 {
+		task := taskList[0]
+		if task.Status == model.KnowledgeQAPairImportFail {
+			return &knowledgebase_qa_service.QAImportTipResp{
+				KnowledgeId:   req.KnowledgeId,
+				KnowledgeName: knowledge.Name,
+				Message:       "\n" + task.ErrorMsg,
+				UploadStatus:  model.KnowledgeQAPairImportFail,
+			}, nil
+		} else if task.Status == model.KnowledgeQAPairImportSuccess {
+			return &knowledgebase_qa_service.QAImportTipResp{
+				KnowledgeId:   req.KnowledgeId,
+				KnowledgeName: knowledge.Name,
+				UploadStatus:  model.KnowledgeQAPairImportSuccess,
+			}, nil
+		}
+	}
+	return &knowledgebase_qa_service.QAImportTipResp{
+		KnowledgeId:   req.KnowledgeId,
+		KnowledgeName: knowledge.Name,
+		Message:       "",
+		UploadStatus:  model.KnowledgeQAPairImportImporting,
+	}, nil
+}
+
 func (s *Service) ExportQAPair(ctx context.Context, req *knowledgebase_qa_service.ExportQAPairReq) (*emptypb.Empty, error) {
 	task, err := buildQAPairExportTask(req)
 	if err != nil {
@@ -86,24 +131,6 @@ func (s *Service) GetQAPairList(ctx context.Context, req *knowledgebase_qa_servi
 		return nil, util.ErrCode(errs.Code_KnowledgeMetaFetchFailed)
 	}
 	return buildQAPairListResp(list, knowledge, docMetaList, total, req.PageSize, req.PageNum), nil
-}
-
-func (s *Service) GetExportRecordList(ctx context.Context, req *knowledgebase_qa_service.GetExportRecordListReq) (*knowledgebase_qa_service.GetExportRecordListResp, error) {
-	userId, orgId := req.UserId, req.OrgId
-	permission, err := orm.SelectUserKnowledgePermission(ctx, req.UserId, req.OrgId, req.KnowledgeId)
-	if err != nil {
-		log.Errorf(fmt.Sprintf("CheckKnowledgeUserPermission 失败(%v)  参数(%v)", err, req))
-		return nil, util.ErrCode(errs.Code_KnowledgePermissionDeny)
-	}
-	if permission.PermissionType == model.PermissionTypeGrant || permission.PermissionType == model.PermissionTypeSystem {
-		userId, orgId = "", ""
-	}
-	list, err := orm.SelectKnowledgeQAPairExportTaskByQAId(ctx, req.KnowledgeId, userId, orgId, req.PageSize, req.PageNum)
-	if err != nil {
-		log.Errorf("select QA export task failed err: (%v) req:(%v)", err, req)
-		return nil, util.ErrCode(errs.Code_KnowledgeQAExportRecordsSelectFailed)
-	}
-	return buildExportRecordListResp(list, int64(len(list)), req.PageSize, req.PageNum), nil
 }
 
 func (s *Service) GetQAPairInfo(ctx context.Context, req *knowledgebase_qa_service.GetQAPairInfoReq) (*knowledgebase_qa_service.QAPairInfo, error) {
@@ -199,21 +226,15 @@ func (s *Service) UpdateQAPairSwitch(ctx context.Context, req *knowledgebase_qa_
 }
 
 func (s *Service) DeleteQAPair(ctx context.Context, req *knowledgebase_qa_service.DeleteQAPairReq) (*emptypb.Empty, error) {
-	//1.查询问答对详情
-	qaPair, err := orm.GetQAPairInfoById(ctx, req.QaPairId, "", "")
-	if err != nil {
-		log.Errorf("get qa pair info fail err: %s", err)
-		return nil, util.ErrCode(errs.Code_KnowledgeQAPairSelectFailed)
-	}
-	//2。查询问答库详情
-	knowledgeBase, err := orm.SelectKnowledgeById(ctx, qaPair.KnowledgeId, "", "")
+	//1。查询问答库详情
+	knowledgeBase, err := orm.SelectKnowledgeById(ctx, req.KnowledgeId, "", "")
 	if err != nil {
 		log.Errorf("select QA knowledge failed err: (%v) req:(%v)", err, req)
 		return nil, util.ErrCode(errs.Code_KnowledgeQABaseSelectFailed)
 	}
-	// 3。删除问答对
-	qaPair, ragParams := buildDeleteQAPairParams(knowledgeBase, req.QaPairId)
-	err = orm.DeleteKnowledgeQAPair(ctx, qaPair, ragParams)
+	// 2。删除问答对
+	ragParams := buildDeleteQAPairParams(knowledgeBase, req.QaPairIds)
+	err = orm.DeleteKnowledgeQAPair(ctx, req.KnowledgeId, req.QaPairIds, ragParams)
 	if err != nil {
 		log.Errorf("delete knowledge qa pair fail: %v", err)
 		return nil, util.ErrCode(errs.Code_KnowledgeDeleteQAPairFailed)
@@ -253,28 +274,15 @@ func (s *Service) KnowledgeQAHit(ctx context.Context, req *knowledgebase_qa_serv
 	return buildKnowledgeBaseHitResp(hitResp), nil
 }
 
-func (s *Service) DeleteExportRecord(ctx context.Context, req *knowledgebase_qa_service.DeleteExportRecordReq) (*emptypb.Empty, error) {
-	err := orm.DeleteQAExportTaskById(ctx, req.QaExportRecordId)
-	if err != nil {
-		log.Errorf("delete knowledge qa export record fail: %v", err)
-		return nil, util.ErrCode(errs.Code_KnowledgeDeleteExportRecordFailed)
-	}
-	return nil, nil
-}
-
 // buildDeleteQAPairParams 构造问答库删除问答对参数
-func buildDeleteQAPairParams(knowledgeBase *model.KnowledgeBase, qaPairId string) (*model.KnowledgeQAPair, *service.RagDeleteQAPairParams) {
-	qaPair := &model.KnowledgeQAPair{
-		QAPairId:    qaPairId,
-		KnowledgeId: knowledgeBase.KnowledgeId,
-	}
+func buildDeleteQAPairParams(knowledgeBase *model.KnowledgeBase, qaPairIds []string) *service.RagDeleteQAPairParams {
 	ragUpdateQAPairParams := &service.RagDeleteQAPairParams{
 		UserId:     knowledgeBase.UserId,
 		QAId:       knowledgeBase.KnowledgeId,
 		QABaseName: knowledgeBase.RagName,
-		QAPairIds:  []string{qaPairId},
+		QAPairIds:  qaPairIds,
 	}
-	return qaPair, ragUpdateQAPairParams
+	return ragUpdateQAPairParams
 }
 
 func buildKnowledgeBaseHitResp(hitResp *service.RagKnowledgeQAHitResp) *knowledgebase_qa_service.KnowledgeQAHitResp {
@@ -500,14 +508,14 @@ func buildQAPairImportTask(req *knowledgebase_qa_service.ImportQAPairReq) (*mode
 	}, nil
 }
 
-// buildExportTask 构造导入任务
-func buildQAPairExportTask(req *knowledgebase_qa_service.ExportQAPairReq) (*model.KnowledgeQAPairExportTask, error) {
-	return &model.KnowledgeQAPairExportTask{
+// buildExportTask 构造导出任务
+func buildQAPairExportTask(req *knowledgebase_qa_service.ExportQAPairReq) (*model.KnowledgeExportTask, error) {
+	return &model.KnowledgeExportTask{
 		ExportId:    generator.GetGenerator().NewID(),
 		KnowledgeId: req.KnowledgeId,
 		CreatedAt:   time.Now().UnixMilli(),
 		UpdatedAt:   time.Now().UnixMilli(),
-		Status:      model.KnowledgeQAPairExportInit,
+		Status:      model.KnowledgeExportInit,
 		UserId:      req.UserId,
 		OrgId:       req.OrgId,
 	}, nil
@@ -542,29 +550,6 @@ func buildQAPairListResp(list []*model.KnowledgeQAPair, knowledge *model.Knowled
 			KnowledgeId:   knowledge.KnowledgeId,
 			KnowledgeName: knowledge.Name,
 		},
-	}
-}
-
-// buildExportRecordListResp 构造问答库导出记录列表
-func buildExportRecordListResp(list []*model.KnowledgeQAPairExportTask, total int64, pageSize int32, pageNum int32) *knowledgebase_qa_service.GetExportRecordListResp {
-	var retList = make([]*knowledgebase_qa_service.ExportRecordInfo, 0)
-	if len(list) > 0 {
-		for _, item := range list {
-			retList = append(retList, &knowledgebase_qa_service.ExportRecordInfo{
-				QaExportRecordId: item.ExportId,
-				Status:           int32(item.Status),
-				ErrorMsg:         item.ErrorMsg,
-				FilePath:         item.ExportFilePath,
-				UserId:           item.UserId,
-				ExportTime:       util2.Time2Str(item.CreatedAt),
-			})
-		}
-	}
-	return &knowledgebase_qa_service.GetExportRecordListResp{
-		ExportRecordInfos: retList,
-		Total:             total,
-		PageSize:          pageSize,
-		PageNum:           pageNum,
 	}
 }
 

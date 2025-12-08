@@ -346,6 +346,62 @@ func (s *Service) GetKnowledgeGraph(ctx context.Context, req *knowledgebase_serv
 	}, nil
 }
 
+func (s *Service) GetExportRecordList(ctx context.Context, req *knowledgebase_service.GetExportRecordListReq) (*knowledgebase_service.GetExportRecordListResp, error) {
+	userId, orgId := req.UserId, req.OrgId
+	permission, err := orm.SelectUserKnowledgePermission(ctx, req.UserId, req.OrgId, req.KnowledgeId)
+	if err != nil {
+		log.Errorf(fmt.Sprintf("CheckKnowledgeUserPermission 失败(%v)  参数(%v)", err, req))
+		return nil, util.ErrCode(errs.Code_KnowledgePermissionDeny)
+	}
+	if permission.PermissionType == model.PermissionTypeGrant || permission.PermissionType == model.PermissionTypeSystem {
+		userId, orgId = "", ""
+	}
+	knowledge, err := orm.SelectKnowledgeById(ctx, req.KnowledgeId, "", "")
+	if err != nil {
+		log.Errorf(fmt.Sprintf("没有操作该知识库的权限 参数(%v)", req))
+		return nil, err
+	}
+	list, err := orm.SelectKnowledgeExportTaskByKnowledgeId(ctx, req.KnowledgeId, userId, orgId, req.PageSize, req.PageNum)
+	if err != nil {
+		log.Errorf("select QA export task failed err: (%v) req:(%v)", err, req)
+		return nil, util.ErrCode(errs.Code_KnowledgeExportRecordsSelectFailed)
+	}
+	return buildExportRecordListResp(knowledge, list, int64(len(list)), req.PageSize, req.PageNum), nil
+}
+
+func (s *Service) DeleteExportRecord(ctx context.Context, req *knowledgebase_service.DeleteExportRecordReq) (*emptypb.Empty, error) {
+	err := orm.DeleteExportTaskById(ctx, req.ExportRecordId)
+	if err != nil {
+		log.Errorf("delete knowledge qa export record fail: %v", err)
+		return nil, util.ErrCode(errs.Code_KnowledgeDeleteExportRecordFailed)
+	}
+	return nil, nil
+}
+
+// buildExportRecordListResp 构造问答库导出记录列表
+func buildExportRecordListResp(knowledge *model.KnowledgeBase, list []*model.KnowledgeExportTask, total int64, pageSize int32, pageNum int32) *knowledgebase_service.GetExportRecordListResp {
+	var retList = make([]*knowledgebase_service.ExportRecordInfo, 0)
+	if len(list) > 0 {
+		for _, item := range list {
+			retList = append(retList, &knowledgebase_service.ExportRecordInfo{
+				ExportRecordId: item.ExportId,
+				Status:         int32(item.Status),
+				ErrorMsg:       item.ErrorMsg,
+				FilePath:       item.ExportFilePath,
+				UserId:         item.UserId,
+				ExportTime:     pkg_util.Time2Str(item.CreatedAt),
+				KnowledgeName:  knowledge.Name,
+			})
+		}
+	}
+	return &knowledgebase_service.GetExportRecordListResp{
+		ExportRecordInfos: retList,
+		Total:             total,
+		PageSize:          pageSize,
+		PageNum:           pageNum,
+	}
+}
+
 func buildDocMetaMap(docMetaList []*model.KnowledgeDocMeta) map[string]map[string][]*model.KnowledgeDocMeta {
 	docMetaMap := make(map[string]map[string][]*model.KnowledgeDocMeta)
 	for _, v := range docMetaList {

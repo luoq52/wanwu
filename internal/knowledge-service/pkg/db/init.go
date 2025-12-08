@@ -114,7 +114,7 @@ func registerTables(dbClient *gorm.DB) error {
 		model.KnowledgeReportImportTask{},
 		model.KnowledgeQAPair{},
 		model.KnowledgeQAPairImportTask{},
-		model.KnowledgeQAPairExportTask{},
+		model.KnowledgeExportTask{},
 	)
 	if err != nil {
 		fmt.Printf("register knowledge tables failed: %v", err)

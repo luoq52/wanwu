@@ -78,8 +78,10 @@ minio:
   password: Wanwu123456
   bucket: rag-doc
   public-rag-bucket: rag-public
+  public-export-bucket: export-public
   knowledge-dir: /knowledge
-  knowledge-export-dir: export
+  knowledge-export-dir: knowledge
+  qa-export-dir: qa
 
 kafka:
   addr: kafka-wanwu:9092

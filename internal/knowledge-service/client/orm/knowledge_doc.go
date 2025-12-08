@@ -95,6 +95,17 @@ func GetDocListByKnowledgeId(ctx context.Context, userId, orgId string, knowledg
 	return docList, nil
 }
 
+// GetDocListByKnowledgeIdAndFileTypeFilter 根据知识库id查询知识库文件列表
+func GetDocListByKnowledgeIdAndFileTypeFilter(ctx context.Context, userId, orgId string, knowledgeId string, fileType string) ([]*model.KnowledgeDoc, error) {
+	var docList []*model.KnowledgeDoc
+	err := sqlopt.SQLOptions(sqlopt.WithPermit(orgId, userId), sqlopt.WithKnowledgeID(knowledgeId), sqlopt.WithDelete(0), sqlopt.WithFileTypeFilter(fileType)).
+		Apply(db.GetHandle(ctx), &model.KnowledgeDoc{}).Find(&docList).Error
+	if err != nil {
+		return nil, err
+	}
+	return docList, nil
+}
+
 // GetDocListByIdListNoDeleteCheck 查询知识库文件列表
 func GetDocListByIdListNoDeleteCheck(ctx context.Context, userId, orgId string, idList []uint32) ([]*model.KnowledgeDoc, error) {
 	var docList []*model.KnowledgeDoc
@@ -135,6 +146,23 @@ func CheckKnowledgeDocSameName(ctx context.Context, userId string, knowledgeId s
 func SelectDocByDocIdList(ctx context.Context, docIdList []string, userId, orgId string) ([]*model.KnowledgeDoc, error) {
 	var docList []*model.KnowledgeDoc
 	err := sqlopt.SQLOptions(sqlopt.WithPermit(orgId, userId), sqlopt.WithDocIDs(docIdList)).
+		Apply(db.GetHandle(ctx), &model.KnowledgeDoc{}).
+		Find(&docList).Error
+	if err != nil {
+		log.Errorf("SelectDocByDocId userId %s err: %v", userId, err)
+		return nil, util.ErrCode(errs.Code_KnowledgeBaseAccessDenied)
+	}
+	if len(docList) == 0 {
+		log.Errorf("SelectDocByDocId userId %s doc list empty", userId)
+		return nil, util.ErrCode(errs.Code_KnowledgeBaseAccessDenied)
+	}
+	return docList, nil
+}
+
+// SelectDocByDocIdListAndFileTypeFilter 查询知识库文档信息
+func SelectDocByDocIdListAndFileTypeFilter(ctx context.Context, docIdList []string, userId, orgId string, fileTypeFilter string) ([]*model.KnowledgeDoc, error) {
+	var docList []*model.KnowledgeDoc
+	err := sqlopt.SQLOptions(sqlopt.WithPermit(orgId, userId), sqlopt.WithDocIDs(docIdList), sqlopt.WithFileTypeFilter(fileTypeFilter)).
 		Apply(db.GetHandle(ctx), &model.KnowledgeDoc{}).
 		Find(&docList).Error
 	if err != nil {

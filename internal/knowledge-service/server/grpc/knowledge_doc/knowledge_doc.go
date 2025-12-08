@@ -102,6 +102,20 @@ func (s *Service) ImportDoc(ctx context.Context, req *knowledgebase_doc_service.
 	return &emptypb.Empty{}, nil
 }
 
+func (s *Service) ExportDoc(ctx context.Context, req *knowledgebase_doc_service.ExportDocReq) (*emptypb.Empty, error) {
+	task, err := buildDocExportTask(req)
+	if err != nil {
+		return nil, err
+	}
+	//创建导出任务
+	err = orm.CreateKnowledgeDocExportTask(ctx, task)
+	if err != nil {
+		log.Errorf("export doc fail %v", err)
+		return nil, util.ErrCode(errs.Code_KnowledgeDocExportFail)
+	}
+	return &emptypb.Empty{}, nil
+}
+
 func (s *Service) UpdateDocStatus(ctx context.Context, req *knowledgebase_doc_service.UpdateDocStatusReq) (*emptypb.Empty, error) {
 	err := orm.UpdateDocStatusDocId(ctx, req.DocId, int(req.Status), buildMetaParamsList(removeDuplicateMeta(req.MetaDataList)))
 	if err != nil {
@@ -731,6 +745,28 @@ func buildImportTask(req *knowledgebase_doc_service.ImportDocReq) (*model.Knowle
 		MetaData:      docImportMetaData,
 		UserId:        req.UserId,
 		OrgId:         req.OrgId,
+	}, nil
+}
+
+// buildExportTask 构造知识库导出任务
+func buildDocExportTask(req *knowledgebase_doc_service.ExportDocReq) (*model.KnowledgeExportTask, error) {
+	params := model.KnowledgeExportTaskParams{
+		KnowledgeId: req.KnowledgeId,
+		DocIdList:   req.DocIdList,
+	}
+	exportParam, err := json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+	return &model.KnowledgeExportTask{
+		ExportId:     generator.GetGenerator().NewID(),
+		KnowledgeId:  req.KnowledgeId,
+		CreatedAt:    time.Now().UnixMilli(),
+		UpdatedAt:    time.Now().UnixMilli(),
+		Status:       model.KnowledgeExportInit,
+		ExportParams: string(exportParam),
+		UserId:       req.UserId,
+		OrgId:        req.OrgId,
 	}, nil
 }
 

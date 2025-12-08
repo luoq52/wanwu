@@ -168,6 +168,12 @@ type KnowledgeDocListByMetaReq struct {
 	CommonCheck
 }
 
+type KnowledgeDocExportReq struct {
+	KnowledgeId string   `json:"knowledgeId" form:"knowledgeId" validate:"required"` //知识库id
+	DocIdList   []string `json:"docIdList"`                                          //文档id
+	CommonCheck
+}
+
 func (c *DocImportReq) Check() error {
 	if len(c.DocAnalyzer) > 0 {
 		for _, v := range c.DocAnalyzer {

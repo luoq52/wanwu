@@ -485,6 +485,21 @@ func GetDocChildSegmentList(ctx *gin.Context, userId, orgId string, req *request
 	return buildDocChildSegmentResp(docSegmentListResp), err
 }
 
+// ExportKnowledgeDoc 导出文档
+func ExportKnowledgeDoc(ctx *gin.Context, userId, orgId string, req *request.KnowledgeDocExportReq) error {
+	_, err := knowledgeBaseDoc.ExportDoc(ctx.Request.Context(), &knowledgebase_doc_service.ExportDocReq{
+		UserId:      userId,
+		OrgId:       orgId,
+		KnowledgeId: req.KnowledgeId,
+		DocIdList:   req.DocIdList,
+	})
+	if err != nil {
+		log.Errorf("导出失败(保存导出任务 失败(%v) ", err)
+		return err
+	}
+	return nil
+}
+
 func buildMetaInfoList(req *request.DocImportReq) []*knowledgebase_doc_service.DocMetaData {
 	var metaList []*knowledgebase_doc_service.DocMetaData
 	for _, meta := range req.DocMetaData {

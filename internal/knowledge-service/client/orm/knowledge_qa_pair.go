@@ -141,20 +141,20 @@ func UpdateKnowledgeQAPairSwitch(ctx context.Context, qaPair *model.KnowledgeQAP
 }
 
 // DeleteKnowledgeQAPair 删除问答对
-func DeleteKnowledgeQAPair(ctx context.Context, qaPair *model.KnowledgeQAPair, deleteParams *service.RagDeleteQAPairParams) error {
+func DeleteKnowledgeQAPair(ctx context.Context, knowledgeId string, qaPairIds []string, deleteParams *service.RagDeleteQAPairParams) error {
 	return db.GetHandle(ctx).Transaction(func(tx *gorm.DB) error {
 		//1.删除问答库问答对
-		err := tx.Model(&model.KnowledgeQAPair{}).Where("qa_pair_id = ?", qaPair.QAPairId).Delete(&model.KnowledgeQAPair{}).Error
+		err := tx.Model(&model.KnowledgeQAPair{}).Where("qa_pair_id in ?", qaPairIds).Delete(&model.KnowledgeQAPair{}).Error
 		if err != nil {
 			return err
 		}
 		//2.更新问答库记录
-		err = UpdateKnowledgeDocCount(tx, qaPair.KnowledgeId)
+		err = UpdateKnowledgeDocCount(tx, knowledgeId)
 		if err != nil {
 			return err
 		}
 		//3.更新元数据记录
-		err = DeleteMetaDataByDocIdList(tx, qaPair.KnowledgeId, []string{qaPair.QAPairId})
+		err = DeleteMetaDataByDocIdList(tx, knowledgeId, qaPairIds)
 		if err != nil {
 			return err
 		}

@@ -147,6 +147,15 @@ func WithQAPairIDsNonEmpty(ids []string) SQLOption {
 	})
 }
 
+func WithFileTypeFilter(fileType string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if len(fileType) > 0 {
+			return db.Where("file_type != ?", fileType)
+		}
+		return db
+	})
+}
+
 func WithQAPairIDs(ids []string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("qa_pair_id in ?", ids)
