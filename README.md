@@ -208,6 +208,20 @@ The platform has been successfully applied in multiple industries such as **fina
 
 ------
 
+### ✨ New Intelligent Agent
+
+- Starting from v0.3.0: We have launched a new version of the intelligent agent implemented in Go, which is fully compatible with the legacy agent. By default, the system currently uses the legacy agent, feel free to enable the new one
+
+1. Modify the `WANWU_BFF_USE_NEW_AGENT` variable in the .env file to enable the new agent
+    ```bash
+    # bff agent
+    WANWU_BFF_USE_NEW_AGENT=1
+    ```
+
+2. Based on the above Docker installation steps, completely start the system service
+
+------
+
 ### ⬆️ Version Upgrade
 
 1. Based on the above Docker installation steps, completely stop the system service

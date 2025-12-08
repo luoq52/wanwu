@@ -312,7 +312,7 @@ func WorkflowConvert(ctx *gin.Context, orgId, workflowId, flowMode string) error
 func ExplorationWorkflowRun(ctx *gin.Context, orgId string, req request.WorkflowRunReq) (*response.CozeNodeResult, error) {
 	// Step 1: 触发异步执行（使用web的test_run接口），获取executeId
 	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.TestRunWebUri)
-	testRunRet := &response.CozeWorkFlowTestRunResponse{}
+	testRunRet := &response.CozeWorkflowTestRunResponse{}
 	resp, err := resty.New().
 		R().
 		SetContext(ctx.Request.Context()).

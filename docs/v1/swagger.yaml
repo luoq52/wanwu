@@ -1960,7 +1960,7 @@ definitions:
           type: string
         type: array
       docImportType:
-        description: 文档导入类型，0：文件上传，1：url上传，2.批量url上传
+        description: 文档导入类型，0：文件上传，1：单条url上传，2.文件url上传
         type: integer
       docInfoList:
         description: 上传文档列表
@@ -2174,6 +2174,7 @@ definitions:
   request.KnowledgeDocExportReq:
     properties:
       docIdList:
+        description: 文档id
         items:
           type: string
         type: array
@@ -4804,6 +4805,8 @@ definitions:
       filePath:
         description: 导出文件路径
         type: string
+      knowledgeName:
+        type: string
       status:
         description: 状态
         type: integer
@@ -5979,24 +5982,51 @@ definitions:
     type: object
 info:
   contact: {}
-  description: "## HTTP Header\r\n| Header        | 说明      |\r\n| ------------- |
-    --------- |\r\n| Authorization | JWT token |\r\n| X-Language    | 语言Code  |\r\n|
-    X-Org-Id      | 组织ID    |\r\n| X-Client-Id   | 客户端标识|\r\n\r\n## HTTP Status\r\n|
-    HTTP Status             | 说明                   |\r\n| -----------------------
-    | ---------------------- |\r\n| 200, StatusOK           | 请求返回成功           |\r\n|
-    400, StatusBadRequest   | 请求返回失败，用于业务 |\r\n| 401, StatusUnauthorized | JWT认证失败
-    \           |\r\n| 403, StatusForbidden    | 没有权限               |\r\n\r\n## 权限-菜单对应表\r\n|
-    一级权限        | 二级权限  | 三级权限 | 一级菜单 | 二级菜单 | 三级菜单 |\r\n|-------------|-------|------|------|------|------|\r\n|
-    guest       |       |      | 【访客】 |      |      |\r\n| common      |       |      |
-    【通用】 |      |      |\r\n| permission  |       |      | 权限管理 |      |      |\r\n|
-    permission  | user  |      | 权限管理 | 用户管理 |      |\r\n| permission  | org   |      |
-    权限管理 | 组织管理 |      |\r\n| permission  | role  |      | 权限管理 | 角色管理 |      |\r\n\r\n##
-    `/v1/user/permission`返回用例\r\n```json\r\n{\r\n  \"code\": 0,\r\n  \"data\": {\r\n
-    \   \"orgPermission\": {\r\n      \"org\": {\"id\": \"test-org-id\", \"name\":
-    \"test-org-name\"},\r\n      \"permissions\": [\r\n        {\"perm\": \"permission\"},\r\n
-    \       {\"perm\": \"permission.user\"},\r\n        {\"perm\": \"permission.org\"},\r\n
-    \       {\"perm\": \"permission.role\"}\r\n      ]\r\n    }\r\n  },\r\n  \"msg\":
-    \"操作成功\"\r\n}\r\n```"
+  description: |-
+    ## HTTP Header
+    | Header        | 说明      |
+    | ------------- | --------- |
+    | Authorization | JWT token |
+    | X-Language    | 语言Code  |
+    | X-Org-Id      | 组织ID    |
+    | X-Client-Id   | 客户端标识|
+
+    ## HTTP Status
+    | HTTP Status             | 说明                   |
+    | ----------------------- | ---------------------- |
+    | 200, StatusOK           | 请求返回成功           |
+    | 400, StatusBadRequest   | 请求返回失败，用于业务 |
+    | 401, StatusUnauthorized | JWT认证失败            |
+    | 403, StatusForbidden    | 没有权限               |
+
+    ## 权限-菜单对应表
+    | 一级权限        | 二级权限  | 三级权限 | 一级菜单 | 二级菜单 | 三级菜单 |
+    |-------------|-------|------|------|------|------|
+    | guest       |       |      | 【访客】 |      |      |
+    | common      |       |      | 【通用】 |      |      |
+    | permission  |       |      | 权限管理 |      |      |
+    | permission  | user  |      | 权限管理 | 用户管理 |      |
+    | permission  | org   |      | 权限管理 | 组织管理 |      |
+    | permission  | role  |      | 权限管理 | 角色管理 |      |
+
+    ## `/v1/user/permission`返回用例
+    ```json
+    {
+      "code": 0,
+      "data": {
+        "orgPermission": {
+          "org": {"id": "test-org-id", "name": "test-org-name"},
+          "permissions": [
+            {"perm": "permission"},
+            {"perm": "permission.user"},
+            {"perm": "permission.org"},
+            {"perm": "permission.role"}
+          ]
+        }
+      },
+      "msg": "操作成功"
+    }
+    ```
   title: AI Agent Productivity Platform API
   version: v0.0.1
 paths:
@@ -8200,7 +8230,7 @@ paths:
       - application/json
       description: 知识库文档导出
       parameters:
-      - description: 问答库文档导出请求参数
+      - description: 知识库文档导出请求参数
         in: body
         name: data
         required: true
@@ -8278,13 +8308,16 @@ paths:
         required: true
         type: string
       - in: query
+        name: metaValue
+        type: string
+      - in: query
         name: pageNo
         type: integer
       - in: query
         name: pageSize
         required: true
         type: integer
-      - description: 当前状态  -1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败
+      - description: 当前状态  -1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败、
         in: query
         name: status
         type: integer
@@ -8303,43 +8336,6 @@ paths:
       security:
       - JWT: []
       summary: 获取文档列表
-      tags:
-      - knowledge.doc
-  /knowledge/doc/list/meta:
-    get:
-      consumes:
-      - application/json
-      description: 根据元数据筛选文档
-      parameters:
-      - in: query
-        name: knowledgeId
-        required: true
-        type: string
-      - in: query
-        name: metaValue
-        type: string
-      - in: query
-        name: pageNo
-        type: integer
-      - in: query
-        name: pageSize
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.DocPageResult'
-              type: object
-      security:
-      - JWT: []
-      summary: 根据元数据筛选文档
       tags:
       - knowledge.doc
   /knowledge/doc/meta:
@@ -8730,10 +8726,6 @@ paths:
       - application/json
       description: 获取知识库导出记录列表
       parameters:
-      - description: 0:知识库，1:问答库
-        in: query
-        name: category
-        type: integer
       - description: 知识库id
         in: query
         name: knowledgeId
@@ -9237,6 +9229,9 @@ paths:
         required: true
         type: string
       - in: query
+        name: metaValue
+        type: string
+      - in: query
         name: name
         type: string
       - in: query
@@ -9264,43 +9259,6 @@ paths:
       security:
       - JWT: []
       summary: 获取问答对列表
-      tags:
-      - knowledge.qa
-  /knowledge/qa/pair/list/meta:
-    get:
-      consumes:
-      - application/json
-      description: 根据元数据筛选问答对
-      parameters:
-      - in: query
-        name: knowledgeId
-        required: true
-        type: string
-      - in: query
-        name: metaValue
-        type: string
-      - in: query
-        name: pageNo
-        type: integer
-      - in: query
-        name: pageSize
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.KnowledgeQAPairPageResult'
-              type: object
-      security:
-      - JWT: []
-      summary: 根据元数据筛选问答对
       tags:
       - knowledge.qa
   /knowledge/qa/pair/switch:

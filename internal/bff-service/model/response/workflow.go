@@ -76,13 +76,13 @@ type CozeWorkflowExportData struct {
 	Schema       string `json:"schema"`
 }
 
-type CozeWorkFlowTestRunResponse struct {
-	Data *CozeWorkFlowTestRunData `json:"data"`
+type CozeWorkflowTestRunResponse struct {
+	Data *CozeWorkflowTestRunData `json:"data"`
 	Code int64                    `json:"code"`
 	Msg  string                   `json:"msg"`
 }
 
-type CozeWorkFlowTestRunData struct {
+type CozeWorkflowTestRunData struct {
 	WorkflowID string `json:"workflow_id"`
 	ExecuteID  string `json:"execute_id"`
 	SessionID  string `json:"session_id"`
