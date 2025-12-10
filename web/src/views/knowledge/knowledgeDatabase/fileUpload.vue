@@ -23,7 +23,7 @@
         <!-- 文件上传 -->
         <div v-if="active === 1">
           <div class="fileBtn">
-            <el-radio-group v-model="fileType" @change="fileTypeChage">
+            <el-radio-group v-model="fileType" @change="fileTypeChange">
               <el-radio-button label="file">
                 {{ $t('knowledgeManage.knowledgeDatabase.fileUpload.file') }}
               </el-radio-button>
@@ -599,7 +599,7 @@
       @editItem="editItem"
       @createItem="createItem"
       @delItem="delSplitterItem"
-      @relodData="relodData"
+      @reloadData="reloadData"
       @checkData="checkData"
     />
   </div>
@@ -652,6 +652,7 @@ export default {
       urlValidate: false,
       active: 1,
       fileType: 'file',
+      withCompressed: false,
       knowledgeId: this.$route.query.id,
       knowledgeName: this.$route.query.name,
       fileList: [],
@@ -795,7 +796,7 @@ export default {
         item => item.splitterValue,
       );
     },
-    relodData(name) {
+    reloadData(name) {
       this.getSplitterList(name);
     },
     async getSplitterList(splitterName) {
@@ -985,7 +986,7 @@ export default {
         return (size / Math.pow(num, 3)).toFixed(2) + 'G'; //G
       return (size / Math.pow(num, 4)).toFixed(2) + 'T'; //T
     },
-    fileTypeChage() {
+    fileTypeChange() {
       // 取消所有正在进行的上传请求
       this.cancelAllRequests();
 
@@ -1223,6 +1224,7 @@ export default {
       return true;
     },
     nextStep() {
+      this.withCompressed = this.fileList;
       //上传文件类型
       if (this.fileType === 'file' || this.fileType === 'fileUrl') {
         if (this.fileIndex < this.fileList.length) {

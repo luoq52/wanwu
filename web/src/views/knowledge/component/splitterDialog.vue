@@ -151,7 +151,7 @@ export default {
     },
     addByEnterKey(e) {
       if (e.keyCode === 13) {
-        this.$emit('relodData', this.tagName);
+        this.$emit('reloadData', this.tagName);
       }
     },
   },
