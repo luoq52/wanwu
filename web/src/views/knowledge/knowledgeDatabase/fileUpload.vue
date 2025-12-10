@@ -1084,35 +1084,38 @@ export default {
     },
     uploadOnChange(file, fileList) {
       if (!fileList.length) return;
-      this.fileList = fileList;
-      if (
-        this.verifyEmpty(file) !== false &&
-        this.verifyFormat(file) !== false &&
-        this.verifyRepeat(file) !== false
-      ) {
-        setTimeout(() => {
-          this.fileList.map((file, index) => {
-            if (file.progressStatus && file.progressStatus !== 'success') {
-              this.$set(file, 'progressStatus', 'exception');
-              this.$set(file, 'showRetry', 'false');
-              this.$set(file, 'showResume', 'false');
-              this.$set(file, 'showRemerge', 'false');
-              if (file.size > this.maxSizeBytes) {
-                this.$set(file, 'fileType', 'maxFile');
-              } else {
-                this.$set(file, 'fileType', 'minFile');
-              }
+      // 先进行验证
+      const isValid =
+        this.verifyEmpty(file) &&
+        this.verifyFormat(file) &&
+        this.verifyRepeat(file);
+
+      if (!isValid) return;
+
+      this.fileList.push(file);
+      setTimeout(() => {
+        this.fileList.map((file, index) => {
+          if (file.progressStatus && file.progressStatus !== 'success') {
+            this.$set(file, 'progressStatus', 'exception');
+            this.$set(file, 'showRetry', 'false');
+            this.$set(file, 'showResume', 'false');
+            this.$set(file, 'showRemerge', 'false');
+            if (file.size > this.maxSizeBytes) {
+              this.$set(file, 'fileType', 'maxFile');
+            } else {
+              this.$set(file, 'fileType', 'minFile');
             }
-          });
-        }, 10);
-        //开始切片上传(如果没有文件正在上传)
-        if (this.file === null) {
-          this.startUpload();
-        } else {
-          //如果上传当中有新的文件加入
-          if (this.file.progressStatus === 'success') {
-            this.startUpload(this.fileIndex);
           }
+        });
+      }, 10);
+
+      // 开始切片上传(如果没有文件正在上传)
+      if (this.file === null) {
+        this.startUpload();
+      } else {
+        // 如果上传当中有新的文件加入
+        if (this.file.progressStatus === 'success') {
+          this.startUpload(this.fileIndex);
         }
       }
     },
@@ -1148,16 +1151,10 @@ export default {
     },
     //  验证文件为空
     verifyEmpty(file) {
-      const isLt1GB = file.size / 1024 / 1024 / 1024 < 1;
       if (file.size <= 0) {
-        setTimeout(() => {
-          this.$message.warning(
-            file.name + this.$t('knowledgeManage.filterFile'),
-          );
-          this.fileList = this.fileList.filter(
-            files => files.name !== file.name,
-          );
-        }, 50);
+        this.$message.warning(
+          file.name + this.$t('knowledgeManage.filterFile'),
+        );
         return false;
       }
       return true;
@@ -1185,83 +1182,45 @@ export default {
         fileName.endsWith(`.${ext}`),
       );
       if (!isSupportedFormat) {
-        setTimeout(() => {
-          this.$message.warning(
-            file.name + this.$t('knowledgeManage.fileTypeError'),
-          );
-          this.fileList = this.fileList.filter(
-            files => files.name !== file.name,
-          );
-        }, 50);
+        this.$message.warning(
+          file.name + this.$t('knowledgeManage.fileTypeError'),
+        );
         return false;
-      } else {
-        const fileType = file.name.split('.').pop();
-        const limit200 = [
-          'pdf',
-          'docx',
-          'doc',
-          'pptx',
-          'zip',
-          'tar.gz',
-          'ofd',
-          'wps',
-        ];
-        const limit20 = ['xlsx', 'xls', 'csv', 'txt', 'html', 'md'];
-        let isLimit200 = file.size / 1024 / 1024 < 200;
-        let isLimit20 = file.size / 1024 / 1024 < 20;
-        let num = 0;
-        if (limit200.includes(fileType)) {
-          num = 200;
-          if (!isLimit200) {
-            setTimeout(() => {
-              this.$message.error(
-                this.$t('knowledgeManage.limitSize') + `${num}MB!`,
-              );
-              this.fileList = this.fileList.filter(
-                files => files.name !== file.name,
-              );
-            }, 50);
-            return false;
-          }
-          return true;
-        } else if (limit20.includes(fileType)) {
-          num = 20;
-          if (!isLimit20) {
-            setTimeout(() => {
-              this.$message.error(
-                this.$t('knowledgeManage.limitSize') + `${num}MB!`,
-              );
-              this.fileList = this.fileList.filter(
-                files => files.name !== file.name,
-              );
-            }, 50);
-            return false;
-          }
-          return true;
-        }
-        return true;
       }
+
+      const fileType = file.name.split('.').pop();
+      const limit200 = [
+        'pdf',
+        'docx',
+        'doc',
+        'pptx',
+        'zip',
+        'tar.gz',
+        'ofd',
+        'wps',
+      ];
+      const limit20 = ['xlsx', 'xls', 'csv', 'txt', 'html', 'md'];
+
+      if (limit200.includes(fileType) && file.size / 1024 / 1024 >= 200) {
+        this.$message.error(this.$t('knowledgeManage.limitSize') + '200MB!');
+        return false;
+      }
+
+      if (limit20.includes(fileType) && file.size / 1024 / 1024 >= 20) {
+        this.$message.error(this.$t('knowledgeManage.limitSize') + '20MB!');
+        return false;
+      }
+      return true;
     },
     //  验证文件格式
     verifyRepeat(file) {
-      let res = true;
-      setTimeout(() => {
-        this.fileList = this.fileList.reduce((accumulator, current) => {
-          const length = accumulator.filter(
-            obj => obj.name === current.name,
-          ).length;
-          if (length === 0) {
-            accumulator.push(current);
-          } else {
-            this.$message.warning(
-              current.name + this.$t('knowledgeManage.fileExist'),
-            );
-            res = false;
-          }
-          return accumulator;
-        }, []);
-        return res;
-      }, 50);
+      const isDuplicate = this.fileList.some(item => item.name === file.name);
+
+      if (isDuplicate) {
+        this.$message.warning(file.name + this.$t('knowledgeManage.fileExist'));
+        return false;
+      }
+      return true;
     },
     nextStep() {
       //上传文件类型
