@@ -32,6 +32,40 @@ general_zh_prompt_template = """
 }}
 """
 
+
+general_eng_prompt_template = """
+You are a professional information-extraction expert and structured-data organizer.  
+Your task is to analyze the provided text and return a **minimal** (≤10 entities) JSON structure that captures valuable entities, their attributes, and their inter-relationships.
+
+Guidelines  
+1. Extract **only** information that matches the predefined schema below.  
+   ```{schema}```  
+2. Be concise: attributes and triples must complement each other—no semantic redundancy.  
+3. Entity strings must appear **verbatim** in the source text.  
+4. If the schema contains a category list, extract **strictly** within that list.  
+5. Never create triples whose subject or object is a single Chinese character.  
+6. Output **only** the JSON illustrated in the example—no extra prose.
+
+Input text  
+```{chunk}```
+
+Example output (return JSON only)  
+{{
+  "attributes": {{
+    "Golden Crown": ["Excavation: 1996"]
+  }},
+  "triples": [
+    ["Great Seal", "collected_by", "Tibet Museum"],
+    ["Gansu Museum", "key_artifact", "Golden Crown"]
+  ],
+  "entity_types": {{
+    "Tibet Museum": "Museum",
+    "Golden Crown": "Artifact"
+  }}
+}}
+"""
+
+
 COMMUNITY_REPORT_PROMPT = """
 You are an AI assistant that helps a human analyst to perform general information discovery. Information discovery is the process of identifying and assessing relevant information associated with certain entities (e.g., organizations and individuals) within a network.
 
@@ -233,6 +267,41 @@ GENERAL_ZH = """
   "entity_types": {{
     "西藏博物馆": "博物馆",
     "黄金冠": "文物",
+  }}
+}}
+"""
+
+
+GENERAL_ENG = """
+You are a professional information extraction expert and structured data organizer. Your task is to analyze the provided text and extract valuable entities, their attributes, and inter-relationships in a structured JSON format.
+The number of entities should be kept minimal (within 10), avoiding redundancy.
+
+Guidelines:
+1. Prioritize extracting information that matches the following predefined schema:
+   ```{schema}```
+2. Flexibility: If the context does not match the predefined schema, extract valuable knowledge as needed;
+3. Conciseness: The attributes and triples you extract should complement each other, avoiding semantic redundancy;
+4. Do not extract triples containing single-character entities;
+5. Entities should remain consistent with their mentions in the original text;
+6. Output format: Return only in the JSON format of the **Example Output**:
+   - attributes: Map each entity to its descriptive features.
+   - triples: List relationships between entities in the format `[entity mention1, relation, entity mention2]`.
+   - entity_types: Map each entity to its schema type based on the provided schema.
+
+```{chunk}```
+
+Example Output:
+{{
+  "attributes": {{
+    "Golden Crown": ["Excavation Year: 1996"]
+  }},
+  "triples": [
+    ["Great Seal", "Collected by", "Tibet Museum"],
+    ["Gansu Museum", "Key Artifact", "Golden Crown"]
+  ],
+  "entity_types": {{
+    "Tibet Museum": "Museum",
+    "Golden Crown": "Artifact"
   }}
 }}
 """
