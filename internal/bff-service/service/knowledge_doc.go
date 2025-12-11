@@ -609,9 +609,11 @@ func buildDocSegment(docSegment *knowledgebase_doc_service.DocSegment) *response
 	}
 	maxSubMaxSplitter := int(docSegment.MaxSplitter)
 	var subMaxSplitter *int
+	var subSplitter []string
 	if docSegment.SegmentMethod == ParentChildSegment {
 		subMaxSplitterValue := int(docSegment.SubMaxSplitter)
 		subMaxSplitter = &subMaxSplitterValue
+		subSplitter = docSegment.SubSplitter
 	}
 	return &response.DocSegment{
 		SegmentType:    docSegment.SegmentType,
@@ -620,6 +622,6 @@ func buildDocSegment(docSegment *knowledgebase_doc_service.DocSegment) *response
 		Overlap:        &docSegment.Overlap,
 		SegmentMethod:  docSegment.SegmentMethod,
 		SubMaxSplitter: subMaxSplitter,
-		SubSplitter:    docSegment.SubSplitter,
+		SubSplitter:    subSplitter,
 	}
 }
