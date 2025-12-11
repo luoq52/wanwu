@@ -3,6 +3,7 @@ import re
 from typing import List, Dict, Tuple
 from graph.config import get_config
 from graph.utils import call_llm_api
+from graph.utils.logger import logger
 
 def _levenshtein_distance(a: str, b: str) -> int:
     """Compute Levenshtein edit distance between two strings"""
@@ -136,10 +137,10 @@ class LLMEntityResolver:
 
         # 构造提示词
         prompt = self._build_llm_prompt(candidate_pairs, old_graph, new_graph)
-
+        logger.info(f"_llm_decision prompt: {prompt}")
         # 调用LLM
         response = self._llm_client.call_api(prompt)
-
+        logger.info(f"_llm_decision response: {response}")
         # 解析结果
         return self._parse_llm_response(response, candidate_pairs)
 
