@@ -31,6 +31,14 @@
       >
         <span class="item-text">{{ $t('metaData.batchExport') }}</span>
       </div>
+      <div class="toolbar-divider" v-if="type === 'knowledge'"></div>
+      <div
+        class="toolbar-item"
+        v-if="type === 'knowledge'"
+        @click="handleBatchConfig"
+      >
+        <span class="item-text">{{ $t('metaData.batchConfig') }}</span>
+      </div>
       <div class="toolbar-divider"></div>
       <div class="toolbar-item" @click="handleCancel">
         <span class="item-text">{{ $t('common.confirm.cancel') }}</span>
@@ -65,6 +73,9 @@ export default {
     },
     handleBatchExport() {
       this.$emit('handleBatchExport');
+    },
+    handleBatchConfig() {
+      this.$emit('handleBatchConfig');
     },
     handleCancel() {
       this.$emit('handleMetaCancel');

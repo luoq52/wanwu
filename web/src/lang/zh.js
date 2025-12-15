@@ -666,7 +666,7 @@ export default {
     importTime: '上传时间',
     currentStatus: '当前状态',
     operate: '操作',
-    segmentConfig: '分段配置',
+    segmentConfig: '分段设置',
     view: '查看',
     knowledgeName: '知识库名称',
     knowledgeNameRules: '请输入知识库名称',
@@ -1105,6 +1105,7 @@ export default {
     batchEdit: '批量编辑元数据值',
     batchDelete: '批量删除文档',
     batchExport: '批量导出',
+    batchConfig: '批量编辑分段设置',
     selected: '已选择',
   },
   metaSet: {

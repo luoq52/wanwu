@@ -280,7 +280,7 @@
                     <el-button
                       size="mini"
                       round
-                      @click="handleConfig(scope.row)"
+                      @click="handleConfig([scope.row.docId])"
                       :disabled="
                         ![KNOWLEDGE_STATUS_FINISH].includes(
                           Number(scope.row.status),
@@ -370,6 +370,7 @@
       @showBatchMeta="showBatchMeta"
       @handleBatchDelete="handleBatchDelete"
       @handleBatchExport="handleBatchExport"
+      @handleBatchConfig="handleBatchConfig"
       @handleMetaCancel="handleMetaCancel"
     />
     <!-- 导出记录 -->
@@ -764,15 +765,15 @@ export default {
         })
         .catch(() => {});
     },
-    handleConfig(data) {
+    handleConfig(docIdList) {
       this.$router.push({
         path: '/knowledge/fileUpload',
         query: {
           id: this.docQuery.knowledgeId,
           name: this.knowledgeName,
           mode: 'config',
-          title: data.docName,
-          docId: data.docId,
+          title: this.$t('knowledgeManage.segmentConfig'),
+          docIdList: docIdList,
         },
       });
     },
@@ -793,6 +794,9 @@ export default {
     },
     handleBatchExport() {
       this.exportData(this.selectedDocIds);
+    },
+    handleBatchConfig() {
+      this.handleConfig(this.selectedDocIds);
     },
     async getTableData(data) {
       this.tableLoading = true;
