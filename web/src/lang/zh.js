@@ -97,6 +97,7 @@ export default {
   },
   common: {
     fileUpload: {
+      fileSizeError: '文件大小不能为空',
       messageAvatar: '请上传图像',
       messageFile: '请上传文件',
       uploadFile: '上传文件',
