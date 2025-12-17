@@ -4,15 +4,18 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	knowledgebase_service "github.com/UnicomAI/wanwu/api/proto/knowledgebase-service"
 	rag_service "github.com/UnicomAI/wanwu/api/proto/rag-service"
 	"github.com/UnicomAI/wanwu/internal/rag-service/client"
 	"github.com/UnicomAI/wanwu/internal/rag-service/client/model"
+	"github.com/UnicomAI/wanwu/internal/rag-service/client/orm"
 	"github.com/UnicomAI/wanwu/internal/rag-service/pkg/generator"
 	message_builder "github.com/UnicomAI/wanwu/internal/rag-service/service/message-builder"
 	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
+	http_client "github.com/UnicomAI/wanwu/pkg/http-client"
 	"github.com/UnicomAI/wanwu/pkg/log"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -20,6 +23,8 @@ import (
 
 const (
 	QACategory int32 = 1 // 问答库类型
+	RAGDRAFT   int32 = 0 // 草稿
+	RAGPUBLISH int32 = 1 // 发布
 )
 
 type Service struct {
@@ -40,13 +45,27 @@ func errStatus(code errs.Code, status *errs.Status) error {
 func (s *Service) ChatRag(req *rag_service.ChatRagReq, stream grpc.ServerStreamingServer[rag_service.ChatRagResp]) error {
 	ctx := stream.Context()
 	// 获取rag详情
-	rag, err := s.cli.FetchRagFirst(ctx, req.RagId)
-	if err != nil {
-		return errStatus(errs.Code_RagChatErr, err)
+	rag := &model.RagInfo{}
+	switch req.Publish {
+	case RAGPUBLISH:
+		publishRag, err := s.cli.FetchPublishRagFirst(ctx, req.RagId, "")
+		if err != nil {
+			return errStatus(errs.Code_RagChatErr, err)
+		}
+		if publishRag.RagInfo == "" {
+			return grpc_util.ErrorStatusWithKey(errs.Code_RagChatErr, "rag_chat_err", "ragInfo is empty")
+		}
+		if err := json.Unmarshal([]byte(publishRag.RagInfo), rag); err != nil {
+			return grpc_util.ErrorStatusWithKey(errs.Code_RagChatErr, "rag_chat_err", err.Error())
+		}
+	default:
+		ragInfo, err := s.cli.FetchRagFirst(ctx, req.RagId)
+		if err != nil {
+			return errStatus(errs.Code_RagChatErr, err)
+		}
+		rag = ragInfo
 	}
-	log.Infof("get rag: %v", rag)
-	// 校验知识库是否存在
-	log.Infof("check know: userid = %s, orgId = %s, knowid = %s", rag.UserID, rag.UserID, rag.KnowledgeBaseConfig.KnowId)
+	log.Infof("get rag: %+v", http_client.Convert2LogString(rag))
 	// 反序列化字符串
 	knowledgeIds, err1 := buildKnowledgeIdList(rag)
 	if err1 != nil {
@@ -279,11 +298,30 @@ func (s *Service) DeleteRag(ctx context.Context, in *rag_service.RagDeleteReq) (
 }
 
 func (s *Service) GetRagDetail(ctx context.Context, in *rag_service.RagDetailReq) (*rag_service.RagInfo, error) {
-	info, err := s.cli.GetRag(ctx, in)
-	if err != nil {
-		return nil, errStatus(errs.Code_RagGetErr, err)
+	switch in.Publish {
+	case RAGDRAFT:
+		info, err := s.cli.GetRag(ctx, in)
+		if err != nil {
+			return nil, errStatus(errs.Code_RagGetErr, err)
+		}
+		return info, nil
+	default:
+		rag, err := s.cli.FetchPublishRagFirst(ctx, in.RagId, "")
+		if err != nil {
+			return nil, errStatus(errs.Code_RagGetErr, err)
+		}
+		log.Infof("publish_rag = %+v", http_client.Convert2LogString(rag))
+		ragInfo := &model.RagInfo{}
+		if err := json.Unmarshal([]byte(rag.RagInfo), ragInfo); err != nil {
+			return &rag_service.RagInfo{}, grpc_util.ErrorStatusWithKey(errs.Code_RagChatErr, "rag_chat_err", err.Error())
+		}
+		log.Infof("ragInfo = %+v", http_client.Convert2LogString(ragInfo))
+		ret, err := orm.BuildRagInfo(ragInfo)
+		if err != nil {
+			return &rag_service.RagInfo{}, errStatus(errs.Code_RagGetErr, err)
+		}
+		return ret, nil
 	}
-	return info, nil
 }
 
 func (s *Service) ListRag(ctx context.Context, in *rag_service.RagListReq) (*rag_service.RagListResp, error) {
@@ -335,6 +373,104 @@ func (s *Service) CopyRag(ctx context.Context, in *rag_service.CopyRagReq) (*rag
 	}
 	return &rag_service.CreateRagResp{
 		RagId: replicaId,
+	}, nil
+}
+
+func (s *Service) PublishRag(ctx context.Context, req *rag_service.PublishRagReq) (*emptypb.Empty, error) {
+	//1.获取rag草稿信息
+	draft, err := s.cli.FetchRagFirst(ctx, req.RagId)
+	if err != nil {
+		return nil, errStatus(errs.Code_RagGetErr, err)
+	}
+	//2.序列化信息
+	var ragInfo string
+	ragInfoBytes, errR := json.Marshal(draft)
+	if errR != nil {
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_RagCreateErr, "rag_publish_err", "marshal err:", errR.Error())
+	}
+	ragInfo = string(ragInfoBytes)
+	//3.存入发布表
+	err = s.cli.PublishRag(ctx, &model.RagPublish{
+		RagID:       draft.RagID,
+		Version:     req.Version,
+		Description: req.Desc,
+		RagInfo:     ragInfo,
+		UserId:      req.Identity.UserId,
+		OrgId:       req.Identity.OrgId,
+		CreatedAt:   time.Now().UnixMilli(),
+		UpdatedAt:   time.Now().UnixMilli(),
+	})
+	if err != nil {
+		return nil, errStatus(errs.Code_RagCreateErr, err)
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (s *Service) UpdatePublishRag(ctx context.Context, req *rag_service.UpdatePublishRagReq) (*emptypb.Empty, error) {
+	rag, err := s.cli.FetchPublishRagFirst(ctx, req.RagId, "")
+	if err != nil {
+		return nil, errStatus(errs.Code_RagGetErr, err)
+	}
+	rag.Description = req.Desc
+	err = s.cli.UpdatePublishRag(ctx, rag)
+	if err != nil {
+		return nil, errStatus(errs.Code_RagUpdateErr, err)
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (s *Service) ListPublishRagHistory(ctx context.Context, req *rag_service.ListPublishRagHistoryReq) (*rag_service.ListPublishRagHistoryResp, error) {
+	historyList := make([]*rag_service.PublishRagHistory, 0)
+	ragList, err := s.cli.FetchPublishRagList(ctx, req.RagId)
+	if err != nil {
+		return nil, errStatus(errs.Code_RagGetErr, err)
+	}
+	for _, rag := range ragList {
+		historyList = append(historyList, &rag_service.PublishRagHistory{
+			RagId:    rag.RagID,
+			Version:  rag.Version,
+			Desc:     rag.Description,
+			CreateAt: rag.CreatedAt,
+		})
+	}
+	return &rag_service.ListPublishRagHistoryResp{
+		HistoryList: historyList,
+		Total:       int64(len(historyList)),
+	}, nil
+}
+
+func (s *Service) OverwriteRagDraft(ctx context.Context, req *rag_service.OverwriteRagDraftReq) (*emptypb.Empty, error) {
+	//1.获取该版本rag信息
+	rag, err := s.cli.FetchPublishRagFirst(ctx, req.RagId, req.Version)
+	if err != nil {
+		return nil, errStatus(errs.Code_RagGetErr, err)
+	}
+	//2.反序列化配置
+	ragInfo := &model.RagInfo{}
+	if rag.RagInfo != "" {
+		errU := json.Unmarshal([]byte(rag.RagInfo), ragInfo)
+		if errU != nil {
+			return nil, grpc_util.ErrorStatusWithKey(errs.Code_RagChatErr, "rag_chat_err", errU.Error())
+		}
+	}
+	//3.覆盖草稿
+	err = s.cli.UpdateRagConfig(ctx, ragInfo)
+	if err != nil {
+		return nil, errStatus(errs.Code_RagUpdateErr, err)
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (s *Service) GetPublishRagDesc(ctx context.Context, req *rag_service.GetPublishRagDescReq) (*rag_service.GetPublishRagDescResp, error) {
+	rag, err := s.cli.FetchPublishRagFirst(ctx, req.RagId, "")
+	if err != nil {
+		return nil, errStatus(errs.Code_RagGetErr, err)
+	}
+	return &rag_service.GetPublishRagDescResp{
+		RagId:    req.RagId,
+		Version:  rag.Version,
+		Desc:     rag.Description,
+		CreateAt: rag.CreatedAt,
 	}, nil
 }
 

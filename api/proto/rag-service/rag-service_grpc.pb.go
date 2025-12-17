@@ -20,15 +20,20 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	RagService_ChatRag_FullMethodName         = "/rag_service.RagService/ChatRag"
-	RagService_CreateRag_FullMethodName       = "/rag_service.RagService/CreateRag"
-	RagService_UpdateRag_FullMethodName       = "/rag_service.RagService/UpdateRag"
-	RagService_UpdateRagConfig_FullMethodName = "/rag_service.RagService/UpdateRagConfig"
-	RagService_DeleteRag_FullMethodName       = "/rag_service.RagService/DeleteRag"
-	RagService_GetRagDetail_FullMethodName    = "/rag_service.RagService/GetRagDetail"
-	RagService_ListRag_FullMethodName         = "/rag_service.RagService/ListRag"
-	RagService_GetRagByIds_FullMethodName     = "/rag_service.RagService/GetRagByIds"
-	RagService_CopyRag_FullMethodName         = "/rag_service.RagService/CopyRag"
+	RagService_ChatRag_FullMethodName               = "/rag_service.RagService/ChatRag"
+	RagService_CreateRag_FullMethodName             = "/rag_service.RagService/CreateRag"
+	RagService_UpdateRag_FullMethodName             = "/rag_service.RagService/UpdateRag"
+	RagService_UpdateRagConfig_FullMethodName       = "/rag_service.RagService/UpdateRagConfig"
+	RagService_DeleteRag_FullMethodName             = "/rag_service.RagService/DeleteRag"
+	RagService_GetRagDetail_FullMethodName          = "/rag_service.RagService/GetRagDetail"
+	RagService_ListRag_FullMethodName               = "/rag_service.RagService/ListRag"
+	RagService_GetRagByIds_FullMethodName           = "/rag_service.RagService/GetRagByIds"
+	RagService_CopyRag_FullMethodName               = "/rag_service.RagService/CopyRag"
+	RagService_PublishRag_FullMethodName            = "/rag_service.RagService/PublishRag"
+	RagService_UpdatePublishRag_FullMethodName      = "/rag_service.RagService/UpdatePublishRag"
+	RagService_ListPublishRagHistory_FullMethodName = "/rag_service.RagService/ListPublishRagHistory"
+	RagService_OverwriteRagDraft_FullMethodName     = "/rag_service.RagService/OverwriteRagDraft"
+	RagService_GetPublishRagDesc_FullMethodName     = "/rag_service.RagService/GetPublishRagDesc"
 )
 
 // RagServiceClient is the client API for RagService service.
@@ -53,6 +58,16 @@ type RagServiceClient interface {
 	GetRagByIds(ctx context.Context, in *GetRagByIdsReq, opts ...grpc.CallOption) (*AppBriefList, error)
 	// 复制 rag
 	CopyRag(ctx context.Context, in *CopyRagReq, opts ...grpc.CallOption) (*CreateRagResp, error)
+	// 发布 rag
+	PublishRag(ctx context.Context, in *PublishRagReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 编辑发布后rag的版本描述
+	UpdatePublishRag(ctx context.Context, in *UpdatePublishRagReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 历史版本列表
+	ListPublishRagHistory(ctx context.Context, in *ListPublishRagHistoryReq, opts ...grpc.CallOption) (*ListPublishRagHistoryResp, error)
+	// 覆盖当前草稿
+	OverwriteRagDraft(ctx context.Context, in *OverwriteRagDraftReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 返回最新版本描述
+	GetPublishRagDesc(ctx context.Context, in *GetPublishRagDescReq, opts ...grpc.CallOption) (*GetPublishRagDescResp, error)
 }
 
 type ragServiceClient struct {
@@ -162,6 +177,56 @@ func (c *ragServiceClient) CopyRag(ctx context.Context, in *CopyRagReq, opts ...
 	return out, nil
 }
 
+func (c *ragServiceClient) PublishRag(ctx context.Context, in *PublishRagReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, RagService_PublishRag_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ragServiceClient) UpdatePublishRag(ctx context.Context, in *UpdatePublishRagReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, RagService_UpdatePublishRag_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ragServiceClient) ListPublishRagHistory(ctx context.Context, in *ListPublishRagHistoryReq, opts ...grpc.CallOption) (*ListPublishRagHistoryResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListPublishRagHistoryResp)
+	err := c.cc.Invoke(ctx, RagService_ListPublishRagHistory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ragServiceClient) OverwriteRagDraft(ctx context.Context, in *OverwriteRagDraftReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, RagService_OverwriteRagDraft_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ragServiceClient) GetPublishRagDesc(ctx context.Context, in *GetPublishRagDescReq, opts ...grpc.CallOption) (*GetPublishRagDescResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPublishRagDescResp)
+	err := c.cc.Invoke(ctx, RagService_GetPublishRagDesc_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RagServiceServer is the server API for RagService service.
 // All implementations must embed UnimplementedRagServiceServer
 // for forward compatibility.
@@ -184,6 +249,16 @@ type RagServiceServer interface {
 	GetRagByIds(context.Context, *GetRagByIdsReq) (*AppBriefList, error)
 	// 复制 rag
 	CopyRag(context.Context, *CopyRagReq) (*CreateRagResp, error)
+	// 发布 rag
+	PublishRag(context.Context, *PublishRagReq) (*emptypb.Empty, error)
+	// 编辑发布后rag的版本描述
+	UpdatePublishRag(context.Context, *UpdatePublishRagReq) (*emptypb.Empty, error)
+	// 历史版本列表
+	ListPublishRagHistory(context.Context, *ListPublishRagHistoryReq) (*ListPublishRagHistoryResp, error)
+	// 覆盖当前草稿
+	OverwriteRagDraft(context.Context, *OverwriteRagDraftReq) (*emptypb.Empty, error)
+	// 返回最新版本描述
+	GetPublishRagDesc(context.Context, *GetPublishRagDescReq) (*GetPublishRagDescResp, error)
 	mustEmbedUnimplementedRagServiceServer()
 }
 
@@ -220,6 +295,21 @@ func (UnimplementedRagServiceServer) GetRagByIds(context.Context, *GetRagByIdsRe
 }
 func (UnimplementedRagServiceServer) CopyRag(context.Context, *CopyRagReq) (*CreateRagResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CopyRag not implemented")
+}
+func (UnimplementedRagServiceServer) PublishRag(context.Context, *PublishRagReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PublishRag not implemented")
+}
+func (UnimplementedRagServiceServer) UpdatePublishRag(context.Context, *UpdatePublishRagReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePublishRag not implemented")
+}
+func (UnimplementedRagServiceServer) ListPublishRagHistory(context.Context, *ListPublishRagHistoryReq) (*ListPublishRagHistoryResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPublishRagHistory not implemented")
+}
+func (UnimplementedRagServiceServer) OverwriteRagDraft(context.Context, *OverwriteRagDraftReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OverwriteRagDraft not implemented")
+}
+func (UnimplementedRagServiceServer) GetPublishRagDesc(context.Context, *GetPublishRagDescReq) (*GetPublishRagDescResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPublishRagDesc not implemented")
 }
 func (UnimplementedRagServiceServer) mustEmbedUnimplementedRagServiceServer() {}
 func (UnimplementedRagServiceServer) testEmbeddedByValue()                    {}
@@ -397,6 +487,96 @@ func _RagService_CopyRag_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RagService_PublishRag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishRagReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RagServiceServer).PublishRag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RagService_PublishRag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RagServiceServer).PublishRag(ctx, req.(*PublishRagReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RagService_UpdatePublishRag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePublishRagReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RagServiceServer).UpdatePublishRag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RagService_UpdatePublishRag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RagServiceServer).UpdatePublishRag(ctx, req.(*UpdatePublishRagReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RagService_ListPublishRagHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPublishRagHistoryReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RagServiceServer).ListPublishRagHistory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RagService_ListPublishRagHistory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RagServiceServer).ListPublishRagHistory(ctx, req.(*ListPublishRagHistoryReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RagService_OverwriteRagDraft_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OverwriteRagDraftReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RagServiceServer).OverwriteRagDraft(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RagService_OverwriteRagDraft_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RagServiceServer).OverwriteRagDraft(ctx, req.(*OverwriteRagDraftReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RagService_GetPublishRagDesc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPublishRagDescReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RagServiceServer).GetPublishRagDesc(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RagService_GetPublishRagDesc_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RagServiceServer).GetPublishRagDesc(ctx, req.(*GetPublishRagDescReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RagService_ServiceDesc is the grpc.ServiceDesc for RagService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -435,6 +615,26 @@ var RagService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CopyRag",
 			Handler:    _RagService_CopyRag_Handler,
+		},
+		{
+			MethodName: "PublishRag",
+			Handler:    _RagService_PublishRag_Handler,
+		},
+		{
+			MethodName: "UpdatePublishRag",
+			Handler:    _RagService_UpdatePublishRag_Handler,
+		},
+		{
+			MethodName: "ListPublishRagHistory",
+			Handler:    _RagService_ListPublishRagHistory_Handler,
+		},
+		{
+			MethodName: "OverwriteRagDraft",
+			Handler:    _RagService_OverwriteRagDraft_Handler,
+		},
+		{
+			MethodName: "GetPublishRagDesc",
+			Handler:    _RagService_GetPublishRagDesc_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

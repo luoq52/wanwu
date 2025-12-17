@@ -11,7 +11,7 @@ const (
 )
 
 type RagInfo struct {
-	ID    int64  `json:"id" gorm:"primaryKey;type:bigint(20) auto_increment;not null;"`
+	ID    int64  `json:"id" gorm:"primaryKey;type:bigint(20);autoIncrement"`
 	RagID string `json:"ragId" gorm:"uniqueIndex:idx_unique_rag_id;column:rag_id;type:varchar(255);comment:ragId"`
 
 	// 使用嵌入结构体（将字段直接映射到主表）

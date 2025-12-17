@@ -79,6 +79,9 @@ func (s *Service) SelectKnowledgeDetailByName(ctx context.Context, req *knowledg
 }
 
 func (s *Service) SelectKnowledgeDetailByIdList(ctx context.Context, req *knowledgebase_service.KnowledgeDetailSelectListReq) (*knowledgebase_service.KnowledgeDetailSelectListResp, error) {
+	if len(req.KnowledgeIds) == 0 {
+		return buildKnowledgeInfoList([]*model.KnowledgeBase{}), nil
+	}
 	knowledgeInfoList, _, err := orm.SelectKnowledgeByIdList(ctx, req.KnowledgeIds, req.UserId, req.OrgId)
 	if err != nil {
 		log.Errorf(fmt.Sprintf("根据id列表获取知识库详情列表失败(%v)  参数(%v)", err, req))

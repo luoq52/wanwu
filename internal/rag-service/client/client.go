@@ -19,4 +19,8 @@ type IClient interface {
 	FetchRagFirst(ctx context.Context, ragId string) (*model.RagInfo, *err_code.Status)
 	FetchRagCopyIndex(ctx context.Context, name, userId, orgId string) (int, *err_code.Status)
 	FetchRagFirstByName(ctx context.Context, name, userId, orgId string) (*model.RagInfo, *err_code.Status)
+	PublishRag(ctx context.Context, req *model.RagPublish) *err_code.Status
+	FetchPublishRagFirst(ctx context.Context, ragId, version string) (*model.RagPublish, *err_code.Status)
+	UpdatePublishRag(ctx context.Context, req *model.RagPublish) *err_code.Status
+	FetchPublishRagList(ctx context.Context, ragId string) ([]*model.RagPublish, *err_code.Status)
 }

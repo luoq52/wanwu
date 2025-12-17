@@ -26,6 +26,16 @@ service RagService {
   rpc GetRagByIds(GetRagByIdsReq) returns (AppBriefList) {}
   // 复制 rag
   rpc CopyRag(CopyRagReq) returns (CreateRagResp) {}
+  // 发布 rag
+  rpc PublishRag(PublishRagReq) returns (google.protobuf.Empty) {}
+  // 编辑发布后rag的版本描述
+  rpc UpdatePublishRag(UpdatePublishRagReq) returns (google.protobuf.Empty) {}
+  // 历史版本列表
+  rpc ListPublishRagHistory(ListPublishRagHistoryReq) returns (ListPublishRagHistoryResp) {}
+  // 覆盖当前草稿
+  rpc OverwriteRagDraft(OverwriteRagDraftReq) returns (google.protobuf.Empty) {}
+  // 返回最新版本描述
+  rpc GetPublishRagDesc(GetPublishRagDescReq) returns (GetPublishRagDescResp) {}
 }
 message Identity {
   string userId = 1;
@@ -37,12 +47,13 @@ message ChatRagReq {
   string question = 2;
   Identity identity = 3;
   repeated HistoryItem history = 4;
+  int32 publish = 5; // 0: 草稿 1: 已发布
 }
 
 message HistoryItem {
-  string  query = 1;
-  string  response = 2;
-  bool  needHistory = 3;
+  string query = 1;
+  string response = 2;
+  bool needHistory = 3;
 }
 
 message ChatRagResp {
@@ -92,6 +103,7 @@ message RagDeleteReq {
 
 message RagDetailReq {
   string ragId = 1;
+  int32 publish = 2; // 0: 草稿 1: 已发布
 }
 
 message RagKnowledgeBaseConfig {
@@ -178,4 +190,51 @@ message AppBriefList{
 message CopyRagReq{
   string ragId = 1;
   Identity identity = 2;
+}
+
+message PublishRagReq{
+  string ragId = 1;
+  string version = 2;
+  string desc = 3;
+  Identity identity = 4;
+}
+
+message UpdatePublishRagReq{
+  string ragId = 1;
+  string desc = 2;
+  Identity identity = 3;
+}
+
+message ListPublishRagHistoryReq{
+  string ragId = 1;
+  Identity identity = 2;
+}
+
+message ListPublishRagHistoryResp{
+  repeated PublishRagHistory historyList = 1;
+  int64 total = 2;
+}
+
+message PublishRagHistory{
+  string ragId = 1;
+  string version = 2;
+  string desc = 3;
+  int64 createAt = 4;
+}
+
+message OverwriteRagDraftReq{
+  string ragId = 1;
+  string version = 2;
+}
+
+message GetPublishRagDescReq{
+  string ragId = 1;
+  Identity identity = 2;
+}
+
+message GetPublishRagDescResp{
+  string ragId = 1;
+  string version = 2;
+  string desc = 3;
+  int64 createAt = 4;
 }
