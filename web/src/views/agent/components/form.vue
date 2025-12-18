@@ -265,8 +265,8 @@
         <div class="block recommend-box tool-box">
           <p class="block-title tool-title">
             <span>
-              {{ $t('agent.form.tool') }} 
-              <span v-if="allTools.length">[{{allTools.length}}]</span>
+              {{ $t('agent.form.tool') }}
+              <span v-if="allTools.length">[{{ allTools.length }}]</span>
             </span>
             <span @click="addTool" class="common-add">
               <span class="el-icon-plus"></span>
@@ -521,7 +521,7 @@ export default {
         if (this.debounceTimer) {
           clearTimeout(this.debounceTimer);
         }
-        
+
         this.debounceTimer = setTimeout(() => {
           if (!this.initialAutoSaveSnapshot) {
             this.initialAutoSaveSnapshot = JSON.parse(JSON.stringify(newVal));
@@ -529,10 +529,14 @@ export default {
           }
 
           const changed =
-            JSON.stringify(newVal) !== JSON.stringify(this.initialAutoSaveSnapshot);
+            JSON.stringify(newVal) !==
+            JSON.stringify(this.initialAutoSaveSnapshot);
 
           if (changed) {
-            if (this.editForm.modelParams !== '' && this.editForm.prologue !== '') {
+            if (
+              this.editForm.modelParams !== '' &&
+              this.editForm.prologue !== ''
+            ) {
               this.updateInfo();
             }
           }
@@ -544,7 +548,7 @@ export default {
   computed: {
     ...mapGetters('app', ['cacheData']),
     ...mapGetters('user', ['commonInfo']),
-    agentFormParams(){
+    agentFormParams() {
       const {
         modelParams,
         modelConfig,
@@ -564,7 +568,7 @@ export default {
         recommendQuestion,
         visionConfig,
       };
-    }
+    },
   },
   data() {
     return {
@@ -711,7 +715,7 @@ export default {
   methods: {
     ...mapActions('app', ['setMaxPicNum', 'clearMaxPicNum']),
     //系统提示词失去焦点时，触发提示词更新
-    handleInstructionsBlur(e){
+    handleInstructionsBlur(e) {
       this.updateInfo();
     },
     syncAutoSaveBaseline() {

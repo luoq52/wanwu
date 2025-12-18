@@ -16,7 +16,7 @@
           >
             {{ item.name }}
             <span>/</span>
-            {{ showToolNum(item.value)}}
+            {{ showToolNum(item.value) }}
           </div>
         </div>
         <el-input
@@ -188,7 +188,7 @@ export default {
         workflow: this.$t('appSpace.workflow'),
         chatflow: this.$t('appSpace.chat'),
       };
-    }
+    },
   },
   created() {
     this.getMcpSelect('');

@@ -535,10 +535,14 @@ export default {
       this.scrollBottom();
       this.$set(this.session_data.history, index, data);
       if (data.finish === 1) {
-         this.$nextTick(() => {
+        this.$nextTick(() => {
           const setCitations = this.setCitations(index);
-          this.$set(this.session_data.history[index], 'citations', setCitations);
-        })
+          this.$set(
+            this.session_data.history[index],
+            'citations',
+            setCitations,
+          );
+        });
       }
     },
     getFileSizeDisplay(fileSize) {
