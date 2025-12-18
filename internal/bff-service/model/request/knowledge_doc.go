@@ -51,6 +51,12 @@ type DocConfigUpdateReq struct {
 	CommonCheck
 }
 
+type DocReImportReq struct {
+	DocIdList   []string `json:"docIdList"  validate:"required"`  //文档id列表
+	KnowledgeId string   `json:"knowledgeId" validate:"required"` //知识库id
+	CommonCheck
+}
+
 type DocMetaDataReq struct {
 	KnowledgeId  string         `json:"knowledgeId" validate:"required"`
 	DocId        string         `json:"docId"`

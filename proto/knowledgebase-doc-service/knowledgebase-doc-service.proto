@@ -13,6 +13,8 @@ service KnowledgeBaseDocService {
   rpc GetDocDetail(GetDocDetailReq) returns (DocInfo) {}
   // 上传文档
   rpc ImportDoc(ImportDocReq) returns (google.protobuf.Empty) {}
+  // 重新解析文档
+  rpc ReImportDoc(ReImportDocReq) returns (google.protobuf.Empty) {}
   // 更新文档导入配置
   rpc UpdateDocImportConfig(UpdateDocImportConfigReq) returns (google.protobuf.Empty) {}
   // 导出文档
@@ -108,6 +110,13 @@ message UpdateDocImportConfigReq {
   ImportDocReq importDocReq = 1; //配置信息
   repeated string docIdList = 2; //文档id列表
   string knowledgeId = 3;
+}
+
+message ReImportDocReq {
+  string userId = 1;
+  string orgId = 2;
+  string knowledgeId = 3; //知识库id
+  repeated string docIdList = 4;//文档id列表
 }
 
 message ExportDocReq {

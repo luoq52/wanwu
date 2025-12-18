@@ -82,7 +82,7 @@ func (f UrlDocImportService) ImportDoc(ctx context.Context, importTask *model.Kn
 }
 
 func checkUrlFile(ctx context.Context, userId string, knowledgeId string, docUrl string) (bool, string) {
-	err := orm.CheckKnowledgeDocSameName(ctx, userId, knowledgeId, "", docUrl)
+	err := orm.CheckKnowledgeDocSameName(ctx, userId, knowledgeId, "", docUrl, "")
 	if err != nil {
 		log.Errorf("文件 '%s' 判断文档重名失败(%v)", docUrl, err)
 		return false, util.KnowledgeImportSameNameErr

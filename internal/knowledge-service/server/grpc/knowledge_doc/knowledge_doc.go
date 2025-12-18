@@ -8,15 +8,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/db"
-
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	knowledgebase_doc_service "github.com/UnicomAI/wanwu/api/proto/knowledgebase-doc-service"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/model"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/orm"
+	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/db"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/generator"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/util"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/service"
+	import_service "github.com/UnicomAI/wanwu/internal/knowledge-service/task/import-service"
 	"github.com/UnicomAI/wanwu/pkg/log"
 	pkg_util "github.com/UnicomAI/wanwu/pkg/util"
 	util2 "github.com/UnicomAI/wanwu/pkg/util"
@@ -131,6 +131,42 @@ func (s *Service) UpdateDocImportConfig(ctx context.Context, req *knowledgebase_
 	}
 	//3.批量处理文档导入配置
 	batchProcessDocConfig(req, knowledge)
+	return &emptypb.Empty{}, nil
+}
+
+// ReImportDoc 重新解析文档
+func (s *Service) ReImportDoc(ctx context.Context, req *knowledgebase_doc_service.ReImportDocReq) (*emptypb.Empty, error) {
+	//1.文档详情查询
+	docInfos, err := orm.SelectDocByDocIdList(ctx, req.DocIdList, "", "")
+	if err != nil {
+		log.Errorf("get doc info %v", err)
+		return nil, util.ErrCode(errs.Code_KnowledgeDocSearchFail)
+	}
+	//2.文档校验
+	docIdList, err := checkDocFile(ctx, req, docInfos)
+	if err != nil {
+		return nil, util.ErrCode(errs.Code_KnowledgeDocSearchFail)
+	}
+	req.DocIdList = docIdList
+	docInfoMap := buildDocInfoMap(docInfos)
+	// 3.导入任务详情查询
+	knowledge, err := orm.SelectKnowledgeById(ctx, req.KnowledgeId, "", "")
+	if err != nil {
+		return nil, err
+	}
+	tasks, err := orm.SelectKnowledgeImportTaskByIdList(ctx, buildImportTaskIdList(docInfos))
+	if err != nil {
+		return nil, err
+	}
+	docTaskMap := buildDocTaskMap(tasks)
+	//4.文档状态更新成待处理
+	err = orm.BatchUpdateDocStatus(ctx, req.DocIdList, model.DocInit)
+	if err != nil {
+		log.Errorf("update doc status %v", err)
+		return nil, util.ErrCode(errs.Code_KnowledgeDocUpdateStatusFailed)
+	}
+	//5.批量导入文档
+	batchReimportDoc(req, docTaskMap, knowledge, docInfoMap)
 	return &emptypb.Empty{}, nil
 }
 
@@ -872,6 +908,40 @@ func buildReImportTask(req *knowledgebase_doc_service.UpdateDocImportConfigReq, 
 	}, nil
 }
 
+// buildReimportTask 构造重新解析任务
+func buildReimportTask(req *knowledgebase_doc_service.ReImportDocReq, task *model.KnowledgeImportTask, knowledgeDoc *model.KnowledgeDoc) (*model.KnowledgeImportTask, error) {
+	docList := make([]*model.DocInfo, 0)
+	docList = append(docList, &model.DocInfo{
+		DocId:   knowledgeDoc.DocId,
+		DocName: knowledgeDoc.Name,
+		DocUrl:  knowledgeDoc.FilePath,
+		DocType: knowledgeDoc.FileType,
+		DocSize: knowledgeDoc.FileSize,
+	})
+	docImportInfo, err := json.Marshal(&model.DocImportInfo{
+		DocInfoList: docList,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &model.KnowledgeImportTask{
+		ImportId:      generator.GetGenerator().NewID(),
+		KnowledgeId:   req.KnowledgeId,
+		ImportType:    task.ImportType,
+		TaskType:      model.ImportTaskTypeUpdateConfig,
+		SegmentConfig: task.SegmentConfig,
+		DocAnalyzer:   task.DocAnalyzer,
+		CreatedAt:     time.Now().UnixMilli(),
+		UpdatedAt:     time.Now().UnixMilli(),
+		DocInfo:       string(docImportInfo),
+		OcrModelId:    task.OcrModelId,
+		DocPreProcess: task.DocPreProcess,
+		MetaData:      "",
+		UserId:        req.UserId,
+		OrgId:         req.OrgId,
+	}, nil
+}
+
 // buildExportTask 构造知识库导出任务
 func buildDocExportTask(req *knowledgebase_doc_service.ExportDocReq) (*model.KnowledgeExportTask, error) {
 	params := model.KnowledgeExportTaskParams{
@@ -1212,6 +1282,58 @@ func batchProcessDocConfig(req *knowledgebase_doc_service.UpdateDocImportConfigR
 	}()
 }
 
+func batchReimportDoc(req *knowledgebase_doc_service.ReImportDocReq, tasks map[string]*model.KnowledgeImportTask, knowledge *model.KnowledgeBase, docInfos map[string]*model.KnowledgeDoc) {
+	go func() {
+		for _, docId := range req.DocIdList {
+			docInfo, exist := docInfos[docId]
+			if !exist {
+				continue
+			}
+			task, exist := tasks[docInfo.ImportTaskId]
+			if !exist {
+				continue
+			}
+			err := ReimportOneDoc(context.Background(), req, task, knowledge, docId, docInfo.Status)
+			if err != nil {
+				log.Errorf("update doc import config %v", err)
+			}
+		}
+	}()
+}
+
+func ReimportOneDoc(ctx context.Context, req *knowledgebase_doc_service.ReImportDocReq, docTask *model.KnowledgeImportTask, knowledge *model.KnowledgeBase, docId string, status int) (err error) {
+	defer pkg_util.PrintPanicStackWithCall(func(panicOccur bool, recoverError error) {
+		if recoverError != nil {
+			err = recoverError
+		}
+		if err != nil {
+			log.Errorf("update doc import %v", err)
+			err2 := orm.UpdateDocInfo(db.GetHandle(context.Background()), docId, model.DocFail, "", "")
+			if err2 != nil {
+				log.Errorf("update doc status %v", err2)
+			}
+		}
+	})
+	//1.删除文档-copy 文档，删除rag
+	knowledgeDoc, err := orm.CopyDocAndRemoveRag(ctx, knowledge, docId, status)
+	if err != nil {
+		log.Errorf("import doc fail %v", err)
+		return err
+	}
+	//2.提交导入任务，注意排队中的任务可以修改，如果文件被删除则忽略不处理
+	task, err := buildReimportTask(req, docTask, knowledgeDoc)
+	if err != nil {
+		return err
+	}
+	//3.创建导入任务
+	err = orm.CreateKnowledgeReImportTask(ctx, task, knowledgeDoc)
+	if err != nil {
+		log.Errorf("import doc fail %v", err)
+		return err
+	}
+	return nil
+}
+
 func updateOneDocImportConfig(ctx context.Context, req *knowledgebase_doc_service.UpdateDocImportConfigReq, knowledge *model.KnowledgeBase, docId string) (err error) {
 	defer pkg_util.PrintPanicStackWithCall(func(panicOccur bool, recoverError error) {
 		if recoverError != nil {
@@ -1226,7 +1348,7 @@ func updateOneDocImportConfig(ctx context.Context, req *knowledgebase_doc_servic
 		}
 	})
 	//1.删除文档-copy 文档，删除rag
-	knowledgeDoc, err := orm.CopyDocAndRemoveRag(ctx, knowledge, docId)
+	knowledgeDoc, err := orm.CopyDocAndRemoveRag(ctx, knowledge, docId, -1)
 	if err != nil {
 		log.Errorf("import doc fail %v", err)
 		return err
@@ -1256,4 +1378,56 @@ func checkDocFinishStatus(ctx context.Context, req *knowledgebase_doc_service.Up
 		return util.ErrCode(errs.Code_KnowledgeDocStatusFinishCheckFail)
 	}
 	return nil
+}
+
+func checkDocFile(ctx context.Context, req *knowledgebase_doc_service.ReImportDocReq, docInfos []*model.KnowledgeDoc) ([]string, error) {
+	var docIdList []string
+	fileTypeMap := import_service.BuildFileTypeMap()
+	for _, doc := range docInfos {
+		//1.文件状态校验
+		if int32(util.BuildDocRespStatus(doc.Status)) != model.DocFail {
+			log.Errorf("文件%s状态%d不支持", doc.Name, doc.Status)
+			continue
+		}
+		//2.文件类型校验
+		if !fileTypeMap[doc.FileType] {
+			log.Errorf("文件%s格式%s不支持", doc.Name, doc.FileType)
+			continue
+		}
+		//3.文件大小校验
+		err := import_service.CheckSingleFileSize(&model.DocInfo{
+			DocId:   doc.DocId,
+			DocName: doc.Name,
+			DocType: doc.FileType,
+			DocSize: doc.FileSize,
+		})
+		if err != nil {
+			log.Errorf("文件 '%s' 大小超过限制(%v)", doc.Name, err)
+			continue
+		}
+		//4.文档重名校验
+		err = orm.CheckKnowledgeDocSameName(ctx, req.UserId, req.KnowledgeId, doc.Name, "", doc.DocId)
+		if err != nil {
+			log.Errorf("文件 '%s' 判断文档重名失败(%v)", doc.Name, err)
+			continue
+		}
+		docIdList = append(docIdList, doc.DocId)
+	}
+	return docIdList, nil
+}
+
+func buildDocInfoMap(docs []*model.KnowledgeDoc) map[string]*model.KnowledgeDoc {
+	docInfoMap := make(map[string]*model.KnowledgeDoc)
+	for _, doc := range docs {
+		docInfoMap[doc.DocId] = doc
+	}
+	return docInfoMap
+}
+
+func buildDocTaskMap(tasks []*model.KnowledgeImportTask) map[string]*model.KnowledgeImportTask {
+	docTaskMap := make(map[string]*model.KnowledgeImportTask)
+	for _, task := range tasks {
+		docTaskMap[task.ImportId] = task
+	}
+	return docTaskMap
 }

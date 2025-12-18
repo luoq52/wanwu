@@ -23,6 +23,7 @@ const (
 	KnowledgeBaseDocService_GetDocList_FullMethodName              = "/knowledgebase_doc_service.KnowledgeBaseDocService/GetDocList"
 	KnowledgeBaseDocService_GetDocDetail_FullMethodName            = "/knowledgebase_doc_service.KnowledgeBaseDocService/GetDocDetail"
 	KnowledgeBaseDocService_ImportDoc_FullMethodName               = "/knowledgebase_doc_service.KnowledgeBaseDocService/ImportDoc"
+	KnowledgeBaseDocService_ReImportDoc_FullMethodName             = "/knowledgebase_doc_service.KnowledgeBaseDocService/ReImportDoc"
 	KnowledgeBaseDocService_UpdateDocImportConfig_FullMethodName   = "/knowledgebase_doc_service.KnowledgeBaseDocService/UpdateDocImportConfig"
 	KnowledgeBaseDocService_ExportDoc_FullMethodName               = "/knowledgebase_doc_service.KnowledgeBaseDocService/ExportDoc"
 	KnowledgeBaseDocService_UpdateDocStatus_FullMethodName         = "/knowledgebase_doc_service.KnowledgeBaseDocService/UpdateDocStatus"
@@ -55,6 +56,8 @@ type KnowledgeBaseDocServiceClient interface {
 	GetDocDetail(ctx context.Context, in *GetDocDetailReq, opts ...grpc.CallOption) (*DocInfo, error)
 	// 上传文档
 	ImportDoc(ctx context.Context, in *ImportDocReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// 重新解析文档
+	ReImportDoc(ctx context.Context, in *ReImportDocReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 更新文档导入配置
 	UpdateDocImportConfig(ctx context.Context, in *UpdateDocImportConfigReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 导出文档
@@ -129,6 +132,16 @@ func (c *knowledgeBaseDocServiceClient) ImportDoc(ctx context.Context, in *Impor
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, KnowledgeBaseDocService_ImportDoc_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *knowledgeBaseDocServiceClient) ReImportDoc(ctx context.Context, in *ReImportDocReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, KnowledgeBaseDocService_ReImportDoc_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -345,6 +358,8 @@ type KnowledgeBaseDocServiceServer interface {
 	GetDocDetail(context.Context, *GetDocDetailReq) (*DocInfo, error)
 	// 上传文档
 	ImportDoc(context.Context, *ImportDocReq) (*emptypb.Empty, error)
+	// 重新解析文档
+	ReImportDoc(context.Context, *ReImportDocReq) (*emptypb.Empty, error)
 	// 更新文档导入配置
 	UpdateDocImportConfig(context.Context, *UpdateDocImportConfigReq) (*emptypb.Empty, error)
 	// 导出文档
@@ -403,6 +418,9 @@ func (UnimplementedKnowledgeBaseDocServiceServer) GetDocDetail(context.Context, 
 }
 func (UnimplementedKnowledgeBaseDocServiceServer) ImportDoc(context.Context, *ImportDocReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ImportDoc not implemented")
+}
+func (UnimplementedKnowledgeBaseDocServiceServer) ReImportDoc(context.Context, *ReImportDocReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReImportDoc not implemented")
 }
 func (UnimplementedKnowledgeBaseDocServiceServer) UpdateDocImportConfig(context.Context, *UpdateDocImportConfigReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDocImportConfig not implemented")
@@ -536,6 +554,24 @@ func _KnowledgeBaseDocService_ImportDoc_Handler(srv interface{}, ctx context.Con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(KnowledgeBaseDocServiceServer).ImportDoc(ctx, req.(*ImportDocReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KnowledgeBaseDocService_ReImportDoc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReImportDocReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KnowledgeBaseDocServiceServer).ReImportDoc(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: KnowledgeBaseDocService_ReImportDoc_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KnowledgeBaseDocServiceServer).ReImportDoc(ctx, req.(*ReImportDocReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -918,6 +954,10 @@ var KnowledgeBaseDocService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ImportDoc",
 			Handler:    _KnowledgeBaseDocService_ImportDoc_Handler,
+		},
+		{
+			MethodName: "ReImportDoc",
+			Handler:    _KnowledgeBaseDocService_ReImportDoc_Handler,
 		},
 		{
 			MethodName: "UpdateDocImportConfig",

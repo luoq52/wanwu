@@ -51,7 +51,7 @@ func (f FileDocImportService) AnalyzeDoc(ctx context.Context, importTask *model.
 
 func (f FileDocImportService) CheckDoc(ctx context.Context, importTask *model.KnowledgeImportTask, docList []*model.DocInfo) ([]*CheckFileResult, error) {
 	var resultList []*CheckFileResult
-	fileTypeMap := buildFileTypeMap()
+	fileTypeMap := BuildFileTypeMap()
 	for _, docInfo := range docList {
 		checkResult, checkMessage := checkOneFile(ctx, importTask, docInfo, fileTypeMap)
 		var status = model.DocInit
@@ -94,13 +94,13 @@ func checkOneFile(ctx context.Context, importTask *model.KnowledgeImportTask, do
 		return false, util.KnowledgeImportFileFormatErr
 	}
 	//2.文件大小校验
-	err := checkSingleFileSize(doc)
+	err := CheckSingleFileSize(doc)
 	if err != nil {
 		log.Errorf("文件 '%s' 大小超过限制(%v)", doc.DocName, err)
 		return false, util.KnowledgeImportFileSizeErr
 	}
 	//3.文档重名校验
-	err = orm.CheckKnowledgeDocSameName(ctx, importTask.UserId, importTask.KnowledgeId, doc.DocName, "")
+	err = orm.CheckKnowledgeDocSameName(ctx, importTask.UserId, importTask.KnowledgeId, doc.DocName, "", "")
 	if err != nil {
 		log.Errorf("文件 '%s' 判断文档重名失败(%v)", doc.DocName, err)
 		return false, util.KnowledgeImportSameNameErr
@@ -109,7 +109,7 @@ func checkOneFile(ctx context.Context, importTask *model.KnowledgeImportTask, do
 }
 
 // 校验单个文件大小限制
-func checkSingleFileSize(doc *model.DocInfo) error {
+func CheckSingleFileSize(doc *model.DocInfo) error {
 	limitConfig := config.GetConfig().UsageLimit
 	var fileLimit int64
 	switch doc.DocType {
@@ -205,7 +205,7 @@ func buildKnowledgeDoc(importTask *model.KnowledgeImportTask, checkFileResult *C
 	}
 }
 
-func buildFileTypeMap() map[string]bool {
+func BuildFileTypeMap() map[string]bool {
 	fileTypes := strings.Split(config.GetConfig().UsageLimit.FileTypes, ";")
 	var fileTypeMap = make(map[string]bool)
 	for _, fileType := range fileTypes {

@@ -543,6 +543,77 @@ func (x *UpdateDocImportConfigReq) GetKnowledgeId() string {
 	return ""
 }
 
+type ReImportDocReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId      string   `protobuf:"bytes,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	OrgId       string   `protobuf:"bytes,2,opt,name=orgId,proto3" json:"orgId,omitempty"`
+	KnowledgeId string   `protobuf:"bytes,3,opt,name=knowledgeId,proto3" json:"knowledgeId,omitempty"` //知识库id
+	DocIdList   []string `protobuf:"bytes,4,rep,name=docIdList,proto3" json:"docIdList,omitempty"`     //文档id列表
+}
+
+func (x *ReImportDocReq) Reset() {
+	*x = ReImportDocReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ReImportDocReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReImportDocReq) ProtoMessage() {}
+
+func (x *ReImportDocReq) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReImportDocReq.ProtoReflect.Descriptor instead.
+func (*ReImportDocReq) Descriptor() ([]byte, []int) {
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ReImportDocReq) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *ReImportDocReq) GetOrgId() string {
+	if x != nil {
+		return x.OrgId
+	}
+	return ""
+}
+
+func (x *ReImportDocReq) GetKnowledgeId() string {
+	if x != nil {
+		return x.KnowledgeId
+	}
+	return ""
+}
+
+func (x *ReImportDocReq) GetDocIdList() []string {
+	if x != nil {
+		return x.DocIdList
+	}
+	return nil
+}
+
 type ExportDocReq struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -557,7 +628,7 @@ type ExportDocReq struct {
 func (x *ExportDocReq) Reset() {
 	*x = ExportDocReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[6]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -570,7 +641,7 @@ func (x *ExportDocReq) String() string {
 func (*ExportDocReq) ProtoMessage() {}
 
 func (x *ExportDocReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[6]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -583,7 +654,7 @@ func (x *ExportDocReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExportDocReq.ProtoReflect.Descriptor instead.
 func (*ExportDocReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{6}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ExportDocReq) GetUserId() string {
@@ -628,7 +699,7 @@ type DocMetaData struct {
 func (x *DocMetaData) Reset() {
 	*x = DocMetaData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[7]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -641,7 +712,7 @@ func (x *DocMetaData) String() string {
 func (*DocMetaData) ProtoMessage() {}
 
 func (x *DocMetaData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[7]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -654,7 +725,7 @@ func (x *DocMetaData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocMetaData.ProtoReflect.Descriptor instead.
 func (*DocMetaData) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{7}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *DocMetaData) GetKey() string {
@@ -698,7 +769,7 @@ type UpdateDocStatusReq struct {
 func (x *UpdateDocStatusReq) Reset() {
 	*x = UpdateDocStatusReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[8]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -711,7 +782,7 @@ func (x *UpdateDocStatusReq) String() string {
 func (*UpdateDocStatusReq) ProtoMessage() {}
 
 func (x *UpdateDocStatusReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[8]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -724,7 +795,7 @@ func (x *UpdateDocStatusReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDocStatusReq.ProtoReflect.Descriptor instead.
 func (*UpdateDocStatusReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{8}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UpdateDocStatusReq) GetDocId() string {
@@ -763,7 +834,7 @@ type UpdateDocMetaDataReq struct {
 func (x *UpdateDocMetaDataReq) Reset() {
 	*x = UpdateDocMetaDataReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[9]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -776,7 +847,7 @@ func (x *UpdateDocMetaDataReq) String() string {
 func (*UpdateDocMetaDataReq) ProtoMessage() {}
 
 func (x *UpdateDocMetaDataReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[9]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -789,7 +860,7 @@ func (x *UpdateDocMetaDataReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDocMetaDataReq.ProtoReflect.Descriptor instead.
 func (*UpdateDocMetaDataReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{9}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdateDocMetaDataReq) GetOrgId() string {
@@ -843,7 +914,7 @@ type BatchUpdateDocMetaDataReq struct {
 func (x *BatchUpdateDocMetaDataReq) Reset() {
 	*x = BatchUpdateDocMetaDataReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[10]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -856,7 +927,7 @@ func (x *BatchUpdateDocMetaDataReq) String() string {
 func (*BatchUpdateDocMetaDataReq) ProtoMessage() {}
 
 func (x *BatchUpdateDocMetaDataReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[10]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -869,7 +940,7 @@ func (x *BatchUpdateDocMetaDataReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BatchUpdateDocMetaDataReq.ProtoReflect.Descriptor instead.
 func (*BatchUpdateDocMetaDataReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{10}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *BatchUpdateDocMetaDataReq) GetOrgId() string {
@@ -930,7 +1001,7 @@ type MetaData struct {
 func (x *MetaData) Reset() {
 	*x = MetaData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[11]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -943,7 +1014,7 @@ func (x *MetaData) String() string {
 func (*MetaData) ProtoMessage() {}
 
 func (x *MetaData) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[11]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -956,7 +1027,7 @@ func (x *MetaData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetaData.ProtoReflect.Descriptor instead.
 func (*MetaData) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{11}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *MetaData) GetMetaId() string {
@@ -1013,7 +1084,7 @@ type InitDocStatusReq struct {
 func (x *InitDocStatusReq) Reset() {
 	*x = InitDocStatusReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[12]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1026,7 +1097,7 @@ func (x *InitDocStatusReq) String() string {
 func (*InitDocStatusReq) ProtoMessage() {}
 
 func (x *InitDocStatusReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[12]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1039,7 +1110,7 @@ func (x *InitDocStatusReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InitDocStatusReq.ProtoReflect.Descriptor instead.
 func (*InitDocStatusReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{12}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *InitDocStatusReq) GetUserId() string {
@@ -1069,7 +1140,7 @@ type DeleteDocReq struct {
 func (x *DeleteDocReq) Reset() {
 	*x = DeleteDocReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[13]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1082,7 +1153,7 @@ func (x *DeleteDocReq) String() string {
 func (*DeleteDocReq) ProtoMessage() {}
 
 func (x *DeleteDocReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[13]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1095,7 +1166,7 @@ func (x *DeleteDocReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDocReq.ProtoReflect.Descriptor instead.
 func (*DeleteDocReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{13}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *DeleteDocReq) GetIds() []string {
@@ -1134,7 +1205,7 @@ type DocFileInfo struct {
 func (x *DocFileInfo) Reset() {
 	*x = DocFileInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[14]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1147,7 +1218,7 @@ func (x *DocFileInfo) String() string {
 func (*DocFileInfo) ProtoMessage() {}
 
 func (x *DocFileInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[14]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1160,7 +1231,7 @@ func (x *DocFileInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocFileInfo.ProtoReflect.Descriptor instead.
 func (*DocFileInfo) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{14}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DocFileInfo) GetDocName() string {
@@ -1215,7 +1286,7 @@ type DocSegment struct {
 func (x *DocSegment) Reset() {
 	*x = DocSegment{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[15]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1228,7 +1299,7 @@ func (x *DocSegment) String() string {
 func (*DocSegment) ProtoMessage() {}
 
 func (x *DocSegment) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[15]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1241,7 +1312,7 @@ func (x *DocSegment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocSegment.ProtoReflect.Descriptor instead.
 func (*DocSegment) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{15}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DocSegment) GetSegmentType() string {
@@ -1306,7 +1377,7 @@ type DocImportTipReq struct {
 func (x *DocImportTipReq) Reset() {
 	*x = DocImportTipReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[16]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1319,7 +1390,7 @@ func (x *DocImportTipReq) String() string {
 func (*DocImportTipReq) ProtoMessage() {}
 
 func (x *DocImportTipReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[16]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1332,7 +1403,7 @@ func (x *DocImportTipReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocImportTipReq.ProtoReflect.Descriptor instead.
 func (*DocImportTipReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{16}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *DocImportTipReq) GetUserId() string {
@@ -1370,7 +1441,7 @@ type DocImportTipResp struct {
 func (x *DocImportTipResp) Reset() {
 	*x = DocImportTipResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[17]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1383,7 +1454,7 @@ func (x *DocImportTipResp) String() string {
 func (*DocImportTipResp) ProtoMessage() {}
 
 func (x *DocImportTipResp) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[17]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1396,7 +1467,7 @@ func (x *DocImportTipResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocImportTipResp.ProtoReflect.Descriptor instead.
 func (*DocImportTipResp) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{17}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *DocImportTipResp) GetKnowledgeName() string {
@@ -1448,7 +1519,7 @@ type DocSegmentListResp struct {
 func (x *DocSegmentListResp) Reset() {
 	*x = DocSegmentListResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[18]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1461,7 +1532,7 @@ func (x *DocSegmentListResp) String() string {
 func (*DocSegmentListResp) ProtoMessage() {}
 
 func (x *DocSegmentListResp) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[18]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1474,7 +1545,7 @@ func (x *DocSegmentListResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocSegmentListResp.ProtoReflect.Descriptor instead.
 func (*DocSegmentListResp) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{18}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *DocSegmentListResp) GetFileName() string {
@@ -1572,7 +1643,7 @@ type SegmentContent struct {
 func (x *SegmentContent) Reset() {
 	*x = SegmentContent{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[19]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1585,7 +1656,7 @@ func (x *SegmentContent) String() string {
 func (*SegmentContent) ProtoMessage() {}
 
 func (x *SegmentContent) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[19]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1598,7 +1669,7 @@ func (x *SegmentContent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SegmentContent.ProtoReflect.Descriptor instead.
 func (*SegmentContent) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{19}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *SegmentContent) GetContent() string {
@@ -1680,7 +1751,7 @@ type DocInfo struct {
 func (x *DocInfo) Reset() {
 	*x = DocInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[20]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1693,7 +1764,7 @@ func (x *DocInfo) String() string {
 func (*DocInfo) ProtoMessage() {}
 
 func (x *DocInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[20]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1706,7 +1777,7 @@ func (x *DocInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocInfo.ProtoReflect.Descriptor instead.
 func (*DocInfo) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{20}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *DocInfo) GetDocId() string {
@@ -1815,7 +1886,7 @@ type DocConfigInfo struct {
 func (x *DocConfigInfo) Reset() {
 	*x = DocConfigInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[21]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1828,7 +1899,7 @@ func (x *DocConfigInfo) String() string {
 func (*DocConfigInfo) ProtoMessage() {}
 
 func (x *DocConfigInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[21]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1841,7 +1912,7 @@ func (x *DocConfigInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocConfigInfo.ProtoReflect.Descriptor instead.
 func (*DocConfigInfo) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{21}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *DocConfigInfo) GetDocImportType() int32 {
@@ -1894,7 +1965,7 @@ type DocSegmentListReq struct {
 func (x *DocSegmentListReq) Reset() {
 	*x = DocSegmentListReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[22]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1907,7 +1978,7 @@ func (x *DocSegmentListReq) String() string {
 func (*DocSegmentListReq) ProtoMessage() {}
 
 func (x *DocSegmentListReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[22]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1920,7 +1991,7 @@ func (x *DocSegmentListReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocSegmentListReq.ProtoReflect.Descriptor instead.
 func (*DocSegmentListReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{22}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *DocSegmentListReq) GetUserId() string {
@@ -1974,7 +2045,7 @@ type UpdateDocSegmentStatusReq struct {
 func (x *UpdateDocSegmentStatusReq) Reset() {
 	*x = UpdateDocSegmentStatusReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[23]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1987,7 +2058,7 @@ func (x *UpdateDocSegmentStatusReq) String() string {
 func (*UpdateDocSegmentStatusReq) ProtoMessage() {}
 
 func (x *UpdateDocSegmentStatusReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[23]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2000,7 +2071,7 @@ func (x *UpdateDocSegmentStatusReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDocSegmentStatusReq.ProtoReflect.Descriptor instead.
 func (*UpdateDocSegmentStatusReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{23}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *UpdateDocSegmentStatusReq) GetUserId() string {
@@ -2059,7 +2130,7 @@ type AnalysisUrlDocReq struct {
 func (x *AnalysisUrlDocReq) Reset() {
 	*x = AnalysisUrlDocReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[24]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[25]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2072,7 +2143,7 @@ func (x *AnalysisUrlDocReq) String() string {
 func (*AnalysisUrlDocReq) ProtoMessage() {}
 
 func (x *AnalysisUrlDocReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[24]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[25]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2085,7 +2156,7 @@ func (x *AnalysisUrlDocReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnalysisUrlDocReq.ProtoReflect.Descriptor instead.
 func (*AnalysisUrlDocReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{24}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *AnalysisUrlDocReq) GetUserId() string {
@@ -2127,7 +2198,7 @@ type AnalysisUrlDocResp struct {
 func (x *AnalysisUrlDocResp) Reset() {
 	*x = AnalysisUrlDocResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[25]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[26]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2140,7 +2211,7 @@ func (x *AnalysisUrlDocResp) String() string {
 func (*AnalysisUrlDocResp) ProtoMessage() {}
 
 func (x *AnalysisUrlDocResp) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[25]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[26]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2153,7 +2224,7 @@ func (x *AnalysisUrlDocResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnalysisUrlDocResp.ProtoReflect.Descriptor instead.
 func (*AnalysisUrlDocResp) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{25}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *AnalysisUrlDocResp) GetUrlList() []*UrlInfo {
@@ -2176,7 +2247,7 @@ type UrlInfo struct {
 func (x *UrlInfo) Reset() {
 	*x = UrlInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[26]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2189,7 +2260,7 @@ func (x *UrlInfo) String() string {
 func (*UrlInfo) ProtoMessage() {}
 
 func (x *UrlInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[26]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2202,7 +2273,7 @@ func (x *UrlInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UrlInfo.ProtoReflect.Descriptor instead.
 func (*UrlInfo) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{26}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *UrlInfo) GetUrl() string {
@@ -2241,7 +2312,7 @@ type DocSegmentLabelsReq struct {
 func (x *DocSegmentLabelsReq) Reset() {
 	*x = DocSegmentLabelsReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[27]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2254,7 +2325,7 @@ func (x *DocSegmentLabelsReq) String() string {
 func (*DocSegmentLabelsReq) ProtoMessage() {}
 
 func (x *DocSegmentLabelsReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[27]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2267,7 +2338,7 @@ func (x *DocSegmentLabelsReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DocSegmentLabelsReq.ProtoReflect.Descriptor instead.
 func (*DocSegmentLabelsReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{27}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *DocSegmentLabelsReq) GetOrgId() string {
@@ -2320,7 +2391,7 @@ type CreateDocSegmentReq struct {
 func (x *CreateDocSegmentReq) Reset() {
 	*x = CreateDocSegmentReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[28]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2333,7 +2404,7 @@ func (x *CreateDocSegmentReq) String() string {
 func (*CreateDocSegmentReq) ProtoMessage() {}
 
 func (x *CreateDocSegmentReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[28]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2346,7 +2417,7 @@ func (x *CreateDocSegmentReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateDocSegmentReq.ProtoReflect.Descriptor instead.
 func (*CreateDocSegmentReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{28}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *CreateDocSegmentReq) GetUserId() string {
@@ -2398,7 +2469,7 @@ type BatchCreateDocSegmentReq struct {
 func (x *BatchCreateDocSegmentReq) Reset() {
 	*x = BatchCreateDocSegmentReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[29]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2411,7 +2482,7 @@ func (x *BatchCreateDocSegmentReq) String() string {
 func (*BatchCreateDocSegmentReq) ProtoMessage() {}
 
 func (x *BatchCreateDocSegmentReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[29]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2424,7 +2495,7 @@ func (x *BatchCreateDocSegmentReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BatchCreateDocSegmentReq.ProtoReflect.Descriptor instead.
 func (*BatchCreateDocSegmentReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{29}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *BatchCreateDocSegmentReq) GetUserId() string {
@@ -2469,7 +2540,7 @@ type DeleteDocSegmentReq struct {
 func (x *DeleteDocSegmentReq) Reset() {
 	*x = DeleteDocSegmentReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[30]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2482,7 +2553,7 @@ func (x *DeleteDocSegmentReq) String() string {
 func (*DeleteDocSegmentReq) ProtoMessage() {}
 
 func (x *DeleteDocSegmentReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[30]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2495,7 +2566,7 @@ func (x *DeleteDocSegmentReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDocSegmentReq.ProtoReflect.Descriptor instead.
 func (*DeleteDocSegmentReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{30}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *DeleteDocSegmentReq) GetUserId() string {
@@ -2541,7 +2612,7 @@ type UpdateDocSegmentReq struct {
 func (x *UpdateDocSegmentReq) Reset() {
 	*x = UpdateDocSegmentReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[31]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[32]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2554,7 +2625,7 @@ func (x *UpdateDocSegmentReq) String() string {
 func (*UpdateDocSegmentReq) ProtoMessage() {}
 
 func (x *UpdateDocSegmentReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[31]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[32]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2567,7 +2638,7 @@ func (x *UpdateDocSegmentReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDocSegmentReq.ProtoReflect.Descriptor instead.
 func (*UpdateDocSegmentReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{31}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *UpdateDocSegmentReq) GetUserId() string {
@@ -2619,7 +2690,7 @@ type GetDocChildSegmentListReq struct {
 func (x *GetDocChildSegmentListReq) Reset() {
 	*x = GetDocChildSegmentListReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[32]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[33]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2632,7 +2703,7 @@ func (x *GetDocChildSegmentListReq) String() string {
 func (*GetDocChildSegmentListReq) ProtoMessage() {}
 
 func (x *GetDocChildSegmentListReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[32]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[33]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2645,7 +2716,7 @@ func (x *GetDocChildSegmentListReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDocChildSegmentListReq.ProtoReflect.Descriptor instead.
 func (*GetDocChildSegmentListReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{32}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *GetDocChildSegmentListReq) GetUserId() string {
@@ -2687,7 +2758,7 @@ type GetDocChildSegmentListResp struct {
 func (x *GetDocChildSegmentListResp) Reset() {
 	*x = GetDocChildSegmentListResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[33]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[34]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2700,7 +2771,7 @@ func (x *GetDocChildSegmentListResp) String() string {
 func (*GetDocChildSegmentListResp) ProtoMessage() {}
 
 func (x *GetDocChildSegmentListResp) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[33]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[34]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2713,7 +2784,7 @@ func (x *GetDocChildSegmentListResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDocChildSegmentListResp.ProtoReflect.Descriptor instead.
 func (*GetDocChildSegmentListResp) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{33}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *GetDocChildSegmentListResp) GetContentList() []*ChildSegmentInfo {
@@ -2737,7 +2808,7 @@ type ChildSegmentInfo struct {
 func (x *ChildSegmentInfo) Reset() {
 	*x = ChildSegmentInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[34]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[35]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2750,7 +2821,7 @@ func (x *ChildSegmentInfo) String() string {
 func (*ChildSegmentInfo) ProtoMessage() {}
 
 func (x *ChildSegmentInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[34]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[35]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2763,7 +2834,7 @@ func (x *ChildSegmentInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChildSegmentInfo.ProtoReflect.Descriptor instead.
 func (*ChildSegmentInfo) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{34}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *ChildSegmentInfo) GetContent() string {
@@ -2809,7 +2880,7 @@ type CreateDocChildSegmentReq struct {
 func (x *CreateDocChildSegmentReq) Reset() {
 	*x = CreateDocChildSegmentReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[35]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[36]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2822,7 +2893,7 @@ func (x *CreateDocChildSegmentReq) String() string {
 func (*CreateDocChildSegmentReq) ProtoMessage() {}
 
 func (x *CreateDocChildSegmentReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[35]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[36]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2835,7 +2906,7 @@ func (x *CreateDocChildSegmentReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateDocChildSegmentReq.ProtoReflect.Descriptor instead.
 func (*CreateDocChildSegmentReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{35}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *CreateDocChildSegmentReq) GetUserId() string {
@@ -2889,7 +2960,7 @@ type DeleteDocChildSegmentReq struct {
 func (x *DeleteDocChildSegmentReq) Reset() {
 	*x = DeleteDocChildSegmentReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[36]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[37]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2902,7 +2973,7 @@ func (x *DeleteDocChildSegmentReq) String() string {
 func (*DeleteDocChildSegmentReq) ProtoMessage() {}
 
 func (x *DeleteDocChildSegmentReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[36]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[37]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2915,7 +2986,7 @@ func (x *DeleteDocChildSegmentReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDocChildSegmentReq.ProtoReflect.Descriptor instead.
 func (*DeleteDocChildSegmentReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{36}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *DeleteDocChildSegmentReq) GetUserId() string {
@@ -2976,7 +3047,7 @@ type UpdateDocChildSegmentReq struct {
 func (x *UpdateDocChildSegmentReq) Reset() {
 	*x = UpdateDocChildSegmentReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[37]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[38]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2989,7 +3060,7 @@ func (x *UpdateDocChildSegmentReq) String() string {
 func (*UpdateDocChildSegmentReq) ProtoMessage() {}
 
 func (x *UpdateDocChildSegmentReq) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[37]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[38]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3002,7 +3073,7 @@ func (x *UpdateDocChildSegmentReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDocChildSegmentReq.ProtoReflect.Descriptor instead.
 func (*UpdateDocChildSegmentReq) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{37}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *UpdateDocChildSegmentReq) GetUserId() string {
@@ -3059,7 +3130,7 @@ type ChildChunk struct {
 func (x *ChildChunk) Reset() {
 	*x = ChildChunk{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[38]
+		mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[39]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -3072,7 +3143,7 @@ func (x *ChildChunk) String() string {
 func (*ChildChunk) ProtoMessage() {}
 
 func (x *ChildChunk) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[38]
+	mi := &file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[39]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3085,7 +3156,7 @@ func (x *ChildChunk) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChildChunk.ProtoReflect.Descriptor instead.
 func (*ChildChunk) Descriptor() ([]byte, []int) {
-	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{38}
+	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *ChildChunk) GetContent() string {
@@ -3202,7 +3273,15 @@ var file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDesc
 	0x6f, 0x63, 0x49, 0x64, 0x4c, 0x69, 0x73, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x09,
 	0x64, 0x6f, 0x63, 0x49, 0x64, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0b, 0x6b, 0x6e, 0x6f,
 	0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x49, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b,
-	0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x49, 0x64, 0x22, 0x7c, 0x0a, 0x0c, 0x45,
+	0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x49, 0x64, 0x22, 0x7e, 0x0a, 0x0e, 0x52,
+	0x65, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x12, 0x16, 0x0a,
+	0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75,
+	0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x6f, 0x72, 0x67, 0x49, 0x64, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6f, 0x72, 0x67, 0x49, 0x64, 0x12, 0x20, 0x0a, 0x0b, 0x6b,
+	0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x49, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0b, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x49, 0x64, 0x12, 0x1c, 0x0a,
+	0x09, 0x64, 0x6f, 0x63, 0x49, 0x64, 0x4c, 0x69, 0x73, 0x74, 0x18, 0x04, 0x20, 0x03, 0x28, 0x09,
+	0x52, 0x09, 0x64, 0x6f, 0x63, 0x49, 0x64, 0x4c, 0x69, 0x73, 0x74, 0x22, 0x7c, 0x0a, 0x0c, 0x45,
 	0x78, 0x70, 0x6f, 0x72, 0x74, 0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x12, 0x16, 0x0a, 0x06, 0x75,
 	0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65,
 	0x72, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x6f, 0x72, 0x67, 0x49, 0x64, 0x18, 0x02, 0x20, 0x01,
@@ -3545,7 +3624,7 @@ var file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDesc
 	0x43, 0x68, 0x75, 0x6e, 0x6b, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12,
 	0x18, 0x0a, 0x07, 0x63, 0x68, 0x75, 0x6e, 0x6b, 0x4e, 0x6f, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05,
-	0x52, 0x07, 0x63, 0x68, 0x75, 0x6e, 0x6b, 0x4e, 0x6f, 0x32, 0xa3, 0x12, 0x0a, 0x17, 0x4b, 0x6e,
+	0x52, 0x07, 0x63, 0x68, 0x75, 0x6e, 0x6b, 0x4e, 0x6f, 0x32, 0xf7, 0x12, 0x0a, 0x17, 0x4b, 0x6e,
 	0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x42, 0x61, 0x73, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65,
 	0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x63, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x63, 0x4c,
 	0x69, 0x73, 0x74, 0x12, 0x28, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62,
@@ -3564,142 +3643,147 @@ var file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDesc
 	0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65,
 	0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x44, 0x6f, 0x63, 0x52,
 	0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x66, 0x0a, 0x15,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x43,
-	0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67,
-	0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x49, 0x6d, 0x70, 0x6f, 0x72,
-	0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f,
-	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70,
-	0x74, 0x79, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x09, 0x45, 0x78, 0x70, 0x6f, 0x72, 0x74, 0x44, 0x6f,
-	0x63, 0x12, 0x27, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73,
-	0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x45, 0x78,
-	0x70, 0x6f, 0x72, 0x74, 0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f,
-	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70,
-	0x74, 0x79, 0x22, 0x00, 0x12, 0x5a, 0x0a, 0x0f, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f,
-	0x63, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x2d, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65,
-	0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x74, 0x61,
-	0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00,
-	0x12, 0x5e, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x4d, 0x65, 0x74,
-	0x61, 0x44, 0x61, 0x74, 0x61, 0x12, 0x2f, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67,
-	0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x44,
-	0x61, 0x74, 0x61, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00,
-	0x12, 0x68, 0x0a, 0x16, 0x42, 0x61, 0x74, 0x63, 0x68, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44,
-	0x6f, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x44, 0x61, 0x74, 0x61, 0x12, 0x34, 0x2e, 0x6b, 0x6e, 0x6f,
-	0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x42, 0x61, 0x74, 0x63, 0x68, 0x55, 0x70, 0x64, 0x61,
-	0x74, 0x65, 0x44, 0x6f, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71,
-	0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x56, 0x0a, 0x0d, 0x49, 0x6e,
-	0x69, 0x74, 0x44, 0x6f, 0x63, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x2b, 0x2e, 0x6b, 0x6e,
+	0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x52, 0x0a, 0x0b,
+	0x52, 0x65, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x44, 0x6f, 0x63, 0x12, 0x29, 0x2e, 0x6b, 0x6e,
 	0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x49, 0x6e, 0x69, 0x74, 0x44, 0x6f, 0x63, 0x53,
-	0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
-	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79,
-	0x22, 0x00, 0x12, 0x4e, 0x0a, 0x09, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x12,
-	0x27, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f,
-	0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x65, 0x6c, 0x65,
-	0x74, 0x65, 0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
-	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79,
-	0x22, 0x00, 0x12, 0x74, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x63, 0x43, 0x61, 0x74, 0x65,
-	0x67, 0x6f, 0x72, 0x79, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x69, 0x70, 0x12, 0x2a, 0x2e,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x52, 0x65, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74,
+	0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00,
+	0x12, 0x66, 0x0a, 0x15, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x49, 0x6d, 0x70,
+	0x6f, 0x72, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77,
+	0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x49,
+	0x6d, 0x70, 0x6f, 0x72, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x52, 0x65, 0x71, 0x1a, 0x16,
+	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x09, 0x45, 0x78, 0x70, 0x6f,
+	0x72, 0x74, 0x44, 0x6f, 0x63, 0x12, 0x27, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67,
+	0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x2e, 0x45, 0x78, 0x70, 0x6f, 0x72, 0x74, 0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x1a, 0x16,
+	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x5a, 0x0a, 0x0f, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x2d, 0x2e, 0x6b, 0x6e,
+	0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f,
+	0x63, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70,
+	0x74, 0x79, 0x22, 0x00, 0x12, 0x5e, 0x0a, 0x11, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f,
+	0x63, 0x4d, 0x65, 0x74, 0x61, 0x44, 0x61, 0x74, 0x61, 0x12, 0x2f, 0x2e, 0x6b, 0x6e, 0x6f, 0x77,
+	0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x4d,
+	0x65, 0x74, 0x61, 0x44, 0x61, 0x74, 0x61, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70,
+	0x74, 0x79, 0x22, 0x00, 0x12, 0x68, 0x0a, 0x16, 0x42, 0x61, 0x74, 0x63, 0x68, 0x55, 0x70, 0x64,
+	0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x44, 0x61, 0x74, 0x61, 0x12, 0x34,
+	0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64,
+	0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x42, 0x61, 0x74, 0x63, 0x68,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x4d, 0x65, 0x74, 0x61, 0x44, 0x61, 0x74,
+	0x61, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x56,
+	0x0a, 0x0d, 0x49, 0x6e, 0x69, 0x74, 0x44, 0x6f, 0x63, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12,
+	0x2b, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f,
+	0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x49, 0x6e, 0x69, 0x74,
+	0x44, 0x6f, 0x63, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45,
+	0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x09, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
+	0x44, 0x6f, 0x63, 0x12, 0x27, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62,
+	0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e,
+	0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45,
+	0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x74, 0x0a, 0x17, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x63,
+	0x43, 0x61, 0x74, 0x65, 0x67, 0x6f, 0x72, 0x79, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x54, 0x69,
+	0x70, 0x12, 0x2a, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73,
+	0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x6f,
+	0x63, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x54, 0x69, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x2b, 0x2e,
 	0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f,
 	0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x6f, 0x63, 0x49, 0x6d, 0x70,
-	0x6f, 0x72, 0x74, 0x54, 0x69, 0x70, 0x52, 0x65, 0x71, 0x1a, 0x2b, 0x2e, 0x6b, 0x6e, 0x6f, 0x77,
-	0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x6f, 0x63, 0x49, 0x6d, 0x70, 0x6f, 0x72, 0x74, 0x54,
-	0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12, 0x72, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x44,
-	0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x2c, 0x2e,
-	0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f,
-	0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67,
-	0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x2d, 0x2e, 0x6b, 0x6e,
-	0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65,
-	0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12, 0x68, 0x0a, 0x16,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74,
-	0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x34, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64,
-	0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d,
-	0x65, 0x6e, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67,
-	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45,
-	0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x6f, 0x0a, 0x0e, 0x41, 0x6e, 0x61, 0x6c, 0x79, 0x73,
-	0x69, 0x73, 0x44, 0x6f, 0x63, 0x55, 0x72, 0x6c, 0x12, 0x2c, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c,
-	0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x2e, 0x41, 0x6e, 0x61, 0x6c, 0x79, 0x73, 0x69, 0x73, 0x55, 0x72, 0x6c,
-	0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x1a, 0x2d, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64,
-	0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x2e, 0x41, 0x6e, 0x61, 0x6c, 0x79, 0x73, 0x69, 0x73, 0x55, 0x72, 0x6c, 0x44, 0x6f,
-	0x63, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12, 0x62, 0x0a, 0x16, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x61, 0x62, 0x65, 0x6c,
-	0x73, 0x12, 0x2e, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73,
+	0x6f, 0x72, 0x74, 0x54, 0x69, 0x70, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12, 0x72, 0x0a, 0x11,
+	0x47, 0x65, 0x74, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73,
+	0x74, 0x12, 0x2c, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73,
 	0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x6f,
-	0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x52, 0x65,
-	0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x5c, 0x0a, 0x10, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12,
-	0x2e, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f,
-	0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x43, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a,
-	0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75,
-	0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x66, 0x0a, 0x15, 0x42, 0x61, 0x74,
-	0x63, 0x68, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65,
-	0x6e, 0x74, 0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61,
-	0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x42,
-	0x61, 0x74, 0x63, 0x68, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67,
-	0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
-	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22,
-	0x00, 0x12, 0x5c, 0x0a, 0x10, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65,
-	0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x2e, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67,
+	0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a,
+	0x2d, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f,
+	0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x6f, 0x63, 0x53,
+	0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00,
+	0x12, 0x68, 0x0a, 0x16, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67,
+	0x6d, 0x65, 0x6e, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x34, 0x2e, 0x6b, 0x6e, 0x6f,
+	0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63,
+	0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71,
+	0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
+	0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x6f, 0x0a, 0x0e, 0x41, 0x6e,
+	0x61, 0x6c, 0x79, 0x73, 0x69, 0x73, 0x44, 0x6f, 0x63, 0x55, 0x72, 0x6c, 0x12, 0x2c, 0x2e, 0x6b,
+	0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63,
+	0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x41, 0x6e, 0x61, 0x6c, 0x79, 0x73, 0x69,
+	0x73, 0x55, 0x72, 0x6c, 0x44, 0x6f, 0x63, 0x52, 0x65, 0x71, 0x1a, 0x2d, 0x2e, 0x6b, 0x6e, 0x6f,
+	0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x41, 0x6e, 0x61, 0x6c, 0x79, 0x73, 0x69, 0x73, 0x55,
+	0x72, 0x6c, 0x44, 0x6f, 0x63, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12, 0x62, 0x0a, 0x16, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c,
+	0x61, 0x62, 0x65, 0x6c, 0x73, 0x12, 0x2e, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67,
 	0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65,
-	0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x65, 0x2e, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x61, 0x62, 0x65,
+	0x6c, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12,
-	0x5c, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d,
+	0x5c, 0x0a, 0x10, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d,
 	0x65, 0x6e, 0x74, 0x12, 0x2e, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62,
 	0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e,
-	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74,
 	0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x87, 0x01,
-	0x0a, 0x16, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67,
-	0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x34, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c,
-	0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64,
-	0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x35,
-	0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64,
-	0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x44, 0x6f,
-	0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73,
-	0x74, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12, 0x66, 0x0a, 0x15, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74,
-	0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65,
-	0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65,
-	0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12,
-	0x66, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c,
-	0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c,
-	0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x43, 0x68,
-	0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e,
-	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
-	0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x66, 0x0a, 0x15, 0x55, 0x70, 0x64, 0x61, 0x74,
-	0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74,
-	0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65,
-	0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65,
-	0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x42,
-	0x6b, 0x5a, 0x69, 0x67, 0x69, 0x74, 0x6c, 0x61, 0x62, 0x2e, 0x61, 0x69, 0x2d, 0x79, 0x75, 0x61,
-	0x6e, 0x6a, 0x69, 0x6e, 0x67, 0x2e, 0x63, 0x6e, 0x2f, 0x61, 0x69, 0x2d, 0x70, 0x6c, 0x61, 0x74,
-	0x66, 0x6f, 0x72, 0x6d, 0x2d, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x2f, 0x62, 0x61, 0x63,
-	0x6b, 0x65, 0x6e, 0x64, 0x2d, 0x75, 0x73, 0x65, 0x64, 0x2d, 0x62, 0x66, 0x66, 0x2f, 0x63, 0x6f,
-	0x6d, 0x6d, 0x6f, 0x6e, 0x2d, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x2f, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65,
-	0x2d, 0x64, 0x6f, 0x63, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x66, 0x0a,
+	0x15, 0x42, 0x61, 0x74, 0x63, 0x68, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53,
+	0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64,
+	0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x2e, 0x42, 0x61, 0x74, 0x63, 0x68, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f,
+	0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d,
+	0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x5c, 0x0a, 0x10, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44,
+	0x6f, 0x63, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x2e, 0x2e, 0x6b, 0x6e, 0x6f, 0x77,
+	0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53,
+	0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x22, 0x00, 0x12, 0x5c, 0x0a, 0x10, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63,
+	0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x2e, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65,
+	0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x53, 0x65, 0x67,
+	0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22,
+	0x00, 0x12, 0x87, 0x01, 0x0a, 0x16, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c,
+	0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x34, 0x2e, 0x6b,
+	0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63,
+	0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x47, 0x65, 0x74, 0x44, 0x6f, 0x63, 0x43,
+	0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x52,
+	0x65, 0x71, 0x1a, 0x35, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61,
+	0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x47,
+	0x65, 0x74, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e,
+	0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12, 0x66, 0x0a, 0x15, 0x43,
+	0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67,
+	0x6d, 0x65, 0x6e, 0x74, 0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65,
+	0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53,
+	0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x22, 0x00, 0x12, 0x66, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44, 0x6f, 0x63,
+	0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x33, 0x2e, 0x6b,
+	0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63,
+	0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x44,
+	0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65,
+	0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x12, 0x66, 0x0a, 0x15, 0x55,
+	0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53, 0x65, 0x67,
+	0x6d, 0x65, 0x6e, 0x74, 0x12, 0x33, 0x2e, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65,
+	0x62, 0x61, 0x73, 0x65, 0x5f, 0x64, 0x6f, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x44, 0x6f, 0x63, 0x43, 0x68, 0x69, 0x6c, 0x64, 0x53,
+	0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x22, 0x00, 0x42, 0x6b, 0x5a, 0x69, 0x67, 0x69, 0x74, 0x6c, 0x61, 0x62, 0x2e, 0x61, 0x69,
+	0x2d, 0x79, 0x75, 0x61, 0x6e, 0x6a, 0x69, 0x6e, 0x67, 0x2e, 0x63, 0x6e, 0x2f, 0x61, 0x69, 0x2d,
+	0x70, 0x6c, 0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d, 0x2d, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65,
+	0x2f, 0x62, 0x61, 0x63, 0x6b, 0x65, 0x6e, 0x64, 0x2d, 0x75, 0x73, 0x65, 0x64, 0x2d, 0x62, 0x66,
+	0x66, 0x2f, 0x63, 0x6f, 0x6d, 0x6d, 0x6f, 0x6e, 0x2d, 0x61, 0x70, 0x69, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65,
+	0x62, 0x61, 0x73, 0x65, 0x2d, 0x64, 0x6f, 0x63, 0x2d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3714,7 +3798,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDes
 	return file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDescData
 }
 
-var file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes = make([]protoimpl.MessageInfo, 39)
+var file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes = make([]protoimpl.MessageInfo, 40)
 var file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_goTypes = []interface{}{
 	(*GetDocListReq)(nil),              // 0: knowledgebase_doc_service.GetDocListReq
 	(*GetDocDetailReq)(nil),            // 1: knowledgebase_doc_service.GetDocDetailReq
@@ -3722,106 +3806,109 @@ var file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_goTypes
 	(*KnowledgeInfo)(nil),              // 3: knowledgebase_doc_service.KnowledgeInfo
 	(*ImportDocReq)(nil),               // 4: knowledgebase_doc_service.ImportDocReq
 	(*UpdateDocImportConfigReq)(nil),   // 5: knowledgebase_doc_service.UpdateDocImportConfigReq
-	(*ExportDocReq)(nil),               // 6: knowledgebase_doc_service.ExportDocReq
-	(*DocMetaData)(nil),                // 7: knowledgebase_doc_service.DocMetaData
-	(*UpdateDocStatusReq)(nil),         // 8: knowledgebase_doc_service.UpdateDocStatusReq
-	(*UpdateDocMetaDataReq)(nil),       // 9: knowledgebase_doc_service.UpdateDocMetaDataReq
-	(*BatchUpdateDocMetaDataReq)(nil),  // 10: knowledgebase_doc_service.BatchUpdateDocMetaDataReq
-	(*MetaData)(nil),                   // 11: knowledgebase_doc_service.MetaData
-	(*InitDocStatusReq)(nil),           // 12: knowledgebase_doc_service.InitDocStatusReq
-	(*DeleteDocReq)(nil),               // 13: knowledgebase_doc_service.DeleteDocReq
-	(*DocFileInfo)(nil),                // 14: knowledgebase_doc_service.DocFileInfo
-	(*DocSegment)(nil),                 // 15: knowledgebase_doc_service.DocSegment
-	(*DocImportTipReq)(nil),            // 16: knowledgebase_doc_service.DocImportTipReq
-	(*DocImportTipResp)(nil),           // 17: knowledgebase_doc_service.DocImportTipResp
-	(*DocSegmentListResp)(nil),         // 18: knowledgebase_doc_service.DocSegmentListResp
-	(*SegmentContent)(nil),             // 19: knowledgebase_doc_service.SegmentContent
-	(*DocInfo)(nil),                    // 20: knowledgebase_doc_service.DocInfo
-	(*DocConfigInfo)(nil),              // 21: knowledgebase_doc_service.DocConfigInfo
-	(*DocSegmentListReq)(nil),          // 22: knowledgebase_doc_service.DocSegmentListReq
-	(*UpdateDocSegmentStatusReq)(nil),  // 23: knowledgebase_doc_service.UpdateDocSegmentStatusReq
-	(*AnalysisUrlDocReq)(nil),          // 24: knowledgebase_doc_service.AnalysisUrlDocReq
-	(*AnalysisUrlDocResp)(nil),         // 25: knowledgebase_doc_service.AnalysisUrlDocResp
-	(*UrlInfo)(nil),                    // 26: knowledgebase_doc_service.UrlInfo
-	(*DocSegmentLabelsReq)(nil),        // 27: knowledgebase_doc_service.DocSegmentLabelsReq
-	(*CreateDocSegmentReq)(nil),        // 28: knowledgebase_doc_service.CreateDocSegmentReq
-	(*BatchCreateDocSegmentReq)(nil),   // 29: knowledgebase_doc_service.BatchCreateDocSegmentReq
-	(*DeleteDocSegmentReq)(nil),        // 30: knowledgebase_doc_service.DeleteDocSegmentReq
-	(*UpdateDocSegmentReq)(nil),        // 31: knowledgebase_doc_service.UpdateDocSegmentReq
-	(*GetDocChildSegmentListReq)(nil),  // 32: knowledgebase_doc_service.GetDocChildSegmentListReq
-	(*GetDocChildSegmentListResp)(nil), // 33: knowledgebase_doc_service.GetDocChildSegmentListResp
-	(*ChildSegmentInfo)(nil),           // 34: knowledgebase_doc_service.ChildSegmentInfo
-	(*CreateDocChildSegmentReq)(nil),   // 35: knowledgebase_doc_service.CreateDocChildSegmentReq
-	(*DeleteDocChildSegmentReq)(nil),   // 36: knowledgebase_doc_service.DeleteDocChildSegmentReq
-	(*UpdateDocChildSegmentReq)(nil),   // 37: knowledgebase_doc_service.UpdateDocChildSegmentReq
-	(*ChildChunk)(nil),                 // 38: knowledgebase_doc_service.ChildChunk
-	(*emptypb.Empty)(nil),              // 39: google.protobuf.Empty
+	(*ReImportDocReq)(nil),             // 6: knowledgebase_doc_service.ReImportDocReq
+	(*ExportDocReq)(nil),               // 7: knowledgebase_doc_service.ExportDocReq
+	(*DocMetaData)(nil),                // 8: knowledgebase_doc_service.DocMetaData
+	(*UpdateDocStatusReq)(nil),         // 9: knowledgebase_doc_service.UpdateDocStatusReq
+	(*UpdateDocMetaDataReq)(nil),       // 10: knowledgebase_doc_service.UpdateDocMetaDataReq
+	(*BatchUpdateDocMetaDataReq)(nil),  // 11: knowledgebase_doc_service.BatchUpdateDocMetaDataReq
+	(*MetaData)(nil),                   // 12: knowledgebase_doc_service.MetaData
+	(*InitDocStatusReq)(nil),           // 13: knowledgebase_doc_service.InitDocStatusReq
+	(*DeleteDocReq)(nil),               // 14: knowledgebase_doc_service.DeleteDocReq
+	(*DocFileInfo)(nil),                // 15: knowledgebase_doc_service.DocFileInfo
+	(*DocSegment)(nil),                 // 16: knowledgebase_doc_service.DocSegment
+	(*DocImportTipReq)(nil),            // 17: knowledgebase_doc_service.DocImportTipReq
+	(*DocImportTipResp)(nil),           // 18: knowledgebase_doc_service.DocImportTipResp
+	(*DocSegmentListResp)(nil),         // 19: knowledgebase_doc_service.DocSegmentListResp
+	(*SegmentContent)(nil),             // 20: knowledgebase_doc_service.SegmentContent
+	(*DocInfo)(nil),                    // 21: knowledgebase_doc_service.DocInfo
+	(*DocConfigInfo)(nil),              // 22: knowledgebase_doc_service.DocConfigInfo
+	(*DocSegmentListReq)(nil),          // 23: knowledgebase_doc_service.DocSegmentListReq
+	(*UpdateDocSegmentStatusReq)(nil),  // 24: knowledgebase_doc_service.UpdateDocSegmentStatusReq
+	(*AnalysisUrlDocReq)(nil),          // 25: knowledgebase_doc_service.AnalysisUrlDocReq
+	(*AnalysisUrlDocResp)(nil),         // 26: knowledgebase_doc_service.AnalysisUrlDocResp
+	(*UrlInfo)(nil),                    // 27: knowledgebase_doc_service.UrlInfo
+	(*DocSegmentLabelsReq)(nil),        // 28: knowledgebase_doc_service.DocSegmentLabelsReq
+	(*CreateDocSegmentReq)(nil),        // 29: knowledgebase_doc_service.CreateDocSegmentReq
+	(*BatchCreateDocSegmentReq)(nil),   // 30: knowledgebase_doc_service.BatchCreateDocSegmentReq
+	(*DeleteDocSegmentReq)(nil),        // 31: knowledgebase_doc_service.DeleteDocSegmentReq
+	(*UpdateDocSegmentReq)(nil),        // 32: knowledgebase_doc_service.UpdateDocSegmentReq
+	(*GetDocChildSegmentListReq)(nil),  // 33: knowledgebase_doc_service.GetDocChildSegmentListReq
+	(*GetDocChildSegmentListResp)(nil), // 34: knowledgebase_doc_service.GetDocChildSegmentListResp
+	(*ChildSegmentInfo)(nil),           // 35: knowledgebase_doc_service.ChildSegmentInfo
+	(*CreateDocChildSegmentReq)(nil),   // 36: knowledgebase_doc_service.CreateDocChildSegmentReq
+	(*DeleteDocChildSegmentReq)(nil),   // 37: knowledgebase_doc_service.DeleteDocChildSegmentReq
+	(*UpdateDocChildSegmentReq)(nil),   // 38: knowledgebase_doc_service.UpdateDocChildSegmentReq
+	(*ChildChunk)(nil),                 // 39: knowledgebase_doc_service.ChildChunk
+	(*emptypb.Empty)(nil),              // 40: google.protobuf.Empty
 }
 var file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_depIdxs = []int32{
-	20, // 0: knowledgebase_doc_service.GetDocListResp.docs:type_name -> knowledgebase_doc_service.DocInfo
+	21, // 0: knowledgebase_doc_service.GetDocListResp.docs:type_name -> knowledgebase_doc_service.DocInfo
 	3,  // 1: knowledgebase_doc_service.GetDocListResp.knowledgeInfo:type_name -> knowledgebase_doc_service.KnowledgeInfo
-	14, // 2: knowledgebase_doc_service.ImportDocReq.docInfoList:type_name -> knowledgebase_doc_service.DocFileInfo
-	15, // 3: knowledgebase_doc_service.ImportDocReq.docSegment:type_name -> knowledgebase_doc_service.DocSegment
-	7,  // 4: knowledgebase_doc_service.ImportDocReq.docMetaDataList:type_name -> knowledgebase_doc_service.DocMetaData
+	15, // 2: knowledgebase_doc_service.ImportDocReq.docInfoList:type_name -> knowledgebase_doc_service.DocFileInfo
+	16, // 3: knowledgebase_doc_service.ImportDocReq.docSegment:type_name -> knowledgebase_doc_service.DocSegment
+	8,  // 4: knowledgebase_doc_service.ImportDocReq.docMetaDataList:type_name -> knowledgebase_doc_service.DocMetaData
 	4,  // 5: knowledgebase_doc_service.UpdateDocImportConfigReq.importDocReq:type_name -> knowledgebase_doc_service.ImportDocReq
-	11, // 6: knowledgebase_doc_service.UpdateDocStatusReq.metaDataList:type_name -> knowledgebase_doc_service.MetaData
-	11, // 7: knowledgebase_doc_service.UpdateDocMetaDataReq.metaDataList:type_name -> knowledgebase_doc_service.MetaData
-	11, // 8: knowledgebase_doc_service.BatchUpdateDocMetaDataReq.metaDataList:type_name -> knowledgebase_doc_service.MetaData
-	19, // 9: knowledgebase_doc_service.DocSegmentListResp.contentList:type_name -> knowledgebase_doc_service.SegmentContent
-	11, // 10: knowledgebase_doc_service.DocSegmentListResp.metaDataList:type_name -> knowledgebase_doc_service.MetaData
-	21, // 11: knowledgebase_doc_service.DocInfo.docConfigInfo:type_name -> knowledgebase_doc_service.DocConfigInfo
-	15, // 12: knowledgebase_doc_service.DocConfigInfo.docSegment:type_name -> knowledgebase_doc_service.DocSegment
-	26, // 13: knowledgebase_doc_service.AnalysisUrlDocResp.urlList:type_name -> knowledgebase_doc_service.UrlInfo
-	34, // 14: knowledgebase_doc_service.GetDocChildSegmentListResp.contentList:type_name -> knowledgebase_doc_service.ChildSegmentInfo
-	38, // 15: knowledgebase_doc_service.UpdateDocChildSegmentReq.childChunk:type_name -> knowledgebase_doc_service.ChildChunk
+	12, // 6: knowledgebase_doc_service.UpdateDocStatusReq.metaDataList:type_name -> knowledgebase_doc_service.MetaData
+	12, // 7: knowledgebase_doc_service.UpdateDocMetaDataReq.metaDataList:type_name -> knowledgebase_doc_service.MetaData
+	12, // 8: knowledgebase_doc_service.BatchUpdateDocMetaDataReq.metaDataList:type_name -> knowledgebase_doc_service.MetaData
+	20, // 9: knowledgebase_doc_service.DocSegmentListResp.contentList:type_name -> knowledgebase_doc_service.SegmentContent
+	12, // 10: knowledgebase_doc_service.DocSegmentListResp.metaDataList:type_name -> knowledgebase_doc_service.MetaData
+	22, // 11: knowledgebase_doc_service.DocInfo.docConfigInfo:type_name -> knowledgebase_doc_service.DocConfigInfo
+	16, // 12: knowledgebase_doc_service.DocConfigInfo.docSegment:type_name -> knowledgebase_doc_service.DocSegment
+	27, // 13: knowledgebase_doc_service.AnalysisUrlDocResp.urlList:type_name -> knowledgebase_doc_service.UrlInfo
+	35, // 14: knowledgebase_doc_service.GetDocChildSegmentListResp.contentList:type_name -> knowledgebase_doc_service.ChildSegmentInfo
+	39, // 15: knowledgebase_doc_service.UpdateDocChildSegmentReq.childChunk:type_name -> knowledgebase_doc_service.ChildChunk
 	0,  // 16: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocList:input_type -> knowledgebase_doc_service.GetDocListReq
 	1,  // 17: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocDetail:input_type -> knowledgebase_doc_service.GetDocDetailReq
 	4,  // 18: knowledgebase_doc_service.KnowledgeBaseDocService.ImportDoc:input_type -> knowledgebase_doc_service.ImportDocReq
-	5,  // 19: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocImportConfig:input_type -> knowledgebase_doc_service.UpdateDocImportConfigReq
-	6,  // 20: knowledgebase_doc_service.KnowledgeBaseDocService.ExportDoc:input_type -> knowledgebase_doc_service.ExportDocReq
-	8,  // 21: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocStatus:input_type -> knowledgebase_doc_service.UpdateDocStatusReq
-	9,  // 22: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocMetaData:input_type -> knowledgebase_doc_service.UpdateDocMetaDataReq
-	10, // 23: knowledgebase_doc_service.KnowledgeBaseDocService.BatchUpdateDocMetaData:input_type -> knowledgebase_doc_service.BatchUpdateDocMetaDataReq
-	12, // 24: knowledgebase_doc_service.KnowledgeBaseDocService.InitDocStatus:input_type -> knowledgebase_doc_service.InitDocStatusReq
-	13, // 25: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDoc:input_type -> knowledgebase_doc_service.DeleteDocReq
-	16, // 26: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocCategoryUploadTip:input_type -> knowledgebase_doc_service.DocImportTipReq
-	22, // 27: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocSegmentList:input_type -> knowledgebase_doc_service.DocSegmentListReq
-	23, // 28: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegmentStatus:input_type -> knowledgebase_doc_service.UpdateDocSegmentStatusReq
-	24, // 29: knowledgebase_doc_service.KnowledgeBaseDocService.AnalysisDocUrl:input_type -> knowledgebase_doc_service.AnalysisUrlDocReq
-	27, // 30: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegmentLabels:input_type -> knowledgebase_doc_service.DocSegmentLabelsReq
-	28, // 31: knowledgebase_doc_service.KnowledgeBaseDocService.CreateDocSegment:input_type -> knowledgebase_doc_service.CreateDocSegmentReq
-	29, // 32: knowledgebase_doc_service.KnowledgeBaseDocService.BatchCreateDocSegment:input_type -> knowledgebase_doc_service.BatchCreateDocSegmentReq
-	30, // 33: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDocSegment:input_type -> knowledgebase_doc_service.DeleteDocSegmentReq
-	31, // 34: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegment:input_type -> knowledgebase_doc_service.UpdateDocSegmentReq
-	32, // 35: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocChildSegmentList:input_type -> knowledgebase_doc_service.GetDocChildSegmentListReq
-	35, // 36: knowledgebase_doc_service.KnowledgeBaseDocService.CreateDocChildSegment:input_type -> knowledgebase_doc_service.CreateDocChildSegmentReq
-	36, // 37: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDocChildSegment:input_type -> knowledgebase_doc_service.DeleteDocChildSegmentReq
-	37, // 38: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocChildSegment:input_type -> knowledgebase_doc_service.UpdateDocChildSegmentReq
-	2,  // 39: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocList:output_type -> knowledgebase_doc_service.GetDocListResp
-	20, // 40: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocDetail:output_type -> knowledgebase_doc_service.DocInfo
-	39, // 41: knowledgebase_doc_service.KnowledgeBaseDocService.ImportDoc:output_type -> google.protobuf.Empty
-	39, // 42: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocImportConfig:output_type -> google.protobuf.Empty
-	39, // 43: knowledgebase_doc_service.KnowledgeBaseDocService.ExportDoc:output_type -> google.protobuf.Empty
-	39, // 44: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocStatus:output_type -> google.protobuf.Empty
-	39, // 45: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocMetaData:output_type -> google.protobuf.Empty
-	39, // 46: knowledgebase_doc_service.KnowledgeBaseDocService.BatchUpdateDocMetaData:output_type -> google.protobuf.Empty
-	39, // 47: knowledgebase_doc_service.KnowledgeBaseDocService.InitDocStatus:output_type -> google.protobuf.Empty
-	39, // 48: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDoc:output_type -> google.protobuf.Empty
-	17, // 49: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocCategoryUploadTip:output_type -> knowledgebase_doc_service.DocImportTipResp
-	18, // 50: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocSegmentList:output_type -> knowledgebase_doc_service.DocSegmentListResp
-	39, // 51: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegmentStatus:output_type -> google.protobuf.Empty
-	25, // 52: knowledgebase_doc_service.KnowledgeBaseDocService.AnalysisDocUrl:output_type -> knowledgebase_doc_service.AnalysisUrlDocResp
-	39, // 53: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegmentLabels:output_type -> google.protobuf.Empty
-	39, // 54: knowledgebase_doc_service.KnowledgeBaseDocService.CreateDocSegment:output_type -> google.protobuf.Empty
-	39, // 55: knowledgebase_doc_service.KnowledgeBaseDocService.BatchCreateDocSegment:output_type -> google.protobuf.Empty
-	39, // 56: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDocSegment:output_type -> google.protobuf.Empty
-	39, // 57: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegment:output_type -> google.protobuf.Empty
-	33, // 58: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocChildSegmentList:output_type -> knowledgebase_doc_service.GetDocChildSegmentListResp
-	39, // 59: knowledgebase_doc_service.KnowledgeBaseDocService.CreateDocChildSegment:output_type -> google.protobuf.Empty
-	39, // 60: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDocChildSegment:output_type -> google.protobuf.Empty
-	39, // 61: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocChildSegment:output_type -> google.protobuf.Empty
-	39, // [39:62] is the sub-list for method output_type
-	16, // [16:39] is the sub-list for method input_type
+	6,  // 19: knowledgebase_doc_service.KnowledgeBaseDocService.ReImportDoc:input_type -> knowledgebase_doc_service.ReImportDocReq
+	5,  // 20: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocImportConfig:input_type -> knowledgebase_doc_service.UpdateDocImportConfigReq
+	7,  // 21: knowledgebase_doc_service.KnowledgeBaseDocService.ExportDoc:input_type -> knowledgebase_doc_service.ExportDocReq
+	9,  // 22: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocStatus:input_type -> knowledgebase_doc_service.UpdateDocStatusReq
+	10, // 23: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocMetaData:input_type -> knowledgebase_doc_service.UpdateDocMetaDataReq
+	11, // 24: knowledgebase_doc_service.KnowledgeBaseDocService.BatchUpdateDocMetaData:input_type -> knowledgebase_doc_service.BatchUpdateDocMetaDataReq
+	13, // 25: knowledgebase_doc_service.KnowledgeBaseDocService.InitDocStatus:input_type -> knowledgebase_doc_service.InitDocStatusReq
+	14, // 26: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDoc:input_type -> knowledgebase_doc_service.DeleteDocReq
+	17, // 27: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocCategoryUploadTip:input_type -> knowledgebase_doc_service.DocImportTipReq
+	23, // 28: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocSegmentList:input_type -> knowledgebase_doc_service.DocSegmentListReq
+	24, // 29: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegmentStatus:input_type -> knowledgebase_doc_service.UpdateDocSegmentStatusReq
+	25, // 30: knowledgebase_doc_service.KnowledgeBaseDocService.AnalysisDocUrl:input_type -> knowledgebase_doc_service.AnalysisUrlDocReq
+	28, // 31: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegmentLabels:input_type -> knowledgebase_doc_service.DocSegmentLabelsReq
+	29, // 32: knowledgebase_doc_service.KnowledgeBaseDocService.CreateDocSegment:input_type -> knowledgebase_doc_service.CreateDocSegmentReq
+	30, // 33: knowledgebase_doc_service.KnowledgeBaseDocService.BatchCreateDocSegment:input_type -> knowledgebase_doc_service.BatchCreateDocSegmentReq
+	31, // 34: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDocSegment:input_type -> knowledgebase_doc_service.DeleteDocSegmentReq
+	32, // 35: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegment:input_type -> knowledgebase_doc_service.UpdateDocSegmentReq
+	33, // 36: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocChildSegmentList:input_type -> knowledgebase_doc_service.GetDocChildSegmentListReq
+	36, // 37: knowledgebase_doc_service.KnowledgeBaseDocService.CreateDocChildSegment:input_type -> knowledgebase_doc_service.CreateDocChildSegmentReq
+	37, // 38: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDocChildSegment:input_type -> knowledgebase_doc_service.DeleteDocChildSegmentReq
+	38, // 39: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocChildSegment:input_type -> knowledgebase_doc_service.UpdateDocChildSegmentReq
+	2,  // 40: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocList:output_type -> knowledgebase_doc_service.GetDocListResp
+	21, // 41: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocDetail:output_type -> knowledgebase_doc_service.DocInfo
+	40, // 42: knowledgebase_doc_service.KnowledgeBaseDocService.ImportDoc:output_type -> google.protobuf.Empty
+	40, // 43: knowledgebase_doc_service.KnowledgeBaseDocService.ReImportDoc:output_type -> google.protobuf.Empty
+	40, // 44: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocImportConfig:output_type -> google.protobuf.Empty
+	40, // 45: knowledgebase_doc_service.KnowledgeBaseDocService.ExportDoc:output_type -> google.protobuf.Empty
+	40, // 46: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocStatus:output_type -> google.protobuf.Empty
+	40, // 47: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocMetaData:output_type -> google.protobuf.Empty
+	40, // 48: knowledgebase_doc_service.KnowledgeBaseDocService.BatchUpdateDocMetaData:output_type -> google.protobuf.Empty
+	40, // 49: knowledgebase_doc_service.KnowledgeBaseDocService.InitDocStatus:output_type -> google.protobuf.Empty
+	40, // 50: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDoc:output_type -> google.protobuf.Empty
+	18, // 51: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocCategoryUploadTip:output_type -> knowledgebase_doc_service.DocImportTipResp
+	19, // 52: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocSegmentList:output_type -> knowledgebase_doc_service.DocSegmentListResp
+	40, // 53: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegmentStatus:output_type -> google.protobuf.Empty
+	26, // 54: knowledgebase_doc_service.KnowledgeBaseDocService.AnalysisDocUrl:output_type -> knowledgebase_doc_service.AnalysisUrlDocResp
+	40, // 55: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegmentLabels:output_type -> google.protobuf.Empty
+	40, // 56: knowledgebase_doc_service.KnowledgeBaseDocService.CreateDocSegment:output_type -> google.protobuf.Empty
+	40, // 57: knowledgebase_doc_service.KnowledgeBaseDocService.BatchCreateDocSegment:output_type -> google.protobuf.Empty
+	40, // 58: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDocSegment:output_type -> google.protobuf.Empty
+	40, // 59: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocSegment:output_type -> google.protobuf.Empty
+	34, // 60: knowledgebase_doc_service.KnowledgeBaseDocService.GetDocChildSegmentList:output_type -> knowledgebase_doc_service.GetDocChildSegmentListResp
+	40, // 61: knowledgebase_doc_service.KnowledgeBaseDocService.CreateDocChildSegment:output_type -> google.protobuf.Empty
+	40, // 62: knowledgebase_doc_service.KnowledgeBaseDocService.DeleteDocChildSegment:output_type -> google.protobuf.Empty
+	40, // 63: knowledgebase_doc_service.KnowledgeBaseDocService.UpdateDocChildSegment:output_type -> google.protobuf.Empty
+	40, // [40:64] is the sub-list for method output_type
+	16, // [16:40] is the sub-list for method input_type
 	16, // [16:16] is the sub-list for extension type_name
 	16, // [16:16] is the sub-list for extension extendee
 	0,  // [0:16] is the sub-list for field type_name
@@ -3906,7 +3993,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ExportDocReq); i {
+			switch v := v.(*ReImportDocReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3918,7 +4005,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocMetaData); i {
+			switch v := v.(*ExportDocReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3930,7 +4017,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateDocStatusReq); i {
+			switch v := v.(*DocMetaData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3942,7 +4029,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateDocMetaDataReq); i {
+			switch v := v.(*UpdateDocStatusReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3954,7 +4041,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BatchUpdateDocMetaDataReq); i {
+			switch v := v.(*UpdateDocMetaDataReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3966,7 +4053,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MetaData); i {
+			switch v := v.(*BatchUpdateDocMetaDataReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3978,7 +4065,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*InitDocStatusReq); i {
+			switch v := v.(*MetaData); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3990,7 +4077,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteDocReq); i {
+			switch v := v.(*InitDocStatusReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4002,7 +4089,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocFileInfo); i {
+			switch v := v.(*DeleteDocReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4014,7 +4101,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocSegment); i {
+			switch v := v.(*DocFileInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4026,7 +4113,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocImportTipReq); i {
+			switch v := v.(*DocSegment); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4038,7 +4125,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocImportTipResp); i {
+			switch v := v.(*DocImportTipReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4050,7 +4137,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocSegmentListResp); i {
+			switch v := v.(*DocImportTipResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4062,7 +4149,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SegmentContent); i {
+			switch v := v.(*DocSegmentListResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4074,7 +4161,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocInfo); i {
+			switch v := v.(*SegmentContent); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4086,7 +4173,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocConfigInfo); i {
+			switch v := v.(*DocInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4098,7 +4185,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocSegmentListReq); i {
+			switch v := v.(*DocConfigInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4110,7 +4197,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateDocSegmentStatusReq); i {
+			switch v := v.(*DocSegmentListReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4122,7 +4209,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AnalysisUrlDocReq); i {
+			switch v := v.(*UpdateDocSegmentStatusReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4134,7 +4221,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AnalysisUrlDocResp); i {
+			switch v := v.(*AnalysisUrlDocReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4146,7 +4233,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UrlInfo); i {
+			switch v := v.(*AnalysisUrlDocResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4158,7 +4245,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DocSegmentLabelsReq); i {
+			switch v := v.(*UrlInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4170,7 +4257,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateDocSegmentReq); i {
+			switch v := v.(*DocSegmentLabelsReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4182,7 +4269,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BatchCreateDocSegmentReq); i {
+			switch v := v.(*CreateDocSegmentReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4194,7 +4281,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteDocSegmentReq); i {
+			switch v := v.(*BatchCreateDocSegmentReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4206,7 +4293,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateDocSegmentReq); i {
+			switch v := v.(*DeleteDocSegmentReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4218,7 +4305,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetDocChildSegmentListReq); i {
+			switch v := v.(*UpdateDocSegmentReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4230,7 +4317,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetDocChildSegmentListResp); i {
+			switch v := v.(*GetDocChildSegmentListReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4242,7 +4329,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ChildSegmentInfo); i {
+			switch v := v.(*GetDocChildSegmentListResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4254,7 +4341,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateDocChildSegmentReq); i {
+			switch v := v.(*ChildSegmentInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4266,7 +4353,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[36].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*DeleteDocChildSegmentReq); i {
+			switch v := v.(*CreateDocChildSegmentReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4278,7 +4365,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateDocChildSegmentReq); i {
+			switch v := v.(*DeleteDocChildSegmentReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4290,6 +4377,18 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			}
 		}
 		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[38].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateDocChildSegmentReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_msgTypes[39].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ChildChunk); i {
 			case 0:
 				return &v.state
@@ -4308,7 +4407,7 @@ func file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_init()
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_proto_knowledgebase_doc_service_knowledgebase_doc_service_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   39,
+			NumMessages:   40,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

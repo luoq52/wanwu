@@ -25,6 +25,7 @@ func registerKnowledge(apiV1 *gin.RouterGroup) {
 	mid.Sub("knowledge").Reg(apiV1, "/knowledge/doc/update/config", http.MethodPost, v1.UpdateDocConfig, "更新文档配置", middleware.AuthKnowledge("knowledgeId", middleware.KnowledgeEdit))
 	mid.Sub("knowledge").Reg(apiV1, "/knowledge/doc/import/tip", http.MethodGet, v1.GetDocImportTip, "获取知识库文档上传状态", middleware.AuthKnowledge("knowledgeId", middleware.KnowledgeView))
 	mid.Sub("knowledge").Reg(apiV1, "/knowledge/doc/export", http.MethodPost, v1.ExportKnowledgeDoc, "知识库文档导出", middleware.AuthKnowledge("knowledgeId", middleware.KnowledgeEdit))
+	mid.Sub("knowledge").Reg(apiV1, "/knowledge/doc/reimport", http.MethodPost, v1.ReImportDoc, "重试导入文档", middleware.AuthKnowledge("knowledgeId", middleware.KnowledgeEdit))
 
 	// 知识库文档，以下通用校验不好做改内部校验
 	mid.Sub("knowledge").Reg(apiV1, "/knowledge/doc", http.MethodDelete, v1.DeleteDoc, "删除文档", middleware.AuthKnowledge("knowledgeId", middleware.KnowledgeEdit))

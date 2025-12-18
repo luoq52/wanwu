@@ -144,7 +144,7 @@ func GetDocListByIdListNoDeleteCheck(ctx context.Context, userId, orgId string, 
 }
 
 // CheckKnowledgeDocSameName 知识库文档同名校验
-func CheckKnowledgeDocSameName(ctx context.Context, userId string, knowledgeId string, docName string, docUrl string) error {
+func CheckKnowledgeDocSameName(ctx context.Context, userId string, knowledgeId string, docName string, docUrl string, docId string) error {
 	var count int64
 	var docUrlMd5 = ""
 	if len(docUrl) > 0 {
@@ -155,6 +155,7 @@ func CheckKnowledgeDocSameName(ctx context.Context, userId string, knowledgeId s
 		sqlopt.WithName(docName),
 		sqlopt.WithFilePathMd5(docUrlMd5),
 		sqlopt.WithoutStatus(model.DocFail),
+		sqlopt.WithoutDocId(docId),
 		sqlopt.WithDelete(0)).
 		Apply(db.GetHandle(ctx), &model.KnowledgeDoc{}).
 		Count(&count).Error
@@ -405,7 +406,7 @@ func ReImportKnowledgeDoc(ctx context.Context, doc *model.KnowledgeDoc, importTa
 }
 
 // CopyDocAndRemoveRag 复制文档并删除rag
-func CopyDocAndRemoveRag(ctx context.Context, knowledge *model.KnowledgeBase, docId string) (*model.KnowledgeDoc, error) {
+func CopyDocAndRemoveRag(ctx context.Context, knowledge *model.KnowledgeBase, docId string, status int) (*model.KnowledgeDoc, error) {
 	knowledgeDoc, err := GetDocDetail(ctx, "", "", docId)
 	if err != nil {
 		log.Errorf("GetDocDetail docId %s error %s", docId, err)
@@ -426,11 +427,15 @@ func CopyDocAndRemoveRag(ctx context.Context, knowledge *model.KnowledgeBase, do
 		}
 		//2.rag删除
 		var fileName = service.RebuildFileName(knowledgeDoc.DocId, knowledgeDoc.FileType, knowledgeDoc.Name)
-		return service.RagDeleteDoc(ctx, &service.RagDeleteDocParams{
+		err = service.RagDeleteDoc(ctx, &service.RagDeleteDocParams{
 			UserId:        knowledge.UserId,
 			KnowledgeBase: knowledge.RagName,
 			FileName:      fileName,
 		})
+		if err != nil {
+			return processError(status, err)
+		}
+		return nil
 	})
 }
 
@@ -847,4 +852,15 @@ func SelectGraphStatus(ctx context.Context, knowledgeId string, userId, orgId st
 		return nil, util.ErrCode(errs.Code_KnowledgeBaseAccessDenied)
 	}
 	return docList, nil
+}
+
+func processError(status int, err error) error {
+	//判断：如果是status属于(51,52,53,54,55,56)，说明是RAG本身导致的解析异常，此时放行该错误”
+	errStatus := []int{51, 52, 53, 54, 55, 56, 61, 62}
+	for _, ragStatus := range errStatus {
+		if status == ragStatus {
+			return nil
+		}
+	}
+	return err
 }

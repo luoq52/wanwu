@@ -91,6 +91,27 @@ func UpdateDocConfig(ctx *gin.Context) {
 	gin_util.Response(ctx, nil, err)
 }
 
+// ReImportDoc
+//
+//	@Tags			knowledge.doc
+//	@Summary		重新解析文档
+//	@Description	重新解析文档
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.ReImportReq	true	"重新导入文档请求参数"
+//	@Success		200		{object}	response.Response
+//	@Router			/knowledge/doc/reimport [post]
+func ReImportDoc(ctx *gin.Context) {
+	userId, orgId := getUserID(ctx), getOrgID(ctx)
+	var req request.DocReImportReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	err := service.ReImportDoc(ctx, userId, orgId, &req)
+	gin_util.Response(ctx, nil, err)
+}
+
 // DeleteDoc
 //
 //	@Tags			knowledge.doc

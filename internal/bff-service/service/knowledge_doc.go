@@ -167,6 +167,21 @@ func UpdateDocConfig(ctx *gin.Context, userId, orgId string, req *request.DocCon
 	return nil
 }
 
+// ReImportDoc 重新解析文档
+func ReImportDoc(ctx *gin.Context, userId, orgId string, req *request.DocReImportReq) error {
+	_, err := knowledgeBaseDoc.ReImportDoc(ctx.Request.Context(), &knowledgebase_doc_service.ReImportDocReq{
+		KnowledgeId: req.KnowledgeId,
+		DocIdList:   req.DocIdList,
+		UserId:      userId,
+		OrgId:       orgId,
+	})
+	if err != nil {
+		log.Errorf("文档重新解析失败(%v) ", err)
+		return err
+	}
+	return nil
+}
+
 // UpdateDocMetaData 更新文档元数据
 func UpdateDocMetaData(ctx *gin.Context, userId, orgId string, r *request.DocMetaDataReq) error {
 	_, err := knowledgeBaseDoc.UpdateDocMetaData(ctx.Request.Context(), &knowledgebase_doc_service.UpdateDocMetaDataReq{

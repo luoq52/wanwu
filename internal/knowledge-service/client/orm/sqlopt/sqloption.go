@@ -265,6 +265,15 @@ func WithoutStatus(status int) SQLOption {
 	})
 }
 
+func WithoutDocId(docId string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if len(docId) > 0 {
+			return db.Where("doc_id != ?", docId)
+		}
+		return db
+	})
+}
+
 func WithName(name string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		if len(name) > 0 {
