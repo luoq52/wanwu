@@ -20,9 +20,9 @@ import (
 	"google.golang.org/grpc"
 )
 
-func AssistantConversionStream(ctx *gin.Context, userId, orgId string, req request.ConversionStreamRequest) error {
+func AssistantConversionStream(ctx *gin.Context, userId, orgId string, req request.ConversionStreamRequest, isPublish bool) error {
 	// 1. CallAssistantConversationStream
-	chatCh, err := CallAssistantConversationStream(ctx, userId, orgId, req)
+	chatCh, err := CallAssistantConversationStream(ctx, userId, orgId, req, isPublish)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func AssistantConversionStream(ctx *gin.Context, userId, orgId string, req reque
 	return nil
 }
 
-func CallAssistantConversationStream(ctx *gin.Context, userId, orgId string, req request.ConversionStreamRequest) (<-chan string, error) {
+func CallAssistantConversationStream(ctx *gin.Context, userId, orgId string, req request.ConversionStreamRequest, isPublish bool) (<-chan string, error) {
 	// 根据agentID获取敏感词配置
 	agentInfo, err := assistant.GetAssistantInfo(ctx, &assistant_service.GetAssistantInfoReq{
 		AssistantId: req.AssistantId,
@@ -74,6 +74,7 @@ func CallAssistantConversationStream(ctx *gin.Context, userId, orgId string, req
 			UserId: userId,
 			OrgId:  orgId,
 		},
+		Draft: !isPublish,
 	}
 	var stream grpc.ServerStreamingClient[assistant_service.AssistantConversionStreamResp]
 	newAgent := config.Cfg().Agent.UseNewAgent == 1

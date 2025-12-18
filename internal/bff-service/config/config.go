@@ -162,6 +162,7 @@ type WorkflowServiceConfig struct {
 	GetProcessUri  string `json:"get_process_uri" mapstructure:"get_process_uri"`
 	TestRunWebUri  string `json:"test_run_web_uri" mapstructure:"test_run_web_uri"`
 	ChatflowRunUri string `json:"chatflow_run_uri" mapstructure:"chatflow_run_uri"`
+	WorkflowRunUri string `json:"workflow_run_uri" mapstructure:"workflow_run_uri"`
 	// conversation
 	CreateChatflowConversationUri string `json:"create_chatflow_conversation_uri" mapstructure:"create_chatflow_conversation_uri"`
 	GetConversationMessageListUri string `json:"get_conversation_message_list_uri" mapstructure:"get_conversation_message_list_uri"`
@@ -170,11 +171,17 @@ type WorkflowServiceConfig struct {
 	DeleteConversationUri         string `json:"delete_conversation_uri" mapstructure:"delete_conversation_uri"`
 	GetProjectConversationDef     string `json:"get_project_conversation_def" mapstructure:"get_project_conversation_def"`
 	// upload
-	UploadActionUri string               `json:"upload_action_uri" mapstructure:"upload_action_uri"`
-	UploadCommonUri string               `json:"upload_common_uri" mapstructure:"upload_common_uri"`
-	UploadFileUri   string               `json:"upload_file_uri" mapstructure:"upload_file_uri"`
-	SignImgUri      string               `json:"sign_img_uri" mapstructure:"sign_img_uri"`
-	ModelParams     []WorkflowModelParam `json:"model_params" mapstructure:"model_params"`
+	UploadActionUri string `json:"upload_action_uri" mapstructure:"upload_action_uri"`
+	UploadCommonUri string `json:"upload_common_uri" mapstructure:"upload_common_uri"`
+	UploadFileUri   string `json:"upload_file_uri" mapstructure:"upload_file_uri"`
+	SignImgUri      string `json:"sign_img_uri" mapstructure:"sign_img_uri"`
+	// version
+	PublishUri           string               `json:"publish_uri" mapstructure:"publish_uri"`
+	VersionListUri       string               `json:"version_list_uri" mapstructure:"version_list_uri"`
+	UpdateVersionDescUri string               `json:"update_version_desc_uri" mapstructure:"update_version_desc_uri"`
+	RollbackUri          string               `json:"rollback_uri" mapstructure:"rollback_uri"`
+	GetLatestCanvasUri   string               `json:"get_latest_canvas_uri" mapstructure:"get_latest_canvas_uri"`
+	ModelParams          []WorkflowModelParam `json:"model_params" mapstructure:"model_params"`
 }
 
 type WorkflowModelParam struct {

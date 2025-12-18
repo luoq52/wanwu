@@ -131,3 +131,7 @@ type SensitiveTable struct {
 type VisionConfig struct {
 	PicNum int32 `json:"picNum"` // 视觉配置图片数量
 }
+
+type AppPublishConfig struct {
+	PublishType string `json:"publishType"`
+}

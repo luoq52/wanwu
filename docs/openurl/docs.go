@@ -1183,6 +1183,10 @@ const docTemplate = `{
                     "description": "开场白",
                     "type": "string"
                 },
+                "publishType": {
+                    "description": "发布类型",
+                    "type": "string"
+                },
                 "recommendQuestion": {
                     "description": "推荐问题",
                     "type": "array",

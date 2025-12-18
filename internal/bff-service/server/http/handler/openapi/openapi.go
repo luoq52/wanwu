@@ -77,7 +77,7 @@ func ChatAgent(ctx *gin.Context) {
 			Prompt:         req.Query,
 			FileInfo:       []request.ConversionStreamFile{},
 			Trial:          false,
-		}); err != nil {
+		}, true); err != nil {
 			gin_util.Response(ctx, nil, err)
 		}
 		return
@@ -89,7 +89,7 @@ func ChatAgent(ctx *gin.Context) {
 		Prompt:         req.Query,
 		FileInfo:       []request.ConversionStreamFile{},
 		Trial:          false,
-	})
+	}, true)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
@@ -139,13 +139,13 @@ func ChatRag(ctx *gin.Context) {
 
 	// 流式
 	if req.Stream {
-		if err := service.ChatRagStream(ctx, userID, orgID, request.ChatRagRequest{RagID: appID, Question: req.Query, History: req.History}); err != nil {
+		if err := service.ChatRagStream(ctx, userID, orgID, request.ChatRagRequest{RagID: appID, Question: req.Query, History: req.History}, true); err != nil {
 			gin_util.Response(ctx, nil, err)
 		}
 		return
 	}
 	// 非流式
-	chatCh, err := service.CallRagChatStream(ctx, userID, orgID, request.ChatRagRequest{RagID: appID, Question: req.Query, History: req.History})
+	chatCh, err := service.CallRagChatStream(ctx, userID, orgID, request.ChatRagRequest{RagID: appID, Question: req.Query, History: req.History}, true)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return

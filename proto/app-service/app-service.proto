@@ -22,6 +22,7 @@ service AppService {
   rpc GetAppList(GetAppListReq) returns (AppList){}
   rpc GetAppListByIds(GetAppListByIdsReq) returns (AppList){}
   rpc DeleteApp(DeleteAppReq) returns (google.protobuf.Empty) {}
+  rpc GetAppInfo(GetAppInfoReq) returns (AppInfo) {}
 
   // --- url ---
   rpc AppUrlCreate(AppUrlCreateReq) returns (google.protobuf.Empty) {}
@@ -152,6 +153,11 @@ message AppList {
 }
 
 message DeleteAppReq {
+  string appId = 1 ;
+  string appType = 2;
+}
+
+message GetAppInfoReq {
   string appId = 1 ;
   string appType = 2;
 }

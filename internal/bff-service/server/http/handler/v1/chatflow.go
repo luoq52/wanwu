@@ -76,11 +76,14 @@ func ImportChatflow(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		application/octet-stream
 //	@Param			workflow_id	query		string	true	"工作流ID"
+//	@Param			version		query		string	false	"版本"
 //	@Success		200			{object}	response.Response{}
 //	@Router			/appspace/chatflow/export [get]
 func ExportChatflow(ctx *gin.Context) {
 	fileName := "chatflow_export.json"
-	resp, err := service.ExportWorkflow(ctx, getOrgID(ctx), ctx.Query("workflow_id"))
+	workflowID := ctx.Query("workflow_id")
+	version := ctx.Query("version")
+	resp, err := service.ExportWorkFlow(ctx, getOrgID(ctx), workflowID, version)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return

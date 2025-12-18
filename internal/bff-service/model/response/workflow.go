@@ -220,3 +220,27 @@ type CozeListMessageApiResponse struct {
 	Code   int64  `thrift:"code,253" form:"code" json:"code" query:"code"`
 	Msg    string `thrift:"msg,254" form:"msg" json:"msg" query:"msg"`
 }
+
+type CozeWorkflowVersionListResp struct {
+	Code int                          `json:"code"`
+	Msg  string                       `json:"msg"`
+	Data *CozeWorkflowVersionListData `json:"data"`
+}
+
+type CozeWorkflowVersionListData struct {
+	WorkflowID  string             `json:"workflow_id"`
+	VersionList []*WorkflowVersion `json:"version_list"`
+	Total       int32              `json:"total"`
+}
+
+type WorkflowVersion struct {
+	Version   string `json:"version"`
+	Desc      string `json:"version_description"`
+	CreatedAt int64  `json:"created_at"`
+	CommitId  string `json:"commit_id"`
+}
+
+type CozeCommonResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+}

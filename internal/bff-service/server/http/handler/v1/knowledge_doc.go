@@ -99,7 +99,7 @@ func UpdateDocConfig(ctx *gin.Context) {
 //	@Security		JWT
 //	@Accept			json
 //	@Produce		json
-//	@Param			data	body		request.ReImportReq	true	"重新导入文档请求参数"
+//	@Param			data	body		request.DocReImportReq	true	"重新导入文档请求参数"
 //	@Success		200		{object}	response.Response
 //	@Router			/knowledge/doc/reimport [post]
 func ReImportDoc(ctx *gin.Context) {

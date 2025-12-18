@@ -11,4 +11,5 @@ type RagInfo struct {
 	KnowledgeBaseConfig   request.AppKnowledgebaseConfig   `json:"knowledgeBaseConfig" validate:"required"`   // 知识库
 	QAKnowledgeBaseConfig request.AppQAKnowledgebaseConfig `json:"qaKnowledgeBaseConfig" validate:"required"` // 问答库
 	SafetyConfig          request.AppSafetyConfig          `json:"safetyConfig"`                              // 敏感词表配置
+	AppPublishConfig      request.AppPublishConfig         `json:"appPublishConfig"`                          // 发布配置
 }

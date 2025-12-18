@@ -26,6 +26,7 @@ type IClient interface {
 	DeleteApp(ctx context.Context, appId, appType string) *err_code.Status
 	RecordAppHistory(ctx context.Context, userId, appId, appType string) *err_code.Status
 	GetAppListByIds(ctx context.Context, ids []string) ([]*model.App, *err_code.Status)
+	GetAppInfo(ctx context.Context, appId, appType string) (*model.App, *err_code.Status)
 
 	// --- safety ---
 	CreateSensitiveWordTable(ctx context.Context, userId, orgId, tableName, remark string) (string, *err_code.Status)

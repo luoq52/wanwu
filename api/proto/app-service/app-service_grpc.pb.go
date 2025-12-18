@@ -32,6 +32,7 @@ const (
 	AppService_GetAppList_FullMethodName                   = "/app_service.AppService/GetAppList"
 	AppService_GetAppListByIds_FullMethodName              = "/app_service.AppService/GetAppListByIds"
 	AppService_DeleteApp_FullMethodName                    = "/app_service.AppService/DeleteApp"
+	AppService_GetAppInfo_FullMethodName                   = "/app_service.AppService/GetAppInfo"
 	AppService_AppUrlCreate_FullMethodName                 = "/app_service.AppService/AppUrlCreate"
 	AppService_AppUrlDelete_FullMethodName                 = "/app_service.AppService/AppUrlDelete"
 	AppService_AppUrlUpdate_FullMethodName                 = "/app_service.AppService/AppUrlUpdate"
@@ -64,6 +65,7 @@ type AppServiceClient interface {
 	GetAppList(ctx context.Context, in *GetAppListReq, opts ...grpc.CallOption) (*AppList, error)
 	GetAppListByIds(ctx context.Context, in *GetAppListByIdsReq, opts ...grpc.CallOption) (*AppList, error)
 	DeleteApp(ctx context.Context, in *DeleteAppReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetAppInfo(ctx context.Context, in *GetAppInfoReq, opts ...grpc.CallOption) (*AppInfo, error)
 	// --- url ---
 	AppUrlCreate(ctx context.Context, in *AppUrlCreateReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AppUrlDelete(ctx context.Context, in *AppUrlDeleteReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -208,6 +210,16 @@ func (c *appServiceClient) DeleteApp(ctx context.Context, in *DeleteAppReq, opts
 	return out, nil
 }
 
+func (c *appServiceClient) GetAppInfo(ctx context.Context, in *GetAppInfoReq, opts ...grpc.CallOption) (*AppInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppInfo)
+	err := c.cc.Invoke(ctx, AppService_GetAppInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *appServiceClient) AppUrlCreate(ctx context.Context, in *AppUrlCreateReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -337,6 +349,7 @@ type AppServiceServer interface {
 	GetAppList(context.Context, *GetAppListReq) (*AppList, error)
 	GetAppListByIds(context.Context, *GetAppListByIdsReq) (*AppList, error)
 	DeleteApp(context.Context, *DeleteAppReq) (*emptypb.Empty, error)
+	GetAppInfo(context.Context, *GetAppInfoReq) (*AppInfo, error)
 	// --- url ---
 	AppUrlCreate(context.Context, *AppUrlCreateReq) (*emptypb.Empty, error)
 	AppUrlDelete(context.Context, *AppUrlDeleteReq) (*emptypb.Empty, error)
@@ -396,6 +409,9 @@ func (UnimplementedAppServiceServer) GetAppListByIds(context.Context, *GetAppLis
 }
 func (UnimplementedAppServiceServer) DeleteApp(context.Context, *DeleteAppReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteApp not implemented")
+}
+func (UnimplementedAppServiceServer) GetAppInfo(context.Context, *GetAppInfoReq) (*AppInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAppInfo not implemented")
 }
 func (UnimplementedAppServiceServer) AppUrlCreate(context.Context, *AppUrlCreateReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppUrlCreate not implemented")
@@ -667,6 +683,24 @@ func _AppService_DeleteApp_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AppService_GetAppInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAppInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).GetAppInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_GetAppInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).GetAppInfo(ctx, req.(*GetAppInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AppService_AppUrlCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AppUrlCreateReq)
 	if err := dec(in); err != nil {
@@ -919,6 +953,10 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteApp",
 			Handler:    _AppService_DeleteApp_Handler,
+		},
+		{
+			MethodName: "GetAppInfo",
+			Handler:    _AppService_GetAppInfo_Handler,
 		},
 		{
 			MethodName: "AppUrlCreate",

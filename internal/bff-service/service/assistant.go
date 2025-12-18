@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"sort"
 
+	app_service "github.com/UnicomAI/wanwu/api/proto/app-service"
 	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
 	"github.com/UnicomAI/wanwu/api/proto/common"
 	knowledgeBase_service "github.com/UnicomAI/wanwu/api/proto/knowledgebase-service"
@@ -81,28 +82,32 @@ func AssistantConfigUpdate(ctx *gin.Context, userId, orgId string, req request.A
 	return nil, err
 }
 
-func GetAssistantInfo(ctx *gin.Context, userId, orgId string, req request.AssistantIdRequest) (*response.Assistant, error) {
-	resp, err := assistant.GetAssistantInfo(ctx.Request.Context(), &assistant_service.GetAssistantInfoReq{
-		AssistantId: req.AssistantId,
-	})
-	if err != nil {
-		return nil, err
+func GetAssistantInfo(ctx *gin.Context, userId, orgId string, req request.AssistantIdRequest, isPublish bool) (*response.Assistant, error) {
+	if isPublish {
+		resp, err := assistant.AssistantSnapshotInfo(ctx.Request.Context(), &assistant_service.AssistantSnapshotInfoReq{
+			AssistantId: req.AssistantId,
+			Identity: &assistant_service.Identity{
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+		if err != nil {
+			return nil, err
+		}
+		return transAssistantResp2Model(ctx, resp)
+	} else {
+		resp, err := assistant.GetAssistantInfo(ctx.Request.Context(), &assistant_service.GetAssistantInfoReq{
+			AssistantId: req.AssistantId,
+			Identity: &assistant_service.Identity{ //草稿只能看自己的
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+		if err != nil {
+			return nil, err
+		}
+		return transAssistantResp2Model(ctx, resp)
 	}
-	return transAssistantResp2Model(ctx, resp)
-}
-
-func GetAssistantDraftInfo(ctx *gin.Context, userId, orgId string, req request.AssistantIdRequest) (*response.Assistant, error) {
-	resp, err := assistant.GetAssistantInfo(ctx.Request.Context(), &assistant_service.GetAssistantInfoReq{
-		AssistantId: req.AssistantId,
-		Identity: &assistant_service.Identity{ //草稿只能看自己的
-			UserId: userId,
-			OrgId:  orgId,
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-	return transAssistantResp2Model(ctx, resp)
 }
 
 func AssistantCopy(ctx *gin.Context, userId, orgId string, req request.AssistantIdRequest) (*response.AssistantCreateResp, error) {
@@ -720,6 +725,9 @@ func transAssistantResp2Model(ctx *gin.Context, resp *assistant_service.Assistan
 		return nil, nil
 	}
 
+	// 获取app发布信息
+	appInfo, _ := app.GetAppInfo(ctx, &app_service.GetAppInfoReq{AppId: resp.AssistantId, AppType: constant.AppTypeAgent})
+
 	// 转换Model配置
 	modelConfig, err := assistantModelConvert(ctx, resp.ModelConfig)
 	if err != nil {
@@ -792,6 +800,7 @@ func transAssistantResp2Model(ctx *gin.Context, resp *assistant_service.Assistan
 		CreatedAt:           util.Time2Str(resp.CreatTime),
 		UpdatedAt:           util.Time2Str(resp.UpdateTime),
 		NewAgent:            config.Cfg().Agent.UseNewAgent == 1,
+		PublishType:         appInfo.GetPublishType(),
 	}
 
 	log.Debugf("Assistant响应到模型转换完成，结果: %+v", assistantModel)

@@ -19,9 +19,9 @@ import (
 )
 
 // ChatRagStream rag私域问答
-func ChatRagStream(ctx *gin.Context, userId, orgId string, req request.ChatRagRequest) error {
+func ChatRagStream(ctx *gin.Context, userId, orgId string, req request.ChatRagRequest, isPublish bool) error {
 	// 1.CallRagChatStream
-	chatCh, err := CallRagChatStream(ctx, userId, orgId, req)
+	chatCh, err := CallRagChatStream(ctx, userId, orgId, req, isPublish)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func ChatRagStream(ctx *gin.Context, userId, orgId string, req request.ChatRagRe
 }
 
 // CallRagChatStream 调用Rag对话
-func CallRagChatStream(ctx *gin.Context, userId, orgId string, req request.ChatRagRequest) (<-chan string, error) {
+func CallRagChatStream(ctx *gin.Context, userId, orgId string, req request.ChatRagRequest, isPublish bool) (<-chan string, error) {
 	// 根据ragID获取敏感词配置
 	ragInfo, err := rag.GetRagDetail(ctx, &rag_service.RagDetailReq{
 		RagId: req.RagID,
@@ -68,6 +68,12 @@ func CallRagChatStream(ctx *gin.Context, userId, orgId string, req request.ChatR
 			})
 		}
 	}
+	var publish int32
+	if isPublish {
+		publish = 1
+	} else {
+		publish = 0
+	}
 	stream, err := rag.ChatRag(ctx, &rag_service.ChatRagReq{
 		RagId:    req.RagID,
 		Question: req.Question,
@@ -76,6 +82,7 @@ func CallRagChatStream(ctx *gin.Context, userId, orgId string, req request.ChatR
 			UserId: userId,
 			OrgId:  orgId,
 		},
+		Publish: publish,
 	})
 	if err != nil {
 		return nil, err

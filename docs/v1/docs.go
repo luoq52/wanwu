@@ -616,6 +616,209 @@ const docTemplate = `{
                 }
             }
         },
+        "/appspace/app/version": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "根据应用类型和应用ID，查询其最新版本信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "获取应用最新版本信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "对应应用 ID",
+                        "name": "appId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "支持的类型",
+                        "name": "appType",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.AppVersionInfo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "更新应用最新版本的描述信息和公开范围",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "更新应用版本信息",
+                "parameters": [
+                    {
+                        "description": "更新应用版本信息请求",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateAppVersionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/app/version/list": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "根据应用类型和应用ID，查询其所有历史版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "获取应用版本列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "对应应用 ID",
+                        "name": "appId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "支持的类型",
+                        "name": "appType",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/response.ListResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/response.AppVersionInfo"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/app/version/rollback": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "将应用回滚至指定的历史版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "回滚应用到指定版本",
+                "parameters": [
+                    {
+                        "description": "回滚应用版本请求",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RollbackAppVersionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/appspace/chatflow": {
             "post": {
                 "security": [
@@ -780,6 +983,12 @@ const docTemplate = `{
                         "name": "workflow_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "版本",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -857,7 +1066,7 @@ const docTemplate = `{
                 "tags": [
                     "rag"
                 ],
-                "summary": "获取RAG信息",
+                "summary": "获取已发布RAG信息",
                 "parameters": [
                     {
                         "type": "string",
@@ -1096,6 +1305,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/appspace/rag/draft": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rag"
+                ],
+                "summary": "获取草稿RAG信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "ragId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.RagInfo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/appspace/workflow": {
             "post": {
                 "security": [
@@ -1260,6 +1516,12 @@ const docTemplate = `{
                         "name": "workflow_id",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "版本",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1379,7 +1641,7 @@ const docTemplate = `{
                         "JWT": []
                     }
                 ],
-                "description": "查看发布后智能体详情",
+                "description": "查看已发布智能体详情",
                 "consumes": [
                     "application/json"
                 ],
@@ -1389,7 +1651,7 @@ const docTemplate = `{
                 "tags": [
                     "agent"
                 ],
-                "summary": "查看发布后智能体详情",
+                "summary": "查看已发布智能体详情",
                 "parameters": [
                     {
                         "type": "string",
@@ -1891,6 +2153,45 @@ const docTemplate = `{
             }
         },
         "/assistant/stream": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "已发布智能体流式问答",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "agent"
+                ],
+                "summary": "已发布智能体流式问答",
+                "parameters": [
+                    {
+                        "description": "智能体流式问答参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ConversionStreamRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/assistant/stream/draft": {
             "post": {
                 "security": [
                     {
@@ -4156,6 +4457,45 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/request.BatchDocMetaDataReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/doc/reimport": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "重新解析文档",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.doc"
+                ],
+                "summary": "重新解析文档",
+                "parameters": [
+                    {
+                        "description": "重新导入文档请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.DocReImportReq"
                         }
                     }
                 ],
@@ -9446,7 +9786,45 @@ const docTemplate = `{
                 "tags": [
                     "rag"
                 ],
-                "summary": "私域 RAG 问答",
+                "summary": "已发布 RAG 问答",
+                "parameters": [
+                    {
+                        "description": "RAG问答请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ChatRagRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/rag/chat/draft": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rag"
+                ],
+                "summary": "私域 草稿RAG 问答",
                 "parameters": [
                     {
                         "description": "RAG问答请求参数",
@@ -11525,7 +11903,7 @@ const docTemplate = `{
                         "JWT": []
                     }
                 ],
-                "description": "工作流运行接口",
+                "description": "已发布工作流运行接口",
                 "consumes": [
                     "application/json"
                 ],
@@ -11535,7 +11913,7 @@ const docTemplate = `{
                 "tags": [
                     "workflow"
                 ],
-                "summary": "工作流运行接口",
+                "summary": "已发布工作流运行接口",
                 "parameters": [
                     {
                         "description": "工作流运行参数",
@@ -13320,6 +13698,14 @@ const docTemplate = `{
                 },
                 "provider": {
                     "description": "模型供应商",
+                    "type": "string"
+                }
+            }
+        },
+        "request.AppPublishConfig": {
+            "type": "object",
+            "properties": {
+                "publishType": {
                     "type": "string"
                 }
             }
@@ -15128,6 +15514,26 @@ const docTemplate = `{
                 }
             }
         },
+        "request.DocReImportReq": {
+            "type": "object",
+            "required": [
+                "docIdList",
+                "knowledgeId"
+            ],
+            "properties": {
+                "docIdList": {
+                    "description": "文档id列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "knowledgeId": {
+                    "description": "知识库id",
+                    "type": "string"
+                }
+            }
+        },
         "request.DocSegment": {
             "type": "object",
             "required": [
@@ -16170,6 +16576,12 @@ const docTemplate = `{
         },
         "request.PublishAppRequest": {
             "type": "object",
+            "required": [
+                "appId",
+                "appType",
+                "publishType",
+                "version"
+            ],
             "properties": {
                 "appId": {
                     "description": "应用ID",
@@ -16179,8 +16591,15 @@ const docTemplate = `{
                     "description": "应用类型",
                     "type": "string"
                 },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
                 "publishType": {
                     "description": "发布类型(public:系统公开发布,organization:组织公开发布,private:私密发布)",
+                    "type": "string"
+                },
+                "version": {
                     "type": "string"
                 }
             }
@@ -16438,6 +16857,26 @@ const docTemplate = `{
                 }
             }
         },
+        "request.RollbackAppVersionRequest": {
+            "type": "object",
+            "required": [
+                "appId",
+                "appType",
+                "version"
+            ],
+            "properties": {
+                "appId": {
+                    "type": "string"
+                },
+                "appType": {
+                    "type": "string"
+                },
+                "version": {
+                    "description": "目标回滚版本",
+                    "type": "string"
+                }
+            }
+        },
         "request.SensitiveTable": {
             "type": "object",
             "required": [
@@ -16479,6 +16918,32 @@ const docTemplate = `{
                 },
                 "appType": {
                     "description": "应用类型",
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateAppVersionRequest": {
+            "type": "object",
+            "required": [
+                "appId",
+                "appType",
+                "publishType"
+            ],
+            "properties": {
+                "appId": {
+                    "description": "应用 ID",
+                    "type": "string"
+                },
+                "appType": {
+                    "description": "应用类型",
+                    "type": "string"
+                },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "publishType": {
+                    "description": "发布类型(public:系统公开发布,organization:组织公开发布,private:私密发布)",
                     "type": "string"
                 }
             }
@@ -17185,6 +17650,23 @@ const docTemplate = `{
                 }
             }
         },
+        "response.AppVersionInfo": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "publish_type": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
         "response.Assistant": {
             "type": "object",
             "required": [
@@ -17248,6 +17730,10 @@ const docTemplate = `{
                 },
                 "prologue": {
                     "description": "开场白",
+                    "type": "string"
+                },
+                "publishType": {
+                    "description": "发布类型",
                     "type": "string"
                 },
                 "recommendQuestion": {
@@ -20432,6 +20918,14 @@ const docTemplate = `{
                 "rerankConfig"
             ],
             "properties": {
+                "appPublishConfig": {
+                    "description": "发布配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.AppPublishConfig"
+                        }
+                    ]
+                },
                 "avatar": {
                     "description": "图标",
                     "allOf": [

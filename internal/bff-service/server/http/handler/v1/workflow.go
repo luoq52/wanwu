@@ -76,11 +76,14 @@ func CopyWorkflow(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		application/octet-stream
 //	@Param			workflow_id	query		string	true	"工作流ID"
+//	@Param			version		query		string	false	"版本"
 //	@Success		200			{object}	response.Response{}
 //	@Router			/appspace/workflow/export [get]
 func ExportWorkflow(ctx *gin.Context) {
 	fileName := "workflow_export.json"
-	resp, err := service.ExportWorkflow(ctx, getOrgID(ctx), ctx.Query("workflow_id"))
+	workflowID := ctx.Query("workflow_id")
+	version := ctx.Query("version")
+	resp, err := service.ExportWorkFlow(ctx, getOrgID(ctx), workflowID, version)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
@@ -210,26 +213,54 @@ func WorkflowConvert(ctx *gin.Context) {
 	gin_util.Response(ctx, nil, service.WorkflowConvert(ctx, getOrgID(ctx), req.WorkflowID, constant.AppTypeChatflow))
 }
 
-// ExplorationWorkflowRun
+// PublishedWorkflowRun
 //
 //	@Tags			workflow
-//	@Summary		工作流运行接口
-//	@Description	工作流运行接口
+//	@Summary		已发布工作流运行接口
+//	@Description	已发布工作流运行接口
 //	@Security		JWT
 //	@Accept			json
 //	@Produce		json
 //	@Param			data	body		request.WorkflowRunReq	true	"工作流运行参数"
 //	@Success		200		{object}	response.Response{}
 //	@Router			/workflow/run [post]
-func ExplorationWorkflowRun(ctx *gin.Context) {
+func PublishedWorkflowRun(ctx *gin.Context) {
 	var req request.WorkflowRunReq
 	if !gin_util.Bind(ctx, &req) {
 		return
 	}
-	resp, err := service.ExplorationWorkflowRun(ctx, getOrgID(ctx), req)
+	resp, err := service.PublishedWorkflowRun(ctx, getOrgID(ctx), req)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
 	}
 	gin_util.Response(ctx, resp, nil)
 }
+
+// // ExportWorkFlowLatestVersion
+// //
+// //	@Tags			workflow
+// //	@Summary		导出工作流最新版本
+// //	@Description	根据 workflow_id导出最新已发布版本的工作流 配置为 JSON 文件
+// //	@Security		JWT
+// //	@Accept			json
+// //	@Produce		application/octet-stream
+// //	@Param			workflow_id	query		string	true	"工作流ID"
+// //	@Success		200			{string}	binary	"JSON 配置文件"
+// //	@Router			/appspace/workflow/export/version/latest [get]
+// func ExportWorkFlowLatestVersion(ctx *gin.Context) {
+// 	fileName := "workflow_export.json"
+// 	workflowID := ctx.Query("workflow_id")
+// 	resp, err := service.ExportWorkFlowLatestVersion(ctx, workflowID)
+// 	if err != nil {
+// 		gin_util.Response(ctx, nil, err)
+// 		return
+// 	}
+
+// 	// 设置响应头
+// 	ctx.Header("Content-Disposition", "attachment; filename*=utf-8''"+url.QueryEscape(fileName))
+// 	ctx.Header("Content-Type", "application/octet-stream")
+// 	ctx.Header("Access-Control-Expose-Headers", "Content-Disposition")
+// 	// 直接写入字节数据
+// 	ctx.Data(http.StatusOK, "application/octet-stream", resp)
+// }

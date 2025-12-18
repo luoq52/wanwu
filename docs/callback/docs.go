@@ -2991,6 +2991,10 @@ const docTemplate = `{
                     "description": "hybrid_search:混合搜索， semantic_search:向量搜索， full_text_search：文本搜索",
                     "type": "string"
                 },
+                "rewrite_query": {
+                    "description": "是否query改写",
+                    "type": "boolean"
+                },
                 "term_weight_coefficient": {
                     "description": "关键词系数",
                     "type": "number"

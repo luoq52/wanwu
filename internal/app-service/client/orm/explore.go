@@ -5,8 +5,6 @@ import (
 	"errors"
 	"time"
 
-	"github.com/UnicomAI/wanwu/pkg/constant"
-
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	"github.com/UnicomAI/wanwu/internal/app-service/client/model"
 	"github.com/UnicomAI/wanwu/internal/app-service/client/orm/sqlopt"
@@ -66,7 +64,7 @@ func (c *Client) GetExplorationAppList(ctx context.Context, userId, orgId, name,
 			return nil, err
 		}
 		for _, app := range favoriteApps {
-			var isValidOrgPublish bool
+			var isValid bool
 			appInfo := &ExplorationAppInfo{
 				UserID:      "",
 				AppId:       app.AppID,
@@ -77,16 +75,12 @@ func (c *Client) GetExplorationAppList(ctx context.Context, userId, orgId, name,
 				PublishType: "",
 			}
 			for _, info := range apps {
-				if info.PublishType == constant.AppPublishOrganization && info.OrgID != orgId {
-					isValidOrgPublish = true
-					break
+				if app.AppID != info.AppID || app.AppType != info.AppType || !canAccessApp(info, userId, orgId) {
+					continue
 				}
-				if app.AppID == info.AppID && app.AppType == info.AppType {
-					appInfo.UserID = info.UserID
-					break
-				}
+				isValid = true
 			}
-			if isValidOrgPublish {
+			if !isValid {
 				continue
 			}
 			ret = append(ret, appInfo)
@@ -114,7 +108,7 @@ func (c *Client) GetExplorationAppList(ctx context.Context, userId, orgId, name,
 			return nil, err
 		}
 		for _, historyApp := range historyApps {
-			var isValidOrgPublish bool
+			var isValid bool
 			appInfo := &ExplorationAppInfo{
 				AppId:      historyApp.AppID,
 				AppType:    historyApp.AppType,
@@ -129,16 +123,12 @@ func (c *Client) GetExplorationAppList(ctx context.Context, userId, orgId, name,
 				}
 			}
 			for _, info := range apps {
-				if info.PublishType == constant.AppPublishOrganization && info.OrgID != orgId {
-					isValidOrgPublish = true
-					break
+				if historyApp.AppID != info.AppID || historyApp.AppType != info.AppType || !canAccessApp(info, userId, orgId) {
+					continue
 				}
-				if historyApp.AppID == info.AppID && historyApp.AppType == info.AppType {
-					appInfo.UserID = info.UserID
-					break
-				}
+				isValid = true
 			}
-			if isValidOrgPublish {
+			if !isValid {
 				continue
 			}
 			ret = append(ret, appInfo)

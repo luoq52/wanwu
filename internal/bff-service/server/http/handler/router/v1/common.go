@@ -57,6 +57,10 @@ func registerCommon(apiV1 *gin.RouterGroup) {
 	mid.Sub("common").Reg(apiV1, "/appspace/app/key", http.MethodPost, v1.GenApiKey, "生成ApiKey")
 	mid.Sub("common").Reg(apiV1, "/appspace/app/key", http.MethodDelete, v1.DelApiKey, "删除ApiKey")
 	mid.Sub("common").Reg(apiV1, "/appspace/app/key/list", http.MethodGet, v1.GetApiKeyList, "获取ApiKey列表")
+	mid.Sub("common").Reg(apiV1, "/appspace/app/version/list", http.MethodGet, v1.GetAppVersionList, "获取应用版本列表")
+	mid.Sub("common").Reg(apiV1, "/appspace/app/version", http.MethodPut, v1.UpdateAppVersion, "更新应用版本描述并设置公开范围")
+	mid.Sub("common").Reg(apiV1, "/appspace/app/version/rollback", http.MethodPost, v1.RollbackAppVersion, "回滚应用到指定版本")
+	mid.Sub("common").Reg(apiV1, "/appspace/app/version", http.MethodGet, v1.GetAppLatestVersion, "获取应用最新版本信息")
 
 	// Safety通用
 	mid.Sub("common").Reg(apiV1, "/safe/sensitive/table/select", http.MethodGet, v1.GetSensitiveWordTableSelect, "获取敏感词表下拉列表")

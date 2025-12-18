@@ -1,6 +1,7 @@
 package service
 
 import (
+	app_service "github.com/UnicomAI/wanwu/api/proto/app-service"
 	knowledgeBase_service "github.com/UnicomAI/wanwu/api/proto/knowledgebase-service"
 	model_service "github.com/UnicomAI/wanwu/api/proto/model-service"
 	rag_service "github.com/UnicomAI/wanwu/api/proto/rag-service"
@@ -182,8 +183,8 @@ func DeleteRag(ctx *gin.Context, req request.RagReq) error {
 	return err
 }
 
-func GetRag(ctx *gin.Context, req request.RagReq) (*response.RagInfo, error) {
-	resp, err := rag.GetRagDetail(ctx.Request.Context(), &rag_service.RagDetailReq{RagId: req.RagID})
+func GetRag(ctx *gin.Context, req request.RagReq, isPublish int32) (*response.RagInfo, error) {
+	resp, err := rag.GetRagDetail(ctx.Request.Context(), &rag_service.RagDetailReq{RagId: req.RagID, Publish: isPublish})
 	if err != nil {
 		return nil, err
 	}
@@ -191,6 +192,7 @@ func GetRag(ctx *gin.Context, req request.RagReq) (*response.RagInfo, error) {
 	if err != nil {
 		log.Errorf("ragId: %v gets config fail: %v", req.RagID, err.Error())
 	}
+	appInfo, _ := app.GetAppInfo(ctx, &app_service.GetAppInfoReq{AppId: req.RagID, AppType: constant.AppTypeRag})
 	ragInfo := &response.RagInfo{
 		RagID:                 resp.RagId,
 		AppBriefConfig:        appBriefConfigProto2Model(ctx, resp.BriefConfig, constant.AppTypeRag),
@@ -200,6 +202,7 @@ func GetRag(ctx *gin.Context, req request.RagReq) (*response.RagInfo, error) {
 		KnowledgeBaseConfig:   ragKBConfigProto2Model(ctx, resp.KnowledgeBaseConfig),
 		QAKnowledgeBaseConfig: ragKBQAConfigProto2Model(ctx, resp.QAknowledgeBaseConfig),
 		SafetyConfig:          ragSafetyConfigProto2Model(ctx, resp.SensitiveConfig),
+		AppPublishConfig:      request.AppPublishConfig{PublishType: appInfo.GetPublishType()},
 	}
 
 	return ragInfo, nil

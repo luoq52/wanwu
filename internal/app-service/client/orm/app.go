@@ -13,13 +13,14 @@ import (
 )
 
 func (c *Client) PublishApp(ctx context.Context, userId, orgId, appId, appType, publishType string) *errs.Status {
-	var existingApp model.App
-	err := sqlopt.SQLOptions(
+	opts := sqlopt.SQLOptions(
 		sqlopt.WithUserID(userId),
 		sqlopt.WithOrgID(orgId),
 		sqlopt.WithAppID(appId),
 		sqlopt.WithAppType(appType),
-	).Apply(c.db.WithContext(ctx)).First(&existingApp).Error
+	)
+	var existingApp model.App
+	err := opts.Apply(c.db.WithContext(ctx)).First(&existingApp).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			newApp := model.App{
@@ -36,7 +37,12 @@ func (c *Client) PublishApp(ctx context.Context, userId, orgId, appId, appType, 
 		}
 		return toErrStatus("app_publish_app_query", appId, err.Error())
 	}
-	return toErrStatus("app_publish_app_exist", appId)
+	if err := opts.Apply(c.db.WithContext(ctx)).Model(&model.App{}).Updates(map[string]interface{}{
+		"publish_type": publishType,
+	}).Error; err != nil {
+		return toErrStatus("app_publish_app_update", appId, err.Error())
+	}
+	return nil
 }
 
 func (c *Client) UnPublishApp(ctx context.Context, appId, appType, userId string) *errs.Status {
@@ -108,6 +114,18 @@ func (c *Client) GetAppListByIds(ctx context.Context, ids []string) ([]*model.Ap
 		return nil, toErrStatus("app_publish_apps_get_by_ids", err.Error())
 	}
 	return publishApps, nil
+}
+
+func (c *Client) GetAppInfo(ctx context.Context, appId, appType string) (*model.App, *errs.Status) {
+	var app model.App
+	err := sqlopt.SQLOptions(
+		sqlopt.WithAppID(appId),
+		sqlopt.WithAppType(appType),
+	).Apply(c.db.WithContext(ctx)).First(&app).Error
+	if err != nil {
+		return nil, toErrStatus("app_publish_app_get_by_id", err.Error())
+	}
+	return &app, nil
 }
 
 func (c *Client) RecordAppHistory(ctx context.Context, userId, appId, appType string) *errs.Status {

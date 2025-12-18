@@ -155,6 +155,39 @@ func PublishApp(ctx *gin.Context, userId, orgId string, req request.PublishAppRe
 	// 		return err
 	// 	}
 	// }
+	if req.AppType == constant.AppTypeWorkflow || req.AppType == constant.AppTypeChatflow {
+		if err := PublishWorkflow(ctx, orgId, req.AppId, req.Version, req.Desc); err != nil {
+			return err
+		}
+	}
+	if req.AppType == constant.AppTypeAgent {
+		_, err := assistant.AssistantSnapshotCreate(ctx.Request.Context(), &assistant_service.AssistantSnapshotReq{
+			AssistantId: req.AppId,
+			Version:     req.Version,
+			Desc:        req.Desc,
+			Identity: &assistant_service.Identity{
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+		if err != nil {
+			return err
+		}
+	}
+	if req.AppType == constant.AppTypeRag {
+		_, err := rag.PublishRag(ctx.Request.Context(), &rag_service.PublishRagReq{
+			RagId:   req.AppId,
+			Version: req.Version,
+			Desc:    req.Desc,
+			Identity: &rag_service.Identity{
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+		if err != nil {
+			return err
+		}
+	}
 	_, err := app.PublishApp(ctx.Request.Context(), &app_service.PublishAppReq{
 		AppId:       req.AppId,
 		AppType:     req.AppType,

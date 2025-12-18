@@ -258,7 +258,7 @@ workflow:
   convert_uri: /api/workflow_api/update_meta_by_wanwu
   # run
   test_run_uri: /v1/workflow/%v/run_by_wanwu
-  test_run_web_uri: /api/workflow_api/test_run
+  test_run_web_uri: /v1/workflow/run_by_wanwu 
   get_process_uri: /api/workflow_api/get_process
   chatflow_run_uri: /v1/workflow/chat_by_wanwu
   # conversation
@@ -273,6 +273,13 @@ workflow:
   upload_common_uri: /api/common/upload
   upload_file_uri: /api/bot/upload_file_by_wanwu
   sign_img_uri: /api/workflow_api/sign_image_url
+  # version
+  publish_uri: /api/workflow_api/publish
+  version_list_uri: /api/workflow_api/version_list           
+  update_version_desc_uri: /api/workflow_api/version_description  
+  rollback_uri: /api/workflow_api/rollback  
+  get_latest_canvas_uri: /api/workflow_api/canvas
+   
 
   model_params:
     - name: temperature

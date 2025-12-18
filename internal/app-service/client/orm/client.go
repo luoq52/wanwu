@@ -1,17 +1,34 @@
 package orm
 
 import (
+	"errors"
+	"fmt"
+
 	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
 	"github.com/UnicomAI/wanwu/internal/app-service/client/model"
+	"github.com/UnicomAI/wanwu/pkg/constant"
 	"gorm.io/gorm"
 )
+
+const initFlagKey = "v0.3.2_app_table_cleared"
+
+type Metadata struct {
+	MetaKey   string `gorm:"primaryKey;column:key"`
+	MetaValue string `gorm:"column:value"`
+	CreatedAt int64  `gorm:"autoCreateTime:milli"`
+	UpdatedAt int64  `gorm:"autoUpdateTime:milli"`
+}
 
 type Client struct {
 	db *gorm.DB
 }
 
 func NewClient(db *gorm.DB) (*Client, error) {
-	// auto migrate
+	// 先迁移 Metadata 表（用于记录状态）
+	if err := db.AutoMigrate(&Metadata{}); err != nil {
+		return nil, err
+	}
+	// 自动迁移表结构
 	if err := db.AutoMigrate(
 		model.AppConversation{},
 		model.ApiKey{},
@@ -25,6 +42,26 @@ func NewClient(db *gorm.DB) (*Client, error) {
 	); err != nil {
 		return nil, err
 	}
+
+	var meta Metadata
+	err := db.Where(&Metadata{MetaKey: initFlagKey}).First(&meta).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// 首次运行：清表
+			if err := db.Session(&gorm.Session{AllowGlobalUpdate: true}).Delete(&model.App{}).Error; err != nil {
+				return nil, fmt.Errorf("failed to clear App table: %w", err)
+			}
+			// 写入带版本的初始化标记
+			if err := db.Create(&Metadata{
+				MetaKey: initFlagKey,
+			}).Error; err != nil {
+				return nil, fmt.Errorf("failed to set init flag: %w", err)
+			}
+		} else {
+			return nil, fmt.Errorf("query metadata failed: %w", err)
+		}
+	}
+
 	return &Client{
 		db: db,
 	}, nil
@@ -56,4 +93,17 @@ type ExplorationAppInfo struct {
 type SensitiveWordTableWithWord struct {
 	model.SensitiveWordTable
 	SensitiveWords []string
+}
+
+func canAccessApp(info *model.App, userId, orgId string) bool {
+	switch info.PublishType {
+	case constant.AppPublishPublic:
+		return true
+	case constant.AppPublishOrganization:
+		return info.OrgID == orgId
+	case constant.AppPublishPrivate:
+		return info.UserID == userId
+	default:
+		return false
+	}
 }

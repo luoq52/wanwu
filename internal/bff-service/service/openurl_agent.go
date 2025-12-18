@@ -123,7 +123,7 @@ func AppUrlConversionStream(ctx *gin.Context, req request.UrlConversionStreamReq
 		FileInfo:       []request.ConversionStreamFile{},
 		Trial:          false,
 		Prompt:         req.Prompt,
-	})
+	}, true)
 	if err != nil {
 		return err
 	}
