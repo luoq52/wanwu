@@ -158,11 +158,10 @@ type WorkflowServiceConfig struct {
 	ImportUri  string `json:"import_uri" mapstructure:"import_uri"`
 	ConvertUri string `json:"convert_uri" mapstructure:"convert_uri"`
 	// run
-	TestRunUri     string `json:"test_run_uri" mapstructure:"test_run_uri"`
-	GetProcessUri  string `json:"get_process_uri" mapstructure:"get_process_uri"`
-	TestRunWebUri  string `json:"test_run_web_uri" mapstructure:"test_run_web_uri"`
-	ChatflowRunUri string `json:"chatflow_run_uri" mapstructure:"chatflow_run_uri"`
-	WorkflowRunUri string `json:"workflow_run_uri" mapstructure:"workflow_run_uri"`
+	WorkflowRunByOpenapiUri     string `json:"workflow_run_by_openapi_uri" mapstructure:"workflow_run_by_openapi_uri"`
+	WorkflowRunLatestVersionUri string `json:"workflow_run_latest_version_uri" mapstructure:"workflow_run_latest_version_uri"`
+	GetProcessUri               string `json:"get_process_uri" mapstructure:"get_process_uri"`
+	ChatflowRunByOpenapiUri     string `json:"chatflow_run_by_openapi_uri" mapstructure:"chatflow_run_by_openapi_uri"`
 	// conversation
 	CreateChatflowConversationUri string `json:"create_chatflow_conversation_uri" mapstructure:"create_chatflow_conversation_uri"`
 	GetConversationMessageListUri string `json:"get_conversation_message_list_uri" mapstructure:"get_conversation_message_list_uri"`
@@ -180,7 +179,6 @@ type WorkflowServiceConfig struct {
 	VersionListUri       string               `json:"version_list_uri" mapstructure:"version_list_uri"`
 	UpdateVersionDescUri string               `json:"update_version_desc_uri" mapstructure:"update_version_desc_uri"`
 	RollbackUri          string               `json:"rollback_uri" mapstructure:"rollback_uri"`
-	GetLatestCanvasUri   string               `json:"get_latest_canvas_uri" mapstructure:"get_latest_canvas_uri"`
 	ModelParams          []WorkflowModelParam `json:"model_params" mapstructure:"model_params"`
 }
 

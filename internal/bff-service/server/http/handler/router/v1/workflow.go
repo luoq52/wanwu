@@ -15,7 +15,6 @@ func registerWorkflow(apiV1 *gin.RouterGroup) {
 	mid.Sub("workflow").Reg(apiV1, "/appspace/workflow/model/select/llm", http.MethodGet, v1.ListLlmModelsByWorkflow, "llm模型列表（用于workflow）")
 	mid.Sub("workflow").Reg(apiV1, "/appspace/workflow/export", http.MethodGet, v1.ExportWorkflow, "导出workflow")
 	mid.Sub("workflow").Reg(apiV1, "/appspace/workflow/import", http.MethodPost, v1.ImportWorkflow, "导入workflow")
-	//mid.Sub("workflow").Reg(apiV1, "/appspace/workflow/export/version/latest", http.MethodGet, v1.ExportWorkFlowLatestVersion, "导出工作流最新版本")
 
 	mid.Sub("workflow").Reg(apiV1, "/workflow/tool/action", http.MethodGet, v1.GetWorkflowToolDetail, "获取Tool具体action")
 	mid.Sub("workflow").Reg(apiV1, "/workflow/tool/select", http.MethodGet, v1.GetWorkflowToolSelect, "获取Tool列表")

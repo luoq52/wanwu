@@ -16,7 +16,7 @@ import (
 func OpenAPIWorkflowRun(ctx *gin.Context, workflowID string, input []byte) ([]byte, error) {
 	// 生成调用工作流的url
 	// 将用户输入的intput透传
-	testRunUrl, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, fmt.Sprintf(config.Cfg().Workflow.TestRunUri, workflowID))
+	testRunUrl, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, fmt.Sprintf(config.Cfg().Workflow.WorkflowRunByOpenapiUri, workflowID))
 	resp, err := resty.New().
 		R().
 		SetContext(ctx).

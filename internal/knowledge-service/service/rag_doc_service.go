@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/util"
 	"strings"
 	"sync"
 	"time"
@@ -13,6 +12,7 @@ import (
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/config"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/http"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/mq"
+	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/util"
 	http_client "github.com/UnicomAI/wanwu/pkg/http-client"
 	"github.com/UnicomAI/wanwu/pkg/log"
 )

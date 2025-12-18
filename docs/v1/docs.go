@@ -17653,13 +17653,13 @@ const docTemplate = `{
         "response.AppVersionInfo": {
             "type": "object",
             "properties": {
-                "created_at": {
+                "createdAt": {
                     "type": "string"
                 },
                 "desc": {
                     "type": "string"
                 },
-                "publish_type": {
+                "publishType": {
                     "type": "string"
                 },
                 "version": {

@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	http_client "github.com/UnicomAI/wanwu/internal/rag-service/pkg/http-client"
 	"io"
 	"log"
 	"mime/multipart"
@@ -14,6 +13,7 @@ import (
 	"time"
 
 	"github.com/UnicomAI/wanwu/internal/agent-service/model/request"
+	http_client "github.com/UnicomAI/wanwu/internal/rag-service/pkg/http-client"
 	"github.com/cloudwego/eino/components/tool"
 	"github.com/cloudwego/eino/schema"
 	"github.com/eino-contrib/jsonschema"
