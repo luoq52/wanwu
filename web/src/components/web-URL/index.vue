@@ -20,7 +20,7 @@
             "
             :class="['toolList', item.type === active ? 'activeItem' : '']"
             @click="checkTool(item)"
-            :key="'agnet' + index"
+            :key="'agent' + index"
           >
             <h3>{{ item.name }}</h3>
             <p>{{ item.desc }}</p>

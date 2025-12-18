@@ -71,7 +71,7 @@ export const deleteApp = data => {
 };
 
 //智能体模版
-export const agnetTemplateList = params => {
+export const agentTemplateList = params => {
   return request({
     url: `${USER_API}/assistant/template/list`,
     method: 'get',
@@ -79,7 +79,7 @@ export const agnetTemplateList = params => {
   });
 };
 //复制智能体
-export const copyAgnetTemplate = data => {
+export const copyAgentTemplate = data => {
   return request({
     url: `${USER_API}/assistant/template`,
     method: 'post',
@@ -87,7 +87,7 @@ export const copyAgnetTemplate = data => {
   });
 };
 //智能体模版详情
-export const agnetTemplateDetail = params => {
+export const agentTemplateDetail = params => {
   return request({
     url: `${USER_API}/assistant/template`,
     method: 'get',

@@ -129,7 +129,7 @@
         <promptTemplate ref="promptTemplate" />
       </div>
       <div class="drawer-form">
-        <div class="agnetSet">
+        <div class="agentSet">
           <h3 class="labelTitle">{{ $t('agent.form.agentConfig') }}</h3>
           <div class="block prompt-box">
             <p class="block-title model-title">
@@ -422,7 +422,7 @@
     <!-- 视图设置 -->
     <visualSet ref="visualSet" @sendVisual="sendVisual" />
     <!-- 内置工具详情 -->
-    <ToolDeatail ref="toolDeatail" @updateDetail="updateDetail" />
+    <ToolDetail ref="toolDetail" @updateDetail="updateDetail" />
     <!-- 提交至提示词 -->
     <createPrompt
       :isCustom="true"
@@ -485,7 +485,7 @@ import {
   switchCustomBuiltIn,
 } from '@/api/agent';
 import ToolDialog from './toolDialog';
-import ToolDeatail from './toolDetail';
+import ToolDetail from './toolDetail';
 import { readWorkFlow } from '@/api/workflow';
 import Chat from './chat';
 import LinkIcon from '@/components/linkIcon.vue';
@@ -503,7 +503,7 @@ export default {
     setSafety,
     visualSet,
     metaSet,
-    ToolDeatail,
+    ToolDetail,
     promptTemplate,
     createPrompt,
     PromptOptimize,
@@ -778,7 +778,7 @@ export default {
       this.updateInfo();
     },
     handleBuiltin(n) {
-      this.$refs.toolDeatail.showDialog(n);
+      this.$refs.toolDetail.showDialog(n);
     },
     showVisualSet() {
       this.$refs.visualSet.showDialog(this.editForm.visionConfig);
@@ -1572,7 +1572,7 @@ export default {
       padding: 10px 20px;
     }
 
-    .agnetSet {
+    .agentSet {
       background: #f7f8fa;
       box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
       border-radius: 8px;
