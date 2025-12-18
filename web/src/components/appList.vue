@@ -129,9 +129,10 @@
               >
                 {{$t('common.button.publish')}}
               </el-dropdown-item>-->
-              <el-dropdown-item command="cancelPublish" v-if="n.publishType">
+              <!--v0.3.2 下掉取消发布-->
+              <!--<el-dropdown-item command="cancelPublish" v-if="n.publishType">
                 {{ $t('common.button.cancelPublish') }}
-              </el-dropdown-item>
+              </el-dropdown-item>-->
               <el-dropdown-item command="publishSet">
                 {{ $t('appSpace.publishSet') }}
               </el-dropdown-item>
@@ -261,10 +262,11 @@ export default {
       this.dialogVisible = false;
     },
     isCanClick(n) {
-      return this.isShowTool
+      return true;
+      /*this.isShowTool
         ? ([WORKFLOW, CHAT].includes(n.appType) && !n.publishType) ||
             ![WORKFLOW, CHAT].includes(n.appType)
-        : true;
+        : true;*/
     },
     // 公用删除方法
     async handleDelete() {
@@ -346,7 +348,6 @@ export default {
     },
     workflowExport(row) {
       exportWorkflow({ workflow_id: row.appId }, row.appType).then(response => {
-        console.log(response, '---------------------123');
         const blob = new Blob([response], { type: response.type });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
