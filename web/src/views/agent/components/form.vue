@@ -122,6 +122,7 @@
             type="textarea"
             show-word-limit
             :rows="12"
+            @blur="handleInstructionsBlur"
           ></el-input>
         </div>
         <promptTemplate ref="promptTemplate" />
@@ -513,35 +514,25 @@ export default {
     };
   },
   watch: {
-    editForm: {
-      handler(newVal, oldVal) {
-        // 如果是从详情设置的数据，不触发更新逻辑
+    agentFormParams: {
+      handler(newVal) {
         if (this.isSettingFromDetail) return;
 
         if (this.debounceTimer) {
           clearTimeout(this.debounceTimer);
         }
+        
         this.debounceTimer = setTimeout(() => {
-          const props = [
-            'modelParams',
-            'modelConfig',
-            'prologue',
-            'knowledgeBaseConfig',
-            'instructions',
-            'safetyConfig',
-            'recommendQuestion',
-            'visionConfig',
-          ];
+          if (!this.initialAutoSaveSnapshot) {
+            this.initialAutoSaveSnapshot = JSON.parse(JSON.stringify(newVal));
+            return;
+          }
 
-          const changed = props.some(prop => {
-            return (
-              JSON.stringify(newVal[prop]) !==
-              JSON.stringify((this.initialEditForm || {})[prop])
-            );
-          });
+          const changed =
+            JSON.stringify(newVal) !== JSON.stringify(this.initialAutoSaveSnapshot);
 
           if (changed) {
-            if (newVal['modelParams'] !== '' && newVal['prologue'] !== '') {
+            if (this.editForm.modelParams !== '' && this.editForm.prologue !== '') {
               this.updateInfo();
             }
           }
@@ -553,6 +544,27 @@ export default {
   computed: {
     ...mapGetters('app', ['cacheData']),
     ...mapGetters('user', ['commonInfo']),
+    agentFormParams(){
+      const {
+        modelParams,
+        modelConfig,
+        prologue,
+        knowledgeBaseConfig,
+        safetyConfig,
+        recommendQuestion,
+        visionConfig,
+      } = this.editForm;
+
+      return {
+        modelParams,
+        modelConfig,
+        prologue,
+        knowledgeBaseConfig,
+        safetyConfig,
+        recommendQuestion,
+        visionConfig,
+      };
+    }
   },
   data() {
     return {
@@ -646,6 +658,7 @@ export default {
       imageUrl: '',
       defaultLogo: require('@/assets/imgs/bg-logo.png'),
       debounceTimer: null, //防抖计时器
+      initialAutoSaveSnapshot: null,
       isSettingFromDetail: false, // 防止详情数据触发更新标记
       nameMap: {
         workflow: {
@@ -697,6 +710,15 @@ export default {
   },
   methods: {
     ...mapActions('app', ['setMaxPicNum', 'clearMaxPicNum']),
+    //系统提示词失去焦点时，触发提示词更新
+    handleInstructionsBlur(e){
+      this.updateInfo();
+    },
+    syncAutoSaveBaseline() {
+      this.initialAutoSaveSnapshot = JSON.parse(
+        JSON.stringify(this.agentFormParams),
+      );
+    },
     //获取知识库或问答库选中数据
     getSelectKnowledge(data, type) {
       this.editForm[type]['knowledgebases'] = data;
@@ -744,9 +766,11 @@ export default {
     },
     promptSubmit(prompt) {
       this.editForm.instructions = prompt;
+      this.updateInfo();
     },
     getPrompt(prompt) {
       this.editForm.instructions = prompt;
+      this.updateInfo();
     },
     handleBuiltin(n) {
       this.$refs.toolDeatail.showDialog(n);
@@ -1164,6 +1188,7 @@ export default {
 
         this.$nextTick(() => {
           this.isSettingFromDetail = false;
+          this.syncAutoSaveBaseline();
         });
       } else {
         this.isSettingFromDetail = false;
