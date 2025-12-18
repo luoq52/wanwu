@@ -159,7 +159,6 @@ func ChatflowChat(ctx *gin.Context, userId, orgId, workflowId, conversationId, m
 			"parameters":      string(p),
 			"connector_id":    "1024",
 			"workflow_id":     workflowId,
-			"execute_mode":    "DEBUG",
 			"app_id":          cvInfo.AppId,
 			"conversation_id": conversationId,
 			"ext": map[string]any{
