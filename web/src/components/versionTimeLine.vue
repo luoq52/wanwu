@@ -47,12 +47,13 @@
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
-                      v-if="appType === 'workflow'"
+                      v-if="showExportList.includes(appType)"
                       :command="{ action: 'export', index }"
                     >
                       {{ $t('common.button.export') }}
                     </el-dropdown-item>
                     <el-dropdown-item
+                      v-if="!showExportList.includes(appType)"
                       :command="{ action: 'rollback', index }"
                       :divided="appType === 'workflow'"
                     >
@@ -72,6 +73,7 @@
 <script>
 import { getAppVersionList, rollbackAppVersion } from '@/api/appspace';
 import { exportWorkflow } from '@/api/workflow';
+import { WORKFLOW, CHAT } from '@/utils/commonSet';
 
 export default {
   name: 'VersionPopover',
@@ -90,6 +92,7 @@ export default {
   data() {
     return {
       popoverVisible: false,
+      showExportList: [WORKFLOW, CHAT],
       versionList: [
         {
           isCurrent: true,
@@ -145,7 +148,7 @@ export default {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = row.name + '.json';
+        link.download = `${this.$route.query.name || ''}_${this.versionList[index].version}.json`;
         link.click();
         window.URL.revokeObjectURL(link.href);
       });
