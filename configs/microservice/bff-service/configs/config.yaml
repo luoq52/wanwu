@@ -277,7 +277,7 @@ workflow:
   publish_uri: /api/workflow_api/publish
   version_list_uri: /api/workflow_api/version_list
   update_version_desc_uri: /api/workflow_api/version_description
-  rollback_uri: /api/workflow_api/rollback
+  rollback_uri: /api/workflow_api/revert
    
 
   model_params:

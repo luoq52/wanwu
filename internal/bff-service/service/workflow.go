@@ -201,6 +201,7 @@ func ExportWorkFlow(ctx *gin.Context, orgID, workflowID, version string) ([]byte
 		SetBody(map[string]string{
 			"workflow_id": workflowID,
 			"version":     version,
+			"space_id":    orgID,
 		}).
 		SetResult(&ret).
 		Post(url); err != nil {
