@@ -41,7 +41,13 @@
                     {{ item.createdAt }}
                   </div>
                 </div>
-                <el-dropdown trigger="click" @command="handleCommand">
+                <el-dropdown
+                  v-if="
+                    !(where === 'webUrl' && !showExportList.includes(appType))
+                  "
+                  trigger="click"
+                  @command="handleCommand"
+                >
                   <span class="el-dropdown-link">
                     <i class="el-icon-more"></i>
                   </span>
@@ -53,7 +59,7 @@
                       {{ $t('common.button.export') }}
                     </el-dropdown-item>
                     <el-dropdown-item
-                      v-if="!showExportList.includes(appType)"
+                      v-if="where !== 'webUrl'"
                       :command="{ action: 'rollback', index }"
                       :divided="appType === 'workflow'"
                     >
@@ -86,6 +92,11 @@ export default {
     appType: {
       type: String,
       required: true,
+      default: () => '',
+    },
+    where: {
+      type: String,
+      required: false,
       default: () => '',
     },
   },

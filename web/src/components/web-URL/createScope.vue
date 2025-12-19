@@ -47,7 +47,7 @@
 
     <div class="version-history">
       <h3>{{ $t('list.version.history') }}</h3>
-      <VersionTimeLine :appId="appId" :appType="appType" />
+      <VersionTimeLine :appId="appId" :appType="appType" where="webUrl" />
     </div>
   </div>
 </template>
