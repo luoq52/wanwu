@@ -306,7 +306,7 @@ func (s *Service) GetRagDetail(ctx context.Context, in *rag_service.RagDetailReq
 		}
 		return info, nil
 	default:
-		rag, err := s.cli.FetchPublishRagFirst(ctx, in.RagId, "")
+		rag, err := s.cli.FetchPublishRagFirst(ctx, in.RagId, in.Version)
 		if err != nil {
 			return nil, errStatus(errs.Code_RagGetErr, err)
 		}
