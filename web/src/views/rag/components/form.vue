@@ -1,5 +1,5 @@
 <template>
-  <div class="agent-from-content">
+  <div class="agent-from-content" :class="{ 'disable-clicks': disableClick }">
     <div class="form-header">
       <div class="header-left">
         <span class="el-icon-arrow-left btn" @click="goBack"></span>
@@ -36,9 +36,11 @@
         <VersionPopover
           ref="versionPopover"
           v-if="publishType"
+          style="pointer-events: auto"
           :appId="editForm.appId"
           :appType="RAG"
           @reloadData="reloadData"
+          @previewVersion="previewVersion"
         />
         <el-button
           v-if="publishType"
@@ -266,7 +268,7 @@ import knowledgeSet from './knowledgeSetDialog.vue';
 import setSafety from '@/components/setSafety';
 import VersionPopover from '@/components/versionPopover';
 import { getRerankList, selectModelList } from '@/api/modelAccess';
-import { getRagInfo, updateRagConfig } from '@/api/rag';
+import { getRagInfo, getRagPublishedInfo, updateRagConfig } from '@/api/rag';
 import Chat from './chat';
 import searchConfig from '@/components/searchConfig.vue';
 import chiChat from '@/components/app/chiChat.vue';
@@ -294,6 +296,8 @@ export default {
   data() {
     return {
       RAG,
+      disableClick: false,
+      version: '',
       rerankOptions: [],
       localKnowledgeConfig: {},
       publishType: this.$route.query.publishType,
@@ -458,6 +462,11 @@ export default {
         }, 500);
       }
     },
+    previewVersion(item) {
+      this.disableClick = !item.isCurrent;
+      this.version = item.version || '';
+      this.getDetail();
+    },
     //获取知识库或问答库选中数据
     getSelectKnowledge(data, type) {
       this.editForm[type]['knowledgebases'] = data;
@@ -500,7 +509,17 @@ export default {
     getDetail() {
       //获取详情
       this.isSettingFromDetail = true; // 设置标志位，防止触发更新逻辑
-      getRagInfo({ ragId: this.editForm.appId })
+      let res;
+      if (this.version) {
+        res = getRagPublishedInfo({
+          ragId: this.editForm.appId,
+          version: this.version,
+        });
+      } else
+        res = getRagInfo({
+          ragId: this.editForm.appId,
+        });
+      res
         .then(res => {
           if (res.code === 0) {
             this.publishType = res.data.appPublishConfig.publishType;

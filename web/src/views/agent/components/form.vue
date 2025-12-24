@@ -1,5 +1,5 @@
 <template>
-  <div class="agent-from-content">
+  <div class="agent-from-content" :class="{ 'disable-clicks': disableClick }">
     <div class="form-header">
       <div class="header-left">
         <span class="el-icon-arrow-left btn" @click="goBack"></span>
@@ -45,9 +45,11 @@
         <VersionPopover
           ref="versionPopover"
           v-if="publishType"
+          style="pointer-events: auto"
           :appId="editForm.assistantId"
           :appType="AGENT"
           @reloadData="reloadData"
+          @previewVersion="previewVersion"
         />
         <el-button
           v-if="publishType"
@@ -509,7 +511,7 @@ import { AGENT } from '@/utils/commonSet';
 import {
   deleteMcp,
   enableMcp,
-  getAgentDetail,
+  getAgentInfo,
   delWorkFlowInfo,
   delActionInfo,
   putAgentInfo,
@@ -517,6 +519,7 @@ import {
   enableAction,
   delCustomBuiltIn,
   switchCustomBuiltIn,
+  getAgentPublishedInfo,
 } from '@/api/agent';
 import ToolDialog from './toolDialog';
 import ToolDetail from './toolDetail';
@@ -615,6 +618,8 @@ export default {
   data() {
     return {
       AGENT,
+      disableClick: false,
+      version: '',
       promptType: 'create',
       limitMaxTokens: 4096,
       knowledgeIndex: -1,
@@ -783,6 +788,11 @@ export default {
         ? JSON.parse(accessCert).user.permission.orgPermission
         : '';
       this.hasPluginPermission = permission.indexOf('plugin') !== -1;
+    },
+    previewVersion(item) {
+      this.disableClick = !item.isCurrent;
+      this.version = item.version || '';
+      this.getAppDetail();
     },
     ...mapActions('app', ['setMaxPicNum', 'clearMaxPicNum']),
     //系统提示词失去焦点时，触发提示词更新
@@ -1161,9 +1171,16 @@ export default {
     async getAppDetail() {
       this.startLoading(0);
       this.isSettingFromDetail = true;
-      let res = await getAgentDetail({
-        assistantId: this.editForm.assistantId,
-      });
+      let res;
+      if (this.version) {
+        res = await getAgentPublishedInfo({
+          assistantId: this.editForm.assistantId,
+          version: this.version,
+        });
+      } else
+        res = await getAgentInfo({
+          assistantId: this.editForm.assistantId,
+        });
       if (res.code === 0) {
         this.startLoading(100);
         let data = res.data;
@@ -1184,6 +1201,7 @@ export default {
 
         this.editForm = {
           ...this.editForm,
+          uuid: data.uuid,
           newAgent: data.newAgent,
           avatar: data.avatar || {},
           prologue: data.prologue || '', //开场白
@@ -1485,7 +1503,7 @@ export default {
   }
 
   .drawer-test {
-    width: 40%;
+    width: 670px;
   }
 }
 </style>

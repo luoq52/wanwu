@@ -49,7 +49,9 @@
       <!-- 问答输入框 -->
       <div
         class="editable-wp flex"
-        :style="{ 'pointer-events': fileLoading ? 'none' : 'auto' }"
+        :style="{
+          'pointer-events': fileLoading || disableClick ? 'none' : 'auto',
+        }"
       >
         <div class="editable-wp-left rl">
           <!-- <i  class="el-icon-upload2 upload-icon" @click="preUpload"></i> -->
@@ -169,6 +171,7 @@ export default {
     },
     isModelDisable: { type: Boolean, default: false },
     type: { type: String },
+    disableClick: { type: Boolean, default: false },
   },
   mixins: [commonMixin, uploadChunk],
   components: { uploadDialog },
