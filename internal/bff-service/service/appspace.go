@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"sort"
 
 	app_service "github.com/UnicomAI/wanwu/api/proto/app-service"
@@ -12,6 +11,7 @@ import (
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/response"
 	"github.com/UnicomAI/wanwu/pkg/constant"
 	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
+	"github.com/UnicomAI/wanwu/pkg/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -172,8 +172,8 @@ func PublishApp(ctx *gin.Context, userId, orgId string, req request.PublishAppRe
 			},
 		})
 		if resp != nil {
-			if req.Version <= resp.Version {
-				return grpc_util.ErrorStatusWithKey(err_code.Code_BFFGeneral, "bff_app_publish_version", fmt.Sprintf("the version number is not self-incrementing, old version %v, current version is %v", resp.Version, req.Version))
+			if err := util.IsVersionGreaterThan(req.Version, resp.Version); err != nil {
+				return grpc_util.ErrorStatusWithKey(err_code.Code_BFFGeneral, "bff_app_publish_version", err.Error())
 			}
 		}
 		_, err := assistant.AssistantSnapshotCreate(ctx.Request.Context(), &assistant_service.AssistantSnapshotReq{
@@ -198,8 +198,8 @@ func PublishApp(ctx *gin.Context, userId, orgId string, req request.PublishAppRe
 			},
 		})
 		if resp != nil {
-			if req.Version <= resp.Version {
-				return grpc_util.ErrorStatusWithKey(err_code.Code_BFFGeneral, "bff_app_publish_version", fmt.Sprintf("the version number is not self-incrementing, old version %v, current version is %v", resp.Version, req.Version))
+			if err := util.IsVersionGreaterThan(req.Version, resp.Version); err != nil {
+				return grpc_util.ErrorStatusWithKey(err_code.Code_BFFGeneral, "bff_app_publish_version", err.Error())
 			}
 		}
 		_, err := rag.PublishRag(ctx.Request.Context(), &rag_service.PublishRagReq{

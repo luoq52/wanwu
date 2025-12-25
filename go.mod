@@ -28,6 +28,7 @@ require (
 	github.com/gromitlee/depend/v2 v2.0.0
 	github.com/gromitlee/go-async v1.0.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
+	github.com/hashicorp/go-version v1.8.0
 	github.com/mark3labs/mcp-go v0.43.0
 	github.com/meguminnnnnnnnn/go-openai v0.1.0
 	github.com/minio/minio-go/v7 v7.0.88
