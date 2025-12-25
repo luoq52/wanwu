@@ -1324,7 +1324,7 @@ export default {
   .drawer-info {
     position: relative;
     width: 30%;
-    margin: 10px 0;
+    margin: 10px 0 10px 10px;
   }
 
   .labelTitle {
@@ -1374,7 +1374,6 @@ export default {
 
   .drawer-form {
     width: 30%;
-    margin: 10px 0;
 
     /*通用*/
     .block {
