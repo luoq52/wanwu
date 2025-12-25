@@ -298,7 +298,9 @@
           <p class="block-title tool-title">
             <span>
               {{ $t('agent.form.tool') }}
-              <span v-if="allTools.length">[{{useToolNum}}/{{ allTools.length }}]</span>
+              <span v-if="allTools.length">
+                [{{ useToolNum }}/{{ allTools.length }}]
+              </span>
             </span>
             <span @click="addTool" class="common-add">
               <span class="el-icon-plus"></span>
@@ -606,7 +608,7 @@ export default {
     },
     useToolNum() {
       return this.allTools.filter(item => item.enable).length;
-    }
+    },
   },
   data() {
     return {
