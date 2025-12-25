@@ -22,7 +22,7 @@ import (
 var _default *HttpClient = CreateDefault()
 
 const (
-	timeout        = 120 * time.Second
+	timeout        = 10 * time.Minute
 	connectTimeout = 60 * time.Second
 )
 
