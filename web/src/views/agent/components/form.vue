@@ -766,7 +766,20 @@ export default {
     this.initialEditForm = JSON.parse(JSON.stringify(this.editForm));
   },
   created() {
-    this.reloadData();
+    this.getModelData(); //获取模型列表
+    this.getRerankData(); //获取rerank模型
+    if (this.$route.query.id) {
+      this.editForm.assistantId = this.$route.query.id;
+      setTimeout(() => {
+        this.getAppDetail();
+      }, 500);
+    }
+    //判断是否有插件管理的权限
+    const accessCert = localStorage.getItem('access_cert');
+    const permission = accessCert
+      ? JSON.parse(accessCert).user.permission.orgPermission
+      : '';
+    this.hasPluginPermission = permission.indexOf('plugin') !== -1;
   },
   beforeDestroy() {
     store.dispatch('app/initState');
@@ -774,20 +787,8 @@ export default {
   },
   methods: {
     reloadData() {
-      this.getModelData(); //获取模型列表
-      this.getRerankData(); //获取rerank模型
-      if (this.$route.query.id) {
-        this.editForm.assistantId = this.$route.query.id;
-        setTimeout(() => {
-          this.getAppDetail();
-        }, 500);
-      }
-      //判断是否有插件管理的权限
-      const accessCert = localStorage.getItem('access_cert');
-      const permission = accessCert
-        ? JSON.parse(accessCert).user.permission.orgPermission
-        : '';
-      this.hasPluginPermission = permission.indexOf('plugin') !== -1;
+      this.disableClick = false;
+      this.getAppDetail();
     },
     previewVersion(item) {
       this.disableClick = !item.isCurrent;

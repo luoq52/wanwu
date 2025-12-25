@@ -449,18 +449,19 @@ export default {
     this.initialEditForm = JSON.parse(JSON.stringify(this.editForm));
   },
   created() {
-    this.reloadData();
+    this.getModelData(); //获取模型列表
+    this.getRerankData(); //获取rerank模型
+    if (this.$route.query.id) {
+      this.editForm.appId = this.$route.query.id;
+      setTimeout(() => {
+        this.getDetail(); //获取详情
+      }, 500);
+    }
   },
   methods: {
     reloadData() {
-      this.getModelData(); //获取模型列表
-      this.getRerankData(); //获取rerank模型
-      if (this.$route.query.id) {
-        this.editForm.appId = this.$route.query.id;
-        setTimeout(() => {
-          this.getDetail(); //获取详情
-        }, 500);
-      }
+      this.disableClick = false;
+      this.getDetail();
     },
     previewVersion(item) {
       this.disableClick = !item.isCurrent;
