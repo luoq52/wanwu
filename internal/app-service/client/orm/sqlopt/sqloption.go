@@ -97,10 +97,19 @@ func WithIDs(Ids []string) SQLOption {
 	})
 }
 
-func WithApiKey(apiKey string) SQLOption {
+func WithAppKey(appKey string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if appKey != "" {
+			return db.Where("api_key = ?", appKey)
+		}
+		return db
+	})
+}
+
+func WithKey(apiKey string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		if apiKey != "" {
-			return db.Where("api_key = ?", apiKey)
+			return db.Where("`key` = ?", apiKey)
 		}
 		return db
 	})

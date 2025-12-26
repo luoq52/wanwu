@@ -41,7 +41,7 @@ func (s *Service) DelAppKey(ctx context.Context, req *app_service.DelAppKeyReq) 
 }
 
 func (s *Service) GetAppKeyByKey(ctx context.Context, req *app_service.GetAppKeyByKeyReq) (*app_service.AppKeyInfo, error) {
-	appKey, err := s.cli.GetAppKeyByKey(ctx, req.AppKeyId)
+	appKey, err := s.cli.GetAppKeyByKey(ctx, req.AppKey)
 	if err != nil {
 		return nil, errStatus(errs.Code_AppApikey, err)
 	}

@@ -692,6 +692,17 @@ const docTemplate = `{
                     "openapi"
                 ],
                 "summary": "工作流OpenAPI",
+                "parameters": [
+                    {
+                        "description": "工作流运行参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.OpenAPIWorkflowRunReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -765,7 +776,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "conversation_id",
-                "query"
+                "query",
+                "uuid"
             ],
             "properties": {
                 "conversation_id": {
@@ -776,13 +788,22 @@ const docTemplate = `{
                 },
                 "stream": {
                     "type": "boolean"
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },
         "request.OpenAPIAgentCreateConversationRequest": {
             "type": "object",
+            "required": [
+                "uuid"
+            ],
             "properties": {
                 "title": {
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 }
             }
@@ -791,7 +812,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "conversation_id",
-                "query"
+                "query",
+                "uuid"
             ],
             "properties": {
                 "conversation_id": {
@@ -803,13 +825,22 @@ const docTemplate = `{
                 },
                 "query": {
                     "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },
         "request.OpenAPIChatflowCreateConversationRequest": {
             "type": "object",
+            "required": [
+                "uuid"
+            ],
             "properties": {
                 "conversation_name": {
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 }
             }
@@ -817,7 +848,8 @@ const docTemplate = `{
         "request.OpenAPIChatflowGetConversationMessageListRequest": {
             "type": "object",
             "required": [
-                "conversation_id"
+                "conversation_id",
+                "uuid"
             ],
             "properties": {
                 "conversation_id": {
@@ -825,13 +857,17 @@ const docTemplate = `{
                 },
                 "limit": {
                     "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },
         "request.OpenAPIRagChatRequest": {
             "type": "object",
             "required": [
-                "query"
+                "query",
+                "uuid"
             ],
             "properties": {
                 "history": {
@@ -845,6 +881,24 @@ const docTemplate = `{
                 },
                 "stream": {
                     "type": "boolean"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.OpenAPIWorkflowRunReq": {
+            "type": "object",
+            "required": [
+                "uuid"
+            ],
+            "properties": {
+                "parameters": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },

@@ -36,8 +36,11 @@ func CreateAgentConversation(ctx *gin.Context) {
 	}
 	userID := getUserID(ctx)
 	orgID := getOrgID(ctx)
-	appID := getAppID(ctx)
-
+	appID, err := service.GetAssistantIdByUuid(ctx, req.UUID)
+	if err != nil {
+		gin_util.Response(ctx, nil, err)
+		return
+	}
 	resp, err := service.ConversationCreate(ctx, userID, orgID, request.ConversationCreateRequest{
 		AssistantId: appID,
 		Prompt:      req.Title,
@@ -67,8 +70,11 @@ func ChatAgent(ctx *gin.Context) {
 	}
 	userID := getUserID(ctx)
 	orgID := getOrgID(ctx)
-	appID := getAppID(ctx)
-
+	appID, err := service.GetAssistantIdByUuid(ctx, req.UUID)
+	if err != nil {
+		gin_util.Response(ctx, nil, err)
+		return
+	}
 	// 流式
 	if req.Stream {
 		if err := service.AssistantConversionStream(ctx, userID, orgID, request.ConversionStreamRequest{
@@ -135,17 +141,16 @@ func ChatRag(ctx *gin.Context) {
 	}
 	userID := getUserID(ctx)
 	orgID := getOrgID(ctx)
-	appID := getAppID(ctx)
 
 	// 流式
 	if req.Stream {
-		if err := service.ChatRagStream(ctx, userID, orgID, request.ChatRagRequest{RagID: appID, Question: req.Query, History: req.History}, true); err != nil {
+		if err := service.ChatRagStream(ctx, userID, orgID, request.ChatRagRequest{RagID: req.UUID, Question: req.Query, History: req.History}, true); err != nil {
 			gin_util.Response(ctx, nil, err)
 		}
 		return
 	}
 	// 非流式
-	chatCh, err := service.CallRagChatStream(ctx, userID, orgID, request.ChatRagRequest{RagID: appID, Question: req.Query, History: req.History}, true)
+	chatCh, err := service.CallRagChatStream(ctx, userID, orgID, request.ChatRagRequest{RagID: req.UUID, Question: req.Query, History: req.History}, true)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
@@ -158,7 +163,7 @@ func ChatRag(ctx *gin.Context) {
 		}
 		curr := &response.OpenAPIRagChatResponse{}
 		if err := json.Unmarshal([]byte(strings.TrimPrefix(chat, "data:")), curr); err != nil {
-			log.Errorf("[RAG] %v user %v org %v unmarshal %v err: %v", appID, userID, orgID, err)
+			log.Errorf("[RAG] %v user %v org %v unmarshal %v err: %v", req.UUID, userID, orgID, err)
 			continue
 		}
 		resp = curr

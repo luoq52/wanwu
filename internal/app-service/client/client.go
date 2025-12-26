@@ -15,6 +15,7 @@ type IClient interface {
 	UpdateApiKey(ctx context.Context, keyId uint32, userId, orgId, name, desc string, expiredAt int64) *err_code.Status
 	ListApiKeys(ctx context.Context, userId, orgId string, offset, limit int32) ([]*model.OpenApiKey, int64, *err_code.Status)
 	UpdateApiKeyStatus(ctx context.Context, keyId uint32, status bool) *err_code.Status
+	GetApiKeyByKey(ctx context.Context, key string) (*model.OpenApiKey, *err_code.Status)
 
 	// --- app key ---
 	GetAppKeyList(ctx context.Context, userId, orgId, appId, appType string) ([]*model.ApiKey, *err_code.Status)

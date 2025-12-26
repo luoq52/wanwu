@@ -104,3 +104,14 @@ func (c *Client) UpdateApiKeyStatus(ctx context.Context, keyId uint32, status bo
 	}
 	return nil
 }
+
+// GetApiKeyByKey 根据Key获取API Key信息
+func (c *Client) GetApiKeyByKey(ctx context.Context, key string) (*model.OpenApiKey, *errs.Status) {
+	var apiKey model.OpenApiKey
+	if err := sqlopt.SQLOptions(
+		sqlopt.WithKey(key),
+	).Apply(c.db.WithContext(ctx)).First(&apiKey).Error; err != nil {
+		return nil, toErrStatus("api_key_get_by_key", err.Error())
+	}
+	return &apiKey, nil
+}

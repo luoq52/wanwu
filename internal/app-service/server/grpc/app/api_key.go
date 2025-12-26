@@ -57,16 +57,25 @@ func (s *Service) UpdateApiKeyStatus(ctx context.Context, req *app_service.Updat
 	return &emptypb.Empty{}, nil
 }
 
+func (s *Service) GetApiKeyByKey(ctx context.Context, req *app_service.GetApiKeyByKeyReq) (*app_service.ApiKeyInfo, error) {
+	apiKey, err := s.cli.GetApiKeyByKey(ctx, req.ApiKey)
+	if err != nil {
+		return nil, errStatus(errs.Code_AppApikey, err)
+	}
+	return toProtoApiKey(apiKey), nil
+}
+
 // --- internal ---
 func toProtoApiKey(apiKey *model.OpenApiKey) *app_service.ApiKeyInfo {
 	return &app_service.ApiKeyInfo{
 		KeyId:     strconv.Itoa(int(apiKey.ID)),
 		Key:       apiKey.Key,
-		Creator:   apiKey.UserID,
+		UserId:    apiKey.UserID,
 		Name:      apiKey.Name,
 		Desc:      apiKey.Description,
 		ExpiredAt: apiKey.ExpiredAt,
 		CreatedAt: apiKey.CreatedAt,
 		Status:    apiKey.Status,
+		OrgId:     apiKey.OrgID,
 	}
 }

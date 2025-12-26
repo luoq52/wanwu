@@ -637,6 +637,16 @@ func GetConversationDetailList(ctx *gin.Context, userId, orgId string, req reque
 	return response.PageResult{Total: resp.Total, List: convertedList, PageNo: req.PageNo, PageSize: req.PageSize}, nil
 }
 
+func GetAssistantIdByUuid(ctx *gin.Context, uuid string) (string, error) {
+	resp, err := assistant.GetAssistantIdByUuid(ctx.Request.Context(), &assistant_service.GetAssistantIdByUuidReq{
+		Uuid: uuid,
+	})
+	if err != nil {
+		return "", err
+	}
+	return resp.AssistantId, nil
+}
+
 func transKnowledgebases2Proto(kbConfig request.AppKnowledgebaseConfig) *assistant_service.AssistantKnowledgeBaseConfig {
 	var knowIds []string
 	if len(kbConfig.Knowledgebases) > 0 {

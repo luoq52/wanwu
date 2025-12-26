@@ -46,7 +46,7 @@ func (c *Client) GenAppKey(ctx context.Context, userId, orgId, appId, appType, a
 
 func (c *Client) GetAppKeyByKey(ctx context.Context, appKey string) (*model.ApiKey, *errs.Status) {
 	ret := &model.ApiKey{}
-	if err := sqlopt.WithApiKey(appKey).Apply(c.db).WithContext(ctx).First(ret).Error; err != nil {
+	if err := sqlopt.WithAppKey(appKey).Apply(c.db).WithContext(ctx).First(ret).Error; err != nil {
 		return nil, toErrStatus("app_api_key_get_by_key", err.Error())
 	}
 	return ret, nil

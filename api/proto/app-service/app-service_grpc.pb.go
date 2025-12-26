@@ -25,6 +25,7 @@ const (
 	AppService_ListApiKeys_FullMethodName                  = "/app_service.AppService/ListApiKeys"
 	AppService_UpdateApiKey_FullMethodName                 = "/app_service.AppService/UpdateApiKey"
 	AppService_UpdateApiKeyStatus_FullMethodName           = "/app_service.AppService/UpdateApiKeyStatus"
+	AppService_GetApiKeyByKey_FullMethodName               = "/app_service.AppService/GetApiKeyByKey"
 	AppService_GenAppKey_FullMethodName                    = "/app_service.AppService/GenAppKey"
 	AppService_GetAppKeyList_FullMethodName                = "/app_service.AppService/GetAppKeyList"
 	AppService_DelAppKey_FullMethodName                    = "/app_service.AppService/DelAppKey"
@@ -62,6 +63,7 @@ type AppServiceClient interface {
 	ListApiKeys(ctx context.Context, in *ListApiKeysReq, opts ...grpc.CallOption) (*ApiKeyInfoList, error)
 	UpdateApiKey(ctx context.Context, in *UpdateApiKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateApiKeyStatus(ctx context.Context, in *UpdateApiKeyStatusReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetApiKeyByKey(ctx context.Context, in *GetApiKeyByKeyReq, opts ...grpc.CallOption) (*ApiKeyInfo, error)
 	// --- appKey ---
 	GenAppKey(ctx context.Context, in *GenAppKeyReq, opts ...grpc.CallOption) (*AppKeyInfo, error)
 	GetAppKeyList(ctx context.Context, in *GetAppKeyListReq, opts ...grpc.CallOption) (*AppKeyInfoList, error)
@@ -147,6 +149,16 @@ func (c *appServiceClient) UpdateApiKeyStatus(ctx context.Context, in *UpdateApi
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, AppService_UpdateApiKeyStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) GetApiKeyByKey(ctx context.Context, in *GetApiKeyByKeyReq, opts ...grpc.CallOption) (*ApiKeyInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApiKeyInfo)
+	err := c.cc.Invoke(ctx, AppService_GetApiKeyByKey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -413,6 +425,7 @@ type AppServiceServer interface {
 	ListApiKeys(context.Context, *ListApiKeysReq) (*ApiKeyInfoList, error)
 	UpdateApiKey(context.Context, *UpdateApiKeyReq) (*emptypb.Empty, error)
 	UpdateApiKeyStatus(context.Context, *UpdateApiKeyStatusReq) (*emptypb.Empty, error)
+	GetApiKeyByKey(context.Context, *GetApiKeyByKeyReq) (*ApiKeyInfo, error)
 	// --- appKey ---
 	GenAppKey(context.Context, *GenAppKeyReq) (*AppKeyInfo, error)
 	GetAppKeyList(context.Context, *GetAppKeyListReq) (*AppKeyInfoList, error)
@@ -468,6 +481,9 @@ func (UnimplementedAppServiceServer) UpdateApiKey(context.Context, *UpdateApiKey
 }
 func (UnimplementedAppServiceServer) UpdateApiKeyStatus(context.Context, *UpdateApiKeyStatusReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateApiKeyStatus not implemented")
+}
+func (UnimplementedAppServiceServer) GetApiKeyByKey(context.Context, *GetApiKeyByKeyReq) (*ApiKeyInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetApiKeyByKey not implemented")
 }
 func (UnimplementedAppServiceServer) GenAppKey(context.Context, *GenAppKeyReq) (*AppKeyInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenAppKey not implemented")
@@ -651,6 +667,24 @@ func _AppService_UpdateApiKeyStatus_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AppServiceServer).UpdateApiKeyStatus(ctx, req.(*UpdateApiKeyStatusReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_GetApiKeyByKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetApiKeyByKeyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).GetApiKeyByKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_GetApiKeyByKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).GetApiKeyByKey(ctx, req.(*GetApiKeyByKeyReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1131,6 +1165,10 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateApiKeyStatus",
 			Handler:    _AppService_UpdateApiKeyStatus_Handler,
+		},
+		{
+			MethodName: "GetApiKeyByKey",
+			Handler:    _AppService_GetApiKeyByKey_Handler,
 		},
 		{
 			MethodName: "GenAppKey",

@@ -45,14 +45,21 @@ definitions:
         type: string
       stream:
         type: boolean
+      uuid:
+        type: string
     required:
     - conversation_id
     - query
+    - uuid
     type: object
   request.OpenAPIAgentCreateConversationRequest:
     properties:
       title:
         type: string
+      uuid:
+        type: string
+    required:
+    - uuid
     type: object
   request.OpenAPIChatflowChatRequest:
     properties:
@@ -63,14 +70,21 @@ definitions:
         type: object
       query:
         type: string
+      uuid:
+        type: string
     required:
     - conversation_id
     - query
+    - uuid
     type: object
   request.OpenAPIChatflowCreateConversationRequest:
     properties:
       conversation_name:
         type: string
+      uuid:
+        type: string
+    required:
+    - uuid
     type: object
   request.OpenAPIChatflowGetConversationMessageListRequest:
     properties:
@@ -78,8 +92,11 @@ definitions:
         type: string
       limit:
         type: string
+      uuid:
+        type: string
     required:
     - conversation_id
+    - uuid
     type: object
   request.OpenAPIRagChatRequest:
     properties:
@@ -91,8 +108,21 @@ definitions:
         type: string
       stream:
         type: boolean
+      uuid:
+        type: string
     required:
     - query
+    - uuid
+    type: object
+  request.OpenAPIWorkflowRunReq:
+    properties:
+      parameters:
+        additionalProperties: {}
+        type: object
+      uuid:
+        type: string
+    required:
+    - uuid
     type: object
   response.OAuthConfig:
     properties:
@@ -776,6 +806,13 @@ paths:
       consumes:
       - application/json
       description: 工作流OpenAPI
+      parameters:
+      - description: 工作流运行参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.OpenAPIWorkflowRunReq'
       produces:
       - application/json
       responses:

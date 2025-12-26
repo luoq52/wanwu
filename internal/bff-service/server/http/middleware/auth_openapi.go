@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
 	"github.com/UnicomAI/wanwu/internal/bff-service/service"
@@ -12,7 +13,7 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-func AuthOpenAPI(appType string) func(*gin.Context) {
+func AuthOpenAPIKey(openApiType string) func(*gin.Context) {
 	return func(ctx *gin.Context) {
 		token, err := getApiKey(ctx)
 		if err != nil {
@@ -20,27 +21,55 @@ func AuthOpenAPI(appType string) func(*gin.Context) {
 			ctx.Abort()
 			return
 		}
-		appKey, err := service.GetAppKeyByKey(ctx, token)
+		apiKey, err := service.GetApiKeyByKey(ctx, token)
 		if err != nil {
 			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, err.Error())
 			ctx.Abort()
 			return
 		}
-		if appKey.AppType != appType {
-			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, "invalid appType")
+		if !apiKey.Status {
+			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, "api key disabled")
 			ctx.Abort()
 			return
 		}
-		ctx.Set(gin_util.USER_ID, appKey.UserId)
-		ctx.Set(gin_util.X_ORG_ID, appKey.OrgId)
-		ctx.Set(gin_util.APP_ID, appKey.AppId)
+		if apiKey.ExpiredAt != 0 && apiKey.ExpiredAt < time.Now().UnixMilli() {
+			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, "api key expired")
+			ctx.Abort()
+			return
+		}
+		ctx.Set(gin_util.USER_ID, apiKey.UserId)
+		ctx.Set(gin_util.X_ORG_ID, apiKey.OrgId)
 	}
-
 }
 
-func AuthOpenAPIByQuery(appType string) func(*gin.Context) {
+// func AuthOpenAPI(appType string) func(*gin.Context) {
+// 	return func(ctx *gin.Context) {
+// 		token, err := getAppKey(ctx)
+// 		if err != nil {
+// 			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, err.Error())
+// 			ctx.Abort()
+// 			return
+// 		}
+// 		appKey, err := service.GetAppKeyByKey(ctx, token)
+// 		if err != nil {
+// 			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, err.Error())
+// 			ctx.Abort()
+// 			return
+// 		}
+// 		if appKey.AppType != appType {
+// 			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, "invalid appType")
+// 			ctx.Abort()
+// 			return
+// 		}
+// 		ctx.Set(gin_util.USER_ID, appKey.UserId)
+// 		ctx.Set(gin_util.X_ORG_ID, appKey.OrgId)
+// 		ctx.Set(gin_util.APP_ID, appKey.AppId)
+// 	}
+//}
+
+func AuthAppKeyByQuery(appType string) func(*gin.Context) {
 	return func(ctx *gin.Context) {
-		token, err := getApiKeyByQuery(ctx)
+		token, err := getAppKeyByQuery(ctx)
 		if err != nil {
 			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, err.Error())
 			ctx.Abort()
@@ -64,6 +93,7 @@ func AuthOpenAPIByQuery(appType string) func(*gin.Context) {
 
 }
 
+// --- internal ---
 func getApiKey(ctx *gin.Context) (string, error) {
 	authorization := ctx.Request.Header.Get("Authorization")
 	if authorization != "" {
@@ -78,7 +108,7 @@ func getApiKey(ctx *gin.Context) (string, error) {
 	}
 }
 
-func getApiKeyByQuery(ctx *gin.Context) (string, error) {
+func getAppKeyByQuery(ctx *gin.Context) (string, error) {
 	key := ctx.Query("key")
 	if key != "" {
 		return key, nil

@@ -13,6 +13,7 @@ service AppService {
   rpc ListApiKeys(ListApiKeysReq) returns (ApiKeyInfoList) {}
   rpc UpdateApiKey(UpdateApiKeyReq) returns (google.protobuf.Empty) {}
   rpc UpdateApiKeyStatus(UpdateApiKeyStatusReq) returns (google.protobuf.Empty) {}
+  rpc GetApiKeyByKey(GetApiKeyByKeyReq) returns (ApiKeyInfo) {}
   // --- appKey ---
   rpc GenAppKey(GenAppKeyReq) returns (AppKeyInfo) {}
   rpc GetAppKeyList(GetAppKeyListReq) returns (AppKeyInfoList) {}
@@ -79,6 +80,9 @@ message UpdateApiKeyStatusReq {
   bool status = 2; // false-禁用, true-启用
 }
 
+message GetApiKeyByKeyReq {
+  string apiKey = 1;
+}
 // 列表请求
 message ListApiKeysReq {
   int32 pageNo = 1;
@@ -91,12 +95,13 @@ message ListApiKeysReq {
 message ApiKeyInfo {
   string keyId = 1; // ID
   string key = 2; // 生成的ApiKey
-  string creator = 3; // 创建者
+  string userId = 3; // 创建者
   string name = 4; // 名称
   string desc = 5; // 描述
   int64 expiredAt = 6; // 过期时间 yyyy-mm-dd
   int64 createdAt = 7; // 创建时间 yyyy-mm-dd
   bool status = 8; // 状态
+  string orgId = 9; // 组织
 }
 
 
@@ -134,7 +139,7 @@ message DelAppKeyReq {
 }
 
 message GetAppKeyByKeyReq {
-  string appKeyId = 1;
+  string appKey = 1;
 }
 
 // API Key列表响应

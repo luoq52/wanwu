@@ -30,7 +30,7 @@ func GetAppBaseUrl(ctx *gin.Context, req request.GetAppBaseUrlRequest) (string, 
 }
 
 func GetAppKeyByKey(ctx *gin.Context, appKey string) (*app_service.AppKeyInfo, error) {
-	return app.GetAppKeyByKey(ctx.Request.Context(), &app_service.GetAppKeyByKeyReq{AppKeyId: appKey})
+	return app.GetAppKeyByKey(ctx.Request.Context(), &app_service.GetAppKeyByKeyReq{AppKey: appKey})
 }
 
 func GenAppKey(ctx *gin.Context, userId, orgId string, req request.GenAppKeyRequest) (*response.AppResponse, error) {

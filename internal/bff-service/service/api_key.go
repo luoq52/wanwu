@@ -85,6 +85,10 @@ func UpdateApiKeyStatus(ctx *gin.Context, req request.UpdateAPIKeyStatusRequest)
 	return nil
 }
 
+func GetApiKeyByKey(ctx *gin.Context, apiKey string) (*app_service.ApiKeyInfo, error) {
+	return app.GetApiKeyByKey(ctx.Request.Context(), &app_service.GetApiKeyByKeyReq{ApiKey: apiKey})
+}
+
 // --- internal ---
 func getUserNameById(ctx *gin.Context, userId string) string {
 	ret, err := iam.GetUserSelectByUserIDs(ctx.Request.Context(), &iam_service.GetUserSelectByUserIDsReq{
