@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -9,6 +10,7 @@ import (
 	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
 	"github.com/UnicomAI/wanwu/internal/bff-service/service"
 	gin_util "github.com/UnicomAI/wanwu/pkg/gin-util"
+	"github.com/UnicomAI/wanwu/pkg/util"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc/codes"
 )
@@ -93,6 +95,42 @@ func AuthAppKeyByQuery(appType string) func(*gin.Context) {
 
 }
 
+// AuthOpenAPIKnowledge 校验知识库权限
+func AuthOpenAPIKnowledge(fieldName string, permissionType int32) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		defer util.PrintPanicStack()
+		//1.获取value值
+		value := getFieldValue(ctx, fieldName)
+		if len(value) == 0 {
+			gin_util.ResponseErrWithStatus(ctx, http.StatusBadRequest, errors.New("knowledgeId is required"))
+			ctx.Abort()
+			return
+		}
+		//2.校验用户授权权限
+		err := openAPIKnowledgeGrantUser(ctx, value, permissionType)
+		//3.返回结果
+		if err != nil {
+			gin_util.ResponseErrWithStatus(ctx, http.StatusBadRequest, err)
+			ctx.Abort()
+			return
+		}
+	}
+}
+
+func openAPIKnowledgeGrantUser(ctx *gin.Context, knowledgeId string, permissionType int32) error {
+	// userID orgID
+	userID, orgID := getOpenAPIUserID(ctx), getOpenAPIOrgID(ctx)
+	if len(userID) == 0 || len(orgID) == 0 {
+		return errors.New("USER-ID or X-Org-Id is empty")
+	}
+
+	// check user knowledge permission
+	if err := service.CheckKnowledgeUserPermission(ctx, userID, orgID, knowledgeId, permissionType); err != nil {
+		return err
+	}
+	return nil
+}
+
 // --- internal ---
 func getApiKey(ctx *gin.Context) (string, error) {
 	authorization := ctx.Request.Header.Get("Authorization")
@@ -115,4 +153,14 @@ func getAppKeyByQuery(ctx *gin.Context) (string, error) {
 	} else {
 		return "", fmt.Errorf("token is nil")
 	}
+}
+
+// 获取当前用户ID
+func getOpenAPIUserID(ctx *gin.Context) string {
+	return ctx.GetString(gin_util.USER_ID)
+}
+
+// 获取当前组织ID
+func getOpenAPIOrgID(ctx *gin.Context) string {
+	return ctx.GetString(gin_util.X_ORG_ID)
 }

@@ -137,13 +137,13 @@ func GetDocConfig(ctx *gin.Context) {
 //	@Security		JWT
 //	@Accept			json
 //	@Produce		json
-//	@Param			data	query		request.DocListReq	true	"文档列表查询请求参数"
+//	@Param			data	body		request.DocListReq	true	"文档列表查询请求参数"
 //	@Success		200		{object}	response.Response{data=response.DocPageResult}
-//	@Router			/knowledge/doc/list [get]
+//	@Router			/knowledge/doc/list [post]
 func GetDocList(ctx *gin.Context) {
 	userId, orgId := getUserID(ctx), getOrgID(ctx)
 	var req request.DocListReq
-	if !gin_util.BindQuery(ctx, &req) {
+	if !gin_util.Bind(ctx, &req) {
 		return
 	}
 	resp, err := service.GetDocList(ctx, userId, orgId, &req)
