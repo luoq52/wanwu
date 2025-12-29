@@ -1503,7 +1503,7 @@ export default {
   }
 
   .drawer-test {
-    width: 670px;
+    min-width: 670px;
   }
 }
 </style>
