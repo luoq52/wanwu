@@ -15,11 +15,12 @@ import (
 // --- openapi request ---
 
 type RerankReq struct {
-	Documents       []string `json:"documents" validate:"required"`
+	Documents       []string `json:"documents" validate:"required"` // 需要重排序的文本
 	Model           string   `json:"model" validate:"required"`
 	Query           string   `json:"query" validate:"required"`
 	ReturnDocuments *bool    `json:"return_documents,omitempty"`
-	TopN            *int     `json:"top_n,omitempty"`
+	TopN            *int     `json:"top_n,omitempty"` // 返回排序后的top_n个文档。默认返回全部文档。
+	User            *string  `json:"user,omitempty"`  // 用户标识（兼容千帆)
 }
 
 func (req *RerankReq) Check() error {
@@ -52,9 +53,9 @@ type RerankResp struct {
 }
 
 type Result struct {
-	Index          int       `json:"index"`
-	Document       *Document `json:"document,omitempty"`
-	RelevanceScore float64   `json:"relevance_score" validate:"required"`
+	Index          int         `json:"index"`
+	Document       interface{} `json:"document,omitempty"`
+	RelevanceScore float64     `json:"relevance_score" validate:"required"`
 }
 
 type Document struct {
@@ -62,9 +63,9 @@ type Document struct {
 }
 
 type Usage struct {
-	PromptTokens     int `json:"prompt_tokens"`
-	TotalTokens      int `json:"total_tokens"`
-	CompletionTokens int `json:"completion_tokens"`
+	PromptTokens     int `json:"prompt_tokens,omitempty"`
+	TotalTokens      int `json:"total_tokens,omitempty"`
+	CompletionTokens int `json:"completion_tokens,omitempty"`
 }
 
 // --- request ---
@@ -156,12 +157,13 @@ func Rerank(ctx context.Context, provider, apiKey, url string, req map[string]in
 	resp, err := request.Post(url)
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v rerank err: %v", url, provider, err)
-	} else if resp.StatusCode() >= 300 {
-		return nil, fmt.Errorf("request %v %v rerank http status %v msg: %v", url, provider, resp.StatusCode(), resp.String())
 	}
 	b, err := io.ReadAll(resp.RawResponse.Body)
 	if err != nil {
-		return nil, fmt.Errorf("request %v %v rerank read response body err: %v", url, provider, err)
+		return nil, fmt.Errorf("request %v %v rerank read response body failed: %v", url, provider, err)
+	}
+	if resp.StatusCode() >= 300 {
+		return nil, fmt.Errorf("request %v %v rerank http status %v msg: %v", url, provider, resp.StatusCode(), string(b))
 	}
 	return b, nil
 }

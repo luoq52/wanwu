@@ -78,7 +78,10 @@ minio:
   password: Wanwu123456
   bucket: rag-doc
   public-rag-bucket: rag-public
+  public-export-bucket: export-public
   knowledge-dir: /knowledge
+  knowledge-export-dir: knowledge
+  qa-export-dir: qa
 
 kafka:
   addr: kafka-wanwu:9092
@@ -121,6 +124,16 @@ rag-server:
   update-report-uri: '/rag/update-report'
   batch-delete-reports-uri: '/rag/batch-delete-reports'
   knowledge-graph-uri: '/rag/knowledgeBase-graph'
+  init-QA-base-uri: '/rag/init-QA-base'
+  delete-QA-base-uri: '/rag/delete-QA-base'
+  update-QA-metas-uri: '/rag/update-QA-metas'
+  delete-QA-meta-key-uri: '/rag/delete-QA-meta-by-keys'
+  rename-QA-meta-key-uri: '/rag/rename-QA-meta-keys'
+  batch-add-qa-pairs-uri: '/rag/batch-add-QAs'
+  update-qa-pair-uri: '/rag/update-QA'
+  update-qa-pair-status-uri: '/rag/update-QA-status'
+  batch-delete-qa-pairs-uri: '/rag/batch-delete-QAs'
+  knowledge-QA-hit-uri: '/callback/v1/rag/search-QA-base'
   timeout: 60
 
 usage-limit:
@@ -143,6 +156,8 @@ usage-limit:
   file-size-limit: 30
   #上传接口并发限制
   upload-concurrent-limit: 100
+  # url数量限制,配置小于等于0时则不限制
+  url-count-limit: 100
 
 knowledge-doc-config:
   doc-local-file-path: static/temp

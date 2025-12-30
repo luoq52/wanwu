@@ -8,6 +8,7 @@ import (
 
 	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
 	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
+	"github.com/UnicomAI/wanwu/internal/bff-service/config"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
 	"github.com/UnicomAI/wanwu/internal/bff-service/pkg/ahocorasick"
 	"github.com/UnicomAI/wanwu/pkg/constant"
@@ -16,11 +17,12 @@ import (
 	sse_util "github.com/UnicomAI/wanwu/pkg/sse-util"
 	"github.com/UnicomAI/wanwu/pkg/util"
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
 )
 
-func AssistantConversionStream(ctx *gin.Context, userId, orgId string, req request.ConversionStreamRequest) error {
+func AssistantConversionStream(ctx *gin.Context, userId, orgId string, req request.ConversionStreamRequest, needLatestPublished bool) error {
 	// 1. CallAssistantConversationStream
-	chatCh, err := CallAssistantConversationStream(ctx, userId, orgId, req)
+	chatCh, err := CallAssistantConversationStream(ctx, userId, orgId, req, needLatestPublished)
 	if err != nil {
 		return err
 	}
@@ -30,11 +32,23 @@ func AssistantConversionStream(ctx *gin.Context, userId, orgId string, req reque
 	return nil
 }
 
-func CallAssistantConversationStream(ctx *gin.Context, userId, orgId string, req request.ConversionStreamRequest) (<-chan string, error) {
+func CallAssistantConversationStream(ctx *gin.Context, userId, orgId string, req request.ConversionStreamRequest, needLatestPublished bool) (<-chan string, error) {
 	// 根据agentID获取敏感词配置
-	agentInfo, err := assistant.GetAssistantInfo(ctx, &assistant_service.GetAssistantInfoReq{
-		AssistantId: req.AssistantId,
-	})
+	var agentInfo *assistant_service.AssistantInfo
+	var err error
+	if needLatestPublished {
+		agentInfo, err = assistant.AssistantSnapshotInfo(ctx, &assistant_service.AssistantSnapshotInfoReq{
+			AssistantId: req.AssistantId,
+		})
+	} else {
+		agentInfo, err = assistant.GetAssistantInfo(ctx, &assistant_service.GetAssistantInfoReq{
+			AssistantId: req.AssistantId,
+			Identity: &assistant_service.Identity{ //草稿只能看自己的
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +75,7 @@ func CallAssistantConversationStream(ctx *gin.Context, userId, orgId string, req
 			return nil, grpc_util.ErrorStatusWithKey(err_code.Code_BFFSensitiveWordCheck, "bff_sensitive_check_req_default_reply")
 		}
 	}
-	stream, err := assistant.AssistantConversionStream(ctx.Request.Context(), &assistant_service.AssistantConversionStreamReq{
+	agentReq := &assistant_service.AssistantConversionStreamReq{
 		AssistantId:    req.AssistantId,
 		ConversationId: req.ConversationId,
 		FileInfo:       transFileInfo(req.FileInfo),
@@ -72,7 +86,15 @@ func CallAssistantConversationStream(ctx *gin.Context, userId, orgId string, req
 			UserId: userId,
 			OrgId:  orgId,
 		},
-	})
+		Draft: !needLatestPublished,
+	}
+	var stream grpc.ServerStreamingClient[assistant_service.AssistantConversionStreamResp]
+	newAgent := config.Cfg().Agent.UseOldAgent != 1
+	if newAgent {
+		stream, err = assistant.AssistantConversionStreamNew(ctx.Request.Context(), agentReq)
+	} else {
+		stream, err = assistant.AssistantConversionStream(ctx.Request.Context(), agentReq)
+	}
 	if err != nil {
 		return nil, err
 	}

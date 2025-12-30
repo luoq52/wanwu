@@ -25,7 +25,7 @@ import (
 //	@Router		/model/{modelId} [get]
 func GetModelById(ctx *gin.Context) {
 	modelId := ctx.Param("modelId")
-	resp, err := service.GetModelById(ctx, &request.GetModelByIdRequest{
+	resp, err := service.GetModelById(ctx, &request.GetModelRequest{
 		BaseModelRequest: request.BaseModelRequest{ModelId: modelId}})
 	// 替换callback返回的模型中的apiKey/endpointUrl信息
 	if resp != nil && resp.Config != nil {
@@ -161,4 +161,42 @@ func ModelGui(ctx *gin.Context) {
 		return
 	}
 	service.ModelGui(ctx, ctx.Param("modelId"), &data)
+}
+
+// ModelAsr
+//
+//	@Tags		callback
+//	@Summary	Model Asr
+//	@Accept		multipart/form-data
+//	@Produce	json
+//	@Param		modelId	path		string	true	"模型ID"
+//	@Param		file	formData	file	true	"语音文件"
+//	@Param		config	formData	string	true	"请求参数"
+//	@Success	200		{object}	mp_common.AsrResp{}
+//	@Router		/model/{modelId}/asr [post]
+func ModelAsr(ctx *gin.Context) {
+	var data mp_common.AsrReq
+	if !gin_util.BindForm(ctx, &data) {
+		return
+	}
+	service.ModelAsr(ctx, ctx.Param("modelId"), &data)
+}
+
+// ModelText2Image
+//
+//	@Tags		callback
+//	@Summary	Model Text-to-Image
+//	@Accept		multipart/form-data
+//	@Accept		json
+//	@Produce	json
+//	@Param		modelId	path		string						true	"模型ID"
+//	@Param		data	body		mp_common.Text2ImageReq{}	true	"请求参数"
+//	@Success	200		{object}	mp_common.Text2ImageResp{}
+//	@Router		/model/{modelId}/text2image [post]
+func ModelText2Image(ctx *gin.Context) {
+	var data mp_common.Text2ImageReq
+	if !gin_util.BindForm(ctx, &data) {
+		return
+	}
+	service.ModelText2Image(ctx, ctx.Param("modelId"), &data)
 }

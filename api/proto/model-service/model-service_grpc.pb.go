@@ -23,36 +23,36 @@ const (
 	ModelService_ImportModel_FullMethodName       = "/model_service.ModelService/ImportModel"
 	ModelService_UpdateModel_FullMethodName       = "/model_service.ModelService/UpdateModel"
 	ModelService_DeleteModel_FullMethodName       = "/model_service.ModelService/DeleteModel"
-	ModelService_GetModel_FullMethodName          = "/model_service.ModelService/GetModel"
-	ModelService_ListModels_FullMethodName        = "/model_service.ModelService/ListModels"
 	ModelService_ChangeModelStatus_FullMethodName = "/model_service.ModelService/ChangeModelStatus"
-	ModelService_GetModelById_FullMethodName      = "/model_service.ModelService/GetModelById"
-	ModelService_ListTypeModels_FullMethodName    = "/model_service.ModelService/ListTypeModels"
+	ModelService_GetModel_FullMethodName          = "/model_service.ModelService/GetModel"
+	ModelService_GetModelByUuid_FullMethodName    = "/model_service.ModelService/GetModelByUuid"
+	ModelService_ListModels_FullMethodName        = "/model_service.ModelService/ListModels"
 	ModelService_GetModelByIds_FullMethodName     = "/model_service.ModelService/GetModelByIds"
+	ModelService_ListTypeModels_FullMethodName    = "/model_service.ModelService/ListTypeModels"
 )
 
 // ModelServiceClient is the client API for ModelService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ModelServiceClient interface {
-	// 模型导入(默认启用
+	// 模型导入
 	ImportModel(ctx context.Context, in *ModelInfo, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 导入模型更新
 	UpdateModel(ctx context.Context, in *ModelInfo, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// 导入模型删除
 	DeleteModel(ctx context.Context, in *DeleteModelReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// ‌查询单个模型‌
-	GetModel(ctx context.Context, in *GetModelReq, opts ...grpc.CallOption) (*ModelInfo, error)
-	// 导入模型列表展示
-	ListModels(ctx context.Context, in *ListModelsReq, opts ...grpc.CallOption) (*ModelInfos, error)
 	// 模型启用/关闭
 	ChangeModelStatus(ctx context.Context, in *ModelStatusReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// 根据模型ID查询
-	GetModelById(ctx context.Context, in *GetModelByIdReq, opts ...grpc.CallOption) (*ModelInfo, error)
-	// llm/rerank/embedding模型列表展示
-	ListTypeModels(ctx context.Context, in *ListTypeModelsReq, opts ...grpc.CallOption) (*ModelInfos, error)
+	// ‌查询单个模型‌
+	GetModel(ctx context.Context, in *GetModelReq, opts ...grpc.CallOption) (*ModelInfo, error)
+	// 根据uuid获取modelId
+	GetModelByUuid(ctx context.Context, in *GetModelByUuidReq, opts ...grpc.CallOption) (*ModelInfo, error)
+	// 导入模型列表展示
+	ListModels(ctx context.Context, in *ListModelsReq, opts ...grpc.CallOption) (*ModelInfos, error)
 	// 根据模型ID列表查询
 	GetModelByIds(ctx context.Context, in *GetModelByIdsReq, opts ...grpc.CallOption) (*ModelInfos, error)
+	// llm/rerank/embedding模型列表展示
+	ListTypeModels(ctx context.Context, in *ListTypeModelsReq, opts ...grpc.CallOption) (*ModelInfos, error)
 }
 
 type modelServiceClient struct {
@@ -93,10 +93,30 @@ func (c *modelServiceClient) DeleteModel(ctx context.Context, in *DeleteModelReq
 	return out, nil
 }
 
+func (c *modelServiceClient) ChangeModelStatus(ctx context.Context, in *ModelStatusReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, ModelService_ChangeModelStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *modelServiceClient) GetModel(ctx context.Context, in *GetModelReq, opts ...grpc.CallOption) (*ModelInfo, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ModelInfo)
 	err := c.cc.Invoke(ctx, ModelService_GetModel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *modelServiceClient) GetModelByUuid(ctx context.Context, in *GetModelByUuidReq, opts ...grpc.CallOption) (*ModelInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ModelInfo)
+	err := c.cc.Invoke(ctx, ModelService_GetModelByUuid_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,20 +133,10 @@ func (c *modelServiceClient) ListModels(ctx context.Context, in *ListModelsReq, 
 	return out, nil
 }
 
-func (c *modelServiceClient) ChangeModelStatus(ctx context.Context, in *ModelStatusReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *modelServiceClient) GetModelByIds(ctx context.Context, in *GetModelByIdsReq, opts ...grpc.CallOption) (*ModelInfos, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, ModelService_ChangeModelStatus_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *modelServiceClient) GetModelById(ctx context.Context, in *GetModelByIdReq, opts ...grpc.CallOption) (*ModelInfo, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ModelInfo)
-	err := c.cc.Invoke(ctx, ModelService_GetModelById_FullMethodName, in, out, cOpts...)
+	out := new(ModelInfos)
+	err := c.cc.Invoke(ctx, ModelService_GetModelByIds_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -143,38 +153,28 @@ func (c *modelServiceClient) ListTypeModels(ctx context.Context, in *ListTypeMod
 	return out, nil
 }
 
-func (c *modelServiceClient) GetModelByIds(ctx context.Context, in *GetModelByIdsReq, opts ...grpc.CallOption) (*ModelInfos, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ModelInfos)
-	err := c.cc.Invoke(ctx, ModelService_GetModelByIds_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ModelServiceServer is the server API for ModelService service.
 // All implementations must embed UnimplementedModelServiceServer
 // for forward compatibility.
 type ModelServiceServer interface {
-	// 模型导入(默认启用
+	// 模型导入
 	ImportModel(context.Context, *ModelInfo) (*emptypb.Empty, error)
 	// 导入模型更新
 	UpdateModel(context.Context, *ModelInfo) (*emptypb.Empty, error)
 	// 导入模型删除
 	DeleteModel(context.Context, *DeleteModelReq) (*emptypb.Empty, error)
-	// ‌查询单个模型‌
-	GetModel(context.Context, *GetModelReq) (*ModelInfo, error)
-	// 导入模型列表展示
-	ListModels(context.Context, *ListModelsReq) (*ModelInfos, error)
 	// 模型启用/关闭
 	ChangeModelStatus(context.Context, *ModelStatusReq) (*emptypb.Empty, error)
-	// 根据模型ID查询
-	GetModelById(context.Context, *GetModelByIdReq) (*ModelInfo, error)
-	// llm/rerank/embedding模型列表展示
-	ListTypeModels(context.Context, *ListTypeModelsReq) (*ModelInfos, error)
+	// ‌查询单个模型‌
+	GetModel(context.Context, *GetModelReq) (*ModelInfo, error)
+	// 根据uuid获取modelId
+	GetModelByUuid(context.Context, *GetModelByUuidReq) (*ModelInfo, error)
+	// 导入模型列表展示
+	ListModels(context.Context, *ListModelsReq) (*ModelInfos, error)
 	// 根据模型ID列表查询
 	GetModelByIds(context.Context, *GetModelByIdsReq) (*ModelInfos, error)
+	// llm/rerank/embedding模型列表展示
+	ListTypeModels(context.Context, *ListTypeModelsReq) (*ModelInfos, error)
 	mustEmbedUnimplementedModelServiceServer()
 }
 
@@ -194,23 +194,23 @@ func (UnimplementedModelServiceServer) UpdateModel(context.Context, *ModelInfo) 
 func (UnimplementedModelServiceServer) DeleteModel(context.Context, *DeleteModelReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteModel not implemented")
 }
+func (UnimplementedModelServiceServer) ChangeModelStatus(context.Context, *ModelStatusReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeModelStatus not implemented")
+}
 func (UnimplementedModelServiceServer) GetModel(context.Context, *GetModelReq) (*ModelInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetModel not implemented")
+}
+func (UnimplementedModelServiceServer) GetModelByUuid(context.Context, *GetModelByUuidReq) (*ModelInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetModelByUuid not implemented")
 }
 func (UnimplementedModelServiceServer) ListModels(context.Context, *ListModelsReq) (*ModelInfos, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListModels not implemented")
 }
-func (UnimplementedModelServiceServer) ChangeModelStatus(context.Context, *ModelStatusReq) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ChangeModelStatus not implemented")
-}
-func (UnimplementedModelServiceServer) GetModelById(context.Context, *GetModelByIdReq) (*ModelInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetModelById not implemented")
+func (UnimplementedModelServiceServer) GetModelByIds(context.Context, *GetModelByIdsReq) (*ModelInfos, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetModelByIds not implemented")
 }
 func (UnimplementedModelServiceServer) ListTypeModels(context.Context, *ListTypeModelsReq) (*ModelInfos, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListTypeModels not implemented")
-}
-func (UnimplementedModelServiceServer) GetModelByIds(context.Context, *GetModelByIdsReq) (*ModelInfos, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetModelByIds not implemented")
 }
 func (UnimplementedModelServiceServer) mustEmbedUnimplementedModelServiceServer() {}
 func (UnimplementedModelServiceServer) testEmbeddedByValue()                      {}
@@ -287,6 +287,24 @@ func _ModelService_DeleteModel_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ModelService_ChangeModelStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModelStatusReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModelServiceServer).ChangeModelStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModelService_ChangeModelStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModelServiceServer).ChangeModelStatus(ctx, req.(*ModelStatusReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ModelService_GetModel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetModelReq)
 	if err := dec(in); err != nil {
@@ -301,6 +319,24 @@ func _ModelService_GetModel_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ModelServiceServer).GetModel(ctx, req.(*GetModelReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ModelService_GetModelByUuid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetModelByUuidReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ModelServiceServer).GetModelByUuid(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ModelService_GetModelByUuid_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ModelServiceServer).GetModelByUuid(ctx, req.(*GetModelByUuidReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -323,38 +359,20 @@ func _ModelService_ListModels_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ModelService_ChangeModelStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ModelStatusReq)
+func _ModelService_GetModelByIds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetModelByIdsReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ModelServiceServer).ChangeModelStatus(ctx, in)
+		return srv.(ModelServiceServer).GetModelByIds(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: ModelService_ChangeModelStatus_FullMethodName,
+		FullMethod: ModelService_GetModelByIds_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ModelServiceServer).ChangeModelStatus(ctx, req.(*ModelStatusReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ModelService_GetModelById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetModelByIdReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ModelServiceServer).GetModelById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ModelService_GetModelById_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ModelServiceServer).GetModelById(ctx, req.(*GetModelByIdReq))
+		return srv.(ModelServiceServer).GetModelByIds(ctx, req.(*GetModelByIdsReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -373,24 +391,6 @@ func _ModelService_ListTypeModels_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ModelServiceServer).ListTypeModels(ctx, req.(*ListTypeModelsReq))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ModelService_GetModelByIds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetModelByIdsReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ModelServiceServer).GetModelByIds(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ModelService_GetModelByIds_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ModelServiceServer).GetModelByIds(ctx, req.(*GetModelByIdsReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -415,28 +415,28 @@ var ModelService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ModelService_DeleteModel_Handler,
 		},
 		{
+			MethodName: "ChangeModelStatus",
+			Handler:    _ModelService_ChangeModelStatus_Handler,
+		},
+		{
 			MethodName: "GetModel",
 			Handler:    _ModelService_GetModel_Handler,
+		},
+		{
+			MethodName: "GetModelByUuid",
+			Handler:    _ModelService_GetModelByUuid_Handler,
 		},
 		{
 			MethodName: "ListModels",
 			Handler:    _ModelService_ListModels_Handler,
 		},
 		{
-			MethodName: "ChangeModelStatus",
-			Handler:    _ModelService_ChangeModelStatus_Handler,
-		},
-		{
-			MethodName: "GetModelById",
-			Handler:    _ModelService_GetModelById_Handler,
+			MethodName: "GetModelByIds",
+			Handler:    _ModelService_GetModelByIds_Handler,
 		},
 		{
 			MethodName: "ListTypeModels",
 			Handler:    _ModelService_ListTypeModels_Handler,
-		},
-		{
-			MethodName: "GetModelByIds",
-			Handler:    _ModelService_GetModelByIds_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

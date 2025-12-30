@@ -7,10 +7,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// ChatRag
+// ChatDraftRag
 //
 //	@Tags		rag
-//	@Summary	私域 RAG 问答
+//	@Summary	私域 草稿RAG 问答
+//	@Description
+//	@Security	JWT
+//	@Accept		json
+//	@Produce	json
+//	@Param		data	body		request.ChatRagRequest	true	"RAG问答请求参数"
+//	@Success	200		{object}	response.Response
+//	@Router		/rag/chat/draft [post]
+func ChatDraftRag(ctx *gin.Context) {
+	userId, orgId := getUserID(ctx), getOrgID(ctx)
+	var req request.ChatRagRequest
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	if err := service.ChatRagStream(ctx, userId, orgId, req, false); err != nil {
+		gin_util.Response(ctx, nil, err)
+	}
+}
+
+// ChatPublishedRag
+//
+//	@Tags		rag
+//	@Summary	已发布 RAG 问答
 //	@Description
 //	@Security	JWT
 //	@Accept		json
@@ -18,13 +40,13 @@ import (
 //	@Param		data	body		request.ChatRagRequest	true	"RAG问答请求参数"
 //	@Success	200		{object}	response.Response
 //	@Router		/rag/chat [post]
-func ChatRag(ctx *gin.Context) {
+func ChatPublishedRag(ctx *gin.Context) {
 	userId, orgId := getUserID(ctx), getOrgID(ctx)
 	var req request.ChatRagRequest
 	if !gin_util.Bind(ctx, &req) {
 		return
 	}
-	if err := service.ChatRagStream(ctx, userId, orgId, req); err != nil {
+	if err := service.ChatRagStream(ctx, userId, orgId, req, true); err != nil {
 		gin_util.Response(ctx, nil, err)
 	}
 }
@@ -111,10 +133,30 @@ func DeleteRag(ctx *gin.Context) {
 	gin_util.Response(ctx, nil, err)
 }
 
-// GetRag
+// GetDraftRag
 //
 //	@Tags		rag
-//	@Summary	获取RAG信息
+//	@Summary	获取草稿RAG信息
+//	@Description
+//	@Security	JWT
+//	@Accept		json
+//	@Produce	json
+//	@Param		data	query		request.RagReq	true	"获取RAG信息的请求参数"
+//	@Success	200		{object}	response.Response{data=response.RagInfo}
+//	@Router		/appspace/rag/draft [get]
+func GetDraftRag(ctx *gin.Context) {
+	var req request.RagReq
+	if !gin_util.BindQuery(ctx, &req) {
+		return
+	}
+	resp, err := service.GetRag(ctx, req, false)
+	gin_util.Response(ctx, resp, err)
+}
+
+// GetPublishedRag
+//
+//	@Tags		rag
+//	@Summary	获取已发布RAG信息
 //	@Description
 //	@Security	JWT
 //	@Accept		json
@@ -122,12 +164,12 @@ func DeleteRag(ctx *gin.Context) {
 //	@Param		data	query		request.RagReq	true	"获取RAG信息的请求参数"
 //	@Success	200		{object}	response.Response{data=response.RagInfo}
 //	@Router		/appspace/rag [get]
-func GetRag(ctx *gin.Context) {
+func GetPublishedRag(ctx *gin.Context) {
 	var req request.RagReq
 	if !gin_util.BindQuery(ctx, &req) {
 		return
 	}
-	resp, err := service.GetRag(ctx, req)
+	resp, err := service.GetRag(ctx, req, true)
 	gin_util.Response(ctx, resp, err)
 }
 

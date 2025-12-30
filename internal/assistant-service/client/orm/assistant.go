@@ -2,6 +2,7 @@ package orm
 
 import (
 	"context"
+	"errors"
 	"strconv"
 	"strings"
 
@@ -62,6 +63,11 @@ func (c *Client) DeleteAssistant(ctx context.Context, assistantID uint32) *err_c
 		if err := sqlopt.WithAssistantID(assistantID).Apply(tx).Delete(&model.AssistantTool{}).Error; err != nil {
 			return toErrStatus("assistant_delete", err.Error())
 		}
+
+		// 同步删除智能体多版本信息
+		if err := sqlopt.WithAssistantID(assistantID).Apply(tx).Delete(&model.AssistantSnapshot{}).Error; err != nil {
+			return toErrStatus("assistant_delete", err.Error())
+		}
 		return nil
 	})
 }
@@ -89,6 +95,18 @@ func (c *Client) GetAssistantsByIDs(ctx context.Context, assistantIDs []uint32) 
 		}
 		return nil
 	})
+}
+
+func (c *Client) GetAssistantByUuid(ctx context.Context, uuid string) (*model.Assistant, *err_code.Status) {
+	var assistant model.Assistant
+	if err := sqlopt.WithUuid(uuid).Apply(c.db.WithContext(ctx)).
+		First(&assistant).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, toErrStatus("assistant_get_by_uuid", "assistant not found")
+		}
+		return nil, toErrStatus("assistant_get_by_uuid", err.Error())
+	}
+	return &assistant, nil
 }
 
 func (c *Client) GetAssistantList(ctx context.Context, userID, orgID string, name string) ([]*model.Assistant, int64, *err_code.Status) {

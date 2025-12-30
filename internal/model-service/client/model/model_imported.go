@@ -2,6 +2,7 @@ package model
 
 type ModelImported struct {
 	ID             uint32 `gorm:"primary_key;auto_increment;not null;"`
+	UUID           string `gorm:"column:uuid;type:varchar(255);uniqueIndex:idx_unique_uuid;comment:模型uuid"`
 	Provider       string `gorm:"column:provider;index:idx_model_imported_provider_type_model,priority:1;type:varchar(100);comment:模型供应商"`
 	ModelType      string `gorm:"column:model_type;index:idx_model_imported_provider_type_model,priority:2;type:varchar(100);comment:模型类型"`
 	Model          string `gorm:"column:model;index:idx_model_imported_provider_type_model,priority:3;type:varchar(100);comment:模型名称"`

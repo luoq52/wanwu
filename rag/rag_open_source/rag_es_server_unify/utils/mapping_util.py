@@ -160,11 +160,37 @@ community_report_mappings = {
         "content_id": {"type": "keyword"},
         "file_name": {"type": "keyword"},
         "kb_name": {"type": "keyword"},
+        "title": {"type": "text", "analyzer": "ik_max_word", "search_analyzer": "ik_smart"},
         "content": {"type": "text", "analyzer": "ik_max_word", "search_analyzer": "ik_smart"},
         "embedding_content": {"type": "text", "analyzer": "ik_max_word", "search_analyzer": "ik_smart"},
         "chunk_id": {"type": "keyword"},
         "status": {"type": "boolean"},
         "create_time": {"type": "keyword"},
+    }
+}
+
+qa_mappings = {
+    "dynamic_templates": vector_dynamic_templates,
+    "properties": {
+        "qa_pair_id": {"type": "keyword"},
+        "question": {"type": "text", "analyzer": "ik_max_word", "search_analyzer": "ik_smart"},
+        "answer": {"type": "text", "analyzer": "ik_max_word", "search_analyzer": "ik_smart"},
+        "QABase": {"type": "keyword"},
+        "QAId": {"type": "keyword"},
+        "status": {"type": "boolean"},
+        "meta_data": {
+            "properties": {
+                "doc_meta": {
+                    "type": "nested",
+                    "properties": {
+                        "key": {"type": "keyword"},
+                        "int_value": {"type": "long"},
+                        "string_value": {"type": "keyword"},
+                        "value_type": {"type": "keyword"}
+                    }
+                }
+            }
+        }
     }
 }
 

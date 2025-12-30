@@ -22,7 +22,7 @@ import (
 var _default *HttpClient = CreateDefault()
 
 const (
-	timeout        = 120 * time.Second
+	timeout        = 10 * time.Minute
 	connectTimeout = 60 * time.Second
 )
 
@@ -113,6 +113,14 @@ func (c HttpClient) Get(ctx context.Context, httpRequestParams *HttpRequestParam
 
 		request, err2 := http.NewRequest("GET", url, nil)
 		return request, "", err2
+	})
+}
+
+// GetOriResp 此方法需要在外部设置content 超时，并进行defer cancel
+func (c HttpClient) GetOriResp(ctx context.Context, httpRequestParams *HttpRequestParams) (result *http.Response, err error) {
+	return SendRequestOriResp(ctx, c.Client, httpRequestParams, "GET", func(params *HttpRequestParams, ctx context.Context) (*http.Request, string, error) {
+		request, err2 := http.NewRequest("GET", httpRequestParams.Url, nil)
+		return request, jsonContentType, err2
 	})
 }
 

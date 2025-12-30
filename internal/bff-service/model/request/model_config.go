@@ -10,6 +10,7 @@ import (
 type BaseModelRequest struct {
 	ModelId string `json:"modelId" form:"modelId" validate:"required"`
 }
+
 type ModelConfig struct {
 	ModelId     string                  `json:"modelId"`
 	Provider    string                  `json:"provider" validate:"required" enums:"OpenAI-API-compatible,YuanJing"` // 模型供应商

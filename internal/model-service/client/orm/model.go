@@ -37,7 +37,6 @@ func (c *Client) ImportModel(ctx context.Context, tab *model_client.ModelImporte
 	if tab.DisplayName != "" {
 		if err := sqlopt.SQLOptions(
 			sqlopt.WithProvider(tab.Provider),
-			sqlopt.WithModelType(tab.ModelType),
 			sqlopt.WithDisplayName(tab.DisplayName),
 			sqlopt.WithOrgID(tab.OrgID),
 			sqlopt.WithUserID(tab.UserID),
@@ -72,18 +71,24 @@ func (c *Client) DeleteModel(ctx context.Context, tab *model_client.ModelImporte
 }
 
 func (c *Client) UpdateModel(ctx context.Context, tab *model_client.ModelImported) *errs.Status {
-	// 查询
+	// 模型显示名称判重
 	var existing model_client.ModelImported
 	if err := sqlopt.SQLOptions(
-		sqlopt.WithID(tab.ID),
-	).Apply(c.db).WithContext(ctx).First(&existing).Error; err != nil {
+		sqlopt.WithProvider(tab.Provider),
+		sqlopt.WithDisplayName(tab.DisplayName),
+		sqlopt.WithOrgID(tab.OrgID),
+		sqlopt.WithUserID(tab.UserID),
+	).Apply(c.db).WithContext(ctx).Select("id").First(&existing).Error; err == nil {
+		if tab.ID != existing.ID {
+			return toErrStatus("model_update_err", "model with same display name exist")
+		}
+	} else if err != gorm.ErrRecordNotFound {
 		return toErrStatus("model_update_err", err.Error())
 	}
-	if existing.ModelType != tab.ModelType || existing.Model != tab.Model || existing.Provider != tab.Provider {
-		return toErrStatus("model_update_err", "type,model,provider can not update!")
-	}
 	// 更新
-	if err := c.db.WithContext(ctx).Model(existing).Updates(map[string]interface{}{
+	if err := sqlopt.SQLOptions(
+		sqlopt.WithID(tab.ID),
+	).Apply(c.db).WithContext(ctx).Model(tab).Updates(map[string]interface{}{
 		"display_name":    tab.DisplayName,
 		"model_desc":      tab.ModelDesc,
 		"model_icon_path": tab.ModelIconPath,
@@ -114,22 +119,6 @@ func (c *Client) ChangeModelStatus(ctx context.Context, tab *model_client.ModelI
 	return nil
 }
 
-func (c *Client) GetModelById(ctx context.Context, modelId uint32) (*model_client.ModelImported, *errs.Status) {
-	info := &model_client.ModelImported{}
-	if err := sqlopt.WithID(modelId).Apply(c.db).WithContext(ctx).First(info).Error; err != nil {
-		return nil, toErrStatus("model_get_by_id_err", err.Error())
-	}
-	return info, nil
-}
-
-func (c *Client) GetModelByIds(ctx context.Context, modelIds []uint32) ([]*model_client.ModelImported, *errs.Status) {
-	var models []*model_client.ModelImported
-	if err := sqlopt.WithIDs(modelIds).Apply(c.db).WithContext(ctx).Find(&models).Error; err != nil {
-		return nil, toErrStatus("model_get_by_ids_err", err.Error())
-	}
-	return models, nil
-}
-
 func (c *Client) GetModel(ctx context.Context, tab *model_client.ModelImported) (*model_client.ModelImported, *errs.Status) {
 	info := &model_client.ModelImported{}
 	if err := sqlopt.SQLOptions(
@@ -140,6 +129,22 @@ func (c *Client) GetModel(ctx context.Context, tab *model_client.ModelImported) 
 		return nil, toErrStatus("model_get_err", err.Error())
 	}
 	return info, nil
+}
+
+func (c *Client) GetModelByUUID(ctx context.Context, uuid string) (*model_client.ModelImported, *errs.Status) {
+	info := &model_client.ModelImported{}
+	if err := sqlopt.WithUUID(uuid).Apply(c.db).WithContext(ctx).First(info).Error; err != nil {
+		return nil, toErrStatus("model_get_by_uuid_err", err.Error())
+	}
+	return info, nil
+}
+
+func (c *Client) GetModelByIds(ctx context.Context, modelIds []uint32) ([]*model_client.ModelImported, *errs.Status) {
+	var models []*model_client.ModelImported
+	if err := sqlopt.WithIDs(modelIds).Apply(c.db).WithContext(ctx).Find(&models).Error; err != nil {
+		return nil, toErrStatus("model_get_by_ids_err", err.Error())
+	}
+	return models, nil
 }
 
 func (c *Client) ListModels(ctx context.Context, tab *model_client.ModelImported) ([]*model_client.ModelImported, *errs.Status) {

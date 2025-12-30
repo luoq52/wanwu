@@ -51,11 +51,3 @@ type ModelStatusRequest struct {
 func (o *ModelStatusRequest) Check() error {
 	return nil
 }
-
-type GetModelByIdRequest struct {
-	BaseModelRequest
-}
-
-func (o *GetModelByIdRequest) Check() error {
-	return nil
-}

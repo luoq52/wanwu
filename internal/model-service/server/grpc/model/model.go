@@ -12,6 +12,7 @@ import (
 
 func (s *Service) ImportModel(ctx context.Context, req *model_service.ModelInfo) (*emptypb.Empty, error) {
 	if err := s.cli.ImportModel(ctx, &model.ModelImported{
+		UUID:           util.NewID(),
 		Provider:       req.Provider,
 		ModelType:      req.ModelType,
 		Model:          req.Model,
@@ -79,33 +80,6 @@ func (s *Service) ChangeModelStatus(ctx context.Context, req *model_service.Mode
 	return nil, nil
 }
 
-func (s *Service) GetModelById(ctx context.Context, req *model_service.GetModelByIdReq) (*model_service.ModelInfo, error) {
-	modelInfo, err := s.cli.GetModelById(ctx, util.MustU32(req.ModelId))
-	if err != nil {
-		return nil, errStatus(errs.Code_ModelGetModelById, err)
-	}
-	return toModelInfo(modelInfo), nil
-}
-
-func toModelInfo(modelInfo *model.ModelImported) *model_service.ModelInfo {
-	return &model_service.ModelInfo{
-		ModelId:        util.Int2Str(modelInfo.ID),
-		Provider:       modelInfo.Provider,
-		ModelType:      modelInfo.ModelType,
-		Model:          modelInfo.Model,
-		DisplayName:    modelInfo.DisplayName,
-		ModelIconPath:  modelInfo.ModelIconPath,
-		IsActive:       modelInfo.IsActive,
-		PublishDate:    modelInfo.PublishDate,
-		ProviderConfig: modelInfo.ProviderConfig,
-		UserId:         modelInfo.UserID,
-		OrgId:          modelInfo.OrgID,
-		CreatedAt:      modelInfo.CreatedAt,
-		UpdatedAt:      modelInfo.UpdatedAt,
-		ModelDesc:      modelInfo.ModelDesc,
-	}
-}
-
 func (s *Service) GetModelByIds(ctx context.Context, req *model_service.GetModelByIdsReq) (*model_service.ModelInfos, error) {
 	var modelIDs []uint32
 	for _, modelID := range req.ModelIds {
@@ -118,19 +92,8 @@ func (s *Service) GetModelByIds(ctx context.Context, req *model_service.GetModel
 	return toModelInfos(modelInfos), nil
 }
 
-func toModelInfos(modelInfos []*model.ModelImported) *model_service.ModelInfos {
-	var res []*model_service.ModelInfo
-	for _, modelInfo := range modelInfos {
-		res = append(res, toModelInfo(modelInfo))
-	}
-	return &model_service.ModelInfos{
-		Models: res,
-		Total:  int64(len(modelInfos)),
-	}
-}
-
 func (s *Service) GetModel(ctx context.Context, req *model_service.GetModelReq) (*model_service.ModelInfo, error) {
-	modelInfos, err := s.cli.GetModel(ctx, &model.ModelImported{
+	modelInfo, err := s.cli.GetModel(ctx, &model.ModelImported{
 		ID: util.MustU32(req.ModelId),
 		PublicModel: model.PublicModel{
 			OrgID:  req.OrgId,
@@ -140,7 +103,15 @@ func (s *Service) GetModel(ctx context.Context, req *model_service.GetModelReq) 
 	if err != nil {
 		return nil, errStatus(errs.Code_ModelGetModel, err)
 	}
-	return toModelInfo(modelInfos), nil
+	return toModelInfo(modelInfo), nil
+}
+
+func (s *Service) GetModelByUuid(ctx context.Context, req *model_service.GetModelByUuidReq) (*model_service.ModelInfo, error) {
+	modelInfo, err := s.cli.GetModelByUUID(ctx, req.Uuid)
+	if err != nil {
+		return nil, errStatus(errs.Code_ModelGetModelByUUID, err)
+	}
+	return toModelInfo(modelInfo), nil
 }
 
 func (s *Service) ListModels(ctx context.Context, req *model_service.ListModelsReq) (*model_service.ModelInfos, error) {
@@ -172,4 +143,35 @@ func (s *Service) ListTypeModels(ctx context.Context, req *model_service.ListTyp
 		return nil, errStatus(errs.Code_ModelListTypeModels, err)
 	}
 	return toModelInfos(modelInfos), nil
+}
+
+func toModelInfo(modelInfo *model.ModelImported) *model_service.ModelInfo {
+	return &model_service.ModelInfo{
+		ModelId:        util.Int2Str(modelInfo.ID),
+		Uuid:           modelInfo.UUID,
+		Provider:       modelInfo.Provider,
+		ModelType:      modelInfo.ModelType,
+		Model:          modelInfo.Model,
+		DisplayName:    modelInfo.DisplayName,
+		ModelIconPath:  modelInfo.ModelIconPath,
+		IsActive:       modelInfo.IsActive,
+		PublishDate:    modelInfo.PublishDate,
+		ProviderConfig: modelInfo.ProviderConfig,
+		UserId:         modelInfo.UserID,
+		OrgId:          modelInfo.OrgID,
+		CreatedAt:      modelInfo.CreatedAt,
+		UpdatedAt:      modelInfo.UpdatedAt,
+		ModelDesc:      modelInfo.ModelDesc,
+	}
+}
+
+func toModelInfos(modelInfos []*model.ModelImported) *model_service.ModelInfos {
+	var res []*model_service.ModelInfo
+	for _, modelInfo := range modelInfos {
+		res = append(res, toModelInfo(modelInfo))
+	}
+	return &model_service.ModelInfos{
+		Models: res,
+		Total:  int64(len(modelInfos)),
+	}
 }

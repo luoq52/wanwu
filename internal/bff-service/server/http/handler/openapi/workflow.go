@@ -1,6 +1,7 @@
 package openapi
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
@@ -16,16 +17,21 @@ import (
 //	@Description	工作流OpenAPI
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	response.Response
+//	@Param			data	body		request.OpenAPIWorkflowRunReq	true	"工作流运行参数"
+//	@Success		200		{object}	response.Response
 //	@Router			/workflow/run [post]
 func WorkflowRun(ctx *gin.Context) {
-	var body []byte
-	if cb, ok := ctx.Get(gin.BodyBytesKey); ok {
-		if cbb, ok := cb.([]byte); ok {
-			body = cbb
-		}
+	var req request.OpenAPIWorkflowRunReq
+	if !gin_util.Bind(ctx, &req) {
+		return
 	}
-	resp, err := service.OpenAPIWorkflowRun(ctx, getAppID(ctx), body)
+	// 转换为 JSON bytes
+	jsonBytes, err := json.Marshal(req.Parameters)
+	if err != nil {
+		gin_util.Response(ctx, nil, err)
+		return
+	}
+	resp, err := service.OpenAPIWorkflowRun(ctx, req.UUID, jsonBytes)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
@@ -56,9 +62,34 @@ func CreateChatflowConversation(ctx *gin.Context) {
 	}
 	userID := getUserID(ctx)
 	orgID := getOrgID(ctx)
-	appID := getAppID(ctx)
 
-	resp, err := service.CreateChatflowConversation(ctx, userID, orgID, appID, req.ConversationName)
+	resp, err := service.CreateChatflowConversation(ctx, userID, orgID, req.UUID, req.ConversationName)
+	if err != nil {
+		gin_util.Response(ctx, nil, err)
+		return
+	}
+	gin_util.Response(ctx, resp, nil)
+}
+
+// GetConversationMessageList
+//
+//	@Tags			openapi
+//	@Summary		对话流根据conversationId获取历史对话
+//	@Description	对话流根据conversationId获取历史对话
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.OpenAPIChatflowGetConversationMessageListRequest	false	"请求参数"
+//	@Success		200		{object}	response.Response{data=response.OpenAPIChatflowGetConversationMessageListResponse}
+//	@Router			/chatflow/conversation/message/list [post]
+func GetConversationMessageList(ctx *gin.Context) {
+	var req request.OpenAPIChatflowGetConversationMessageListRequest
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	userID := getUserID(ctx)
+	orgID := getOrgID(ctx)
+
+	resp, err := service.GetConversationMessageList(ctx, userID, orgID, req.UUID, req.ConversationId, req.Limit)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
@@ -83,10 +114,9 @@ func ChatflowChat(ctx *gin.Context) {
 	}
 	userID := getUserID(ctx)
 	orgID := getOrgID(ctx)
-	appID := getAppID(ctx)
 
 	// 流式处理 - 直接操作响应流
-	err := service.ChatflowChat(ctx, userID, orgID, appID, req.ConversationId, req.Query)
+	err := service.ChatflowChat(ctx, userID, orgID, req.UUID, req.ConversationId, req.Query, req.Parameters)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return

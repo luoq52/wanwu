@@ -15,6 +15,241 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/key": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "更新API密钥",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api.key"
+                ],
+                "summary": "更新API密钥",
+                "parameters": [
+                    {
+                        "description": "更新API密钥参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateAPIKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "创建API密钥",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api.key"
+                ],
+                "summary": "创建API密钥",
+                "parameters": [
+                    {
+                        "description": "创建API密钥参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateAPIKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.APIKeyDetailResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "删除API密钥",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api.key"
+                ],
+                "summary": "删除API\t密钥",
+                "parameters": [
+                    {
+                        "description": "删除API密钥参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.DeleteAPIKeyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/key/list": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "获取API密钥列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api.key"
+                ],
+                "summary": "获取API密钥列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页面编号，从1开始",
+                        "name": "pageNo",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "单页数量，从1开始",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/response.PageResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/response.APIKeyDetailResponse"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/key/status": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "更新API密钥状态",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api.key"
+                ],
+                "summary": "更新API密钥状态",
+                "parameters": [
+                    {
+                        "description": "更新API密钥状态参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateAPIKeyStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/appspace/app": {
             "delete": {
                 "security": [
@@ -56,7 +291,7 @@ const docTemplate = `{
         },
         "/appspace/app/key": {
             "post": {
-                "description": "生成ApiKey",
+                "description": "生成AppKey",
                 "consumes": [
                     "application/json"
                 ],
@@ -66,15 +301,15 @@ const docTemplate = `{
                 "tags": [
                     "app.key"
                 ],
-                "summary": "生成ApiKey",
+                "summary": "生成AppKey",
                 "parameters": [
                     {
-                        "description": "生成ApiKey参数",
+                        "description": "生成AppKey参数",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.GenApiKeyRequest"
+                            "$ref": "#/definitions/request.GenAppKeyRequest"
                         }
                     }
                 ],
@@ -90,7 +325,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.ApiResponse"
+                                            "$ref": "#/definitions/response.AppKeyInfo"
                                         }
                                     }
                                 }
@@ -100,7 +335,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "删除ApiKey",
+                "description": "删除AppKey",
                 "consumes": [
                     "application/json"
                 ],
@@ -110,15 +345,15 @@ const docTemplate = `{
                 "tags": [
                     "app.key"
                 ],
-                "summary": "删除ApiKey",
+                "summary": "删除AppKey",
                 "parameters": [
                     {
-                        "description": "删除Apikey参数",
+                        "description": "删除Appkey参数",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.DelApiKeyRequest"
+                            "$ref": "#/definitions/request.DelAppKeyRequest"
                         }
                     }
                 ],
@@ -134,7 +369,7 @@ const docTemplate = `{
         },
         "/appspace/app/key/list": {
             "get": {
-                "description": "获取ApiKey",
+                "description": "获取AppKey",
                 "consumes": [
                     "application/json"
                 ],
@@ -144,7 +379,7 @@ const docTemplate = `{
                 "tags": [
                     "app.key"
                 ],
-                "summary": "获取ApiKey",
+                "summary": "获取AppKey",
                 "parameters": [
                     {
                         "type": "string",
@@ -175,7 +410,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/response.ApiResponse"
+                                                "$ref": "#/definitions/response.AppKeyInfo"
                                             }
                                         }
                                     }
@@ -567,7 +802,7 @@ const docTemplate = `{
                         "JWT": []
                     }
                 ],
-                "description": "获取Api根地址",
+                "description": "获取App根地址",
                 "consumes": [
                     "application/json"
                 ],
@@ -577,7 +812,7 @@ const docTemplate = `{
                 "tags": [
                     "app.key"
                 ],
-                "summary": "获取Api根地址",
+                "summary": "获取App根地址",
                 "parameters": [
                     {
                         "type": "string",
@@ -611,6 +846,209 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/app/version": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "根据应用类型和应用ID，查询其最新版本信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "获取应用最新版本信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "对应应用 ID",
+                        "name": "appId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "支持的类型",
+                        "name": "appType",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.AppVersionInfo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "更新应用最新版本的描述信息和公开范围",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "更新应用版本信息",
+                "parameters": [
+                    {
+                        "description": "更新应用版本信息请求",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateAppVersionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/app/version/list": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "根据应用类型和应用ID，查询其所有历史版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "获取应用版本列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "对应应用 ID",
+                        "name": "appId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "支持的类型",
+                        "name": "appType",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/response.ListResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/response.AppVersionInfo"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/app/version/rollback": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "将应用回滚至指定的历史版本",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "common"
+                ],
+                "summary": "回滚应用到指定版本",
+                "parameters": [
+                    {
+                        "description": "回滚应用版本请求",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RollbackAppVersionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -661,6 +1099,45 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/chatflow/convert": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "chatflow转为workflow",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatflow"
+                ],
+                "summary": "chatflow转为workflow",
+                "parameters": [
+                    {
+                        "description": "对话流工作流转换参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.WorkflowConvertReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -723,7 +1200,7 @@ const docTemplate = `{
                         "JWT": []
                     }
                 ],
-                "description": "导出工作流的json文件",
+                "description": "导出对话流的json文件",
                 "consumes": [
                     "application/json"
                 ],
@@ -734,6 +1211,49 @@ const docTemplate = `{
                     "chatflow"
                 ],
                 "summary": "导出Chatflow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "工作流ID",
+                        "name": "workflow_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "版本",
+                        "name": "version",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/chatflow/export/draft": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "导出对话流草稿的json文件",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "chatflow"
+                ],
+                "summary": "导出Chatflow草稿",
                 "parameters": [
                     {
                         "type": "string",
@@ -818,13 +1338,18 @@ const docTemplate = `{
                 "tags": [
                     "rag"
                 ],
-                "summary": "获取RAG信息",
+                "summary": "获取已发布RAG信息",
                 "parameters": [
                     {
                         "type": "string",
                         "name": "ragId",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1057,6 +1582,58 @@ const docTemplate = `{
                 }
             }
         },
+        "/appspace/rag/draft": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rag"
+                ],
+                "summary": "获取草稿RAG信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "ragId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "version",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.RagInfo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/appspace/workflow": {
             "post": {
                 "security": [
@@ -1102,6 +1679,45 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/workflow/convert": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "workflow转为chatflow",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workflow"
+                ],
+                "summary": "workflow转为chatflow",
+                "parameters": [
+                    {
+                        "description": "对话流工作流转换参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.WorkflowConvertReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -1175,6 +1791,49 @@ const docTemplate = `{
                     "workflow"
                 ],
                 "summary": "导出Workflow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "工作流ID",
+                        "name": "workflow_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "版本",
+                        "name": "version",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/workflow/export/draft": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "导出工作流草稿的json文件",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "workflow"
+                ],
+                "summary": "导出Workflow草稿",
                 "parameters": [
                     {
                         "type": "string",
@@ -1301,7 +1960,7 @@ const docTemplate = `{
                         "JWT": []
                     }
                 ],
-                "description": "查看发布后智能体详情",
+                "description": "查看已发布智能体详情",
                 "consumes": [
                     "application/json"
                 ],
@@ -1311,14 +1970,18 @@ const docTemplate = `{
                 "tags": [
                     "agent"
                 ],
-                "summary": "查看发布后智能体详情",
+                "summary": "查看已发布智能体详情",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "智能体id",
                         "name": "assistantId",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1784,10 +2447,14 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "智能体id",
                         "name": "assistantId",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "version",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1813,6 +2480,45 @@ const docTemplate = `{
             }
         },
         "/assistant/stream": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "已发布智能体流式问答",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "agent"
+                ],
+                "summary": "已发布智能体流式问答",
+                "parameters": [
+                    {
+                        "description": "智能体流式问答参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ConversionStreamRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/assistant/stream/draft": {
             "post": {
                 "security": [
                     {
@@ -2799,6 +3505,147 @@ const docTemplate = `{
                 }
             }
         },
+        "/chatflow/application/info": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "应用广场对话流关联应用信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatflow"
+                ],
+                "summary": "应用广场对话流关联应用信息",
+                "parameters": [
+                    {
+                        "description": "应用广场对话流关联应用信息参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ChatflowApplicationInfoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.CozeGetDraftIntelligenceInfoData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/chatflow/application/list": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "应用广场对话流关联应用",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatflow"
+                ],
+                "summary": "应用广场对话流关联应用",
+                "parameters": [
+                    {
+                        "description": "应用广场对话流关联应用参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ChatflowApplicationListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.CozeDraftIntelligenceListData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/chatflow/conversation/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "删除对话流会话",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatflow"
+                ],
+                "summary": "删除对话流会话",
+                "parameters": [
+                    {
+                        "description": "删除对话流会话请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ChatflowConversationDeleteReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/custom/home": {
             "post": {
                 "security": [
@@ -3564,10 +4411,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/response.CreateKnowledgeResp"
-                                            }
+                                            "$ref": "#/definitions/response.CreateKnowledgeResp"
                                         }
                                     }
                                 }
@@ -3640,6 +4484,99 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/request.DeleteDocReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/doc/config": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "获取文档配置信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.doc"
+                ],
+                "summary": "获取文档配置信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "docId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "knowledgeId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.DocConfigResult"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/doc/export": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "知识库文档导出",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.doc"
+                ],
+                "summary": "知识库文档导出",
+                "parameters": [
+                    {
+                        "description": "知识库文档导出请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.KnowledgeDocExportReq"
                         }
                     }
                 ],
@@ -3729,7 +4666,7 @@ const docTemplate = `{
             }
         },
         "/knowledge/doc/list": {
-            "get": {
+            "post": {
                 "security": [
                     {
                         "JWT": []
@@ -3748,32 +4685,13 @@ const docTemplate = `{
                 "summary": "获取文档列表",
                 "parameters": [
                     {
-                        "type": "string",
-                        "name": "docName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "knowledgeId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "name": "pageNo",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "pageSize",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "当前状态  -1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败",
-                        "name": "status",
-                        "in": "query"
+                        "description": "文档列表查询请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.DocListReq"
+                        }
                     }
                 ],
                 "responses": {
@@ -3863,6 +4781,45 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/request.BatchDocMetaDataReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/doc/reimport": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "重新解析文档",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.doc"
+                ],
+                "summary": "重新解析文档",
+                "parameters": [
+                    {
+                        "description": "重新导入文档请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.DocReImportReq"
                         }
                     }
                 ],
@@ -4340,6 +5297,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/knowledge/doc/update/config": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "更新文档配置",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.doc"
+                ],
+                "summary": "更新文档配置",
+                "parameters": [
+                    {
+                        "description": "文更新文档配置请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.DocConfigUpdateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/knowledge/doc/url/analysis": {
             "post": {
                 "security": [
@@ -4382,6 +5378,105 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/response.AnalysisDocUrlResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/export/record": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "删除知识库导出记录",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge"
+                ],
+                "summary": "删除知识库导出记录",
+                "parameters": [
+                    {
+                        "description": "删除知识库导出记录请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.DeleteKnowledgeExportRecordReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/export/record/list": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "获取知识库导出记录列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge"
+                ],
+                "summary": "获取知识库导出记录列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "知识库id",
+                        "name": "knowledgeId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "pageNo",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.KnowledgeExportRecordPageResult"
                                         }
                                     }
                                 }
@@ -4848,6 +5943,11 @@ const docTemplate = `{
                         "name": "knowledgeId",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "transfer",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -4867,6 +5967,420 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/qa/export": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "问答库文档导出",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.qa"
+                ],
+                "summary": "问答库文档导出",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "问答库id",
+                        "name": "knowledgeId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/qa/hit": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "问答库命中测试",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge"
+                ],
+                "summary": "问答库命中测试",
+                "parameters": [
+                    {
+                        "description": "问答库命中测试请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.KnowledgeHitReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.KnowledgeQAHitResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/qa/pair": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "编辑问答对",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.qa"
+                ],
+                "summary": "编辑问答对",
+                "parameters": [
+                    {
+                        "description": "编辑问答对请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateKnowledgeQAPairReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "新增问答对",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.qa"
+                ],
+                "summary": "新增问答对",
+                "parameters": [
+                    {
+                        "description": "新增问答对请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateKnowledgeQAPairReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.CreateKnowledgeQAPairResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "刪除问答对",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.qa"
+                ],
+                "summary": "刪除问答对",
+                "parameters": [
+                    {
+                        "description": "刪除问答对请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.DeleteKnowledgeQAPairReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/qa/pair/import": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "问答库文档导入",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.qa"
+                ],
+                "summary": "问答库文档导入",
+                "parameters": [
+                    {
+                        "description": "问答库文档导入请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.KnowledgeQAPairImportReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/qa/pair/import/tip": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "获取问答库异步上传任务提示：有正在执行的异步上传任务/最近一次上传任务的失败信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.qa"
+                ],
+                "summary": "获取问答库异步上传任务提示",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "问答库id",
+                        "name": "knowledgeId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.KnowledgeQAPairImportTipResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/qa/pair/list": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "获取问答对列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.qa"
+                ],
+                "summary": "获取问答对列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "knowledgeId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "metaValue",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "pageNo",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.KnowledgeQAPairPageResult"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/knowledge/qa/pair/switch": {
+            "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "启停问答对",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "knowledge.qa"
+                ],
+                "summary": "启停问答对",
+                "parameters": [
+                    {
+                        "description": "启停问答对请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateKnowledgeQAPairSwitchReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -6983,6 +8497,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/model/select/asr": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "asr语音识别模型列表展示",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/response.ListResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "$ref": "#/definitions/response.ModelInfo"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/model/select/embedding": {
             "get": {
                 "security": [
@@ -7289,6 +8854,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/model/select/text2image": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "model"
+                ],
+                "summary": "文生图模型列表展示",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/response.ListResult"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "$ref": "#/definitions/response.ModelInfo"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/model/status": {
             "put": {
                 "security": [
@@ -7551,65 +9167,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/oauth/code/authorize": {
-            "get": {
-                "description": "授权码方式-获取授权码",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "oauth"
-                ],
-                "summary": "授权码方式",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "备案ID",
-                        "name": "client_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "重定向URI",
-                        "name": "redirect_uri",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "响应类型",
-                        "name": "response_type",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "权限范围",
-                        "name": "scope",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "状态参数",
-                        "name": "state",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "302": {
-                        "description": "重定向到指定URI",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }
@@ -8553,7 +10110,45 @@ const docTemplate = `{
                 "tags": [
                     "rag"
                 ],
-                "summary": "私域 RAG 问答",
+                "summary": "已发布 RAG 问答",
+                "parameters": [
+                    {
+                        "description": "RAG问答请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ChatRagRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/rag/chat/draft": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rag"
+                ],
+                "summary": "私域 草稿RAG 问答",
                 "parameters": [
                     {
                         "description": "RAG问答请求参数",
@@ -10625,6 +12220,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/workflow/run": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "已发布工作流运行接口",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workflow"
+                ],
+                "summary": "已发布工作流运行接口",
+                "parameters": [
+                    {
+                        "description": "工作流运行参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.WorkflowRunReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/workflow/select": {
             "get": {
                 "security": [
@@ -11129,10 +12763,13 @@ const docTemplate = `{
         "mp.AppModelParams": {
             "type": "object",
             "properties": {
-                "providerHuoshan": {
-                    "$ref": "#/definitions/mp.AppModelParamsHuoshan"
+                "providerDeepSeek": {
+                    "$ref": "#/definitions/mp.AppModelParamsDeepSeek"
                 },
-                "providerModelByInfini": {
+                "providerHuoshan": {
+                    "$ref": "#/definitions/mp.AppModelParamsHuoShan"
+                },
+                "providerInfini": {
                     "$ref": "#/definitions/mp.AppModelParamsInfini"
                 },
                 "providerOllama": {
@@ -11145,6 +12782,9 @@ const docTemplate = `{
                             "$ref": "#/definitions/mp.AppModelParamsOpenAICompatible"
                         }
                     ]
+                },
+                "providerQianFan": {
+                    "$ref": "#/definitions/mp.AppModelParamsQianFan"
                 },
                 "providerQwen": {
                     "$ref": "#/definitions/mp.AppModelParamsQwen"
@@ -11159,14 +12799,27 @@ const docTemplate = `{
                 }
             }
         },
-        "mp.AppModelParamsHuoshan": {
+        "mp.AppModelParamsDeepSeek": {
             "type": "object",
             "properties": {
                 "llm": {
                     "description": "大语言模型配置",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/mp_huoshan.LLMParams"
+                            "$ref": "#/definitions/mp_common.LLMParams"
+                        }
+                    ]
+                }
+            }
+        },
+        "mp.AppModelParamsHuoShan": {
+            "type": "object",
+            "properties": {
+                "llm": {
+                    "description": "大语言模型配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/mp_common.LLMParams"
                         }
                     ]
                 }
@@ -11179,7 +12832,7 @@ const docTemplate = `{
                     "description": "大语言模型配置",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/mp_infini.LLMParams"
+                            "$ref": "#/definitions/mp_common.LLMParams"
                         }
                     ]
                 }
@@ -11192,7 +12845,7 @@ const docTemplate = `{
                     "description": "大语言模型配置",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/mp_ollama.LLMParams"
+                            "$ref": "#/definitions/mp_common.LLMParams"
                         }
                     ]
                 }
@@ -11205,7 +12858,20 @@ const docTemplate = `{
                     "description": "大语言模型配置",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/mp_openai_compatible.LLMParams"
+                            "$ref": "#/definitions/mp_common.LLMParams"
+                        }
+                    ]
+                }
+            }
+        },
+        "mp.AppModelParamsQianFan": {
+            "type": "object",
+            "properties": {
+                "llm": {
+                    "description": "大语言模型配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/mp_common.LLMParams"
                         }
                     ]
                 }
@@ -11218,7 +12884,7 @@ const docTemplate = `{
                     "description": "大语言模型配置",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/mp_qwen.LLMParams"
+                            "$ref": "#/definitions/mp_common.LLMParams"
                         }
                     ]
                 }
@@ -11231,13 +12897,21 @@ const docTemplate = `{
                     "description": "大语言模型配置",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/mp_yuanjing.LLMParams"
+                            "$ref": "#/definitions/mp_common.LLMParams"
                         }
                     ]
                 }
             }
         },
-        "mp.ProviderModelByHuoshan": {
+        "mp.ProviderModelByDeepSeek": {
+            "type": "object",
+            "properties": {
+                "llm": {
+                    "$ref": "#/definitions/mp_deepseek.LLM"
+                }
+            }
+        },
+        "mp.ProviderModelByHuoShan": {
             "type": "object",
             "properties": {
                 "embedding": {
@@ -11287,6 +12961,20 @@ const docTemplate = `{
                 }
             }
         },
+        "mp.ProviderModelByQianFan": {
+            "type": "object",
+            "properties": {
+                "embedding": {
+                    "$ref": "#/definitions/mp_qianfan.Embedding"
+                },
+                "llm": {
+                    "$ref": "#/definitions/mp_qianfan.LLM"
+                },
+                "rerank": {
+                    "$ref": "#/definitions/mp_qianfan.Rerank"
+                }
+            }
+        },
         "mp.ProviderModelByQwen": {
             "type": "object",
             "properties": {
@@ -11327,10 +13015,13 @@ const docTemplate = `{
         "mp.ProviderModelConfig": {
             "type": "object",
             "properties": {
-                "providerHuoshan": {
-                    "$ref": "#/definitions/mp.ProviderModelByHuoshan"
+                "providerDeepSeek": {
+                    "$ref": "#/definitions/mp.ProviderModelByDeepSeek"
                 },
-                "providerModelByInfini": {
+                "providerHuoShan": {
+                    "$ref": "#/definitions/mp.ProviderModelByHuoShan"
+                },
+                "providerInfini": {
                     "$ref": "#/definitions/mp.ProviderModelByInfini"
                 },
                 "providerOllama": {
@@ -11338,6 +13029,9 @@ const docTemplate = `{
                 },
                 "providerOpenAICompatible": {
                     "$ref": "#/definitions/mp.ProviderModelByOpenAICompatible"
+                },
+                "providerQianFan": {
+                    "$ref": "#/definitions/mp.ProviderModelByQianFan"
                 },
                 "providerQwen": {
                     "$ref": "#/definitions/mp.ProviderModelByQwen"
@@ -11347,11 +13041,85 @@ const docTemplate = `{
                 }
             }
         },
+        "mp_common.LLMParams": {
+            "type": "object",
+            "properties": {
+                "frequencyPenalty": {
+                    "description": "频率惩罚",
+                    "type": "number"
+                },
+                "frequencyPenaltyEnable": {
+                    "description": "频率惩罚(开关)",
+                    "type": "boolean"
+                },
+                "maxTokens": {
+                    "description": "最大标记",
+                    "type": "integer"
+                },
+                "maxTokensEnable": {
+                    "description": "最大标记(开关)",
+                    "type": "boolean"
+                },
+                "presencePenalty": {
+                    "description": "存在惩罚",
+                    "type": "number"
+                },
+                "presencePenaltyEnable": {
+                    "description": "存在惩罚(开关)",
+                    "type": "boolean"
+                },
+                "temperature": {
+                    "description": "温度",
+                    "type": "number"
+                },
+                "temperatureEnable": {
+                    "description": "温度(开关)",
+                    "type": "boolean"
+                },
+                "topP": {
+                    "description": "Top P",
+                    "type": "number"
+                },
+                "topPEnable": {
+                    "description": "Top P(开关)",
+                    "type": "boolean"
+                }
+            }
+        },
         "mp_common.Tag": {
             "type": "object",
             "properties": {
                 "text": {
                     "type": "string"
+                }
+            }
+        },
+        "mp_deepseek.LLM": {
+            "type": "object",
+            "properties": {
+                "apiKey": {
+                    "description": "ApiKey",
+                    "type": "string"
+                },
+                "contextSize": {
+                    "description": "上下文长度",
+                    "type": "integer"
+                },
+                "endpointUrl": {
+                    "description": "推理url",
+                    "type": "string"
+                },
+                "functionCalling": {
+                    "description": "函数调用是否支持",
+                    "type": "string",
+                    "enum": [
+                        "noSupport",
+                        "toolCall"
+                    ]
+                },
+                "maxTokens": {
+                    "description": "模型回答最大tokens",
+                    "type": "integer"
                 }
             }
         },
@@ -11409,51 +13177,6 @@ const docTemplate = `{
                 }
             }
         },
-        "mp_huoshan.LLMParams": {
-            "type": "object",
-            "properties": {
-                "frequencyPenalty": {
-                    "description": "频率惩罚",
-                    "type": "number"
-                },
-                "frequencyPenaltyEnable": {
-                    "description": "频率惩罚(开关)",
-                    "type": "boolean"
-                },
-                "maxTokens": {
-                    "description": "最大标记",
-                    "type": "integer"
-                },
-                "maxTokensEnable": {
-                    "description": "最大标记(开关)",
-                    "type": "boolean"
-                },
-                "presencePenalty": {
-                    "description": "存在惩罚",
-                    "type": "number"
-                },
-                "presencePenaltyEnable": {
-                    "description": "存在惩罚(开关)",
-                    "type": "boolean"
-                },
-                "temperature": {
-                    "description": "温度",
-                    "type": "number"
-                },
-                "temperatureEnable": {
-                    "description": "温度(开关)",
-                    "type": "boolean"
-                },
-                "topP": {
-                    "description": "Top P",
-                    "type": "number"
-                },
-                "topPEnable": {
-                    "description": "Top P(开关)",
-                    "type": "boolean"
-                }
-            }
-        },
         "mp_infini.Embedding": {
             "type": "object",
             "properties": {
@@ -11505,51 +13228,6 @@ const docTemplate = `{
                         "noSupport",
                         "support"
                     ]
-                }
-            }
-        },
-        "mp_infini.LLMParams": {
-            "type": "object",
-            "properties": {
-                "frequencyPenalty": {
-                    "description": "频率惩罚",
-                    "type": "number"
-                },
-                "frequencyPenaltyEnable": {
-                    "description": "频率惩罚(开关)",
-                    "type": "boolean"
-                },
-                "maxTokens": {
-                    "description": "最大标记",
-                    "type": "integer"
-                },
-                "maxTokensEnable": {
-                    "description": "最大标记(开关)",
-                    "type": "boolean"
-                },
-                "presencePenalty": {
-                    "description": "存在惩罚",
-                    "type": "number"
-                },
-                "presencePenaltyEnable": {
-                    "description": "存在惩罚(开关)",
-                    "type": "boolean"
-                },
-                "temperature": {
-                    "description": "温度",
-                    "type": "number"
-                },
-                "temperatureEnable": {
-                    "description": "温度(开关)",
-                    "type": "boolean"
-                },
-                "topP": {
-                    "description": "Top P",
-                    "type": "number"
-                },
-                "topPEnable": {
-                    "description": "Top P(开关)",
-                    "type": "boolean"
                 }
             }
         },
@@ -11624,51 +13302,6 @@ const docTemplate = `{
                 }
             }
         },
-        "mp_ollama.LLMParams": {
-            "type": "object",
-            "properties": {
-                "frequencyPenalty": {
-                    "description": "频率惩罚",
-                    "type": "number"
-                },
-                "frequencyPenaltyEnable": {
-                    "description": "频率惩罚(开关)",
-                    "type": "boolean"
-                },
-                "maxTokens": {
-                    "description": "最大标记",
-                    "type": "integer"
-                },
-                "maxTokensEnable": {
-                    "description": "最大标记(开关)",
-                    "type": "boolean"
-                },
-                "presencePenalty": {
-                    "description": "存在惩罚",
-                    "type": "number"
-                },
-                "presencePenaltyEnable": {
-                    "description": "存在惩罚(开关)",
-                    "type": "boolean"
-                },
-                "temperature": {
-                    "description": "温度",
-                    "type": "number"
-                },
-                "temperatureEnable": {
-                    "description": "温度(开关)",
-                    "type": "boolean"
-                },
-                "topP": {
-                    "description": "Top P",
-                    "type": "number"
-                },
-                "topPEnable": {
-                    "description": "Top P(开关)",
-                    "type": "boolean"
-                }
-            }
-        },
         "mp_openai_compatible.Embedding": {
             "type": "object",
             "properties": {
@@ -11723,52 +13356,78 @@ const docTemplate = `{
                 }
             }
         },
-        "mp_openai_compatible.LLMParams": {
+        "mp_openai_compatible.Rerank": {
             "type": "object",
             "properties": {
-                "frequencyPenalty": {
-                    "description": "频率惩罚",
-                    "type": "number"
+                "apiKey": {
+                    "description": "ApiKey",
+                    "type": "string"
                 },
-                "frequencyPenaltyEnable": {
-                    "description": "频率惩罚(开关)",
-                    "type": "boolean"
-                },
-                "maxTokens": {
-                    "description": "最大标记",
+                "contextSize": {
+                    "description": "上下文长度",
                     "type": "integer"
                 },
-                "maxTokensEnable": {
-                    "description": "最大标记(开关)",
-                    "type": "boolean"
-                },
-                "presencePenalty": {
-                    "description": "存在惩罚",
-                    "type": "number"
-                },
-                "presencePenaltyEnable": {
-                    "description": "存在惩罚(开关)",
-                    "type": "boolean"
-                },
-                "temperature": {
-                    "description": "温度",
-                    "type": "number"
-                },
-                "temperatureEnable": {
-                    "description": "温度(开关)",
-                    "type": "boolean"
-                },
-                "topP": {
-                    "description": "Top P",
-                    "type": "number"
-                },
-                "topPEnable": {
-                    "description": "Top P(开关)",
-                    "type": "boolean"
+                "endpointUrl": {
+                    "description": "推理url",
+                    "type": "string"
                 }
             }
         },
-        "mp_openai_compatible.Rerank": {
+        "mp_qianfan.Embedding": {
+            "type": "object",
+            "properties": {
+                "apiKey": {
+                    "description": "ApiKey",
+                    "type": "string"
+                },
+                "contextSize": {
+                    "description": "上下文长度",
+                    "type": "integer"
+                },
+                "endpointUrl": {
+                    "description": "推理url",
+                    "type": "string"
+                }
+            }
+        },
+        "mp_qianfan.LLM": {
+            "type": "object",
+            "properties": {
+                "apiKey": {
+                    "description": "ApiKey",
+                    "type": "string"
+                },
+                "contextSize": {
+                    "description": "上下文长度",
+                    "type": "integer"
+                },
+                "endpointUrl": {
+                    "description": "推理url",
+                    "type": "string"
+                },
+                "functionCalling": {
+                    "description": "函数调用是否支持",
+                    "type": "string",
+                    "enum": [
+                        "noSupport",
+                        "toolCall"
+                    ]
+                },
+                "maxTokens": {
+                    "description": "模型回答最大tokens",
+                    "type": "integer"
+                },
+                "visionSupport": {
+                    "description": "视觉支持",
+                    "type": "string",
+                    "enum": [
+                        "noSupport",
+                        "support"
+                    ]
+                }
+            }
+        },
+        "mp_qianfan.Rerank": {
             "type": "object",
             "properties": {
                 "apiKey": {
@@ -11836,51 +13495,6 @@ const docTemplate = `{
                         "noSupport",
                         "support"
                     ]
-                }
-            }
-        },
-        "mp_qwen.LLMParams": {
-            "type": "object",
-            "properties": {
-                "frequencyPenalty": {
-                    "description": "频率惩罚",
-                    "type": "number"
-                },
-                "frequencyPenaltyEnable": {
-                    "description": "频率惩罚(开关)",
-                    "type": "boolean"
-                },
-                "maxTokens": {
-                    "description": "最大标记",
-                    "type": "integer"
-                },
-                "maxTokensEnable": {
-                    "description": "最大标记(开关)",
-                    "type": "boolean"
-                },
-                "presencePenalty": {
-                    "description": "存在惩罚",
-                    "type": "number"
-                },
-                "presencePenaltyEnable": {
-                    "description": "存在惩罚(开关)",
-                    "type": "boolean"
-                },
-                "temperature": {
-                    "description": "温度",
-                    "type": "number"
-                },
-                "temperatureEnable": {
-                    "description": "温度(开关)",
-                    "type": "boolean"
-                },
-                "topP": {
-                    "description": "Top P",
-                    "type": "number"
-                },
-                "topPEnable": {
-                    "description": "Top P(开关)",
-                    "type": "boolean"
                 }
             }
         },
@@ -11965,51 +13579,6 @@ const docTemplate = `{
                         "noSupport",
                         "support"
                     ]
-                }
-            }
-        },
-        "mp_yuanjing.LLMParams": {
-            "type": "object",
-            "properties": {
-                "frequencyPenalty": {
-                    "description": "频率惩罚",
-                    "type": "number"
-                },
-                "frequencyPenaltyEnable": {
-                    "description": "频率惩罚(开关)",
-                    "type": "boolean"
-                },
-                "maxTokens": {
-                    "description": "最大标记",
-                    "type": "integer"
-                },
-                "maxTokensEnable": {
-                    "description": "最大标记(开关)",
-                    "type": "boolean"
-                },
-                "presencePenalty": {
-                    "description": "存在惩罚",
-                    "type": "number"
-                },
-                "presencePenaltyEnable": {
-                    "description": "存在惩罚(开关)",
-                    "type": "boolean"
-                },
-                "temperature": {
-                    "description": "温度",
-                    "type": "number"
-                },
-                "temperatureEnable": {
-                    "description": "温度(开关)",
-                    "type": "boolean"
-                },
-                "topP": {
-                    "description": "Top P",
-                    "type": "number"
-                },
-                "topPEnable": {
-                    "description": "Top P(开关)",
-                    "type": "boolean"
                 }
             }
         },
@@ -12392,6 +13961,85 @@ const docTemplate = `{
                 }
             }
         },
+        "request.AppPublishConfig": {
+            "type": "object",
+            "properties": {
+                "publishType": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.AppQAKnowledgeBase": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "知识库id",
+                    "type": "string"
+                },
+                "metaDataFilterParams": {
+                    "$ref": "#/definitions/request.MetaDataFilterParams"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.AppQAKnowledgebaseConfig": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "description": "问答库参数",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.AppQAKnowledgebaseParams"
+                        }
+                    ]
+                },
+                "knowledgebases": {
+                    "description": "问答库id、名字",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.AppQAKnowledgeBase"
+                    }
+                }
+            }
+        },
+        "request.AppQAKnowledgebaseParams": {
+            "type": "object",
+            "properties": {
+                "keywordPriority": {
+                    "description": "关键词权重",
+                    "type": "number"
+                },
+                "matchType": {
+                    "description": "matchType：vector（向量检索）、text（文本检索）、mix（混合检索：向量+文本）",
+                    "type": "string"
+                },
+                "maxHistory": {
+                    "description": "最长上下文",
+                    "type": "integer"
+                },
+                "priorityMatch": {
+                    "description": "权重匹配，只有在混合检索模式下，选择权重设置后，这个才设置为1",
+                    "type": "integer"
+                },
+                "semanticsPriority": {
+                    "description": "语义权重",
+                    "type": "number"
+                },
+                "threshold": {
+                    "description": "过滤阈值",
+                    "type": "number"
+                },
+                "topK": {
+                    "description": "知识条数",
+                    "type": "integer"
+                }
+            }
+        },
         "request.AppSafetyConfig": {
             "type": "object",
             "properties": {
@@ -12637,6 +14285,9 @@ const docTemplate = `{
             ],
             "properties": {
                 "assistantId": {
+                    "type": "string"
+                },
+                "version": {
                     "type": "string"
                 }
             }
@@ -13032,6 +14683,47 @@ const docTemplate = `{
                 }
             }
         },
+        "request.ChatflowApplicationInfoReq": {
+            "type": "object",
+            "required": [
+                "intelligence_id",
+                "intelligence_type"
+            ],
+            "properties": {
+                "intelligence_id": {
+                    "type": "string"
+                },
+                "intelligence_type": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.ChatflowApplicationListReq": {
+            "type": "object",
+            "required": [
+                "workflow_id"
+            ],
+            "properties": {
+                "workflow_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.ChatflowConversationDeleteReq": {
+            "type": "object",
+            "required": [
+                "project_id",
+                "unique_id"
+            ],
+            "properties": {
+                "project_id": {
+                    "type": "string"
+                },
+                "unique_id": {
+                    "type": "string"
+                }
+            }
+        },
         "request.CheckFileListReq": {
             "type": "object",
             "required": [
@@ -13160,6 +14852,24 @@ const docTemplate = `{
                 }
             }
         },
+        "request.CreateAPIKeyRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "desc": {
+                    "type": "string"
+                },
+                "expiredAt": {
+                    "description": "格式 yyyy-mm-dd",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "request.CreateDocChildSegmentReq": {
             "type": "object",
             "required": [
@@ -13232,14 +14942,36 @@ const docTemplate = `{
                 }
             }
         },
+        "request.CreateKnowledgeQAPairReq": {
+            "type": "object",
+            "required": [
+                "knowledgeId"
+            ],
+            "properties": {
+                "answer": {
+                    "description": "答案",
+                    "type": "string"
+                },
+                "knowledgeId": {
+                    "type": "string"
+                },
+                "question": {
+                    "description": "问题",
+                    "type": "string"
+                }
+            }
+        },
         "request.CreateKnowledgeReq": {
             "type": "object",
             "required": [
                 "embeddingModelInfo",
-                "knowledgeGraph",
                 "name"
             ],
             "properties": {
+                "category": {
+                    "description": "0:知识库，1:问答库",
+                    "type": "integer"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -13594,7 +15326,7 @@ const docTemplate = `{
                 }
             }
         },
-        "request.DelApiKeyRequest": {
+        "request.DelAppKeyRequest": {
             "type": "object",
             "required": [
                 "apiId"
@@ -13602,6 +15334,14 @@ const docTemplate = `{
             "properties": {
                 "apiId": {
                     "description": "ApiID",
+                    "type": "string"
+                }
+            }
+        },
+        "request.DeleteAPIKeyRequest": {
+            "type": "object",
+            "properties": {
+                "keyId": {
                     "type": "string"
                 }
             }
@@ -13721,6 +15461,43 @@ const docTemplate = `{
                 }
             }
         },
+        "request.DeleteKnowledgeExportRecordReq": {
+            "type": "object",
+            "required": [
+                "exportRecordId",
+                "knowledgeId"
+            ],
+            "properties": {
+                "exportRecordId": {
+                    "description": "问答库导出记录id",
+                    "type": "string"
+                },
+                "knowledgeId": {
+                    "description": "问答库id",
+                    "type": "string"
+                }
+            }
+        },
+        "request.DeleteKnowledgeQAPairReq": {
+            "type": "object",
+            "required": [
+                "QAPairIdList",
+                "knowledgeId"
+            ],
+            "properties": {
+                "QAPairIdList": {
+                    "description": "问答对列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "knowledgeId": {
+                    "description": "问答库id",
+                    "type": "string"
+                }
+            }
+        },
         "request.DeleteKnowledgeSplitterReq": {
             "type": "object",
             "required": [
@@ -13794,6 +15571,65 @@ const docTemplate = `{
                 }
             }
         },
+        "request.DocConfigUpdateReq": {
+            "type": "object",
+            "required": [
+                "docAnalyzer",
+                "docIdList",
+                "docSegment",
+                "knowledgeId"
+            ],
+            "properties": {
+                "docAnalyzer": {
+                    "description": "文档解析类型 text / ocr  / model",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "docIdList": {
+                    "description": "文档id列表，当更新配置时需要传",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "docImportType": {
+                    "description": "文档导入类型，0：文件上传，1：单条url上传，2.文件url上传",
+                    "type": "integer"
+                },
+                "docMetaData": {
+                    "description": "元数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.DocMetaData"
+                    }
+                },
+                "docPreprocess": {
+                    "description": "文本预处理规则 replaceSymbols / deleteLinks",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "docSegment": {
+                    "description": "文档分段配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.DocSegment"
+                        }
+                    ]
+                },
+                "knowledgeId": {
+                    "description": "知识库id",
+                    "type": "string"
+                },
+                "parserModelId": {
+                    "description": "模型解析或ocr模型id",
+                    "type": "string"
+                }
+            }
+        },
         "request.DocImportReq": {
             "type": "object",
             "required": [
@@ -13811,7 +15647,7 @@ const docTemplate = `{
                     }
                 },
                 "docImportType": {
-                    "description": "文档导入类型，0：文件上传，1：url上传，2.批量url上传",
+                    "description": "文档导入类型，0：文件上传，1：单条url上传，2.文件url上传",
                     "type": "integer"
                 },
                 "docInfoList": {
@@ -13878,6 +15714,44 @@ const docTemplate = `{
                 }
             }
         },
+        "request.DocListReq": {
+            "type": "object",
+            "required": [
+                "knowledgeId",
+                "pageSize"
+            ],
+            "properties": {
+                "docName": {
+                    "type": "string"
+                },
+                "graphStatus": {
+                    "description": "图谱状态：-1.全部 0.待处理 1.解析中 2.解析成功 3.解析失败",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "knowledgeId": {
+                    "type": "string"
+                },
+                "metaValue": {
+                    "type": "string"
+                },
+                "pageNo": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "文档状态：-1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
         "request.DocMetaData": {
             "type": "object",
             "properties": {
@@ -13909,6 +15783,9 @@ const docTemplate = `{
         },
         "request.DocMetaDataReq": {
             "type": "object",
+            "required": [
+                "knowledgeId"
+            ],
             "properties": {
                 "docId": {
                     "type": "string"
@@ -13922,6 +15799,26 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/request.DocMetaData"
                     }
+                }
+            }
+        },
+        "request.DocReImportReq": {
+            "type": "object",
+            "required": [
+                "docIdList",
+                "knowledgeId"
+            ],
+            "properties": {
+                "docIdList": {
+                    "description": "文档id列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "knowledgeId": {
+                    "description": "知识库id",
+                    "type": "string"
                 }
             }
         },
@@ -14000,7 +15897,7 @@ const docTemplate = `{
                 }
             }
         },
-        "request.GenApiKeyRequest": {
+        "request.GenAppKeyRequest": {
             "type": "object",
             "required": [
                 "appId",
@@ -14102,6 +15999,25 @@ const docTemplate = `{
                 },
                 "publishDate": {
                     "description": "模型发布时间",
+                    "type": "string"
+                }
+            }
+        },
+        "request.KnowledgeDocExportReq": {
+            "type": "object",
+            "required": [
+                "knowledgeId"
+            ],
+            "properties": {
+                "docIdList": {
+                    "description": "文档id",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "knowledgeId": {
+                    "description": "知识库id",
                     "type": "string"
                 }
             }
@@ -14221,6 +16137,26 @@ const docTemplate = `{
                 }
             }
         },
+        "request.KnowledgeQAPairImportReq": {
+            "type": "object",
+            "required": [
+                "docInfoList",
+                "knowledgeId"
+            ],
+            "properties": {
+                "docInfoList": {
+                    "description": "上传文档列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.DocInfo"
+                    }
+                },
+                "knowledgeId": {
+                    "description": "问答库id",
+                    "type": "string"
+                }
+            }
+        },
         "request.KnowledgeReportAddReq": {
             "type": "object",
             "required": [
@@ -14307,6 +16243,10 @@ const docTemplate = `{
         "request.KnowledgeSelectReq": {
             "type": "object",
             "properties": {
+                "category": {
+                    "description": "0:知识库，1:问答库",
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -14924,6 +16864,12 @@ const docTemplate = `{
         },
         "request.PublishAppRequest": {
             "type": "object",
+            "required": [
+                "appId",
+                "appType",
+                "publishType",
+                "version"
+            ],
             "properties": {
                 "appId": {
                     "description": "应用ID",
@@ -14933,8 +16879,15 @@ const docTemplate = `{
                     "description": "应用类型",
                     "type": "string"
                 },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
                 "publishType": {
                     "description": "发布类型(public:系统公开发布,organization:组织公开发布,private:私密发布)",
+                    "type": "string"
+                },
+                "version": {
                     "type": "string"
                 }
             }
@@ -14972,6 +16925,8 @@ const docTemplate = `{
             "required": [
                 "knowledgeBaseConfig",
                 "modelConfig",
+                "qaKnowledgeBaseConfig",
+                "qaRerankConfig",
                 "ragId",
                 "rerankConfig"
             ],
@@ -14992,11 +16947,27 @@ const docTemplate = `{
                         }
                     ]
                 },
+                "qaKnowledgeBaseConfig": {
+                    "description": "问答库（不用传知识图谱开关）",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.AppQAKnowledgebaseConfig"
+                        }
+                    ]
+                },
+                "qaRerankConfig": {
+                    "description": "问答库Rerank模型",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.AppModelConfig"
+                        }
+                    ]
+                },
                 "ragId": {
                     "type": "string"
                 },
                 "rerankConfig": {
-                    "description": "Rerank模型",
+                    "description": "知识库Rerank模型",
                     "allOf": [
                         {
                             "$ref": "#/definitions/request.AppModelConfig"
@@ -15020,6 +16991,9 @@ const docTemplate = `{
             ],
             "properties": {
                 "ragId": {
+                    "type": "string"
+                },
+                "version": {
                     "type": "string"
                 }
             }
@@ -15174,6 +17148,26 @@ const docTemplate = `{
                 }
             }
         },
+        "request.RollbackAppVersionRequest": {
+            "type": "object",
+            "required": [
+                "appId",
+                "appType",
+                "version"
+            ],
+            "properties": {
+                "appId": {
+                    "type": "string"
+                },
+                "appType": {
+                    "type": "string"
+                },
+                "version": {
+                    "description": "目标回滚版本",
+                    "type": "string"
+                }
+            }
+        },
         "request.SensitiveTable": {
             "type": "object",
             "required": [
@@ -15215,6 +17209,61 @@ const docTemplate = `{
                 },
                 "appType": {
                     "description": "应用类型",
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateAPIKeyRequest": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "type": "string"
+                },
+                "expiredAt": {
+                    "type": "string"
+                },
+                "keyId": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateAPIKeyStatusRequest": {
+            "type": "object",
+            "properties": {
+                "keyId": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态 false-禁用 true-启用",
+                    "type": "boolean"
+                }
+            }
+        },
+        "request.UpdateAppVersionRequest": {
+            "type": "object",
+            "required": [
+                "appId",
+                "appType",
+                "publishType"
+            ],
+            "properties": {
+                "appId": {
+                    "description": "应用 ID",
+                    "type": "string"
+                },
+                "appType": {
+                    "description": "应用类型",
+                    "type": "string"
+                },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "publishType": {
+                    "description": "发布类型(public:系统公开发布,organization:组织公开发布,private:私密发布)",
                     "type": "string"
                 }
             }
@@ -15348,6 +17397,39 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "request.UpdateKnowledgeQAPairReq": {
+            "type": "object",
+            "required": [
+                "qaPairId"
+            ],
+            "properties": {
+                "answer": {
+                    "description": "答案",
+                    "type": "string"
+                },
+                "qaPairId": {
+                    "type": "string"
+                },
+                "question": {
+                    "description": "问题",
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateKnowledgeQAPairSwitchReq": {
+            "type": "object",
+            "required": [
+                "qaPairId"
+            ],
+            "properties": {
+                "qaPairId": {
+                    "type": "string"
+                },
+                "switch": {
+                    "type": "boolean"
                 }
             }
         },
@@ -15705,6 +17787,17 @@ const docTemplate = `{
                 }
             }
         },
+        "request.WorkflowConvertReq": {
+            "type": "object",
+            "required": [
+                "workflow_id"
+            ],
+            "properties": {
+                "workflow_id": {
+                    "type": "string"
+                }
+            }
+        },
         "request.WorkflowIDReq": {
             "type": "object",
             "required": [
@@ -15716,6 +17809,58 @@ const docTemplate = `{
                 }
             }
         },
+        "request.WorkflowRunReq": {
+            "type": "object",
+            "required": [
+                "workflow_id"
+            ],
+            "properties": {
+                "input": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "workflow_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.APIKeyDetailResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建ApiKey的时间",
+                    "type": "string"
+                },
+                "creator": {
+                    "description": "创建者",
+                    "type": "string"
+                },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "expiredAt": {
+                    "description": "过期时间",
+                    "type": "string"
+                },
+                "key": {
+                    "description": "生成的ApiKey",
+                    "type": "string"
+                },
+                "keyId": {
+                    "description": "ID",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "名称",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "boolean"
+                }
+            }
+        },
         "response.AnalysisDocUrlResp": {
             "type": "object",
             "properties": {
@@ -15724,23 +17869,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/response.DocUrl"
                     }
-                }
-            }
-        },
-        "response.ApiResponse": {
-            "type": "object",
-            "properties": {
-                "apiId": {
-                    "description": "ApiID",
-                    "type": "string"
-                },
-                "apiKey": {
-                    "description": "生成的ApiKey",
-                    "type": "string"
-                },
-                "createdAt": {
-                    "description": "创建ApiKey的时间",
-                    "type": "string"
                 }
             }
         },
@@ -15785,6 +17913,23 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "description": "应用更新时间(用于历史记录排序)",
+                    "type": "string"
+                }
+            }
+        },
+        "response.AppKeyInfo": {
+            "type": "object",
+            "properties": {
+                "apiId": {
+                    "description": "ApiID",
+                    "type": "string"
+                },
+                "apiKey": {
+                    "description": "生成的ApiKey",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建ApiKey的时间",
                     "type": "string"
                 }
             }
@@ -15862,6 +18007,23 @@ const docTemplate = `{
                 }
             }
         },
+        "response.AppVersionInfo": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "publishType": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
         "response.Assistant": {
             "type": "object",
             "required": [
@@ -15919,8 +18081,16 @@ const docTemplate = `{
                     "description": "名称",
                     "type": "string"
                 },
+                "newAgent": {
+                    "description": "是否是新版本智能体",
+                    "type": "boolean"
+                },
                 "prologue": {
                     "description": "开场白",
+                    "type": "string"
+                },
+                "publishType": {
+                    "description": "发布类型",
                     "type": "string"
                 },
                 "recommendQuestion": {
@@ -15959,6 +18129,9 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "description": "更新时间",
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 },
                 "visionConfig": {
@@ -16250,7 +18423,7 @@ const docTemplate = `{
                     }
                 },
                 "contentType": {
-                    "description": "graph：知识图谱（文本）, text：文档分段（文本）, community_report：社区报告（markdown）",
+                    "description": "graph：知识图谱（文本）, text：文档分段（文本）, community_report：社区报告（markdown），qa：问答库（文本）",
                     "type": "string"
                 },
                 "knowledgeName": {
@@ -16425,6 +18598,219 @@ const docTemplate = `{
                 }
             }
         },
+        "response.CozeConnectorInfo": {
+            "type": "object",
+            "properties": {
+                "connector_status": {
+                    "type": "integer"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "share_link": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.CozeDraftIntelligenceListData": {
+            "type": "object",
+            "properties": {
+                "has_more": {
+                    "type": "boolean"
+                },
+                "intelligences": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.CozeIntelligenceData"
+                    }
+                },
+                "next_cursor_id": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.CozeFavoriteInfo": {
+            "type": "object",
+            "properties": {
+                "fav_time": {
+                    "type": "string"
+                },
+                "is_fav": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "response.CozeGetDraftIntelligenceInfoData": {
+            "type": "object",
+            "properties": {
+                "basic_info": {
+                    "$ref": "#/definitions/response.CozeIntelligenceBasicInfo"
+                },
+                "intelligence_type": {
+                    "type": "integer"
+                },
+                "owner_info": {
+                    "$ref": "#/definitions/response.CozeUser"
+                },
+                "publish_info": {
+                    "$ref": "#/definitions/response.CozeIntelligencePublishInfo"
+                }
+            }
+        },
+        "response.CozeIntelligenceBasicInfo": {
+            "type": "object",
+            "properties": {
+                "create_time": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "enterprise_id": {
+                    "type": "string"
+                },
+                "icon_uri": {
+                    "type": "string"
+                },
+                "icon_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "organization_id": {
+                    "type": "integer"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "publish_time": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "space_id": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "update_time": {
+                    "type": "string",
+                    "example": "0"
+                }
+            }
+        },
+        "response.CozeIntelligenceData": {
+            "type": "object",
+            "properties": {
+                "basic_info": {
+                    "$ref": "#/definitions/response.CozeIntelligenceBasicInfo"
+                },
+                "favorite_info": {
+                    "$ref": "#/definitions/response.CozeFavoriteInfo"
+                },
+                "owner_info": {
+                    "$ref": "#/definitions/response.CozeUser"
+                },
+                "permission_info": {
+                    "$ref": "#/definitions/response.CozeIntelligencePermissionInfo"
+                },
+                "publish_info": {
+                    "$ref": "#/definitions/response.CozeIntelligencePublishInfo"
+                },
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.CozeIntelligencePermissionInfo": {
+            "type": "object",
+            "properties": {
+                "can_delete": {
+                    "type": "boolean"
+                },
+                "can_view": {
+                    "type": "boolean"
+                },
+                "in_collaboration": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "response.CozeIntelligencePublishInfo": {
+            "type": "object",
+            "properties": {
+                "connectors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.CozeConnectorInfo"
+                    }
+                },
+                "has_published": {
+                    "type": "boolean"
+                },
+                "publish_time": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.CozeUser": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "user_label": {
+                    "$ref": "#/definitions/response.CozeUserLabel"
+                },
+                "user_unique_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.CozeUserLabel": {
+            "type": "object",
+            "properties": {
+                "icon_uri": {
+                    "type": "string"
+                },
+                "icon_url": {
+                    "type": "string"
+                },
+                "jump_link": {
+                    "type": "string"
+                },
+                "label_id": {
+                    "type": "string"
+                },
+                "label_name": {
+                    "type": "string"
+                }
+            }
+        },
         "response.CozeWorkflowIDData": {
             "type": "object",
             "properties": {
@@ -16522,6 +18908,9 @@ const docTemplate = `{
                 },
                 "userId": {
                     "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },
@@ -16542,6 +18931,14 @@ const docTemplate = `{
                 },
                 "video_understanding": {
                     "type": "boolean"
+                }
+            }
+        },
+        "response.CreateKnowledgeQAPairResp": {
+            "type": "object",
+            "properties": {
+                "qaPairId": {
+                    "type": "string"
                 }
             }
         },
@@ -16877,6 +19274,41 @@ const docTemplate = `{
                 }
             }
         },
+        "response.DocConfigResult": {
+            "type": "object",
+            "properties": {
+                "docAnalyzer": {
+                    "description": "文档解析类型",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "docImportType": {
+                    "description": "文档导入类型，0：文件上传，1：url上传，2.批量url上传",
+                    "type": "integer"
+                },
+                "docPreprocess": {
+                    "description": "文本预处理规则",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "docSegment": {
+                    "description": "分段信息配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/response.DocSegment"
+                        }
+                    ]
+                },
+                "parserModelId": {
+                    "description": "ocr模型id",
+                    "type": "string"
+                }
+            }
+        },
         "response.DocKnowledgeInfo": {
             "type": "object",
             "properties": {
@@ -17003,6 +19435,48 @@ const docTemplate = `{
                 }
             }
         },
+        "response.DocSegment": {
+            "type": "object",
+            "required": [
+                "segmentMethod"
+            ],
+            "properties": {
+                "maxSplitter": {
+                    "description": "可分隔最大值（只有自定义分段必填）",
+                    "type": "integer"
+                },
+                "overlap": {
+                    "description": "可重叠值（只有自定义分段必填）",
+                    "type": "number"
+                },
+                "segmentMethod": {
+                    "description": "分段方法 0：通用分段；1：父子分段",
+                    "type": "string"
+                },
+                "segmentType": {
+                    "description": "分段方式，只有通用分段必填 0：自动分段；1：自定义分段",
+                    "type": "string"
+                },
+                "splitter": {
+                    "description": "分隔符（只有自定义分段必填）",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "subMaxSplitter": {
+                    "description": "可分隔最大值（只有父子分段必填）",
+                    "type": "integer"
+                },
+                "subSplitter": {
+                    "description": "分隔符（只有父子分段必填）",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "response.DocSegmentResp": {
             "type": "object",
             "properties": {
@@ -17011,6 +19485,13 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/response.SegmentContent"
+                    }
+                },
+                "docAnalyzerText": {
+                    "description": "文档解析类型 文字提取 / OCR解析  / 模型解析",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
                 },
                 "fileName": {
@@ -17264,6 +19745,26 @@ const docTemplate = `{
                 }
             }
         },
+        "response.KnowledgeExportRecordPageResult": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.ListKnowledgeExportRecordResp"
+                    }
+                },
+                "pageNo": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.KnowledgeGraphEdge": {
             "type": "object",
             "properties": {
@@ -17409,6 +19910,10 @@ const docTemplate = `{
         "response.KnowledgeInfo": {
             "type": "object",
             "properties": {
+                "category": {
+                    "description": "0: 知识库; 1: 问答库",
+                    "type": "integer"
+                },
                 "createAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -17447,6 +19952,10 @@ const docTemplate = `{
                         "$ref": "#/definitions/response.KnowledgeTag"
                     }
                 },
+                "llmModelId": {
+                    "description": "知识图谱模型id",
+                    "type": "string"
+                },
                 "name": {
                     "description": "知识库名称",
                     "type": "string"
@@ -17466,6 +19975,10 @@ const docTemplate = `{
                 "share": {
                     "description": "是分享，还是私有",
                     "type": "boolean"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
                 }
             }
         },
@@ -17527,6 +20040,68 @@ const docTemplate = `{
                 },
                 "metaValueType": {
                     "type": "string"
+                }
+            }
+        },
+        "response.KnowledgeQAHitResp": {
+            "type": "object",
+            "properties": {
+                "score": {
+                    "description": "打分信息",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "searchList": {
+                    "description": "种种结果",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.QAHitSearchList"
+                    }
+                }
+            }
+        },
+        "response.KnowledgeQAPairImportTipResp": {
+            "type": "object",
+            "properties": {
+                "knowledgeId": {
+                    "description": "知识库id",
+                    "type": "string"
+                },
+                "knowledgeName": {
+                    "description": "知识库名称",
+                    "type": "string"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "uploadstatus": {
+                    "description": "上传状态",
+                    "type": "integer"
+                }
+            }
+        },
+        "response.KnowledgeQAPairPageResult": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.ListKnowledgeQAPairResp"
+                    }
+                },
+                "pageNo": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "qaKnowledgeInfo": {
+                    "$ref": "#/definitions/response.QAKnowledgeInfo"
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },
@@ -17762,6 +20337,86 @@ const docTemplate = `{
                 "status": {
                     "description": "处理状态",
                     "type": "integer"
+                },
+                "uploadTime": {
+                    "description": "上传时间",
+                    "type": "string"
+                }
+            }
+        },
+        "response.ListKnowledgeExportRecordResp": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "导出人",
+                    "type": "string"
+                },
+                "errorMsg": {
+                    "description": "导出状态错误信息",
+                    "type": "string"
+                },
+                "exportRecordId": {
+                    "description": "知识库导出记录id",
+                    "type": "string"
+                },
+                "exportTime": {
+                    "description": "导出时间",
+                    "type": "string"
+                },
+                "filePath": {
+                    "description": "导出文件路径",
+                    "type": "string"
+                },
+                "knowledgeName": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                }
+            }
+        },
+        "response.ListKnowledgeQAPairResp": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "description": "答案",
+                    "type": "string"
+                },
+                "author": {
+                    "description": "作者",
+                    "type": "string"
+                },
+                "errorMsg": {
+                    "description": "处理错误信息",
+                    "type": "string"
+                },
+                "knowledgeId": {
+                    "description": "问答库id",
+                    "type": "string"
+                },
+                "metaDataList": {
+                    "description": "元数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.DocMetaData"
+                    }
+                },
+                "qaPairId": {
+                    "description": "问答对id",
+                    "type": "string"
+                },
+                "question": {
+                    "description": "问题",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "处理状态",
+                    "type": "integer"
+                },
+                "switch": {
+                    "description": "启停开关",
+                    "type": "boolean"
                 },
                 "uploadTime": {
                     "description": "上传时间",
@@ -18415,6 +21070,9 @@ const docTemplate = `{
                 },
                 "userId": {
                     "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },
@@ -18583,16 +21241,64 @@ const docTemplate = `{
                 }
             }
         },
+        "response.QAHitSearchList": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "type": "string"
+                },
+                "contentType": {
+                    "description": "graph：知识图谱（文本）, text：文档分段（文本）, community_report：社区报告（markdown），qa：问答库（文本）",
+                    "type": "string"
+                },
+                "qaBase": {
+                    "type": "string"
+                },
+                "qaId": {
+                    "type": "string"
+                },
+                "qaPairId": {
+                    "type": "string"
+                },
+                "question": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.QAKnowledgeInfo": {
+            "type": "object",
+            "properties": {
+                "knowledgeId": {
+                    "type": "string"
+                },
+                "knowledgeName": {
+                    "type": "string"
+                }
+            }
+        },
         "response.RagInfo": {
             "type": "object",
             "required": [
                 "knowledgeBaseConfig",
                 "modelConfig",
                 "name",
+                "qaKnowledgeBaseConfig",
+                "qaRerankConfig",
                 "ragId",
                 "rerankConfig"
             ],
             "properties": {
+                "appPublishConfig": {
+                    "description": "发布配置",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.AppPublishConfig"
+                        }
+                    ]
+                },
                 "avatar": {
                     "description": "图标",
                     "allOf": [
@@ -18624,6 +21330,22 @@ const docTemplate = `{
                 "name": {
                     "description": "名称",
                     "type": "string"
+                },
+                "qaKnowledgeBaseConfig": {
+                    "description": "问答库",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.AppQAKnowledgebaseConfig"
+                        }
+                    ]
+                },
+                "qaRerankConfig": {
+                    "description": "问答库Rerank模型",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.AppModelConfig"
+                        }
+                    ]
                 },
                 "ragId": {
                     "type": "string"

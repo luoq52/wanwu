@@ -31,7 +31,6 @@ func (c *Client) DeleteRag(ctx context.Context, req *rag_service.RagDeleteReq) *
 }
 func (c *Client) GetRag(ctx context.Context, req *rag_service.RagDetailReq) (*rag_service.RagInfo, *err_code.Status) {
 	info := &model.RagInfo{}
-
 	// 获取 rag 信息
 	err := sqlopt.WithRagID(req.RagId).Apply(c.db.WithContext(ctx)).First(info).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -39,15 +38,15 @@ func (c *Client) GetRag(ctx context.Context, req *rag_service.RagDetailReq) (*ra
 	} else if err != nil {
 		return nil, toErrStatus("rag_get_err", err.Error())
 	}
-
-	// 反序列化敏感词表
-	var sensitiveIds []string
-	if info.SensitiveConfig.TableIds != "" {
-		err = json.Unmarshal([]byte(info.SensitiveConfig.TableIds), &sensitiveIds)
-		if err != nil {
-			return nil, toErrStatus("rag_get_err", "sensitive "+err.Error())
-		}
+	// 构建 rag 信息
+	resp, errF := BuildRagInfo(info)
+	if errF != nil {
+		return nil, errF
 	}
+	return resp, nil
+}
+
+func BuildRagInfo(info *model.RagInfo) (*rag_service.RagInfo, *err_code.Status) {
 	knowledgeConfig := info.KnowledgeBaseConfig
 	kbGlobalConfig := &rag_service.RagGlobalConfig{
 		MaxHistory:        int32(knowledgeConfig.MaxHistory),
@@ -62,11 +61,29 @@ func (c *Client) GetRag(ctx context.Context, req *rag_service.RagDetailReq) (*ra
 		UseGraph:          knowledgeConfig.UseGraph,
 	}
 
+	// 反序列化敏感词表
+	var sensitiveIds []string
+	if info.SensitiveConfig.TableIds != "" {
+		err := json.Unmarshal([]byte(info.SensitiveConfig.TableIds), &sensitiveIds)
+		if err != nil {
+			return nil, toErrStatus("rag_get_err", "sensitive "+err.Error())
+		}
+	}
+
+	// 反序列化 - 知识库元数据
 	var perKbConfig []*rag_service.RagPerKnowledgeConfig
 	if info.KnowledgeBaseConfig.MetaParams != "" {
-		err = json.Unmarshal([]byte(info.KnowledgeBaseConfig.MetaParams), &perKbConfig)
+		err := json.Unmarshal([]byte(info.KnowledgeBaseConfig.MetaParams), &perKbConfig)
 		if err != nil {
 			return nil, toErrStatus("rag_get_err", "kb_meta "+err.Error())
+		}
+	}
+
+	// 反序列化 - 问答库配置
+	qaConfig := &rag_service.RagQAKnowledgeBaseConfig{}
+	if info.QAKnowledgebaseConfig != "" {
+		if err := json.Unmarshal([]byte(info.QAKnowledgebaseConfig), qaConfig); err != nil {
+			return nil, toErrStatus("rag_get_err", "kb_qa "+err.Error())
 		}
 	}
 
@@ -86,22 +103,29 @@ func (c *Client) GetRag(ctx context.Context, req *rag_service.RagDetailReq) (*ra
 			Config:    info.ModelConfig.Config,
 		},
 		RerankConfig: &common.AppModelConfig{
+			Provider:  info.RerankConfig.Provider,
 			Model:     info.RerankConfig.Model,
 			ModelId:   info.RerankConfig.ModelId,
-			Provider:  info.RerankConfig.Provider,
 			ModelType: info.RerankConfig.ModelType,
 			Config:    info.RerankConfig.Config,
+		},
+		QArerankConfig: &common.AppModelConfig{
+			Provider:  info.QARerankConfig.Provider,
+			Model:     info.QARerankConfig.Model,
+			ModelId:   info.QARerankConfig.ModelId,
+			ModelType: info.QARerankConfig.ModelType,
+			Config:    info.QARerankConfig.Config,
 		},
 		KnowledgeBaseConfig: &rag_service.RagKnowledgeBaseConfig{
 			PerKnowledgeConfigs: perKbConfig,
 			GlobalConfig:        kbGlobalConfig,
 		},
+		QAknowledgeBaseConfig: qaConfig,
 		SensitiveConfig: &rag_service.RagSensitiveConfig{
 			Enable:   info.SensitiveConfig.Enable,
 			TableIds: sensitiveIds,
 		},
 	}
-
 	return resp, nil
 }
 
@@ -253,6 +277,12 @@ func (c *Client) UpdateRagConfig(ctx context.Context, rag *model.RagInfo) *err_c
 				"rerank_model_type": rag.RerankConfig.ModelType,
 				"rerank_config":     rag.RerankConfig.Config,
 
+				"qa_rerank_provider":   rag.QARerankConfig.Provider,
+				"qa_rerank_model":      rag.QARerankConfig.Model,
+				"qa_rerank_model_id":   rag.QARerankConfig.ModelId,
+				"qa_rerank_model_type": rag.QARerankConfig.ModelType,
+				"qa_rerank_config":     rag.QARerankConfig.Config,
+
 				"kb_know_id":     rag.KnowledgeBaseConfig.KnowId,
 				"kb_max_history": rag.KnowledgeBaseConfig.MaxHistory,
 				"kb_threshold":   rag.KnowledgeBaseConfig.Threshold,
@@ -266,6 +296,8 @@ func (c *Client) UpdateRagConfig(ctx context.Context, rag *model.RagInfo) *err_c
 				"kb_term_weight":        rag.KnowledgeBaseConfig.TermWeight,
 				"kb_term_weight_enable": rag.KnowledgeBaseConfig.TermWeightEnable,
 				"kb_use_graph":          rag.KnowledgeBaseConfig.UseGraph,
+
+				"qa_knowledgebase_config": rag.QAKnowledgebaseConfig,
 
 				"sensitive_enable":    rag.SensitiveConfig.Enable,
 				"sensitive_table_ids": rag.SensitiveConfig.TableIds,
@@ -334,4 +366,56 @@ func (c *Client) FetchRagCopyIndex(ctx context.Context, name, userId, orgId stri
 	}
 	// 返回最大索引 + 1
 	return *maxIndex + 1, nil
+}
+
+func (c *Client) PublishRag(ctx context.Context, rag *model.RagPublish) *err_code.Status {
+	return c.transaction(ctx, func(tx *gorm.DB) *err_code.Status {
+		// 查找是否已存在相同 ragID 和版本号的记录
+		if err := sqlopt.SQLOptions(sqlopt.WithRagID(rag.RagID), sqlopt.WithVersion(rag.Version)).
+			Apply(tx).First(&model.RagPublish{}).Error; err == nil {
+			return toErrStatus("rag_publish_err", "repeated version: "+rag.Version)
+		}
+		if err := tx.Create(rag).Error; err != nil {
+			return toErrStatus("rag_publish_err", err.Error()) // todo
+		}
+		return nil
+	})
+}
+
+func (c *Client) FetchPublishRagFirst(ctx context.Context, ragId, version string) (*model.RagPublish, *err_code.Status) {
+	if ragId == "" {
+		return nil, toErrStatus("rag_get_err", "get rag but ragID is empty")
+	}
+	rag := &model.RagPublish{}
+	// 如果version为空，则返回最新版本
+	if err := sqlopt.SQLOptions(sqlopt.WithRagID(ragId), sqlopt.WithVersion(version)).
+		Apply(c.db.WithContext(ctx)).
+		Order("created_at DESC").
+		Limit(1).
+		First(rag).Error; err != nil {
+		return nil, toErrStatus("rag_get_err", "failed to fetch rag: "+err.Error())
+	}
+	return rag, nil
+}
+
+func (c *Client) UpdatePublishRag(ctx context.Context, rag *model.RagPublish) *err_code.Status {
+	return c.transaction(ctx, func(tx *gorm.DB) *err_code.Status {
+		if err := sqlopt.WithID(rag.ID).Apply(tx).Model(&model.RagPublish{}).
+			Update("description", rag.Description).Error; err != nil {
+			return toErrStatus("rag_update_err", "failed to update rag: "+err.Error())
+		}
+		return nil
+	})
+}
+
+func (c *Client) FetchPublishRagList(ctx context.Context, ragId string) ([]*model.RagPublish, *err_code.Status) {
+	if ragId == "" {
+		return nil, toErrStatus("rag_get_err", "get rag but ragID is empty")
+	}
+	ragList := make([]*model.RagPublish, 0)
+	err := sqlopt.SQLOptions(sqlopt.WithRagID(ragId)).Apply(c.db.WithContext(ctx)).Order("created_at DESC").Find(&ragList).Error
+	if err != nil {
+		return nil, toErrStatus("rag_get_err", "failed to fetch rag: "+err.Error())
+	}
+	return ragList, nil
 }

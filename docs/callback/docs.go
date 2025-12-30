@@ -163,6 +163,133 @@ const docTemplate = `{
                 }
             }
         },
+        "/callback/mcp": {
+            "get": {
+                "description": "获取自定义MCP详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mcp"
+                ],
+                "summary": "获取自定义MCP详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "mcpId",
+                        "name": "mcpId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.MCPDetail"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/callback/mcp/server": {
+            "get": {
+                "description": "获取MCP Server详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "mcp.server"
+                ],
+                "summary": "获取MCP Server详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "mcpServerId",
+                        "name": "mcpServerId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.MCPServerDetail"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/chatflow/list": {
+            "get": {
+                "description": "根据userId和spaceId获取Chatflow",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "callback"
+                ],
+                "summary": "根据userId和spaceId获取Chatflow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "获取工作流参数userId",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "获取工作流参数orgId",
+                        "name": "orgId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/file/url/base64": {
             "post": {
                 "consumes": [
@@ -246,6 +373,51 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/model/{modelId}/asr": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "callback"
+                ],
+                "summary": "Model Asr",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "模型ID",
+                        "name": "modelId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "语音文件",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求参数",
+                        "name": "config",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/mp_common.AsrResp"
                         }
                     }
                 }
@@ -494,6 +666,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/model/{modelId}/text2image": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data",
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "callback"
+                ],
+                "summary": "Model Text-to-Image",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "模型ID",
+                        "name": "modelId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mp_common.Text2ImageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/mp_common.Text2ImageResp"
+                        }
+                    }
+                }
+            }
+        },
         "/rag/knowledge/stream/search": {
             "post": {
                 "description": "知识库流式问答",
@@ -557,6 +770,97 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/rag/search-qa-base": {
+            "post": {
+                "description": "查询问答列表（命中测试）",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "callback"
+                ],
+                "summary": "查询问答列表（命中测试）",
+                "parameters": [
+                    {
+                        "description": "查询知识库列表请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RagSearchQABaseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/tool/builtin/asr": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "callback"
+                ],
+                "summary": "语音文件（base64格式）转文本内置工具服务",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "语音文件 base64",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求参数",
+                        "name": "config",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "api token",
+                        "name": "apiKey",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -800,7 +1104,15 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "mp.ProviderModelByHuoshan": {
+        "mp.ProviderModelByDeepSeek": {
+            "type": "object",
+            "properties": {
+                "llm": {
+                    "$ref": "#/definitions/mp_deepseek.LLM"
+                }
+            }
+        },
+        "mp.ProviderModelByHuoShan": {
             "type": "object",
             "properties": {
                 "embedding": {
@@ -850,6 +1162,20 @@ const docTemplate = `{
                 }
             }
         },
+        "mp.ProviderModelByQianFan": {
+            "type": "object",
+            "properties": {
+                "embedding": {
+                    "$ref": "#/definitions/mp_qianfan.Embedding"
+                },
+                "llm": {
+                    "$ref": "#/definitions/mp_qianfan.LLM"
+                },
+                "rerank": {
+                    "$ref": "#/definitions/mp_qianfan.Rerank"
+                }
+            }
+        },
         "mp.ProviderModelByQwen": {
             "type": "object",
             "properties": {
@@ -890,10 +1216,13 @@ const docTemplate = `{
         "mp.ProviderModelConfig": {
             "type": "object",
             "properties": {
-                "providerHuoshan": {
-                    "$ref": "#/definitions/mp.ProviderModelByHuoshan"
+                "providerDeepSeek": {
+                    "$ref": "#/definitions/mp.ProviderModelByDeepSeek"
                 },
-                "providerModelByInfini": {
+                "providerHuoShan": {
+                    "$ref": "#/definitions/mp.ProviderModelByHuoShan"
+                },
+                "providerInfini": {
                     "$ref": "#/definitions/mp.ProviderModelByInfini"
                 },
                 "providerOllama": {
@@ -901,6 +1230,9 @@ const docTemplate = `{
                 },
                 "providerOpenAICompatible": {
                     "$ref": "#/definitions/mp.ProviderModelByOpenAICompatible"
+                },
+                "providerQianFan": {
+                    "$ref": "#/definitions/mp.ProviderModelByQianFan"
                 },
                 "providerQwen": {
                     "$ref": "#/definitions/mp.ProviderModelByQwen"
@@ -910,10 +1242,53 @@ const docTemplate = `{
                 }
             }
         },
-        "mp_common.Document": {
+        "mp_common.AsrResp": {
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "result": {
+                    "$ref": "#/definitions/mp_common.AsrResult"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "mp_common.AsrResult": {
+            "type": "object",
+            "properties": {
+                "diarization": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/mp_common.DiarizationObj"
+                    }
+                }
+            }
+        },
+        "mp_common.DiarizationObj": {
+            "type": "object",
+            "properties": {
+                "end": {
+                    "type": "number"
+                },
+                "speaker": {
+                    "type": "integer"
+                },
+                "start": {
+                    "type": "number"
+                },
                 "text": {
+                    "type": "string"
+                },
+                "trans": {
                     "type": "string"
                 }
             }
@@ -956,6 +1331,10 @@ const docTemplate = `{
                     }
                 },
                 "model": {
+                    "type": "string"
+                },
+                "user": {
+                    "description": "用户标识（兼容千帆)",
                     "type": "string"
                 }
             }
@@ -1238,6 +1617,7 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "user": {
+                    "description": "用户标识（兼容千帆)",
                     "type": "string"
                 },
                 "web_search": {
@@ -1596,6 +1976,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "documents": {
+                    "description": "需要重排序的文本",
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -1611,7 +1992,12 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "top_n": {
+                    "description": "返回排序后的top_n个文档。默认返回全部文档。",
                     "type": "integer"
+                },
+                "user": {
+                    "description": "用户标识（兼容千帆)",
+                    "type": "string"
                 }
             }
         },
@@ -1647,9 +2033,7 @@ const docTemplate = `{
                 "relevance_score"
             ],
             "properties": {
-                "document": {
-                    "$ref": "#/definitions/mp_common.Document"
-                },
+                "document": {},
                 "index": {
                     "type": "integer"
                 },
@@ -1669,11 +2053,63 @@ const docTemplate = `{
                 }
             }
         },
+        "mp_common.T2IUsage": {
+            "type": "object",
+            "properties": {
+                "total_patches": {
+                    "type": "integer"
+                }
+            }
+        },
         "mp_common.Tag": {
             "type": "object",
             "properties": {
                 "text": {
                     "type": "string"
+                }
+            }
+        },
+        "mp_common.Text2ImageReq": {
+            "type": "object",
+            "required": [
+                "prompt"
+            ],
+            "properties": {
+                "advanced_opt": {
+                    "description": "高级选项参数 json, {\"height\": 512, \"width\": 512, \"num_images_per_prompt\": 1, \"style\": \"摄影\"}",
+                    "type": "string"
+                },
+                "prompt": {
+                    "description": "提示词",
+                    "type": "string"
+                },
+                "report_url": {
+                    "description": "参考",
+                    "type": "string"
+                },
+                "response_format": {
+                    "description": "“url” or “b64_json”,默认b64_json",
+                    "type": "string"
+                }
+            }
+        },
+        "mp_common.Text2ImageResp": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "msg": {
+                    "type": "string"
+                },
+                "result": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "usage": {
+                    "$ref": "#/definitions/mp_common.T2IUsage"
                 }
             }
         },
@@ -1740,6 +2176,35 @@ const docTemplate = `{
                 },
                 "enable_trace": {
                     "type": "boolean"
+                }
+            }
+        },
+        "mp_deepseek.LLM": {
+            "type": "object",
+            "properties": {
+                "apiKey": {
+                    "description": "ApiKey",
+                    "type": "string"
+                },
+                "contextSize": {
+                    "description": "上下文长度",
+                    "type": "integer"
+                },
+                "endpointUrl": {
+                    "description": "推理url",
+                    "type": "string"
+                },
+                "functionCalling": {
+                    "description": "函数调用是否支持",
+                    "type": "string",
+                    "enum": [
+                        "noSupport",
+                        "toolCall"
+                    ]
+                },
+                "maxTokens": {
+                    "description": "模型回答最大tokens",
+                    "type": "integer"
                 }
             }
         },
@@ -1977,6 +2442,77 @@ const docTemplate = `{
             }
         },
         "mp_openai_compatible.Rerank": {
+            "type": "object",
+            "properties": {
+                "apiKey": {
+                    "description": "ApiKey",
+                    "type": "string"
+                },
+                "contextSize": {
+                    "description": "上下文长度",
+                    "type": "integer"
+                },
+                "endpointUrl": {
+                    "description": "推理url",
+                    "type": "string"
+                }
+            }
+        },
+        "mp_qianfan.Embedding": {
+            "type": "object",
+            "properties": {
+                "apiKey": {
+                    "description": "ApiKey",
+                    "type": "string"
+                },
+                "contextSize": {
+                    "description": "上下文长度",
+                    "type": "integer"
+                },
+                "endpointUrl": {
+                    "description": "推理url",
+                    "type": "string"
+                }
+            }
+        },
+        "mp_qianfan.LLM": {
+            "type": "object",
+            "properties": {
+                "apiKey": {
+                    "description": "ApiKey",
+                    "type": "string"
+                },
+                "contextSize": {
+                    "description": "上下文长度",
+                    "type": "integer"
+                },
+                "endpointUrl": {
+                    "description": "推理url",
+                    "type": "string"
+                },
+                "functionCalling": {
+                    "description": "函数调用是否支持",
+                    "type": "string",
+                    "enum": [
+                        "noSupport",
+                        "toolCall"
+                    ]
+                },
+                "maxTokens": {
+                    "description": "模型回答最大tokens",
+                    "type": "integer"
+                },
+                "visionSupport": {
+                    "description": "视觉支持",
+                    "type": "string",
+                    "enum": [
+                        "noSupport",
+                        "support"
+                    ]
+                }
+            }
+        },
+        "mp_qianfan.Rerank": {
             "type": "object",
             "properties": {
                 "apiKey": {
@@ -2411,6 +2947,14 @@ const docTemplate = `{
                 "fileUrl"
             ],
             "properties": {
+                "addPrefix": {
+                    "description": "是否添加 data:xxx;base64, 前缀",
+                    "type": "boolean"
+                },
+                "customPrefix": {
+                    "description": "自定义前缀（如 \"data:video/mp4;base64,\"）",
+                    "type": "string"
+                },
                 "fileUrl": {
                     "description": "文件URL",
                     "type": "string"
@@ -2468,6 +3012,23 @@ const docTemplate = `{
                 }
             }
         },
+        "request.QAMetadataFilterItem": {
+            "type": "object",
+            "properties": {
+                "conditions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.MetaItem"
+                    }
+                },
+                "filtering_qa_base_name": {
+                    "type": "string"
+                },
+                "logical_operator": {
+                    "type": "string"
+                }
+            }
+        },
         "request.RagKnowledgeChatReq": {
             "type": "object",
             "properties": {
@@ -2476,7 +3037,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "chichat": {
-                    "description": "当知识库召回结果为空时是否使用默认话术（兜底），默认为true",
+                    "description": "当知识库召回结果为空时是否使用默认话术（兜底），默认为false",
                     "type": "boolean"
                 },
                 "custom_model_info": {
@@ -2593,6 +3154,17 @@ const docTemplate = `{
                 }
             }
         },
+        "request.RagQaInfo": {
+            "type": "object",
+            "properties": {
+                "QABase": {
+                    "type": "string"
+                },
+                "QAId": {
+                    "type": "string"
+                }
+            }
+        },
         "request.RagSearchKnowledgeBaseReq": {
             "type": "object",
             "required": [
@@ -2601,6 +3173,10 @@ const docTemplate = `{
                 "userId"
             ],
             "properties": {
+                "auto_citation": {
+                    "description": "是否启动知识图谱查询",
+                    "type": "boolean"
+                },
                 "knowledgeIdList": {
                     "type": "array",
                     "items": {
@@ -2642,6 +3218,10 @@ const docTemplate = `{
                     "description": "hybrid_search:混合搜索， semantic_search:向量搜索， full_text_search：文本搜索",
                     "type": "string"
                 },
+                "rewrite_query": {
+                    "description": "是否query改写",
+                    "type": "boolean"
+                },
                 "term_weight_coefficient": {
                     "description": "关键词系数",
                     "type": "number"
@@ -2666,6 +3246,66 @@ const docTemplate = `{
                             "$ref": "#/definitions/request.WeightParams"
                         }
                     ]
+                }
+            }
+        },
+        "request.RagSearchQABaseReq": {
+            "type": "object",
+            "required": [
+                "knowledgeIdList",
+                "userId"
+            ],
+            "properties": {
+                "QABaseInfo": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/request.RagQaInfo"
+                        }
+                    }
+                },
+                "knowledgeIdList": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "metadataFiltering": {
+                    "type": "boolean"
+                },
+                "metadataFilteringConditions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.QAMetadataFilterItem"
+                    }
+                },
+                "question": {
+                    "type": "string"
+                },
+                "rerankMod": {
+                    "type": "string"
+                },
+                "rerankModelId": {
+                    "type": "string"
+                },
+                "retrieveMethod": {
+                    "type": "string"
+                },
+                "returnMeta": {
+                    "type": "boolean"
+                },
+                "threshold": {
+                    "type": "number"
+                },
+                "topK": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "string"
+                },
+                "weights": {
+                    "$ref": "#/definitions/request.WeightParams"
                 }
             }
         },
@@ -2703,12 +3343,15 @@ const docTemplate = `{
         "request.WorkflowUploadFileByBase64Req": {
             "type": "object",
             "required": [
-                "file",
-                "fileName"
+                "file"
             ],
             "properties": {
                 "file": {
                     "description": "base64格式",
+                    "type": "string"
+                },
+                "fileExt": {
+                    "description": "文件后缀名，如 \"png\", \"pdf\"",
                     "type": "string"
                 },
                 "fileName": {
@@ -2777,6 +3420,144 @@ const docTemplate = `{
                 },
                 "schema": {
                     "description": "schema",
+                    "type": "string"
+                }
+            }
+        },
+        "response.MCPDetail": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "图标",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.Avatar"
+                        }
+                    ]
+                },
+                "category": {
+                    "description": "类型(data:数据,create:创作,search:搜索)",
+                    "type": "string"
+                },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "detail": {
+                    "description": "详情",
+                    "type": "string"
+                },
+                "feature": {
+                    "description": "特性说明",
+                    "type": "string"
+                },
+                "from": {
+                    "description": "来源",
+                    "type": "string"
+                },
+                "manual": {
+                    "description": "使用说明",
+                    "type": "string"
+                },
+                "mcpId": {
+                    "description": "mcpId",
+                    "type": "string"
+                },
+                "mcpSquareId": {
+                    "description": "广场mcpId(非空表示来源于广场)",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "名称",
+                    "type": "string"
+                },
+                "scenario": {
+                    "description": "应用场景",
+                    "type": "string"
+                },
+                "sseUrl": {
+                    "description": "SSE URL",
+                    "type": "string"
+                },
+                "summary": {
+                    "description": "使用概述",
+                    "type": "string"
+                }
+            }
+        },
+        "response.MCPServerDetail": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "图标",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/request.Avatar"
+                        }
+                    ]
+                },
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "mcpServerId": {
+                    "description": "mcpServerId",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "名称",
+                    "type": "string"
+                },
+                "sseExample": {
+                    "description": "sse连接示例",
+                    "type": "string"
+                },
+                "sseUrl": {
+                    "description": "sse url",
+                    "type": "string"
+                },
+                "streamableExample": {
+                    "description": "streamable http 连接示例",
+                    "type": "string"
+                },
+                "streamableUrl": {
+                    "description": "streamable http url",
+                    "type": "string"
+                },
+                "tools": {
+                    "description": "绑定工具列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.MCPServerToolInfo"
+                    }
+                }
+            }
+        },
+        "response.MCPServerToolInfo": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "应用或工具id",
+                    "type": "string"
+                },
+                "mcpServerToolId": {
+                    "description": "mcpServerToolId",
+                    "type": "string"
+                },
+                "methodName": {
+                    "description": "显示名称",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "应用或工具名称",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "类型",
                     "type": "string"
                 }
             }
@@ -2860,6 +3641,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "userId": {
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 }
             }

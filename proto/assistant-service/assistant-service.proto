@@ -16,7 +16,16 @@ service AssistantService {
   rpc AssistantDelete(AssistantDeleteReq) returns (google.protobuf.Empty) {}
   rpc GetAssistantListMyAll(GetAssistantListMyAllReq) returns (AppBriefList) {}
   rpc GetAssistantInfo(GetAssistantInfoReq) returns (AssistantInfo) {}
+  rpc GetAssistantIdByUuid(GetAssistantIdByUuidReq) returns (GetAssistantIdByUuidResp) {}
   rpc AssistantCopy(AssistantCopyReq) returns (AssistantCreateResp) {}
+
+  // --- assistant snapshot ---
+  rpc AssistantSnapshotCreate(AssistantSnapshotReq) returns (AssistantSnapshotResp) {}
+  rpc AssistantSnapshotUpdate(AssistantSnapshotUpdateReq) returns (google.protobuf.Empty) {}
+  rpc AssistantSnapshotList(AssistantSnapshotListReq) returns (AssistantSnapshotListResp) {}
+  rpc AssistantSnapshotRollback(AssistantSnapshotRollbackReq) returns (google.protobuf.Empty) {}
+  rpc AssistantSnapshotInfo(AssistantSnapshotInfoReq) returns (AssistantInfo) {}
+  rpc AssistantSnapshotLatest(AssistantSnapshotInfoReq) returns (AssistantSnapshot) {}
 
   // --- workFlow ---
   rpc AssistantWorkFlowCreate(AssistantWorkFlowCreateReq) returns (google.protobuf.Empty) {}
@@ -44,6 +53,7 @@ service AssistantService {
   rpc GetConversationList(GetConversationListReq) returns (GetConversationListResp) {}
   rpc GetConversationDetailList(GetConversationDetailListReq) returns (GetConversationDetailListResp) {}
   rpc AssistantConversionStream(AssistantConversionStreamReq) returns (stream AssistantConversionStreamResp) {}
+  rpc AssistantConversionStreamNew(AssistantConversionStreamReq) returns (stream AssistantConversionStreamResp) {}
   rpc ConversationDeleteByAssistantId(ConversationDeleteByAssistantIdReq) returns (google.protobuf.Empty) {}
 
   // --- custom prompt ---
@@ -80,6 +90,53 @@ message AssistantCreateReq {
 
 message AssistantCreateResp {
   string assistantId = 1;
+}
+
+message AssistantSnapshotReq {
+  string assistantId = 1;
+  string version = 2;
+  string desc = 3;
+  Identity identity = 4;
+}
+
+message AssistantSnapshotResp {
+  string snapshotId = 1;
+}
+
+message AssistantSnapshotUpdateReq {
+  string assistantId = 1;
+  string desc = 3;
+  Identity identity = 4;
+}
+
+message AssistantSnapshotListReq {
+  string assistantId = 1;
+  Identity identity = 2;
+}
+
+message AssistantSnapshot {
+  string snapshotId = 1;
+  string assistantId = 2;
+  string version = 3;
+  string desc = 4;
+  int64 createAt = 5;
+}
+
+message AssistantSnapshotListResp {
+  repeated AssistantSnapshot list = 1;
+  int64 total = 2;
+}
+
+message AssistantSnapshotRollbackReq {
+  string assistantId = 1;
+  string version = 2;
+  Identity identity = 3;
+}
+
+message AssistantSnapshotInfoReq {
+  string assistantId = 1;
+  string version = 2;
+  Identity identity = 3;
 }
 
 message AssistantUpdateReq {
@@ -168,6 +225,14 @@ message GetAssistantListMyAllReq {
   Identity identity = 2;
 }
 
+message GetAssistantIdByUuidReq {
+  string uuid = 1;
+}
+
+message GetAssistantIdByUuidResp {
+  string assistantId = 1;
+}
+
 message AssistantInfo {
   string assistantId = 1;
   Identity identity = 2;
@@ -186,6 +251,7 @@ message AssistantInfo {
   int64 updateTime = 17;
   AssistantSafetyConfig safetyConfig = 18;
   AssistantVisionConfig visionConfig = 19;
+  string uuid = 20;
 }
 
 
@@ -413,7 +479,8 @@ message AssistantConversionStreamReq {
   bool trial = 4;
   string prompt = 5;
   string systemPrompt = 6;
-  Identity identity = 7;
+  bool draft = 7;
+  Identity identity = 8;
 }
 
 message ConversionStreamFile{

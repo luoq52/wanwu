@@ -7,8 +7,8 @@ import (
 
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/config"
-	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/util"
 	"github.com/UnicomAI/wanwu/pkg/log"
+	"github.com/UnicomAI/wanwu/pkg/util"
 
 	"github.com/IBM/sarama"
 )
@@ -70,7 +70,7 @@ func initKafka(kafkaAdmin sarama.ClusterAdmin) (sarama.SyncProducer, error) {
 	defaultPartitionNum := config.GetConfig().Kafka.DefaultPartitionNum
 	var defaultTopic = config.GetConfig().Kafka.Topic
 	kafkaConfig := sarama.NewConfig()
-	kafkaConfig.ClientID = util.UUID()
+	kafkaConfig.ClientID = util.GenUUID()
 	kafkaConfig.Version = sarama.MaxVersion
 	// 使用 NewBalanceStrategyRange 函数来设置再平衡策略
 	kafkaConfig.Consumer.Group.Rebalance.Strategy = sarama.NewBalanceStrategyRange()

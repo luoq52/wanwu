@@ -41,14 +41,14 @@ func DeleteFile(ctx context.Context, minioFilePath string) error {
 	bucketName, objectName, _ := SplitFilePath(minioFilePath)
 	err := minio_client.Knowledge().DeleteObject(ctx, bucketName, objectName)
 	if err != nil {
-		log.Errorf("DeleteFile error %s", err)
+		log.Errorf("DeleteFile error %s filePath %s", err, minioFilePath)
 		return err
 	}
 	return nil
 }
 
 // UploadLocalFile 根据文件路径上传文件
-func UploadLocalFile(ctx context.Context, minioDir string, minioFileName string, srcFilePath string) (string, string, int64, error) {
+func UploadLocalFile(ctx context.Context, minioDir string, minioBucketName string, minioFileName string, srcFilePath string) (string, string, int64, error) {
 	srcFile, err := os.Open(srcFilePath)
 	if err != nil {
 		log.Errorf("UploadLocalFile open file error :%s", err)
@@ -65,16 +65,16 @@ func UploadLocalFile(ctx context.Context, minioDir string, minioFileName string,
 	if err == nil {
 		fileUploadSize = fileInfo.Size()
 	}
-	filePath, fileSize, err := UploadFile(ctx, minioDir, minioFileName, srcFile, fileUploadSize)
+	filePath, fileSize, err := UploadFile(ctx, minioDir, minioBucketName, minioFileName, srcFile, fileUploadSize)
 	return minioFileName, filePath, fileSize, err
 }
 
-func CopyFile(ctx context.Context, srcFilePath string, destObjectNamePre string) (string, string, int64, error) {
+func CopyFile(ctx context.Context, srcFilePath string, destObjectNamePre string, newFile bool) (string, string, int64, error) {
 	bucketName, objectName, fileName := SplitFilePath(srcFilePath)
 	if len(bucketName) == 0 || len(objectName) == 0 {
 		return "", "", 0, errors.New("invalid file path")
 	}
-	destObjectName := buildObjectName(destObjectNamePre, fileName)
+	destObjectName := buildObjectName(destObjectNamePre, fileName, newFile)
 	minioConfig := config.GetConfig().Minio
 
 	destOptions := minio.CopyDestOptions{
@@ -114,12 +114,11 @@ func getContentType(uri string) (contentType string) {
 	return ""
 }
 
-func UploadFile(ctx context.Context, dir string, fileName string, reader io.Reader, objectSize int64) (string, int64, error) {
-	bucketName := config.GetConfig().Minio.Bucket
+func UploadFile(ctx context.Context, dir string, bucketName string, fileName string, reader io.Reader, objectSize int64) (string, int64, error) {
 	// 上传文件。
 	//milli := time.Now().UnixMilli()
 	var uploadInfo minio.UploadInfo
-	objectName := buildObjectName(dir, fileName)
+	objectName := buildObjectName(dir, fileName, false)
 	contentType := getContentType(objectName)
 	putObjectOptions := minio.PutObjectOptions{}
 	if len(contentType) > 0 {
@@ -198,9 +197,16 @@ func SplitFilePath(filePath string) (bucketName string, objectName string, fileN
 	return "", "", filePath
 }
 
-func buildObjectName(dir, fileName string) string {
+func buildObjectName(dir, fileName string, newFile bool) string {
 	if len(dir) == 0 {
-		return fileName
+		return newFileName(fileName, newFile)
 	}
-	return dir + "/" + fileName
+	return dir + "/" + newFileName(fileName, newFile)
+}
+
+func newFileName(fileName string, newFile bool) string {
+	if newFile {
+		fileName = util.BuildFilePath("", filepath.Ext(fileName))
+	}
+	return fileName
 }

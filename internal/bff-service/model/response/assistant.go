@@ -7,6 +7,7 @@ import (
 type Assistant struct {
 	request.AppBriefConfig                                // 基本信息
 	AssistantId            string                         `json:"assistantId"  validate:"required"`
+	UUID                   string                         `json:"uuid"`
 	Prologue               string                         `json:"prologue"`            // 开场白
 	Instructions           string                         `json:"instructions"`        // 系统提示词
 	RecommendQuestion      []string                       `json:"recommendQuestion"`   // 推荐问题
@@ -21,6 +22,8 @@ type Assistant struct {
 	ToolInfos              []*AssistantToolInfo           `json:"toolInfos"`           // 自定义工具、内置工具
 	CreatedAt              string                         `json:"createdAt"`           // 创建时间
 	UpdatedAt              string                         `json:"updatedAt"`           // 更新时间
+	NewAgent               bool                           `json:"newAgent"`            //是否是新版本智能体
+	PublishType            string                         `json:"publishType"`         //发布类型
 }
 
 type AssistantWorkFlowInfo struct {

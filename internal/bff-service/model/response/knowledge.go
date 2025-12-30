@@ -52,6 +52,9 @@ type KnowledgeInfo struct {
 	Share              bool                `json:"share"`          //是分享，还是私有
 	RagName            string              `json:"ragName"`        //rag名称
 	GraphSwitch        int32               `json:"graphSwitch"`    //图谱开关
+	Category           int32               `json:"category"`       // 0: 知识库; 1: 问答库
+	LlmModelId         string              `json:"llmModelId"`     // 知识图谱模型id
+	UpdatedAt          string              `json:"updatedAt"`      // 更新时间
 }
 
 type KnowledgeMetaData struct {
@@ -65,7 +68,7 @@ type ChunkSearchList struct {
 	KnowledgeName    string          `json:"knowledgeName"`
 	ChildContentList []*ChildContent `json:"childContentList"`
 	ChildScore       []float64       `json:"childScore"`
-	ContentType      string          `json:"contentType"` // graph：知识图谱（文本）, text：文档分段（文本）, community_report：社区报告（markdown）
+	ContentType      string          `json:"contentType"` // graph：知识图谱（文本）, text：文档分段（文本）, community_report：社区报告（markdown），qa：问答库（文本）
 }
 
 type ChildContent struct {
@@ -130,4 +133,21 @@ type KnowledgeGraphEdge struct {
 	Description  string   `json:"description"`
 	Weight       float64  `json:"weight"`
 	SourceId     []string `json:"source_id"`
+}
+
+type KnowledgeExportRecordPageResult struct {
+	List     []*ListKnowledgeExportRecordResp `json:"list"`
+	Total    int64                            `json:"total"`
+	PageNo   int                              `json:"pageNo"`
+	PageSize int                              `json:"pageSize"`
+}
+
+type ListKnowledgeExportRecordResp struct {
+	ExportRecordId string `json:"exportRecordId"` //知识库导出记录id
+	Author         string `json:"author"`         //导出人
+	ExportTime     string `json:"exportTime"`     //导出时间
+	FilePath       string `json:"filePath"`       //导出文件路径
+	Status         int    `json:"status"`         //状态
+	ErrorMsg       string `json:"errorMsg"`       //导出状态错误信息
+	KnowledgeName  string `json:"knowledgeName"`
 }

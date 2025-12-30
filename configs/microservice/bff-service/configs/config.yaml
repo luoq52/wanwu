@@ -110,9 +110,9 @@ doc-center:
     - key: model
       val: 模型导入方式-详细版.md
     - key: knowledge
-      val: 2.知识库/创建知识库.md
+      val: 2.知识库/创建知识库、问答库/创建知识库/创建知识库.md
     - key: knowledge-hit
-      val: 2.知识库/命中测试.md
+      val: 2.知识库/命中测试/创建命中测试.md
     - key: knowledge-keywords
       val: 2.知识库/关键词管理.md
     - key: mcp
@@ -124,49 +124,55 @@ doc-center:
     - key: agent
       val: 7.智能体.md
     - key: workflow-1
-      val: 6.工作流/开始.md
+      val: 6.工作流/开始节点.md
     - key: workflow-2
-      val: 6.工作流/结束.md
+      val: 6.工作流/结束节点.md
     - key: workflow-3
-      val: 6.工作流/大模型.md
+      val: 6.工作流/大模型节点.md
     - key: workflow-5
-      val: 6.工作流/代码.md
+      val: 6.工作流/业务逻辑/代码节点.md
     - key: workflow-8
-      val: 6.工作流/选择器.md
+      val: 6.工作流/业务逻辑/选择器节点.md
     - key: workflow-9
-      val: 6.工作流/工作流.md
+      val: 6.工作流/工作流节点.md
     - key: workflow-13
-      val: 6.工作流/输出.md
+      val: 6.工作流/输入与输出/输出节点.md
     - key: workflow-15
-      val: 6.工作流/文本处理.md
+      val: 6.工作流/组件/文本处理节点.md
     - key: workflow-21
-      val: 6.工作流/循环.md
+      val: 6.工作流/业务逻辑/循环节点.md
     - key: workflow-28
-      val: 6.工作流/批处理.md
+      val: 6.工作流/业务逻辑/批处理节点.md
     - key: workflow-30
-      val: 6.工作流/输入.md
+      val: 6.工作流/输入与输出/输入节点.md
     - key: workflow-32
-      val: 6.工作流/变量聚合.md
+      val: 6.工作流/业务逻辑/变量聚合节点.md
     - key: workflow-45
-      val: 6.工作流/HTTP请求.md
+      val: 6.工作流/组件/HTTP请求节点.md
     - key: workflow-58
-      val: 6.工作流/JSON序列化.md
+      val: 6.工作流/组件/JSON序列化节点.md
     - key: workflow-1004
-      val: 6.工作流/工具.md
+      val: 6.工作流/组件/工具节点.md
     - key: workflow-1006
-      val: 6.工作流/知识库.md
+      val: 6.工作流/知识库与数据/知识库节点.md
     - key: workflow-1007
-      val: 6.工作流/文档生成.md
+      val: 6.工作流/文档/文档生成节点.md
     - key: workflow-1008
-      val: 6.工作流/文档解析.md
+      val: 6.工作流/文档/文档解析节点.md
     - key: workflow-1009
-      val: 6.工作流/MCP.md
+      val: 6.工作流/组件/MCP节点.md
     - key: workflow-1010
-      val: 6.工作流/GUI.md
+      val: 6.工作流/组件/GUI节点.md
     - key: workflow-1022
-      val: 6.工作流/意图识别.md
+      val: 6.工作流/业务逻辑/意图识别节点.md
     - key: workflow-1059
-      val: 6.工作流/JSON反序列化.md
+      val: 6.工作流/组件/JSON反序列化节点.md
+
+models :
+  - model_id: "Asr"
+    model_type: "asr"
+    provider: "YuanJing"
+    endpoint: "https://maas-api.ai-yuanjing.com/openapi/synchronous/asr/audio/file/transfer/unicom/sync/file/asr"
 
 workflow-template:
   server_mode: local
@@ -179,7 +185,7 @@ workflow-template:
 
 prompt-template:
   configPath: configs/microservice/bff-service/configs/prompt_template_config.yaml
-  
+
 # --- middleware ---
 
 minio:
@@ -207,6 +213,7 @@ model:
   host: model-service:8989
   png_test_file_path: "configs/microservice/bff-service/static/model/test.png"
   pdf_test_file_path: "configs/microservice/bff-service/static/model/test.pdf"
+  asr_test_file_path: "configs/microservice/bff-service/static/model/test.m4a"
 
 mcp:
   host: mcp-service:9898
@@ -224,6 +231,7 @@ operate:
   host: operate-service:9797
 
 agent:
+  use_old_agent: 0
   host: agent-wanwu
   upload_minio:
     port: 15001
@@ -234,24 +242,43 @@ rag-knowledge:
   chat-endpoint: 'http://rag-wanwu:10891'
   search-knowledge-base-uri: '/rag/search-knowledge-base'
   knowledge-chat-uri: '/rag/knowledge/stream/search'
+  search-qa-base-uri: '/rag/search-QA-base'
 
 workflow:
   endpoint: http://workflow-wanwu:8999
   minio_proxy_endpoint: http://workflow-wanwu:8998
   minio_proxy_prefix: /workflow/minio/presign
+  # general
   list_uri: /api/workflow_api/workflow_list_by_wanwu
   create_uri: /api/workflow_api/create
   delete_uri: /api/workflow_api/delete
   copy_uri: /api/workflow_api/copy
   export_uri: /api/workflow_api/export
   import_uri: /api/workflow_api/import
-  test_run_uri: /v1/workflow/%v/run_by_wanwu
+  convert_uri: /api/workflow_api/update_meta_by_wanwu
+  # run
+  workflow_run_by_openapi_uri: /v1/workflow/%v/run_by_wanwu
+  workflow_run_latest_version_uri: /v1/workflow/run_by_wanwu
+  get_process_uri: /api/workflow_api/get_process
+  chatflow_run_by_openapi_uri: /v1/workflow/chat_by_wanwu
+  # conversation
   create_chatflow_conversation_uri: /v1/workflow/conversation/create_by_wanwu
-  chatflow_run_uri: /v1/workflow/chat_by_wanwu
+  get_draft_intelligence_list_uri: /api/intelligence_api/search/get_draft_intelligence_list
+  get_draft_intelligence_info_uri: /api/intelligence_api/search/get_draft_intelligence_info
+  get_project_conversation_def: /api/workflow_api/project_conversation/create_by_wanwu
+  get_conversation_message_list_uri: /v1/conversation/message/list_by_wanwu
+  delete_conversation_uri: /api/workflow_api/project_conversation/delete
+  # upload
   upload_action_uri: /api/common/upload/apply_upload_action
   upload_common_uri: /api/common/upload
   upload_file_uri: /api/bot/upload_file_by_wanwu
   sign_img_uri: /api/workflow_api/sign_image_url
+  # version
+  publish_uri: /api/workflow_api/publish
+  version_list_uri: /api/workflow_api/version_list
+  update_version_desc_uri: /api/workflow_api/version_description
+  rollback_uri: /api/workflow_api/revert
+   
 
   model_params:
     - name: temperature

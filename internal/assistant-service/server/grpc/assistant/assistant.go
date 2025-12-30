@@ -3,7 +3,6 @@ package assistant
 import (
 	"context"
 	"encoding/json"
-	"strconv"
 	"strings"
 
 	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
@@ -21,9 +20,7 @@ func (s *Service) GetAssistantByIds(ctx context.Context, req *assistant_service.
 	// 转换字符串ID为uint32
 	var assistantIDs []uint32
 	for _, idStr := range req.AssistantIdList {
-		if id, err := strconv.ParseUint(idStr, 10, 32); err == nil {
-			assistantIDs = append(assistantIDs, uint32(id))
-		}
+		assistantIDs = append(assistantIDs, util.MustU32(idStr))
 	}
 
 	// 调用client方法获取智能体列表
@@ -38,7 +35,7 @@ func (s *Service) GetAssistantByIds(ctx context.Context, req *assistant_service.
 		appBriefs = append(appBriefs, &common.AppBrief{
 			OrgId:      assistant.OrgId,
 			UserId:     assistant.UserId,
-			AppId:      strconv.FormatUint(uint64(assistant.ID), 10),
+			AppId:      util.Int2Str(assistant.ID),
 			AppType:    "agent",
 			Name:       assistant.Name,
 			AvatarPath: assistant.AvatarPath,
@@ -57,6 +54,7 @@ func (s *Service) GetAssistantByIds(ctx context.Context, req *assistant_service.
 func (s *Service) AssistantCreate(ctx context.Context, req *assistant_service.AssistantCreateReq) (*assistant_service.AssistantCreateResp, error) {
 	// 组装model参数
 	assistant := &model.Assistant{
+		UUID:       util.NewID(),
 		AvatarPath: req.AssistantBrief.AvatarPath,
 		Name:       req.AssistantBrief.Name,
 		Desc:       req.AssistantBrief.Desc,
@@ -74,20 +72,17 @@ func (s *Service) AssistantCreate(ctx context.Context, req *assistant_service.As
 	}
 
 	return &assistant_service.AssistantCreateResp{
-		AssistantId: strconv.FormatUint(uint64(assistant.ID), 10),
+		AssistantId: util.Int2Str(assistant.ID),
 	}, nil
 }
 
 // AssistantUpdate 修改智能体
 func (s *Service) AssistantUpdate(ctx context.Context, req *assistant_service.AssistantUpdateReq) (*emptypb.Empty, error) {
 	// 转换ID
-	assistantID, err := strconv.ParseUint(req.AssistantId, 10, 32)
-	if err != nil {
-		return nil, err
-	}
+	assistantID := util.MustU32(req.AssistantId)
 
 	// 获取现有智能体信息
-	existingAssistant, status := s.cli.GetAssistant(ctx, uint32(assistantID), "", "")
+	existingAssistant, status := s.cli.GetAssistant(ctx, assistantID, "", "")
 	if status != nil {
 		return nil, errStatus(errs.Code_AssistantErr, status)
 	}
@@ -112,13 +107,10 @@ func (s *Service) AssistantUpdate(ctx context.Context, req *assistant_service.As
 // AssistantDelete 删除智能体
 func (s *Service) AssistantDelete(ctx context.Context, req *assistant_service.AssistantDeleteReq) (*emptypb.Empty, error) {
 	// 转换ID
-	assistantID, err := strconv.ParseUint(req.AssistantId, 10, 32)
-	if err != nil {
-		return nil, err
-	}
+	assistantID := util.MustU32(req.AssistantId)
 
 	// 调用client方法删除智能体
-	if status := s.cli.DeleteAssistant(ctx, uint32(assistantID)); status != nil {
+	if status := s.cli.DeleteAssistant(ctx, assistantID); status != nil {
 		return nil, errStatus(errs.Code_AssistantErr, status)
 	}
 
@@ -128,13 +120,10 @@ func (s *Service) AssistantDelete(ctx context.Context, req *assistant_service.As
 // AssistantConfigUpdate 修改智能体配置
 func (s *Service) AssistantConfigUpdate(ctx context.Context, req *assistant_service.AssistantConfigUpdateReq) (*emptypb.Empty, error) {
 	// 转换ID
-	assistantID, err := strconv.ParseUint(req.AssistantId, 10, 32)
-	if err != nil {
-		return nil, err
-	}
+	assistantID := util.MustU32(req.AssistantId)
 
 	// 先获取现有智能体信息
-	existingAssistant, status := s.cli.GetAssistant(ctx, uint32(assistantID), "", "")
+	existingAssistant, status := s.cli.GetAssistant(ctx, assistantID, "", "")
 	if status != nil {
 		return nil, errStatus(errs.Code_AssistantErr, status)
 	}
@@ -157,15 +146,24 @@ func (s *Service) AssistantConfigUpdate(ctx context.Context, req *assistant_serv
 	}
 
 	// 处理rerankConfig，转换成json字符串之后再更新
-	if req.RerankConfig != nil {
-		rerankConfigBytes, err := json.Marshal(req.RerankConfig)
-		if err != nil {
-			return nil, errStatus(errs.Code_AssistantErr, &errs.Status{
-				TextKey: "assistant_rerankConfig_marshal",
-				Args:    []string{err.Error()},
-			})
+	var knowledgeBaseIds []string
+	if req.KnowledgeBaseConfig != nil {
+		knowledgeBaseIds = req.KnowledgeBaseConfig.GetKnowledgeBaseIds()
+	}
+
+	if req.KnowledgeBaseConfig == nil || len(knowledgeBaseIds) == 0 {
+		existingAssistant.RerankConfig = ""
+	} else {
+		if req.RerankConfig != nil {
+			rerankConfigBytes, err := json.Marshal(req.RerankConfig)
+			if err != nil {
+				return nil, errStatus(errs.Code_AssistantErr, &errs.Status{
+					TextKey: "assistant_rerankConfig_marshal",
+					Args:    []string{err.Error()},
+				})
+			}
+			existingAssistant.RerankConfig = string(rerankConfigBytes)
 		}
-		existingAssistant.RerankConfig = string(rerankConfigBytes)
 	}
 
 	// 处理knowledgeBaseConfig，转换成json字符串之后再更新
@@ -227,7 +225,7 @@ func (s *Service) GetAssistantListMyAll(ctx context.Context, req *assistant_serv
 		appBriefs = append(appBriefs, &common.AppBrief{
 			OrgId:      assistant.OrgId,
 			UserId:     assistant.UserId,
-			AppId:      strconv.FormatUint(uint64(assistant.ID), 10),
+			AppId:      util.Int2Str(assistant.ID),
 			AppType:    "agent",
 			Name:       assistant.Name,
 			AvatarPath: assistant.AvatarPath,
@@ -269,7 +267,7 @@ func (s *Service) GetAssistantInfo(ctx context.Context, req *assistant_service.G
 	var workFlowInfos []*assistant_service.AssistantWorkFlowInfos
 	for _, workflow := range workflows {
 		workFlowInfos = append(workFlowInfos, &assistant_service.AssistantWorkFlowInfos{
-			Id:         strconv.FormatUint(uint64(workflow.ID), 10),
+			Id:         util.Int2Str(workflow.ID),
 			WorkFlowId: workflow.WorkflowId,
 			Enable:     workflow.Enable,
 		})
@@ -281,7 +279,7 @@ func (s *Service) GetAssistantInfo(ctx context.Context, req *assistant_service.G
 	var mcpInfos []*assistant_service.AssistantMCPInfos
 	for _, mcp := range mcps {
 		mcpInfos = append(mcpInfos, &assistant_service.AssistantMCPInfos{
-			Id:         strconv.FormatUint(uint64(mcp.ID), 10),
+			Id:         util.Int2Str(mcp.ID),
 			McpId:      mcp.MCPId,
 			McpType:    mcp.MCPType,
 			ActionName: mcp.ActionName,
@@ -295,7 +293,7 @@ func (s *Service) GetAssistantInfo(ctx context.Context, req *assistant_service.G
 	var toolInfos []*assistant_service.AssistantToolInfos
 	for _, tool := range tools {
 		toolInfos = append(toolInfos, &assistant_service.AssistantToolInfos{
-			Id:         strconv.FormatUint(uint64(tool.ID), 10),
+			Id:         util.Int2Str(tool.ID),
 			ToolId:     tool.ToolId,
 			ToolType:   tool.ToolType,
 			ActionName: tool.ActionName,
@@ -366,11 +364,12 @@ func (s *Service) GetAssistantInfo(ctx context.Context, req *assistant_service.G
 	}
 
 	return &assistant_service.AssistantInfo{
-		AssistantId: strconv.FormatUint(uint64(assistant.ID), 10),
+		AssistantId: util.Int2Str(assistant.ID),
 		Identity: &assistant_service.Identity{
 			UserId: assistant.UserId,
 			OrgId:  assistant.OrgId,
 		},
+		Uuid: assistant.UUID,
 		AssistantBrief: &common.AppBriefConfig{
 			Name:       assistant.Name,
 			AvatarPath: assistant.AvatarPath,
@@ -390,6 +389,16 @@ func (s *Service) GetAssistantInfo(ctx context.Context, req *assistant_service.G
 		ToolInfos:           toolInfos,
 		CreatTime:           assistant.CreatedAt,
 		UpdateTime:          assistant.UpdatedAt,
+	}, nil
+}
+
+func (s *Service) GetAssistantIdByUuid(ctx context.Context, req *assistant_service.GetAssistantIdByUuidReq) (*assistant_service.GetAssistantIdByUuidResp, error) {
+	assistant, status := s.cli.GetAssistantByUuid(ctx, req.Uuid)
+	if status != nil {
+		return nil, errStatus(errs.Code_AssistantErr, status)
+	}
+	return &assistant_service.GetAssistantIdByUuidResp{
+		AssistantId: util.Int2Str(assistant.ID),
 	}, nil
 }
 

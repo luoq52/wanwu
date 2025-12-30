@@ -97,10 +97,19 @@ func WithIDs(Ids []string) SQLOption {
 	})
 }
 
-func WithApiKey(apiKey string) SQLOption {
+func WithAppKey(appKey string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if appKey != "" {
+			return db.Where("api_key = ?", appKey)
+		}
+		return db
+	})
+}
+
+func WithKey(apiKey string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		if apiKey != "" {
-			return db.Where("api_key = ?", apiKey)
+			return db.Where("`key` = ?", apiKey)
 		}
 		return db
 	})
@@ -221,5 +230,23 @@ func WithContents(contents []string) SQLOption {
 func WithConversationID(id string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("conversation_id = ?", id)
+	})
+}
+
+func WithWorkflowID(workflowId string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if workflowId != "" {
+			return db.Where("workflow_id = ?", workflowId)
+		}
+		return db
+	})
+}
+
+func WithApplicationID(applicationId string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if applicationId != "" {
+			return db.Where("application_id = ?", applicationId)
+		}
+		return db
 	})
 }

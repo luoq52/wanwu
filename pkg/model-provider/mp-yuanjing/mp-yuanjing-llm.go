@@ -23,11 +23,7 @@ func (cfg *LLM) Tags() []mp_common.Tag {
 			Text: mp_common.TagChat,
 		},
 	}
-	if cfg.VisionSupport == "support" {
-		tags = append(tags, mp_common.Tag{
-			Text: mp_common.TagVisionSupport,
-		})
-	}
+	tags = append(tags, mp_common.GetTagsByVisionSupport(cfg.VisionSupport)...)
 	tags = append(tags, mp_common.GetTagsByFunctionCall(cfg.FunctionCalling)...)
 	tags = append(tags, mp_common.GetTagsByContentSize(cfg.ContextSize)...)
 	return tags

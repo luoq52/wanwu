@@ -5,10 +5,13 @@ import (
 
 	app_service "github.com/UnicomAI/wanwu/api/proto/app-service"
 	assistant_service "github.com/UnicomAI/wanwu/api/proto/assistant-service"
+	err_code "github.com/UnicomAI/wanwu/api/proto/err-code"
 	rag_service "github.com/UnicomAI/wanwu/api/proto/rag-service"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/response"
 	"github.com/UnicomAI/wanwu/pkg/constant"
+	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
+	"github.com/UnicomAI/wanwu/pkg/util"
 	"github.com/gin-gonic/gin"
 )
 
@@ -155,6 +158,63 @@ func PublishApp(ctx *gin.Context, userId, orgId string, req request.PublishAppRe
 	// 		return err
 	// 	}
 	// }
+	if req.AppType == constant.AppTypeWorkflow || req.AppType == constant.AppTypeChatflow {
+		if err := PublishWorkflow(ctx, orgId, req.AppId, req.Version, req.Desc); err != nil {
+			return err
+		}
+	}
+	if req.AppType == constant.AppTypeAgent {
+		resp, _ := assistant.AssistantSnapshotLatest(ctx.Request.Context(), &assistant_service.AssistantSnapshotInfoReq{
+			AssistantId: req.AppId,
+			Identity: &assistant_service.Identity{
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+		if resp != nil {
+			if err := util.IsVersionGreaterThan(req.Version, resp.Version); err != nil {
+				return grpc_util.ErrorStatusWithKey(err_code.Code_BFFGeneral, "bff_app_publish_version", resp.Version, req.Version, err.Error())
+			}
+		}
+		_, err := assistant.AssistantSnapshotCreate(ctx.Request.Context(), &assistant_service.AssistantSnapshotReq{
+			AssistantId: req.AppId,
+			Version:     req.Version,
+			Desc:        req.Desc,
+			Identity: &assistant_service.Identity{
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+		if err != nil {
+			return err
+		}
+	}
+	if req.AppType == constant.AppTypeRag {
+		resp, _ := rag.GetPublishRagDesc(ctx.Request.Context(), &rag_service.GetPublishRagDescReq{
+			RagId: req.AppId,
+			Identity: &rag_service.Identity{
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+		if resp != nil {
+			if err := util.IsVersionGreaterThan(req.Version, resp.Version); err != nil {
+				return grpc_util.ErrorStatusWithKey(err_code.Code_BFFGeneral, "bff_app_publish_version", resp.Version, req.Version, err.Error())
+			}
+		}
+		_, err := rag.PublishRag(ctx.Request.Context(), &rag_service.PublishRagReq{
+			RagId:   req.AppId,
+			Version: req.Version,
+			Desc:    req.Desc,
+			Identity: &rag_service.Identity{
+				UserId: userId,
+				OrgId:  orgId,
+			},
+		})
+		if err != nil {
+			return err
+		}
+	}
 	_, err := app.PublishApp(ctx.Request.Context(), &app_service.PublishAppReq{
 		AppId:       req.AppId,
 		AppType:     req.AppType,

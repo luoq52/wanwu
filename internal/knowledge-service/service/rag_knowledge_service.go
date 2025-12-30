@@ -38,6 +38,12 @@ type RagDocSegmentResp struct {
 	Data    SegmentResult `json:"data"`
 }
 
+type RagDocSearchResp struct {
+	Code    int           `json:"code"`
+	Message string        `json:"message"`
+	Data    SegmentResult `json:"data"`
+}
+
 type SegmentResult struct {
 	SuccessCount int `json:"success_count"` // 分段成功导入数量
 }
@@ -58,7 +64,7 @@ type RagDeleteParams struct {
 type KnowledgeHitParams struct {
 	UserId               string                `json:"userId"`
 	Question             string                `json:"question" validate:"required"`
-	KnowledgeBase        []string              `json:"knowledgeBase" validate:"required"`
+	KnowledgeBase        []string              `json:"knowledgeBase"`
 	KnowledgeIdList      []string              `json:"knowledgeIdList" validate:"required"`
 	Threshold            float64               `json:"threshold"`
 	TopK                 int32                 `json:"topK"`

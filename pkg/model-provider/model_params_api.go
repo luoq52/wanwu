@@ -5,12 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	mp_huoshan "github.com/UnicomAI/wanwu/pkg/model-provider/mp-huoshan"
-	mp_infini "github.com/UnicomAI/wanwu/pkg/model-provider/mp-infini"
-	mp_ollama "github.com/UnicomAI/wanwu/pkg/model-provider/mp-ollama"
-	mp_openai_compatible "github.com/UnicomAI/wanwu/pkg/model-provider/mp-openai-compatible"
-	mp_qwen "github.com/UnicomAI/wanwu/pkg/model-provider/mp-qwen"
-	mp_yuanjing "github.com/UnicomAI/wanwu/pkg/model-provider/mp-yuanjing"
+	mp_common "github.com/UnicomAI/wanwu/pkg/model-provider/mp-common"
 )
 
 type ILLMParams interface {
@@ -41,7 +36,7 @@ func ToModelParams(provider, modelType, cfg string) (interface{}, map[string]int
 	case ProviderOpenAICompatible:
 		switch modelType {
 		case ModelTypeLLM:
-			llm := &mp_openai_compatible.LLMParams{}
+			llm := &mp_common.LLMParams{}
 			if err = json.Unmarshal([]byte(cfg), llm); err == nil {
 				ret = llm
 				params = llm.GetParams()
@@ -54,7 +49,7 @@ func ToModelParams(provider, modelType, cfg string) (interface{}, map[string]int
 	case ProviderYuanJing:
 		switch modelType {
 		case ModelTypeLLM:
-			llm := &mp_yuanjing.LLMParams{}
+			llm := &mp_common.LLMParams{}
 			if err = json.Unmarshal([]byte(cfg), llm); err == nil {
 				ret = llm
 				params = llm.GetParams()
@@ -64,13 +59,15 @@ func ToModelParams(provider, modelType, cfg string) (interface{}, map[string]int
 		case ModelTypeGui:
 		case ModelTypeOcr:
 		case ModelTypePdfParser:
+		case ModelTypeAsr:
+		case ModelTypeText2Image:
 		default:
 			return nil, nil, fmt.Errorf("invalid model type: %v", modelType)
 		}
 	case ProviderHuoshan:
 		switch modelType {
 		case ModelTypeLLM:
-			llm := &mp_huoshan.LLMParams{}
+			llm := &mp_common.LLMParams{}
 			if err = json.Unmarshal([]byte(cfg), llm); err == nil {
 				ret = llm
 				params = llm.GetParams()
@@ -83,7 +80,7 @@ func ToModelParams(provider, modelType, cfg string) (interface{}, map[string]int
 	case ProviderOllama:
 		switch modelType {
 		case ModelTypeLLM:
-			llm := &mp_ollama.LLMParams{}
+			llm := &mp_common.LLMParams{}
 			if err = json.Unmarshal([]byte(cfg), llm); err == nil {
 				ret = llm
 				params = llm.GetParams()
@@ -96,7 +93,7 @@ func ToModelParams(provider, modelType, cfg string) (interface{}, map[string]int
 	case ProviderQwen:
 		switch modelType {
 		case ModelTypeLLM:
-			llm := &mp_qwen.LLMParams{}
+			llm := &mp_common.LLMParams{}
 			if err = json.Unmarshal([]byte(cfg), llm); err == nil {
 				ret = llm
 				params = llm.GetParams()
@@ -109,13 +106,38 @@ func ToModelParams(provider, modelType, cfg string) (interface{}, map[string]int
 	case ProviderInfini:
 		switch modelType {
 		case ModelTypeLLM:
-			llm := &mp_infini.LLMParams{}
+			llm := &mp_common.LLMParams{}
 			if err = json.Unmarshal([]byte(cfg), llm); err == nil {
 				ret = llm
 				params = llm.GetParams()
 			}
 		case ModelTypeRerank:
 		case ModelTypeEmbedding:
+		default:
+			return nil, nil, fmt.Errorf("invalid model type: %v", modelType)
+		}
+	case ProviderQianfan:
+		switch modelType {
+		case ModelTypeLLM:
+			llm := &mp_common.LLMParams{}
+			if err = json.Unmarshal([]byte(cfg), llm); err == nil {
+				ret = llm
+				params = llm.GetParams()
+			}
+		case ModelTypeRerank:
+		case ModelTypeEmbedding:
+		case ModelTypeOcr:
+		default:
+			return nil, nil, fmt.Errorf("invalid model type: %v", modelType)
+		}
+	case ProviderDeepSeek:
+		switch modelType {
+		case ModelTypeLLM:
+			llm := &mp_common.LLMParams{}
+			if err = json.Unmarshal([]byte(cfg), llm); err == nil {
+				ret = llm
+				params = llm.GetParams()
+			}
 		default:
 			return nil, nil, fmt.Errorf("invalid model type: %v", modelType)
 		}
@@ -131,32 +153,42 @@ func ToModelParams(provider, modelType, cfg string) (interface{}, map[string]int
 type AppModelParams struct {
 	ProviderOpenAICompatible AppModelParamsOpenAICompatible `json:"providerOpenAICompatible"` // OpenAI-API-compatible模型配置
 	ProviderYuanJing         AppModelParamsYuanjing         `json:"providerYuanjing"`         // YuanJing模型配置
-	ProviderHuoshan          AppModelParamsHuoshan          `json:"providerHuoshan"`
+	ProviderHuoshan          AppModelParamsHuoShan          `json:"providerHuoshan"`
 	ProviderQwen             AppModelParamsQwen             `json:"providerQwen"`
 	ProviderOllama           AppModelParamsOllama           `json:"providerOllama"`
-	ProviderInfini           AppModelParamsInfini           `json:"providerModelByInfini"`
+	ProviderInfini           AppModelParamsInfini           `json:"providerInfini"`
+	ProviderQianFan          AppModelParamsQianFan          `json:"providerQianFan"`
+	ProviderDeepSeek         AppModelParamsDeepSeek         `json:"providerDeepSeek"`
 }
 
 type AppModelParamsOpenAICompatible struct {
-	LLM mp_openai_compatible.LLMParams `json:"llm"` // 大语言模型配置
+	LLM mp_common.LLMParams `json:"llm"` // 大语言模型配置
 }
 
 type AppModelParamsYuanjing struct {
-	LLM mp_yuanjing.LLMParams `json:"llm"` // 大语言模型配置
+	LLM mp_common.LLMParams `json:"llm"` // 大语言模型配置
 }
 
-type AppModelParamsHuoshan struct {
-	LLM mp_huoshan.LLMParams `json:"llm"` // 大语言模型配置
+type AppModelParamsHuoShan struct {
+	LLM mp_common.LLMParams `json:"llm"` // 大语言模型配置
 }
 
 type AppModelParamsQwen struct {
-	LLM mp_qwen.LLMParams `json:"llm"` // 大语言模型配置
+	LLM mp_common.LLMParams `json:"llm"` // 大语言模型配置
 }
 
 type AppModelParamsOllama struct {
-	LLM mp_ollama.LLMParams `json:"llm"` // 大语言模型配置
+	LLM mp_common.LLMParams `json:"llm"` // 大语言模型配置
 }
 
 type AppModelParamsInfini struct {
-	LLM mp_infini.LLMParams `json:"llm"` // 大语言模型配置
+	LLM mp_common.LLMParams `json:"llm"` // 大语言模型配置
+}
+
+type AppModelParamsQianFan struct {
+	LLM mp_common.LLMParams `json:"llm"` // 大语言模型配置
+}
+
+type AppModelParamsDeepSeek struct {
+	LLM mp_common.LLMParams `json:"llm"` // 大语言模型配置
 }

@@ -11,9 +11,9 @@ import (
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/model"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/orm"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/config"
-	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/generator"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/util"
 	"github.com/UnicomAI/wanwu/pkg/log"
+	wanwu_util "github.com/UnicomAI/wanwu/pkg/util"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -136,7 +136,7 @@ func buildKnowledgeSplitter(knowledgeSplitter *model.KnowledgeSplitter, splitter
 // buildKnowledgeSplitterModel 构造知识库分隔符模型
 func buildKnowledgeSplitterModel(req *knowledgebase_splitter_service.CreateKnowledgeSplitterReq) *model.KnowledgeSplitter {
 	return &model.KnowledgeSplitter{
-		SplitterId: generator.GetGenerator().NewID(),
+		SplitterId: wanwu_util.NewID(),
 		Name:       req.SplitterName,
 		Value:      req.SplitterValue,
 		OrgId:      req.OrgId,

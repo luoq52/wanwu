@@ -1,11 +1,16 @@
 package service
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	net_url "net/url"
+	"sort"
+	"time"
 
+	app_service "github.com/UnicomAI/wanwu/api/proto/app-service"
 	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
 	"github.com/UnicomAI/wanwu/internal/bff-service/config"
 	"github.com/UnicomAI/wanwu/internal/bff-service/model/request"
@@ -67,7 +72,7 @@ func ListWorkflow(ctx *gin.Context, orgID, name, appType string) (*response.Coze
 		Post(url); err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_list", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_list", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_list", fmt.Sprintf("[%v] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
 	} else if ret.Code != 0 {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_list", fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
 	}
@@ -104,7 +109,7 @@ func ListWorkflowByIDs(ctx *gin.Context, name string, workflowIDs []string) (*re
 	if resp, err := request.SetResult(ret).Post(url); err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_list", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_list", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_list", fmt.Sprintf("[%v] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
 	} else if ret.Code != 0 {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_apps_list", fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
 	}
@@ -130,7 +135,7 @@ func CreateWorkflow(ctx *gin.Context, orgID, name, desc, iconUri string) (*respo
 		Post(url); err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_create", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_create", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_create", fmt.Sprintf("[%v] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
 	} else if ret.Code != 0 {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_create", fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
 	}
@@ -154,7 +159,7 @@ func CopyWorkflow(ctx *gin.Context, orgID, workflowID string) (*response.CozeWor
 		Post(url); err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_copy", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_copy", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_copy", fmt.Sprintf("[%v] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
 	} else if ret.Code != 0 {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_copy", fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
 	}
@@ -178,14 +183,14 @@ func DeleteWorkflow(ctx *gin.Context, orgID, workflowID string) error {
 		Post(url); err != nil {
 		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_delete", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_delete", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_delete", fmt.Sprintf("[%v] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
 	} else if ret.Code != 0 || (ret.Data != nil && ret.Data.Status != 0) {
 		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_app_delete", fmt.Sprintf("code %v msg %v status %v", ret.Code, ret.Msg, ret.Data.GetStatus()))
 	}
 	return nil
 }
 
-func ExportWorkflow(ctx *gin.Context, orgID, workflowID string) ([]byte, error) {
+func ExportWorkFlow(ctx *gin.Context, orgID, workflowID, version string, qType uint8) ([]byte, error) {
 	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.ExportUri)
 	ret := &response.CozeWorkflowExportResp{}
 	if resp, err := resty.New().
@@ -194,15 +199,17 @@ func ExportWorkflow(ctx *gin.Context, orgID, workflowID string) ([]byte, error) 
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Accept", "application/json").
 		SetHeaders(workflowHttpReqHeader(ctx)).
-		SetBody(map[string]string{
-			"space_id":    orgID,
+		SetBody(map[string]any{
 			"workflow_id": workflowID,
+			"version":     version,
+			"space_id":    orgID,
+			"qType":       qType,
 		}).
 		SetResult(&ret).
 		Post(url); err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_export", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_export", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_export", fmt.Sprintf("[%v] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
 	}
 	exportData := response.CozeWorkflowExportData{
 		WorkflowName: ret.Data.WorkflowName,
@@ -254,7 +261,7 @@ func ImportWorkflow(ctx *gin.Context, orgID, appType string) (*response.CozeWork
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Accept", "application/json").
 		SetHeaders(workflowHttpReqHeader(ctx)).
-		SetQueryParams(map[string]string{
+		SetBody(map[string]string{
 			"space_id":  orgID,
 			"name":      rawData.Name,
 			"desc":      rawData.Desc,
@@ -265,11 +272,330 @@ func ImportWorkflow(ctx *gin.Context, orgID, appType string) (*response.CozeWork
 		Post(url); err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_import_file", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_import_file", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_import_file", fmt.Sprintf("[%v] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
 	} else if ret.Code != 0 {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_import_file", fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
 	}
 	return ret.Data, nil
+}
+
+func WorkflowConvert(ctx *gin.Context, orgId, workflowId, flowMode string) error {
+	switch flowMode {
+	case constant.AppTypeChatflow:
+		flowMode = "3"
+	case constant.AppTypeWorkflow:
+		flowMode = "0"
+	default:
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_convert", "invalid flow mode")
+	}
+	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.ConvertUri)
+	resp, err := resty.New().
+		R().
+		SetContext(ctx.Request.Context()).
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Accept", "application/json").
+		SetHeaders(workflowHttpReqHeader(ctx)).
+		SetBody(map[string]any{
+			"workflow_id": workflowId,
+			"flow_mode":   util.MustI64(flowMode),
+			"space_id":    orgId,
+		}).
+		Post(url)
+	if err != nil {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_convert", err.Error())
+	} else if resp.StatusCode() >= 300 {
+		b, err := io.ReadAll(resp.RawResponse.Body)
+		if err != nil {
+			return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_convert", fmt.Sprintf("[%v] %v", resp.StatusCode(), err))
+		}
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_convert", fmt.Sprintf("[%v] %v", resp.StatusCode(), string(b)))
+	}
+	var oldAppType, newAppType string
+	if flowMode == "3" {
+		oldAppType = constant.AppTypeWorkflow
+		newAppType = constant.AppTypeChatflow
+	} else {
+		oldAppType = constant.AppTypeChatflow
+		newAppType = constant.AppTypeWorkflow
+	}
+	_, err = app.ConvertAppType(ctx, &app_service.ConvertAppTypeReq{AppId: workflowId, OldAppType: oldAppType, NewAppType: newAppType})
+	return err
+}
+
+func PublishedWorkflowRun(ctx *gin.Context, orgId string, req request.WorkflowRunReq) (*response.CozeNodeResult, error) {
+	// Step 1: 触发异步执行（使用web的test_run接口），获取executeId
+	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.WorkflowRunLatestVersionUri)
+	testRunRet := &response.CozeWorkflowTestRunResponse{}
+	resp, err := resty.New().
+		R().
+		SetContext(ctx.Request.Context()).
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Accept", "application/json").
+		SetHeaders(workflowHttpReqHeader(ctx)).
+		SetResult(testRunRet).
+		SetBody(map[string]any{
+			"workflow_id": req.WorkflowID,
+			"space_id":    orgId,
+			"input":       req.Input,
+		}).
+		Post(url)
+
+	if err != nil {
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run", err.Error())
+	}
+	if resp.StatusCode() >= 300 {
+		b, _ := io.ReadAll(resp.RawResponse.Body)
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run",
+			fmt.Sprintf("[%d] %s", resp.StatusCode(), string(b)))
+	}
+
+	if testRunRet.Data == nil || testRunRet.Data.ExecuteID == "" {
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run", "execute_id is empty")
+	}
+	executeID := testRunRet.Data.ExecuteID
+
+	// Step 2: 轮询执行状态(将coze的getprocess方法弄为同步，返回结果给应用广场的工作流使用)
+	gpUri, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.GetProcessUri)
+
+	// 创建一个带 30 分钟超时的子 context
+	pollCtx, cancel := context.WithTimeout(ctx.Request.Context(), 30*time.Minute)
+	defer cancel()
+
+	ticker := time.NewTicker(3 * time.Second) // 每3秒轮询一次
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-pollCtx.Done():
+			// 超时 or 上层取消
+			if errors.Is(pollCtx.Err(), context.DeadlineExceeded) {
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run",
+					"workflow execution timeout")
+			}
+			return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run",
+				"request canceled")
+
+		case <-ticker.C:
+			// 执行一次状态查询
+			statusResp, err := resty.New().
+				R().
+				SetContext(pollCtx). // 使用带超时的 context
+				SetHeader("Content-Type", "application/json").
+				SetHeader("Accept", "application/json").
+				SetHeaders(workflowHttpReqHeader(ctx)).
+				SetQueryParams(map[string]string{
+					"execute_id":  executeID,
+					"workflow_id": req.WorkflowID,
+					"space_id":    orgId,
+				}).
+				Get(gpUri)
+
+			if err != nil {
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run", err.Error())
+			}
+			if statusResp.StatusCode() >= 300 {
+				b, _ := io.ReadAll(statusResp.RawResponse.Body)
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run",
+					fmt.Sprintf("[%d] %s", statusResp.StatusCode(), string(b)))
+			}
+
+			var processResp response.CozeGetWorkflowProcessResponse
+			if err := json.Unmarshal(statusResp.Body(), &processResp); err != nil {
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run",
+					fmt.Sprintf("failed to unmarshal status response: %v", err))
+			}
+			data := processResp.Data
+			if data.ExecuteId == "" {
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run", "executeId is empty in status response")
+			}
+
+			switch data.ExecuteStatus {
+			case 2: // Success
+				for _, nodeResult := range data.NodeResults {
+					if nodeResult.NodeType == "End" && nodeResult.NodeId == "900001" {
+						return nodeResult, nil
+					}
+				}
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run", "workflow execution succeeded but End node result not found")
+
+			case 3: // Failed
+				reason := "unknown"
+				if data.Reason != nil {
+					reason = *data.Reason
+				}
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run",
+					fmt.Sprintf("workflow execution failed: %s", reason))
+
+			case 4: // Canceled
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run",
+					"workflow execution was canceled")
+
+			case 1: // Running — 继续下一次轮询
+				continue
+
+			default:
+				return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_exploration_run",
+					fmt.Sprintf("unexpected executeStatus: %d", data.ExecuteStatus))
+			}
+		}
+	}
+
+}
+
+func PublishWorkflow(ctx *gin.Context, orgID, workflowID, version, versionDesc string) error {
+	body := map[string]any{
+		"space_id":            orgID,
+		"workflow_id":         workflowID,
+		"has_collaborator":    false,
+		"force":               true,
+		"workflow_version":    version,
+		"version_description": versionDesc,
+	}
+	url := config.Cfg().Workflow.Endpoint + config.Cfg().Workflow.PublishUri
+	ret := &response.CozeCommonResp{}
+	resp, err := resty.New().R().
+		SetContext(ctx.Request.Context()).
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Accept", "application/json").
+		SetHeaders(workflowHttpReqHeader(ctx)).
+		SetBody(body).
+		SetResult(ret).
+		Post(url)
+	if err != nil {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_publish", err.Error())
+	}
+	if resp.StatusCode() >= 300 {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_publish", fmt.Sprintf("[%d] http error", resp.StatusCode()))
+	}
+	if ret.Code != 0 {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_publish", fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
+	}
+	return nil
+}
+
+func GetWorkflowVersionList(ctx *gin.Context, workflowID string) (*response.CozeWorkflowVersionListData, error) {
+	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.VersionListUri)
+	ret := &response.CozeWorkflowVersionListResp{}
+	resp, err := resty.New().
+		R().
+		SetContext(ctx.Request.Context()).
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Accept", "application/json").
+		SetHeaders(workflowHttpReqHeader(ctx)).
+		SetBody(map[string]string{
+			"workflow_id": workflowID,
+		}).
+		SetResult(ret).
+		Post(url)
+
+	if err != nil {
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_version_list", err.Error())
+	}
+	if resp.StatusCode() >= 300 {
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_version_list",
+			fmt.Sprintf("[%d] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
+	}
+	if ret.Code != 0 {
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_version_list",
+			fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
+	}
+	return ret.Data, nil
+}
+
+func GetWorkflowVersion(ctx *gin.Context, appID string) (string, string, error) {
+	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.VersionListUri)
+	ret := &response.CozeWorkflowVersionListResp{}
+	resp, err := resty.New().
+		R().
+		SetContext(ctx.Request.Context()).
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Accept", "application/json").
+		SetHeaders(workflowHttpReqHeader(ctx)).
+		SetBody(map[string]string{
+			"workflow_id": appID,
+		}).
+		SetResult(ret).
+		Post(url)
+
+	if err != nil {
+		return "", "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_version_list", err.Error())
+	}
+	if resp.StatusCode() >= 300 {
+		return "", "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_version_list",
+			fmt.Sprintf("[%d] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
+	}
+	if ret.Code != 0 {
+		return "", "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_version_list",
+			fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
+	}
+	sort.SliceStable(ret.Data.VersionList, func(i, j int) bool {
+		return ret.Data.VersionList[i].CreatedAt > ret.Data.VersionList[j].CreatedAt
+	})
+	if len(ret.Data.VersionList) == 0 {
+		return "", "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_version_list",
+			fmt.Sprintf("workflow %s no version", appID))
+	}
+	return ret.Data.VersionList[0].Version, ret.Data.VersionList[0].Desc, nil
+}
+
+func UpdateWorkflowVersionDesc(ctx *gin.Context, workflowID, description string) error {
+	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.UpdateVersionDescUri)
+	ret := &response.CozeCommonResp{}
+	resp, err := resty.New().
+		R().
+		SetContext(ctx.Request.Context()).
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Accept", "application/json").
+		SetHeaders(workflowHttpReqHeader(ctx)).
+		SetBody(map[string]interface{}{
+			"workflow_id":         workflowID,
+			"version_description": description,
+		}).
+		SetResult(ret).
+		Put(url)
+
+	if err != nil {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_update_desc", err.Error())
+	}
+	if resp.StatusCode() >= 300 {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_update_desc",
+			fmt.Sprintf("[%d] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
+	}
+	if ret.Code != 0 {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_update_desc",
+			fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
+	}
+	return nil
+}
+
+func RollbackWorkflowVersion(ctx *gin.Context, workflowID, version string) error {
+	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.RollbackUri)
+	ret := &response.CozeCommonResp{}
+	resp, err := resty.New().
+		R().
+		SetContext(ctx.Request.Context()).
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Accept", "application/json").
+		SetHeaders(workflowHttpReqHeader(ctx)).
+		SetBody(map[string]string{
+			"workflow_id": workflowID,
+			"version":     version,
+		}).
+		SetResult(ret).
+		Post(url)
+
+	if err != nil {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_rollback", err.Error())
+	}
+	if resp.StatusCode() >= 300 {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_rollback",
+			fmt.Sprintf("[%d] code %v msg %v", resp.StatusCode(), ret.Code, ret.Msg))
+	}
+	if ret.Code != 0 {
+		return grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_rollback",
+			fmt.Sprintf("code %v msg %v", ret.Code, ret.Msg))
+	}
+	return nil
 }
 
 // --- internal ---

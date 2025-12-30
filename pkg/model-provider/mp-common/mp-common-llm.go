@@ -30,6 +30,8 @@ const (
 	TagGui           string = "GUI"
 	TagOcr           string = "OCR"
 	TagPdfParser     string = "文档解析"
+	TagAsr           string = "ASR"
+	TagText2Image    string = "文生图"
 	TagVisionSupport string = "图文问答"
 	TagToolCall      string = "工具调用"
 )
@@ -43,6 +45,16 @@ func GetTagsByFunctionCall(fcType string) []Tag {
 	if FCType(fcType) == FCTypeToolCall {
 		tags = append(tags, Tag{
 			Text: TagToolCall,
+		})
+	}
+	return tags
+}
+
+func GetTagsByVisionSupport(visionType string) []Tag {
+	var tags []Tag
+	if VSType(visionType) == VSTypeSupport {
+		tags = append(tags, Tag{
+			Text: TagVisionSupport,
 		})
 	}
 	return tags
@@ -122,7 +134,7 @@ type LLMReq struct {
 	ThinkingBudget *int  `json:"thinking_budget,omitempty"` // 思考过程的最大长度，只在enable_thinking为true时生效
 
 	WebSearch *WebSearch `json:"web_search,omitempty"` //搜索增强
-	User      *string    `json:"user,omitempty"`
+	User      *string    `json:"user,omitempty"`       // 用户标识（兼容千帆)
 	// Yuanjing
 	DoSample  *bool      `json:"do_sample,omitempty"`
 	ExtraBody *ExtraBody `json:"extra_body,omitempty"` // 扩展参数
@@ -209,7 +221,7 @@ type OpenAIFunction struct {
 type OpenAIFunctionParameters struct {
 	Type       string                                      `json:"type"`
 	Properties map[string]OpenAIFunctionParametersProperty `json:"properties"`
-	Required   []string                                    `json:"required"`
+	Required   []string                                    `json:"required,omitempty"`
 }
 type OpenAIFunctionParametersProperty struct {
 	Description string `json:"description"`
@@ -409,12 +421,13 @@ func chatCompletionsUnary(ctx context.Context, provider, apiKey, url string, req
 	resp, err := request.Post(url)
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v chat completions unary err: %v", url, provider, err)
-	} else if resp.StatusCode() >= 300 {
-		return nil, fmt.Errorf("request %v %v chat completions unary http status %v msg: %v", url, provider, resp.StatusCode(), resp.String())
 	}
 	b, err := io.ReadAll(resp.RawResponse.Body)
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v chat completions unary read response body err: %v", url, provider, err)
+	}
+	if resp.StatusCode() >= 300 {
+		return nil, fmt.Errorf("request %v %v chat completions unary http status %v msg: %v", url, provider, resp.StatusCode(), string(b))
 	}
 	return respConverter(false, string(b)), nil
 }
@@ -432,9 +445,15 @@ func chatCompletionsStream(ctx context.Context, provider, apiKey, url string, re
 	}
 
 	ret := make(chan ILLMResp, 1024)
+	// 创建错误通道（缓冲1个，防止goroutine阻塞），主函数接收异步错误
+	errChan := make(chan error, 1)
+
 	go func() {
 		defer util.PrintPanicStack()
 		defer close(ret)
+		var resp *resty.Response
+		var err error
+
 		request := resty.New().
 			SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true}). // 关闭证书校验
 			R().
@@ -446,18 +465,58 @@ func chatCompletionsStream(ctx context.Context, provider, apiKey, url string, re
 		for _, header := range headers {
 			request.SetHeader(header.Key, header.Value)
 		}
-		resp, err := request.Post(url)
+		resp, err = request.Post(url)
 		if err != nil {
-			log.Errorf("request %v %v chat completions stream err: %v", url, provider, err)
-			return
-		} else if resp.StatusCode() >= 300 {
-			log.Errorf("request %v %v chat completions stream http status %v msg: %v", url, provider, resp.StatusCode(), resp.String())
+			wrappedErr := fmt.Errorf("chat completions stream post request failed | provider: %s | url: %s | error: %v", provider, url, err)
+			log.Errorf("%v", wrappedErr.Error())
+			errChan <- wrappedErr
 			return
 		}
+		defer func() {
+			if resp != nil && resp.RawResponse != nil {
+				_ = resp.RawResponse.Body.Close()
+			}
+		}()
+
+		if resp.StatusCode() >= 300 {
+			b, err := io.ReadAll(resp.RawResponse.Body)
+			if err != nil {
+				wrappedErr := fmt.Errorf("chat completions stream read response body failed | provider: %s | url: %s: %w", provider, url, err)
+				log.Errorf("%v", wrappedErr)
+				errChan <- wrappedErr
+				return
+			}
+			wrappedErr := fmt.Errorf("chat completions stream request failed | provider: %s | url: %s | status: %d | message: %s", provider, url, resp.StatusCode(), string(b))
+			log.Errorf("%v", wrappedErr.Error())
+			errChan <- wrappedErr
+			return
+		}
+
+		close(errChan)
+
 		scan := bufio.NewScanner(resp.RawResponse.Body)
 		for scan.Scan() {
-			ret <- respConverter(true, scan.Text())
+			select {
+			case ret <- respConverter(true, scan.Text()):
+			case <-ctx.Done():
+				log.Warnf("chat completions stream ctx canceled | provider: %s | url: %s", provider, url)
+				return
+			}
+		}
+		// 检查流读取过程中的错误（如网络中断、数据损坏）
+		if scanErr := scan.Err(); scanErr != nil {
+			log.Errorf("request %v %v chat completions stream scan err: %v", url, provider, scanErr)
+			ret <- respConverter(false, scanErr.Error())
 		}
 	}()
+	// 主函数等待错误通道的消息
+	select {
+	case sseErr, ok := <-errChan:
+		if ok { // 通道未关闭，说明有错误
+			return nil, sseErr
+		}
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	}
 	return ret, nil
 }

@@ -20,10 +20,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AppService_GenApiKey_FullMethodName                    = "/app_service.AppService/GenApiKey"
-	AppService_GetApiKeyList_FullMethodName                = "/app_service.AppService/GetApiKeyList"
-	AppService_DelApiKey_FullMethodName                    = "/app_service.AppService/DelApiKey"
+	AppService_CreateApiKey_FullMethodName                 = "/app_service.AppService/CreateApiKey"
+	AppService_DeleteApiKey_FullMethodName                 = "/app_service.AppService/DeleteApiKey"
+	AppService_ListApiKeys_FullMethodName                  = "/app_service.AppService/ListApiKeys"
+	AppService_UpdateApiKey_FullMethodName                 = "/app_service.AppService/UpdateApiKey"
+	AppService_UpdateApiKeyStatus_FullMethodName           = "/app_service.AppService/UpdateApiKeyStatus"
 	AppService_GetApiKeyByKey_FullMethodName               = "/app_service.AppService/GetApiKeyByKey"
+	AppService_GenAppKey_FullMethodName                    = "/app_service.AppService/GenAppKey"
+	AppService_GetAppKeyList_FullMethodName                = "/app_service.AppService/GetAppKeyList"
+	AppService_DelAppKey_FullMethodName                    = "/app_service.AppService/DelAppKey"
+	AppService_GetAppKeyByKey_FullMethodName               = "/app_service.AppService/GetAppKeyByKey"
 	AppService_GetExplorationAppList_FullMethodName        = "/app_service.AppService/GetExplorationAppList"
 	AppService_ChangeExplorationAppFavorite_FullMethodName = "/app_service.AppService/ChangeExplorationAppFavorite"
 	AppService_RecordAppHistory_FullMethodName             = "/app_service.AppService/RecordAppHistory"
@@ -32,6 +38,8 @@ const (
 	AppService_GetAppList_FullMethodName                   = "/app_service.AppService/GetAppList"
 	AppService_GetAppListByIds_FullMethodName              = "/app_service.AppService/GetAppListByIds"
 	AppService_DeleteApp_FullMethodName                    = "/app_service.AppService/DeleteApp"
+	AppService_GetAppInfo_FullMethodName                   = "/app_service.AppService/GetAppInfo"
+	AppService_ConvertAppType_FullMethodName               = "/app_service.AppService/ConvertAppType"
 	AppService_AppUrlCreate_FullMethodName                 = "/app_service.AppService/AppUrlCreate"
 	AppService_AppUrlDelete_FullMethodName                 = "/app_service.AppService/AppUrlDelete"
 	AppService_AppUrlUpdate_FullMethodName                 = "/app_service.AppService/AppUrlUpdate"
@@ -40,6 +48,9 @@ const (
 	AppService_AppUrlStatusSwitch_FullMethodName           = "/app_service.AppService/AppUrlStatusSwitch"
 	AppService_GetConversationByID_FullMethodName          = "/app_service.AppService/GetConversationByID"
 	AppService_CreateConversation_FullMethodName           = "/app_service.AppService/CreateConversation"
+	AppService_GetChatflowApplication_FullMethodName       = "/app_service.AppService/GetChatflowApplication"
+	AppService_GetChatflowByApplicationID_FullMethodName   = "/app_service.AppService/GetChatflowByApplicationID"
+	AppService_CreateChatflowApplication_FullMethodName    = "/app_service.AppService/CreateChatflowApplication"
 )
 
 // AppServiceClient is the client API for AppService service.
@@ -47,10 +58,17 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AppServiceClient interface {
 	// --- apiKey ---
-	GenApiKey(ctx context.Context, in *GenApiKeyReq, opts ...grpc.CallOption) (*ApiKeyInfo, error)
-	GetApiKeyList(ctx context.Context, in *GetApiKeyListReq, opts ...grpc.CallOption) (*ApiKeyInfoList, error)
-	DelApiKey(ctx context.Context, in *DelApiKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateApiKey(ctx context.Context, in *CreateApiKeyReq, opts ...grpc.CallOption) (*ApiKeyInfo, error)
+	DeleteApiKey(ctx context.Context, in *DeleteApiKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListApiKeys(ctx context.Context, in *ListApiKeysReq, opts ...grpc.CallOption) (*ApiKeyInfoList, error)
+	UpdateApiKey(ctx context.Context, in *UpdateApiKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateApiKeyStatus(ctx context.Context, in *UpdateApiKeyStatusReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetApiKeyByKey(ctx context.Context, in *GetApiKeyByKeyReq, opts ...grpc.CallOption) (*ApiKeyInfo, error)
+	// --- appKey ---
+	GenAppKey(ctx context.Context, in *GenAppKeyReq, opts ...grpc.CallOption) (*AppKeyInfo, error)
+	GetAppKeyList(ctx context.Context, in *GetAppKeyListReq, opts ...grpc.CallOption) (*AppKeyInfoList, error)
+	DelAppKey(ctx context.Context, in *DelAppKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetAppKeyByKey(ctx context.Context, in *GetAppKeyByKeyReq, opts ...grpc.CallOption) (*AppKeyInfo, error)
 	// --- exploration ---
 	GetExplorationAppList(ctx context.Context, in *GetExplorationAppListReq, opts ...grpc.CallOption) (*ExplorationAppList, error)
 	ChangeExplorationAppFavorite(ctx context.Context, in *ChangeExplorationAppFavoriteReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -61,6 +79,8 @@ type AppServiceClient interface {
 	GetAppList(ctx context.Context, in *GetAppListReq, opts ...grpc.CallOption) (*AppList, error)
 	GetAppListByIds(ctx context.Context, in *GetAppListByIdsReq, opts ...grpc.CallOption) (*AppList, error)
 	DeleteApp(ctx context.Context, in *DeleteAppReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetAppInfo(ctx context.Context, in *GetAppInfoReq, opts ...grpc.CallOption) (*AppInfo, error)
+	ConvertAppType(ctx context.Context, in *ConvertAppTypeReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// --- url ---
 	AppUrlCreate(ctx context.Context, in *AppUrlCreateReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AppUrlDelete(ctx context.Context, in *AppUrlDeleteReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -71,6 +91,10 @@ type AppServiceClient interface {
 	// --- conversation ---
 	GetConversationByID(ctx context.Context, in *GetConversationByIDReq, opts ...grpc.CallOption) (*ConversationInfo, error)
 	CreateConversation(ctx context.Context, in *CreateConversationReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// --- chatflowApplication ---
+	GetChatflowApplication(ctx context.Context, in *GetChatflowApplicationReq, opts ...grpc.CallOption) (*ChatflowApplicationInfo, error)
+	GetChatflowByApplicationID(ctx context.Context, in *GetChatflowByApplicationIDReq, opts ...grpc.CallOption) (*ChatflowApplicationInfo, error)
+	CreateChatflowApplication(ctx context.Context, in *CreateChatflowApplicationReq, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type appServiceClient struct {
@@ -81,30 +105,50 @@ func NewAppServiceClient(cc grpc.ClientConnInterface) AppServiceClient {
 	return &appServiceClient{cc}
 }
 
-func (c *appServiceClient) GenApiKey(ctx context.Context, in *GenApiKeyReq, opts ...grpc.CallOption) (*ApiKeyInfo, error) {
+func (c *appServiceClient) CreateApiKey(ctx context.Context, in *CreateApiKeyReq, opts ...grpc.CallOption) (*ApiKeyInfo, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ApiKeyInfo)
-	err := c.cc.Invoke(ctx, AppService_GenApiKey_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, AppService_CreateApiKey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *appServiceClient) GetApiKeyList(ctx context.Context, in *GetApiKeyListReq, opts ...grpc.CallOption) (*ApiKeyInfoList, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ApiKeyInfoList)
-	err := c.cc.Invoke(ctx, AppService_GetApiKeyList_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *appServiceClient) DelApiKey(ctx context.Context, in *DelApiKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *appServiceClient) DeleteApiKey(ctx context.Context, in *DeleteApiKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, AppService_DelApiKey_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, AppService_DeleteApiKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) ListApiKeys(ctx context.Context, in *ListApiKeysReq, opts ...grpc.CallOption) (*ApiKeyInfoList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApiKeyInfoList)
+	err := c.cc.Invoke(ctx, AppService_ListApiKeys_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) UpdateApiKey(ctx context.Context, in *UpdateApiKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AppService_UpdateApiKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) UpdateApiKeyStatus(ctx context.Context, in *UpdateApiKeyStatusReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AppService_UpdateApiKeyStatus_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,6 +159,46 @@ func (c *appServiceClient) GetApiKeyByKey(ctx context.Context, in *GetApiKeyByKe
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ApiKeyInfo)
 	err := c.cc.Invoke(ctx, AppService_GetApiKeyByKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) GenAppKey(ctx context.Context, in *GenAppKeyReq, opts ...grpc.CallOption) (*AppKeyInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppKeyInfo)
+	err := c.cc.Invoke(ctx, AppService_GenAppKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) GetAppKeyList(ctx context.Context, in *GetAppKeyListReq, opts ...grpc.CallOption) (*AppKeyInfoList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppKeyInfoList)
+	err := c.cc.Invoke(ctx, AppService_GetAppKeyList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) DelAppKey(ctx context.Context, in *DelAppKeyReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AppService_DelAppKey_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) GetAppKeyByKey(ctx context.Context, in *GetAppKeyByKeyReq, opts ...grpc.CallOption) (*AppKeyInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppKeyInfo)
+	err := c.cc.Invoke(ctx, AppService_GetAppKeyByKey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -201,6 +285,26 @@ func (c *appServiceClient) DeleteApp(ctx context.Context, in *DeleteAppReq, opts
 	return out, nil
 }
 
+func (c *appServiceClient) GetAppInfo(ctx context.Context, in *GetAppInfoReq, opts ...grpc.CallOption) (*AppInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppInfo)
+	err := c.cc.Invoke(ctx, AppService_GetAppInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) ConvertAppType(ctx context.Context, in *ConvertAppTypeReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AppService_ConvertAppType_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *appServiceClient) AppUrlCreate(ctx context.Context, in *AppUrlCreateReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
@@ -281,15 +385,52 @@ func (c *appServiceClient) CreateConversation(ctx context.Context, in *CreateCon
 	return out, nil
 }
 
+func (c *appServiceClient) GetChatflowApplication(ctx context.Context, in *GetChatflowApplicationReq, opts ...grpc.CallOption) (*ChatflowApplicationInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChatflowApplicationInfo)
+	err := c.cc.Invoke(ctx, AppService_GetChatflowApplication_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) GetChatflowByApplicationID(ctx context.Context, in *GetChatflowByApplicationIDReq, opts ...grpc.CallOption) (*ChatflowApplicationInfo, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChatflowApplicationInfo)
+	err := c.cc.Invoke(ctx, AppService_GetChatflowByApplicationID_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appServiceClient) CreateChatflowApplication(ctx context.Context, in *CreateChatflowApplicationReq, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, AppService_CreateChatflowApplication_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AppServiceServer is the server API for AppService service.
 // All implementations must embed UnimplementedAppServiceServer
 // for forward compatibility.
 type AppServiceServer interface {
 	// --- apiKey ---
-	GenApiKey(context.Context, *GenApiKeyReq) (*ApiKeyInfo, error)
-	GetApiKeyList(context.Context, *GetApiKeyListReq) (*ApiKeyInfoList, error)
-	DelApiKey(context.Context, *DelApiKeyReq) (*emptypb.Empty, error)
+	CreateApiKey(context.Context, *CreateApiKeyReq) (*ApiKeyInfo, error)
+	DeleteApiKey(context.Context, *DeleteApiKeyReq) (*emptypb.Empty, error)
+	ListApiKeys(context.Context, *ListApiKeysReq) (*ApiKeyInfoList, error)
+	UpdateApiKey(context.Context, *UpdateApiKeyReq) (*emptypb.Empty, error)
+	UpdateApiKeyStatus(context.Context, *UpdateApiKeyStatusReq) (*emptypb.Empty, error)
 	GetApiKeyByKey(context.Context, *GetApiKeyByKeyReq) (*ApiKeyInfo, error)
+	// --- appKey ---
+	GenAppKey(context.Context, *GenAppKeyReq) (*AppKeyInfo, error)
+	GetAppKeyList(context.Context, *GetAppKeyListReq) (*AppKeyInfoList, error)
+	DelAppKey(context.Context, *DelAppKeyReq) (*emptypb.Empty, error)
+	GetAppKeyByKey(context.Context, *GetAppKeyByKeyReq) (*AppKeyInfo, error)
 	// --- exploration ---
 	GetExplorationAppList(context.Context, *GetExplorationAppListReq) (*ExplorationAppList, error)
 	ChangeExplorationAppFavorite(context.Context, *ChangeExplorationAppFavoriteReq) (*emptypb.Empty, error)
@@ -300,6 +441,8 @@ type AppServiceServer interface {
 	GetAppList(context.Context, *GetAppListReq) (*AppList, error)
 	GetAppListByIds(context.Context, *GetAppListByIdsReq) (*AppList, error)
 	DeleteApp(context.Context, *DeleteAppReq) (*emptypb.Empty, error)
+	GetAppInfo(context.Context, *GetAppInfoReq) (*AppInfo, error)
+	ConvertAppType(context.Context, *ConvertAppTypeReq) (*emptypb.Empty, error)
 	// --- url ---
 	AppUrlCreate(context.Context, *AppUrlCreateReq) (*emptypb.Empty, error)
 	AppUrlDelete(context.Context, *AppUrlDeleteReq) (*emptypb.Empty, error)
@@ -310,6 +453,10 @@ type AppServiceServer interface {
 	// --- conversation ---
 	GetConversationByID(context.Context, *GetConversationByIDReq) (*ConversationInfo, error)
 	CreateConversation(context.Context, *CreateConversationReq) (*emptypb.Empty, error)
+	// --- chatflowApplication ---
+	GetChatflowApplication(context.Context, *GetChatflowApplicationReq) (*ChatflowApplicationInfo, error)
+	GetChatflowByApplicationID(context.Context, *GetChatflowByApplicationIDReq) (*ChatflowApplicationInfo, error)
+	CreateChatflowApplication(context.Context, *CreateChatflowApplicationReq) (*emptypb.Empty, error)
 	mustEmbedUnimplementedAppServiceServer()
 }
 
@@ -320,17 +467,35 @@ type AppServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAppServiceServer struct{}
 
-func (UnimplementedAppServiceServer) GenApiKey(context.Context, *GenApiKeyReq) (*ApiKeyInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GenApiKey not implemented")
+func (UnimplementedAppServiceServer) CreateApiKey(context.Context, *CreateApiKeyReq) (*ApiKeyInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateApiKey not implemented")
 }
-func (UnimplementedAppServiceServer) GetApiKeyList(context.Context, *GetApiKeyListReq) (*ApiKeyInfoList, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetApiKeyList not implemented")
+func (UnimplementedAppServiceServer) DeleteApiKey(context.Context, *DeleteApiKeyReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteApiKey not implemented")
 }
-func (UnimplementedAppServiceServer) DelApiKey(context.Context, *DelApiKeyReq) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelApiKey not implemented")
+func (UnimplementedAppServiceServer) ListApiKeys(context.Context, *ListApiKeysReq) (*ApiKeyInfoList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListApiKeys not implemented")
+}
+func (UnimplementedAppServiceServer) UpdateApiKey(context.Context, *UpdateApiKeyReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateApiKey not implemented")
+}
+func (UnimplementedAppServiceServer) UpdateApiKeyStatus(context.Context, *UpdateApiKeyStatusReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateApiKeyStatus not implemented")
 }
 func (UnimplementedAppServiceServer) GetApiKeyByKey(context.Context, *GetApiKeyByKeyReq) (*ApiKeyInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetApiKeyByKey not implemented")
+}
+func (UnimplementedAppServiceServer) GenAppKey(context.Context, *GenAppKeyReq) (*AppKeyInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenAppKey not implemented")
+}
+func (UnimplementedAppServiceServer) GetAppKeyList(context.Context, *GetAppKeyListReq) (*AppKeyInfoList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAppKeyList not implemented")
+}
+func (UnimplementedAppServiceServer) DelAppKey(context.Context, *DelAppKeyReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelAppKey not implemented")
+}
+func (UnimplementedAppServiceServer) GetAppKeyByKey(context.Context, *GetAppKeyByKeyReq) (*AppKeyInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAppKeyByKey not implemented")
 }
 func (UnimplementedAppServiceServer) GetExplorationAppList(context.Context, *GetExplorationAppListReq) (*ExplorationAppList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetExplorationAppList not implemented")
@@ -356,6 +521,12 @@ func (UnimplementedAppServiceServer) GetAppListByIds(context.Context, *GetAppLis
 func (UnimplementedAppServiceServer) DeleteApp(context.Context, *DeleteAppReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteApp not implemented")
 }
+func (UnimplementedAppServiceServer) GetAppInfo(context.Context, *GetAppInfoReq) (*AppInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAppInfo not implemented")
+}
+func (UnimplementedAppServiceServer) ConvertAppType(context.Context, *ConvertAppTypeReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConvertAppType not implemented")
+}
 func (UnimplementedAppServiceServer) AppUrlCreate(context.Context, *AppUrlCreateReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AppUrlCreate not implemented")
 }
@@ -380,6 +551,15 @@ func (UnimplementedAppServiceServer) GetConversationByID(context.Context, *GetCo
 func (UnimplementedAppServiceServer) CreateConversation(context.Context, *CreateConversationReq) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateConversation not implemented")
 }
+func (UnimplementedAppServiceServer) GetChatflowApplication(context.Context, *GetChatflowApplicationReq) (*ChatflowApplicationInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetChatflowApplication not implemented")
+}
+func (UnimplementedAppServiceServer) GetChatflowByApplicationID(context.Context, *GetChatflowByApplicationIDReq) (*ChatflowApplicationInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetChatflowByApplicationID not implemented")
+}
+func (UnimplementedAppServiceServer) CreateChatflowApplication(context.Context, *CreateChatflowApplicationReq) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateChatflowApplication not implemented")
+}
 func (UnimplementedAppServiceServer) mustEmbedUnimplementedAppServiceServer() {}
 func (UnimplementedAppServiceServer) testEmbeddedByValue()                    {}
 
@@ -401,56 +581,92 @@ func RegisterAppServiceServer(s grpc.ServiceRegistrar, srv AppServiceServer) {
 	s.RegisterService(&AppService_ServiceDesc, srv)
 }
 
-func _AppService_GenApiKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GenApiKeyReq)
+func _AppService_CreateApiKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateApiKeyReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AppServiceServer).GenApiKey(ctx, in)
+		return srv.(AppServiceServer).CreateApiKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AppService_GenApiKey_FullMethodName,
+		FullMethod: AppService_CreateApiKey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AppServiceServer).GenApiKey(ctx, req.(*GenApiKeyReq))
+		return srv.(AppServiceServer).CreateApiKey(ctx, req.(*CreateApiKeyReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AppService_GetApiKeyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetApiKeyListReq)
+func _AppService_DeleteApiKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteApiKeyReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AppServiceServer).GetApiKeyList(ctx, in)
+		return srv.(AppServiceServer).DeleteApiKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AppService_GetApiKeyList_FullMethodName,
+		FullMethod: AppService_DeleteApiKey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AppServiceServer).GetApiKeyList(ctx, req.(*GetApiKeyListReq))
+		return srv.(AppServiceServer).DeleteApiKey(ctx, req.(*DeleteApiKeyReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AppService_DelApiKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DelApiKeyReq)
+func _AppService_ListApiKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListApiKeysReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AppServiceServer).DelApiKey(ctx, in)
+		return srv.(AppServiceServer).ListApiKeys(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: AppService_DelApiKey_FullMethodName,
+		FullMethod: AppService_ListApiKeys_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AppServiceServer).DelApiKey(ctx, req.(*DelApiKeyReq))
+		return srv.(AppServiceServer).ListApiKeys(ctx, req.(*ListApiKeysReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_UpdateApiKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateApiKeyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).UpdateApiKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_UpdateApiKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).UpdateApiKey(ctx, req.(*UpdateApiKeyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_UpdateApiKeyStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateApiKeyStatusReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).UpdateApiKeyStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_UpdateApiKeyStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).UpdateApiKeyStatus(ctx, req.(*UpdateApiKeyStatusReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -469,6 +685,78 @@ func _AppService_GetApiKeyByKey_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AppServiceServer).GetApiKeyByKey(ctx, req.(*GetApiKeyByKeyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_GenAppKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenAppKeyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).GenAppKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_GenAppKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).GenAppKey(ctx, req.(*GenAppKeyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_GetAppKeyList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAppKeyListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).GetAppKeyList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_GetAppKeyList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).GetAppKeyList(ctx, req.(*GetAppKeyListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_DelAppKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DelAppKeyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).DelAppKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_DelAppKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).DelAppKey(ctx, req.(*DelAppKeyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_GetAppKeyByKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAppKeyByKeyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).GetAppKeyByKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_GetAppKeyByKey_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).GetAppKeyByKey(ctx, req.(*GetAppKeyByKeyReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -617,6 +905,42 @@ func _AppService_DeleteApp_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AppService_GetAppInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAppInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).GetAppInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_GetAppInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).GetAppInfo(ctx, req.(*GetAppInfoReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_ConvertAppType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConvertAppTypeReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).ConvertAppType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_ConvertAppType_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).ConvertAppType(ctx, req.(*ConvertAppTypeReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AppService_AppUrlCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AppUrlCreateReq)
 	if err := dec(in); err != nil {
@@ -761,6 +1085,60 @@ func _AppService_CreateConversation_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AppService_GetChatflowApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetChatflowApplicationReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).GetChatflowApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_GetChatflowApplication_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).GetChatflowApplication(ctx, req.(*GetChatflowApplicationReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_GetChatflowByApplicationID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetChatflowByApplicationIDReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).GetChatflowByApplicationID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_GetChatflowByApplicationID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).GetChatflowByApplicationID(ctx, req.(*GetChatflowByApplicationIDReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppService_CreateChatflowApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateChatflowApplicationReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServiceServer).CreateChatflowApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppService_CreateChatflowApplication_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServiceServer).CreateChatflowApplication(ctx, req.(*CreateChatflowApplicationReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AppService_ServiceDesc is the grpc.ServiceDesc for AppService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -769,20 +1147,44 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AppServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GenApiKey",
-			Handler:    _AppService_GenApiKey_Handler,
+			MethodName: "CreateApiKey",
+			Handler:    _AppService_CreateApiKey_Handler,
 		},
 		{
-			MethodName: "GetApiKeyList",
-			Handler:    _AppService_GetApiKeyList_Handler,
+			MethodName: "DeleteApiKey",
+			Handler:    _AppService_DeleteApiKey_Handler,
 		},
 		{
-			MethodName: "DelApiKey",
-			Handler:    _AppService_DelApiKey_Handler,
+			MethodName: "ListApiKeys",
+			Handler:    _AppService_ListApiKeys_Handler,
+		},
+		{
+			MethodName: "UpdateApiKey",
+			Handler:    _AppService_UpdateApiKey_Handler,
+		},
+		{
+			MethodName: "UpdateApiKeyStatus",
+			Handler:    _AppService_UpdateApiKeyStatus_Handler,
 		},
 		{
 			MethodName: "GetApiKeyByKey",
 			Handler:    _AppService_GetApiKeyByKey_Handler,
+		},
+		{
+			MethodName: "GenAppKey",
+			Handler:    _AppService_GenAppKey_Handler,
+		},
+		{
+			MethodName: "GetAppKeyList",
+			Handler:    _AppService_GetAppKeyList_Handler,
+		},
+		{
+			MethodName: "DelAppKey",
+			Handler:    _AppService_DelAppKey_Handler,
+		},
+		{
+			MethodName: "GetAppKeyByKey",
+			Handler:    _AppService_GetAppKeyByKey_Handler,
 		},
 		{
 			MethodName: "GetExplorationAppList",
@@ -817,6 +1219,14 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AppService_DeleteApp_Handler,
 		},
 		{
+			MethodName: "GetAppInfo",
+			Handler:    _AppService_GetAppInfo_Handler,
+		},
+		{
+			MethodName: "ConvertAppType",
+			Handler:    _AppService_ConvertAppType_Handler,
+		},
+		{
 			MethodName: "AppUrlCreate",
 			Handler:    _AppService_AppUrlCreate_Handler,
 		},
@@ -847,6 +1257,18 @@ var AppService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateConversation",
 			Handler:    _AppService_CreateConversation_Handler,
+		},
+		{
+			MethodName: "GetChatflowApplication",
+			Handler:    _AppService_GetChatflowApplication_Handler,
+		},
+		{
+			MethodName: "GetChatflowByApplicationID",
+			Handler:    _AppService_GetChatflowByApplicationID_Handler,
+		},
+		{
+			MethodName: "CreateChatflowApplication",
+			Handler:    _AppService_CreateChatflowApplication_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

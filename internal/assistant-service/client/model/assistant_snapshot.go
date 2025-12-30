@@ -1,0 +1,16 @@
+package model
+
+type AssistantSnapshot struct {
+	ID                      uint32 `gorm:"primarykey;column:id;comment:智能体快照Id"`
+	AssistantID             uint32 `gorm:"column:assistant_id;type:int;comment:智能体Id"`
+	Version                 string `gorm:"column:version;type:varchar(64);comment:智能体版本"`
+	SnapshotDesc            string `gorm:"column:desc;type:longtext;comment:智能体介绍"`
+	AssistantInfo           string `gorm:"column:assistant_info;type:longtext;comment:智能体基本信息"`
+	AssistantToolConfig     string `gorm:"column:assistant_tool_config;type:longtext;comment:智能体工具配置"`
+	AssistantMCPConfig      string `gorm:"column:assistant_mcp_config;type:longtext;comment:智能体MCP配置"`
+	AssistantWorkflowConfig string `gorm:"column:assistant_workflow_config;type:longtext;comment:智能体工作流配置"`
+	UserId                  string `gorm:"column:user_id;index:idx_assistant_user_id;comment:用户id"`
+	OrgId                   string `gorm:"column:org_id;index:idx_assistant_org_id;comment:组织id"`
+	CreatedAt               int64  `gorm:"autoCreateTime:milli;comment:创建时间"`
+	UpdatedAt               int64  `gorm:"autoUpdateTime:milli;comment:更新时间"`
+}

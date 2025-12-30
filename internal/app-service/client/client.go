@@ -9,11 +9,19 @@ import (
 )
 
 type IClient interface {
-	// --- api key ---
-	GetApiKeyList(ctx context.Context, userId, orgId, appId, appType string) ([]*model.ApiKey, *err_code.Status)
-	DelApiKey(ctx context.Context, apiId uint32) *err_code.Status
-	GenApiKey(ctx context.Context, userId, orgId, appId, appType, apiKey string) (*model.ApiKey, *err_code.Status)
-	GetApiKeyByKey(ctx context.Context, apiKey string) (*model.ApiKey, *err_code.Status)
+	// ---api key ---
+	CreateApiKey(ctx context.Context, userId, orgId, name, desc string, expiredAt int64, apiKey string) (*model.OpenApiKey, *err_code.Status)
+	DeleteApiKey(ctx context.Context, keyId uint32) *err_code.Status
+	UpdateApiKey(ctx context.Context, keyId uint32, userId, orgId, name, desc string, expiredAt int64) *err_code.Status
+	ListApiKeys(ctx context.Context, userId, orgId string, offset, limit int32) ([]*model.OpenApiKey, int64, *err_code.Status)
+	UpdateApiKeyStatus(ctx context.Context, keyId uint32, status bool) *err_code.Status
+	GetApiKeyByKey(ctx context.Context, key string) (*model.OpenApiKey, *err_code.Status)
+
+	// --- app key ---
+	GetAppKeyList(ctx context.Context, userId, orgId, appId, appType string) ([]*model.ApiKey, *err_code.Status)
+	DelAppKey(ctx context.Context, appKeyId uint32) *err_code.Status
+	GenAppKey(ctx context.Context, userId, orgId, appId, appType, appKey string) (*model.ApiKey, *err_code.Status)
+	GetAppKeyByKey(ctx context.Context, appKey string) (*model.ApiKey, *err_code.Status)
 
 	// --- explore ---
 	GetExplorationAppList(ctx context.Context, userId, orgId, name, appType, searchType string) ([]*orm.ExplorationAppInfo, *err_code.Status)
@@ -26,6 +34,8 @@ type IClient interface {
 	DeleteApp(ctx context.Context, appId, appType string) *err_code.Status
 	RecordAppHistory(ctx context.Context, userId, appId, appType string) *err_code.Status
 	GetAppListByIds(ctx context.Context, ids []string) ([]*model.App, *err_code.Status)
+	GetAppInfo(ctx context.Context, appId, appType string) (*model.App, *err_code.Status)
+	ConvertAppType(ctx context.Context, appId, oldAppType, newAppType string) *err_code.Status
 
 	// --- safety ---
 	CreateSensitiveWordTable(ctx context.Context, userId, orgId, tableName, remark string) (string, *err_code.Status)
@@ -51,4 +61,7 @@ type IClient interface {
 	// --- conversation ---
 	GetConversationByID(ctx context.Context, ConversationId string) (*model.AppConversation, *err_code.Status)
 	CreateConversation(ctx context.Context, userId, orgId, appId, appType, conversationId, conversationName string) *err_code.Status
+	GetChatflowApplication(ctx context.Context, orgId, userId, workflowId string) (*model.ChatflowApplcation, *err_code.Status)
+	GetChatflowApplicationByApplicationID(ctx context.Context, orgId, userId, applicationId string) (*model.ChatflowApplcation, *err_code.Status)
+	CreateChatflowApplication(ctx context.Context, orgId, userId, workflowId, applicationId string) *err_code.Status
 }

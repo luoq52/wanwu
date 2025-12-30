@@ -2,9 +2,11 @@ basePath: /openurl/v1
 definitions:
   mp.AppModelParams:
     properties:
+      providerDeepSeek:
+        $ref: '#/definitions/mp.AppModelParamsDeepSeek'
       providerHuoshan:
-        $ref: '#/definitions/mp.AppModelParamsHuoshan'
-      providerModelByInfini:
+        $ref: '#/definitions/mp.AppModelParamsHuoShan'
+      providerInfini:
         $ref: '#/definitions/mp.AppModelParamsInfini'
       providerOllama:
         $ref: '#/definitions/mp.AppModelParamsOllama'
@@ -12,6 +14,8 @@ definitions:
         allOf:
         - $ref: '#/definitions/mp.AppModelParamsOpenAICompatible'
         description: OpenAI-API-compatible模型配置
+      providerQianFan:
+        $ref: '#/definitions/mp.AppModelParamsQianFan'
       providerQwen:
         $ref: '#/definitions/mp.AppModelParamsQwen'
       providerYuanjing:
@@ -19,214 +23,63 @@ definitions:
         - $ref: '#/definitions/mp.AppModelParamsYuanjing'
         description: YuanJing模型配置
     type: object
-  mp.AppModelParamsHuoshan:
+  mp.AppModelParamsDeepSeek:
     properties:
       llm:
         allOf:
-        - $ref: '#/definitions/mp_huoshan.LLMParams'
+        - $ref: '#/definitions/mp_common.LLMParams'
+        description: 大语言模型配置
+    type: object
+  mp.AppModelParamsHuoShan:
+    properties:
+      llm:
+        allOf:
+        - $ref: '#/definitions/mp_common.LLMParams'
         description: 大语言模型配置
     type: object
   mp.AppModelParamsInfini:
     properties:
       llm:
         allOf:
-        - $ref: '#/definitions/mp_infini.LLMParams'
+        - $ref: '#/definitions/mp_common.LLMParams'
         description: 大语言模型配置
     type: object
   mp.AppModelParamsOllama:
     properties:
       llm:
         allOf:
-        - $ref: '#/definitions/mp_ollama.LLMParams'
+        - $ref: '#/definitions/mp_common.LLMParams'
         description: 大语言模型配置
     type: object
   mp.AppModelParamsOpenAICompatible:
     properties:
       llm:
         allOf:
-        - $ref: '#/definitions/mp_openai_compatible.LLMParams'
+        - $ref: '#/definitions/mp_common.LLMParams'
+        description: 大语言模型配置
+    type: object
+  mp.AppModelParamsQianFan:
+    properties:
+      llm:
+        allOf:
+        - $ref: '#/definitions/mp_common.LLMParams'
         description: 大语言模型配置
     type: object
   mp.AppModelParamsQwen:
     properties:
       llm:
         allOf:
-        - $ref: '#/definitions/mp_qwen.LLMParams'
+        - $ref: '#/definitions/mp_common.LLMParams'
         description: 大语言模型配置
     type: object
   mp.AppModelParamsYuanjing:
     properties:
       llm:
         allOf:
-        - $ref: '#/definitions/mp_yuanjing.LLMParams'
+        - $ref: '#/definitions/mp_common.LLMParams'
         description: 大语言模型配置
     type: object
-  mp_huoshan.LLMParams:
-    properties:
-      frequencyPenalty:
-        description: 频率惩罚
-        type: number
-      frequencyPenaltyEnable:
-        description: 频率惩罚(开关)
-        type: boolean
-      maxTokens:
-        description: 最大标记
-        type: integer
-      maxTokensEnable:
-        description: 最大标记(开关)
-        type: boolean
-      presencePenalty:
-        description: 存在惩罚
-        type: number
-      presencePenaltyEnable:
-        description: 存在惩罚(开关)
-        type: boolean
-      temperature:
-        description: 温度
-        type: number
-      temperatureEnable:
-        description: 温度(开关)
-        type: boolean
-      topP:
-        description: Top P
-        type: number
-      topPEnable:
-        description: Top P(开关)
-        type: boolean
-    type: object
-  mp_infini.LLMParams:
-    properties:
-      frequencyPenalty:
-        description: 频率惩罚
-        type: number
-      frequencyPenaltyEnable:
-        description: 频率惩罚(开关)
-        type: boolean
-      maxTokens:
-        description: 最大标记
-        type: integer
-      maxTokensEnable:
-        description: 最大标记(开关)
-        type: boolean
-      presencePenalty:
-        description: 存在惩罚
-        type: number
-      presencePenaltyEnable:
-        description: 存在惩罚(开关)
-        type: boolean
-      temperature:
-        description: 温度
-        type: number
-      temperatureEnable:
-        description: 温度(开关)
-        type: boolean
-      topP:
-        description: Top P
-        type: number
-      topPEnable:
-        description: Top P(开关)
-        type: boolean
-    type: object
-  mp_ollama.LLMParams:
-    properties:
-      frequencyPenalty:
-        description: 频率惩罚
-        type: number
-      frequencyPenaltyEnable:
-        description: 频率惩罚(开关)
-        type: boolean
-      maxTokens:
-        description: 最大标记
-        type: integer
-      maxTokensEnable:
-        description: 最大标记(开关)
-        type: boolean
-      presencePenalty:
-        description: 存在惩罚
-        type: number
-      presencePenaltyEnable:
-        description: 存在惩罚(开关)
-        type: boolean
-      temperature:
-        description: 温度
-        type: number
-      temperatureEnable:
-        description: 温度(开关)
-        type: boolean
-      topP:
-        description: Top P
-        type: number
-      topPEnable:
-        description: Top P(开关)
-        type: boolean
-    type: object
-  mp_openai_compatible.LLMParams:
-    properties:
-      frequencyPenalty:
-        description: 频率惩罚
-        type: number
-      frequencyPenaltyEnable:
-        description: 频率惩罚(开关)
-        type: boolean
-      maxTokens:
-        description: 最大标记
-        type: integer
-      maxTokensEnable:
-        description: 最大标记(开关)
-        type: boolean
-      presencePenalty:
-        description: 存在惩罚
-        type: number
-      presencePenaltyEnable:
-        description: 存在惩罚(开关)
-        type: boolean
-      temperature:
-        description: 温度
-        type: number
-      temperatureEnable:
-        description: 温度(开关)
-        type: boolean
-      topP:
-        description: Top P
-        type: number
-      topPEnable:
-        description: Top P(开关)
-        type: boolean
-    type: object
-  mp_qwen.LLMParams:
-    properties:
-      frequencyPenalty:
-        description: 频率惩罚
-        type: number
-      frequencyPenaltyEnable:
-        description: 频率惩罚(开关)
-        type: boolean
-      maxTokens:
-        description: 最大标记
-        type: integer
-      maxTokensEnable:
-        description: 最大标记(开关)
-        type: boolean
-      presencePenalty:
-        description: 存在惩罚
-        type: number
-      presencePenaltyEnable:
-        description: 存在惩罚(开关)
-        type: boolean
-      temperature:
-        description: 温度
-        type: number
-      temperatureEnable:
-        description: 温度(开关)
-        type: boolean
-      topP:
-        description: Top P
-        type: number
-      topPEnable:
-        description: Top P(开关)
-        type: boolean
-    type: object
-  mp_yuanjing.LLMParams:
+  mp_common.LLMParams:
     properties:
       frequencyPenalty:
         description: 频率惩罚
@@ -528,8 +381,14 @@ definitions:
       name:
         description: 名称
         type: string
+      newAgent:
+        description: 是否是新版本智能体
+        type: boolean
       prologue:
         description: 开场白
+        type: string
+      publishType:
+        description: 发布类型
         type: string
       recommendQuestion:
         description: 推荐问题
@@ -554,6 +413,8 @@ definitions:
         type: array
       updatedAt:
         description: 更新时间
+        type: string
+      uuid:
         type: string
       visionConfig:
         allOf:

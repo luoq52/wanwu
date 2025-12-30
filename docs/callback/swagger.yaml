@@ -1,6 +1,11 @@
 basePath: /callback/v1
 definitions:
-  mp.ProviderModelByHuoshan:
+  mp.ProviderModelByDeepSeek:
+    properties:
+      llm:
+        $ref: '#/definitions/mp_deepseek.LLM'
+    type: object
+  mp.ProviderModelByHuoShan:
     properties:
       embedding:
         $ref: '#/definitions/mp_huoshan.Embedding'
@@ -32,6 +37,15 @@ definitions:
       rerank:
         $ref: '#/definitions/mp_openai_compatible.Rerank'
     type: object
+  mp.ProviderModelByQianFan:
+    properties:
+      embedding:
+        $ref: '#/definitions/mp_qianfan.Embedding'
+      llm:
+        $ref: '#/definitions/mp_qianfan.LLM'
+      rerank:
+        $ref: '#/definitions/mp_qianfan.Rerank'
+    type: object
   mp.ProviderModelByQwen:
     properties:
       embedding:
@@ -58,22 +72,54 @@ definitions:
     type: object
   mp.ProviderModelConfig:
     properties:
-      providerHuoshan:
-        $ref: '#/definitions/mp.ProviderModelByHuoshan'
-      providerModelByInfini:
+      providerDeepSeek:
+        $ref: '#/definitions/mp.ProviderModelByDeepSeek'
+      providerHuoShan:
+        $ref: '#/definitions/mp.ProviderModelByHuoShan'
+      providerInfini:
         $ref: '#/definitions/mp.ProviderModelByInfini'
       providerOllama:
         $ref: '#/definitions/mp.ProviderModelByOllama'
       providerOpenAICompatible:
         $ref: '#/definitions/mp.ProviderModelByOpenAICompatible'
+      providerQianFan:
+        $ref: '#/definitions/mp.ProviderModelByQianFan'
       providerQwen:
         $ref: '#/definitions/mp.ProviderModelByQwen'
       providerYuanJing:
         $ref: '#/definitions/mp.ProviderModelByYuanjing'
     type: object
-  mp_common.Document:
+  mp_common.AsrResp:
     properties:
+      code:
+        type: integer
+      msg:
+        type: string
+      result:
+        $ref: '#/definitions/mp_common.AsrResult'
+      status:
+        type: string
+      uuid:
+        type: string
+    type: object
+  mp_common.AsrResult:
+    properties:
+      diarization:
+        items:
+          $ref: '#/definitions/mp_common.DiarizationObj'
+        type: array
+    type: object
+  mp_common.DiarizationObj:
+    properties:
+      end:
+        type: number
+      speaker:
+        type: integer
+      start:
+        type: number
       text:
+        type: string
+      trans:
         type: string
     type: object
   mp_common.EmbeddingData:
@@ -99,6 +145,9 @@ definitions:
           type: string
         type: array
       model:
+        type: string
+      user:
+        description: 用户标识（兼容千帆)
         type: string
     required:
     - input
@@ -291,6 +340,7 @@ definitions:
       top_p:
         type: number
       user:
+        description: 用户标识（兼容千帆)
         type: string
       web_search:
         allOf:
@@ -526,6 +576,7 @@ definitions:
   mp_common.RerankReq:
     properties:
       documents:
+        description: 需要重排序的文本
         items:
           type: string
         type: array
@@ -536,7 +587,11 @@ definitions:
       return_documents:
         type: boolean
       top_n:
+        description: 返回排序后的top_n个文档。默认返回全部文档。
         type: integer
+      user:
+        description: 用户标识（兼容千帆)
+        type: string
     required:
     - documents
     - model
@@ -561,8 +616,7 @@ definitions:
     type: object
   mp_common.Result:
     properties:
-      document:
-        $ref: '#/definitions/mp_common.Document'
+      document: {}
       index:
         type: integer
       relevance_score:
@@ -577,10 +631,46 @@ definitions:
       include_usage:
         type: boolean
     type: object
+  mp_common.T2IUsage:
+    properties:
+      total_patches:
+        type: integer
+    type: object
   mp_common.Tag:
     properties:
       text:
         type: string
+    type: object
+  mp_common.Text2ImageReq:
+    properties:
+      advanced_opt:
+        description: '高级选项参数 json, {"height": 512, "width": 512, "num_images_per_prompt":
+          1, "style": "摄影"}'
+        type: string
+      prompt:
+        description: 提示词
+        type: string
+      report_url:
+        description: 参考
+        type: string
+      response_format:
+        description: “url” or “b64_json”,默认b64_json
+        type: string
+    required:
+    - prompt
+    type: object
+  mp_common.Text2ImageResp:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+      result:
+        items:
+          type: string
+        type: array
+      usage:
+        $ref: '#/definitions/mp_common.T2IUsage'
     type: object
   mp_common.Thinking:
     properties:
@@ -624,6 +714,27 @@ definitions:
         type: boolean
       enable_trace:
         type: boolean
+    type: object
+  mp_deepseek.LLM:
+    properties:
+      apiKey:
+        description: ApiKey
+        type: string
+      contextSize:
+        description: 上下文长度
+        type: integer
+      endpointUrl:
+        description: 推理url
+        type: string
+      functionCalling:
+        description: 函数调用是否支持
+        enum:
+        - noSupport
+        - toolCall
+        type: string
+      maxTokens:
+        description: 模型回答最大tokens
+        type: integer
     type: object
   mp_huoshan.Embedding:
     properties:
@@ -794,6 +905,57 @@ definitions:
         type: string
     type: object
   mp_openai_compatible.Rerank:
+    properties:
+      apiKey:
+        description: ApiKey
+        type: string
+      contextSize:
+        description: 上下文长度
+        type: integer
+      endpointUrl:
+        description: 推理url
+        type: string
+    type: object
+  mp_qianfan.Embedding:
+    properties:
+      apiKey:
+        description: ApiKey
+        type: string
+      contextSize:
+        description: 上下文长度
+        type: integer
+      endpointUrl:
+        description: 推理url
+        type: string
+    type: object
+  mp_qianfan.LLM:
+    properties:
+      apiKey:
+        description: ApiKey
+        type: string
+      contextSize:
+        description: 上下文长度
+        type: integer
+      endpointUrl:
+        description: 推理url
+        type: string
+      functionCalling:
+        description: 函数调用是否支持
+        enum:
+        - noSupport
+        - toolCall
+        type: string
+      maxTokens:
+        description: 模型回答最大tokens
+        type: integer
+      visionSupport:
+        description: 视觉支持
+        enum:
+        - noSupport
+        - support
+        type: string
+    type: object
+  mp_qianfan.Rerank:
     properties:
       apiKey:
         description: ApiKey
@@ -1099,6 +1261,12 @@ definitions:
     type: object
   request.FileUrlConvertBase64Req:
     properties:
+      addPrefix:
+        description: 是否添加 data:xxx;base64, 前缀
+        type: boolean
+      customPrefix:
+        description: 自定义前缀（如 "data:video/mp4;base64,"）
+        type: string
       fileUrl:
         description: 文件URL
         type: string
@@ -1139,13 +1307,24 @@ definitions:
       logical_operator:
         type: string
     type: object
+  request.QAMetadataFilterItem:
+    properties:
+      conditions:
+        items:
+          $ref: '#/definitions/request.MetaItem'
+        type: array
+      filtering_qa_base_name:
+        type: string
+      logical_operator:
+        type: string
+    type: object
   request.RagKnowledgeChatReq:
     properties:
       auto_citation:
         description: 是否自动角标
         type: boolean
       chichat:
-        description: 当知识库召回结果为空时是否使用默认话术（兜底），默认为true
+        description: 当知识库召回结果为空时是否使用默认话术（兜底），默认为false
         type: boolean
       custom_model_info:
         $ref: '#/definitions/request.CustomModelInfo'
@@ -1225,8 +1404,18 @@ definitions:
       kb_name:
         type: string
     type: object
+  request.RagQaInfo:
+    properties:
+      QABase:
+        type: string
+      QAId:
+        type: string
+    type: object
   request.RagSearchKnowledgeBaseReq:
     properties:
+      auto_citation:
+        description: 是否启动知识图谱查询
+        type: boolean
       knowledge_base_info:
         additionalProperties:
           items:
@@ -1256,6 +1445,9 @@ definitions:
       retrieve_method:
         description: hybrid_search:混合搜索， semantic_search:向量搜索， full_text_search：文本搜索
         type: string
+      rewrite_query:
+        description: 是否query改写
+        type: boolean
       term_weight_coefficient:
         description: 关键词系数
         type: number
@@ -1275,6 +1467,46 @@ definitions:
     required:
     - knowledgeIdList
     - question
+    - userId
+    type: object
+  request.RagSearchQABaseReq:
+    properties:
+      QABaseInfo:
+        additionalProperties:
+          items:
+            $ref: '#/definitions/request.RagQaInfo'
+          type: array
+        type: object
+      knowledgeIdList:
+        items:
+          type: string
+        type: array
+      metadataFiltering:
+        type: boolean
+      metadataFilteringConditions:
+        items:
+          $ref: '#/definitions/request.QAMetadataFilterItem'
+        type: array
+      question:
+        type: string
+      rerankMod:
+        type: string
+      rerankModelId:
+        type: string
+      retrieveMethod:
+        type: string
+      returnMeta:
+        type: boolean
+      threshold:
+        type: number
+      topK:
+        type: integer
+      userId:
+        type: string
+      weights:
+        $ref: '#/definitions/request.WeightParams'
+    required:
+    - knowledgeIdList
     - userId
     type: object
   request.SearchKnowledgeInfoReq:
@@ -1303,11 +1535,13 @@ definitions:
       file:
         description: base64格式
         type: string
+      fileExt:
+        description: 文件后缀名，如 "png", "pdf"
+        type: string
       fileName:
         type: string
     required:
     - file
-    - fileName
     type: object
   response.CustomToolActionInfo:
     properties:
@@ -1349,6 +1583,103 @@ definitions:
         type: string
       schema:
         description: schema
+        type: string
+    type: object
+  response.MCPDetail:
+    properties:
+      avatar:
+        allOf:
+        - $ref: '#/definitions/request.Avatar'
+        description: 图标
+      category:
+        description: 类型(data:数据,create:创作,search:搜索)
+        type: string
+      desc:
+        description: 描述
+        type: string
+      detail:
+        description: 详情
+        type: string
+      feature:
+        description: 特性说明
+        type: string
+      from:
+        description: 来源
+        type: string
+      manual:
+        description: 使用说明
+        type: string
+      mcpId:
+        description: mcpId
+        type: string
+      mcpSquareId:
+        description: 广场mcpId(非空表示来源于广场)
+        type: string
+      name:
+        description: 名称
+        type: string
+      scenario:
+        description: 应用场景
+        type: string
+      sseUrl:
+        description: SSE URL
+        type: string
+      summary:
+        description: 使用概述
+        type: string
+    type: object
+  response.MCPServerDetail:
+    properties:
+      avatar:
+        allOf:
+        - $ref: '#/definitions/request.Avatar'
+        description: 图标
+      desc:
+        description: 描述
+        type: string
+      mcpServerId:
+        description: mcpServerId
+        type: string
+      name:
+        description: 名称
+        type: string
+      sseExample:
+        description: sse连接示例
+        type: string
+      sseUrl:
+        description: sse url
+        type: string
+      streamableExample:
+        description: streamable http 连接示例
+        type: string
+      streamableUrl:
+        description: streamable http url
+        type: string
+      tools:
+        description: 绑定工具列表
+        items:
+          $ref: '#/definitions/response.MCPServerToolInfo'
+        type: array
+    type: object
+  response.MCPServerToolInfo:
+    properties:
+      desc:
+        description: 描述
+        type: string
+      id:
+        description: 应用或工具id
+        type: string
+      mcpServerToolId:
+        description: mcpServerToolId
+        type: string
+      methodName:
+        description: 显示名称
+        type: string
+      name:
+        description: 应用或工具名称
+        type: string
+      type:
+        description: 类型
         type: string
     type: object
   response.ModelInfo:
@@ -1401,6 +1732,8 @@ definitions:
       updatedAt:
         type: string
       userId:
+        type: string
+      uuid:
         type: string
     required:
     - model
@@ -1595,6 +1928,84 @@ paths:
       summary: 更新知识库状态
       tags:
       - callback
+  /callback/mcp:
+    get:
+      consumes:
+      - application/json
+      description: 获取自定义MCP详情
+      parameters:
+      - description: mcpId
+        in: query
+        name: mcpId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.MCPDetail'
+              type: object
+      summary: 获取自定义MCP详情
+      tags:
+      - mcp
+  /callback/mcp/server:
+    get:
+      consumes:
+      - application/json
+      description: 获取MCP Server详情
+      parameters:
+      - description: mcpServerId
+        in: query
+        name: mcpServerId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.MCPServerDetail'
+              type: object
+      summary: 获取MCP Server详情
+      tags:
+      - mcp.server
+  /chatflow/list:
+    get:
+      consumes:
+      - application/json
+      description: 根据userId和spaceId获取Chatflow
+      parameters:
+      - description: 获取工作流参数userId
+        in: query
+        name: userId
+        required: true
+        type: string
+      - description: 获取工作流参数orgId
+        in: query
+        name: orgId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 根据userId和spaceId获取Chatflow
+      tags:
+      - callback
   /file/url/base64:
     post:
       consumes:
@@ -1644,6 +2055,36 @@ paths:
                   $ref: '#/definitions/response.ModelInfo'
               type: object
       summary: 根据ModelId获取模型
+      tags:
+      - callback
+  /model/{modelId}/asr:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 模型ID
+        in: path
+        name: modelId
+        required: true
+        type: string
+      - description: 语音文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: 请求参数
+        in: formData
+        name: config
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/mp_common.AsrResp'
+      summary: Model Asr
       tags:
       - callback
   /model/{modelId}/chat/completions:
@@ -1805,6 +2246,33 @@ paths:
       summary: Model Rerank
       tags:
       - callback
+  /model/{modelId}/text2image:
+    post:
+      consumes:
+      - multipart/form-data
+      - application/json
+      parameters:
+      - description: 模型ID
+        in: path
+        name: modelId
+        required: true
+        type: string
+      - description: 请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/mp_common.Text2ImageReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/mp_common.Text2ImageResp'
+      summary: Model Text-to-Image
+      tags:
+      - callback
   /rag/knowledge/stream/search:
     post:
       consumes:
@@ -1847,6 +2315,63 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: 查询知识库列表（命中测试）
+      tags:
+      - callback
+  /rag/search-qa-base:
+    post:
+      consumes:
+      - application/json
+      description: 查询问答列表（命中测试）
+      parameters:
+      - description: 查询知识库列表请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RagSearchQABaseReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 查询问答列表（命中测试）
+      tags:
+      - callback
+  /tool/builtin/asr:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 语音文件 base64
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: 请求参数
+        in: formData
+        name: config
+        required: true
+        type: string
+      - description: api token
+        in: formData
+        name: apiKey
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 语音文件（base64格式）转文本内置工具服务
       tags:
       - callback
   /workflow/list:

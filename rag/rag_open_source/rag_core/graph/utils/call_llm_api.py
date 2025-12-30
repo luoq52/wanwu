@@ -7,7 +7,7 @@ import re
 from openai import OpenAI
 from dotenv import load_dotenv
 
-from utils.logger import logger
+from graph.utils.logger import logger
 
 load_dotenv()
 
@@ -52,7 +52,7 @@ class LLMCompletionCall:
                 "stream": False,
                 "messages": [{"role": "user", "content": content}],
             }
-            response = requests.post(self.llm_base_url, json=llm_data, headers=headers, verify=False)
+            response = requests.post(self.llm_base_url, json=llm_data, headers=headers, verify=False, timeout=600)
             result_data = json.loads(response.text)
             raw = result_data["choices"][0]["message"]["content"] or ""
             clean_completion = self._clean_llm_content(raw)

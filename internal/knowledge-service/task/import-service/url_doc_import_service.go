@@ -7,9 +7,9 @@ import (
 
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/model"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/orm"
-	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/generator"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/util"
 	"github.com/UnicomAI/wanwu/pkg/log"
+	wanwu_util "github.com/UnicomAI/wanwu/pkg/util"
 )
 
 const (
@@ -34,7 +34,16 @@ func (f UrlDocImportService) AnalyzeDoc(ctx context.Context, importTask *model.K
 
 func (f UrlDocImportService) CheckDoc(ctx context.Context, importTask *model.KnowledgeImportTask, docList []*model.DocInfo) ([]*CheckFileResult, error) {
 	var resultList []*CheckFileResult
+	var urlRepeatMap = make(map[string]bool)
 	for _, docInfo := range docList {
+		if urlRepeatMap[docInfo.FilePathMd5] { //如果统一文件内存在同一url则直接失败
+			resultList = append(resultList, &CheckFileResult{
+				Status:     model.DocFail,
+				ErrMessage: util.KnowledgeImportSameNameErr,
+				DocInfo:    docInfo,
+			})
+			continue
+		}
 		//文档重名校验
 		checkResult, checkMessage := checkUrlFile(ctx, importTask.UserId, importTask.KnowledgeId, docInfo.DocUrl)
 		var status = model.DocInit
@@ -46,6 +55,9 @@ func (f UrlDocImportService) CheckDoc(ctx context.Context, importTask *model.Kno
 			ErrMessage: checkMessage,
 			DocInfo:    docInfo,
 		})
+		if len(docInfo.FilePathMd5) > 0 {
+			urlRepeatMap[docInfo.FilePathMd5] = true
+		}
 	}
 	return resultList, nil
 }
@@ -70,7 +82,7 @@ func (f UrlDocImportService) ImportDoc(ctx context.Context, importTask *model.Kn
 }
 
 func checkUrlFile(ctx context.Context, userId string, knowledgeId string, docUrl string) (bool, string) {
-	err := orm.CheckKnowledgeDocSameName(ctx, userId, knowledgeId, "", docUrl)
+	err := orm.CheckKnowledgeDocSameName(ctx, userId, knowledgeId, "", docUrl, "")
 	if err != nil {
 		log.Errorf("文件 '%s' 判断文档重名失败(%v)", docUrl, err)
 		return false, util.KnowledgeImportSameNameErr
@@ -84,7 +96,7 @@ func buildKnowledgeUrlDoc(importTask *model.KnowledgeImportTask, docInfo *CheckF
 		fileSize = 10 // 10b,经bff转换后为0.01kb
 	}
 	return &model.KnowledgeDoc{
-		DocId:        generator.GetGenerator().NewID(),
+		DocId:        wanwu_util.NewID(),
 		ImportTaskId: importTask.ImportId,
 		KnowledgeId:  importTask.KnowledgeId,
 		FilePath:     docInfo.DocInfo.DocUrl,

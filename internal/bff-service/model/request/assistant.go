@@ -38,6 +38,7 @@ func (a *AssistantDeleteRequest) Check() error { return nil }
 
 type AssistantIdRequest struct {
 	AssistantId string `json:"assistantId" form:"assistantId" validate:"required"`
+	Version     string `json:"version" form:"version"`
 }
 
 func (a *AssistantIdRequest) Check() error { return nil }

@@ -18,6 +18,7 @@ type EmbeddingReq struct {
 	Model          string   `json:"model" validate:"required"`
 	Input          []string `json:"input" validate:"required"`
 	EncodingFormat *string  `json:"encoding_format,omitempty"`
+	User           *string  `json:"user,omitempty"` // 用户标识（兼容千帆)
 }
 
 func (req *EmbeddingReq) Check() error { return nil }
@@ -139,12 +140,13 @@ func Embeddings(ctx context.Context, provider, apiKey, url string, req map[strin
 	resp, err := request.Post(url)
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v embeddings err: %v", url, provider, err)
-	} else if resp.StatusCode() >= 300 {
-		return nil, fmt.Errorf("request %v %v embeddings http status %v msg: %v", url, provider, resp.StatusCode(), resp.String())
 	}
 	b, err := io.ReadAll(resp.RawResponse.Body)
 	if err != nil {
 		return nil, fmt.Errorf("request %v %v embeddings read response body err: %v", url, provider, err)
+	}
+	if resp.StatusCode() >= 300 {
+		return nil, fmt.Errorf("request %v %v embeddings http status %v msg: %v", url, provider, resp.StatusCode(), string(b))
 	}
 	return b, nil
 }

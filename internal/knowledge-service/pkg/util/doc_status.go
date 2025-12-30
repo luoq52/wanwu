@@ -19,21 +19,42 @@ func BuildDocRespStatus(number int) int {
 	}
 }
 
-func BuildDocReqStatusList(status int) []int {
+func BuildDocReqStatusList(reqStatusList []int32) []int {
 	var statusList []int
-	switch status {
-	case -1: //-1 查全部
-		break
-	case 1:
-		statusList = append(statusList, []int{1, 10}...)
-	case 3:
-		statusList = append(statusList, []int{31, 32, 33, 34, 35}...)
-	case 5:
-		statusList = append(statusList, []int{5, 51, 52, 53, 54, 55, 56, 61, 62}...)
-	default:
-		statusList = append(statusList, status)
+	for _, v := range reqStatusList {
+		switch v {
+		case -1: //-1 查全部
+			break
+		case 1:
+			statusList = append(statusList, []int{1, 10}...)
+		case 3:
+			statusList = append(statusList, []int{31, 32, 33, 34, 35}...)
+		case 5:
+			statusList = append(statusList, []int{5, 51, 52, 53, 54, 55, 56, 61, 62}...)
+		default:
+			statusList = append(statusList, int(v))
+		}
 	}
 	return statusList
+}
+
+func BuildDocReqGraphStatusList(reqGraphStatusList []int32) []int {
+	var graphStatusList []int
+	for _, v := range reqGraphStatusList {
+		switch v {
+		case -1: //-1 查全部
+			break
+		case 0:
+			graphStatusList = append(graphStatusList, []int{0}...)
+		case 1:
+			graphStatusList = append(graphStatusList, []int{110}...)
+		case 2:
+			graphStatusList = append(graphStatusList, []int{100}...)
+		default:
+			graphStatusList = append(graphStatusList, []int{101, 102, 103, 119}...)
+		}
+	}
+	return graphStatusList
 }
 
 // BuildDocErrMessage 构造文档错误信息

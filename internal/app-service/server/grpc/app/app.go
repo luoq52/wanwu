@@ -84,8 +84,24 @@ func (s *Service) GetAppListByIds(ctx context.Context, req *app_service.GetAppLi
 	return ret, nil
 }
 
+func (s *Service) GetAppInfo(ctx context.Context, req *app_service.GetAppInfoReq) (*app_service.AppInfo, error) {
+	publishApp, err := s.cli.GetAppInfo(ctx, req.AppId, req.AppType)
+	if err != nil {
+		return nil, errStatus(errs.Code_AppGeneral, err)
+	}
+	return toProtoApp(publishApp), nil
+}
+
 func (s *Service) RecordAppHistory(ctx context.Context, req *app_service.RecordAppHistoryReq) (*emptypb.Empty, error) {
 	err := s.cli.RecordAppHistory(ctx, req.UserId, req.AppId, req.AppType)
+	if err != nil {
+		return nil, errStatus(errs.Code_AppGeneral, err)
+	}
+	return &emptypb.Empty{}, nil
+}
+
+func (s *Service) ConvertAppType(ctx context.Context, req *app_service.ConvertAppTypeReq) (*emptypb.Empty, error) {
+	err := s.cli.ConvertAppType(ctx, req.AppId, req.OldAppType, req.NewAppType)
 	if err != nil {
 		return nil, errStatus(errs.Code_AppGeneral, err)
 	}

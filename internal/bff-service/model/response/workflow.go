@@ -76,6 +76,85 @@ type CozeWorkflowExportData struct {
 	Schema       string `json:"schema"`
 }
 
+type CozeWorkflowTestRunResponse struct {
+	Data *CozeWorkflowTestRunData `json:"data"`
+	Code int64                    `json:"code"`
+	Msg  string                   `json:"msg"`
+}
+
+type CozeWorkflowTestRunData struct {
+	WorkflowID string `json:"workflow_id"`
+	ExecuteID  string `json:"execute_id"`
+	SessionID  string `json:"session_id"`
+}
+
+type CozeGetWorkflowProcessResponse struct {
+	Code int64                       `json:"code"`
+	Msg  string                      `json:"msg"`
+	Data *CozeGetWorkFlowProcessData `json:"data"`
+}
+
+type CozeGetWorkFlowProcessData struct {
+	WorkFlowId       string            `json:"workFlowId"`
+	ExecuteId        string            `json:"executeId"`
+	ExecuteStatus    int64             `json:"executeStatus"`
+	NodeResults      []*CozeNodeResult `json:"nodeResults"`
+	Rate             string            `json:"rate"`
+	ExeHistoryStatus int64             `json:"exeHistoryStatus"`
+	WorkflowExeCost  string            `json:"workflowExeCost"`
+	TokenAndCost     *CozeTokenAndCost `json:"tokenAndCost,omitempty"`
+	Reason           *string           `json:"reason,omitempty"`
+	LastNodeID       *string           `json:"lastNodeID,omitempty"`
+	LogID            string            `json:"logID"`
+	NodeEvents       []*CozeNodeEvent  `json:"nodeEvents"`
+	ProjectId        string            `json:"projectId"`
+}
+
+type CozeTokenAndCost struct {
+	InputTokens  *string `json:"inputTokens,omitempty"`
+	InputCost    *string `json:"inputCost,omitempty"`
+	OutputTokens *string `json:"outputTokens,omitempty"`
+	OutputCost   *string `json:"outputCost,omitempty"`
+	TotalTokens  *string `json:"totalTokens,omitempty"`
+	TotalCost    *string `json:"totalCost,omitempty"`
+}
+
+type CozeNodeResult struct {
+	NodeId          string            `json:"nodeId"`
+	NodeType        string            `json:"NodeType"`
+	NodeName        string            `json:"NodeName"`
+	NodeStatus      int64             `json:"nodeStatus"`
+	ErrorInfo       string            `json:"errorInfo"`
+	Input           string            `json:"input"`
+	Output          string            `json:"output"`
+	NodeExeCost     string            `json:"nodeExeCost"`
+	TokenAndCost    *CozeTokenAndCost `json:"tokenAndCost,omitempty"`
+	RawOutput       *string           `json:"raw_output,omitempty"`
+	ErrorLevel      string            `json:"errorLevel"`
+	Index           *int32            `json:"index,omitempty"`
+	Items           *string           `json:"items,omitempty"`
+	MaxBatchSize    *int32            `json:"maxBatchSize,omitempty"`
+	LimitVariable   *string           `json:"limitVariable,omitempty"`
+	LoopVariableLen *int32            `json:"loopVariableLen,omitempty"`
+	Batch           *string           `json:"batch,omitempty"`
+	IsBatch         *bool             `json:"isBatch,omitempty"`
+	LogVersion      int32             `json:"logVersion"`
+	Extra           string            `json:"extra"`
+	ExecuteId       *string           `json:"executeId,omitempty"`
+	SubExecuteId    *string           `json:"subExecuteId,omitempty"`
+	NeedAsync       *bool             `json:"needAsync,omitempty"`
+}
+
+type CozeNodeEvent struct {
+	ID           string `json:"id"`
+	Type         int64  `json:"type"`
+	NodeTitle    string `json:"node_title"`
+	Data         string `json:"data"`
+	NodeIcon     string `json:"node_icon"`
+	NodeID       string `json:"node_id"`
+	SchemaNodeID string `json:"schema_node_id"`
+}
+
 type ToolDetail4Workflow struct {
 	Inputs     []interface{} `json:"inputs"`
 	Outputs    []interface{} `json:"outputs"`
@@ -128,4 +207,40 @@ type CozeConversationData struct {
 type UploadFileByWorkflowResp struct {
 	Url string `json:"url"`
 	Uri string `json:"uri"`
+}
+
+type CozeListMessageApiResponse struct {
+	Messages []*OpenMessageApi `thrift:"messages,1,optional" form:"data" json:"data,omitempty"`
+	// Is there still data, true yes, false no
+	HasMore *bool `thrift:"has_more,2,optional" form:"has_more" json:"has_more,omitempty"`
+	// The ID of the first piece of data
+	FirstID *int64 `thrift:"first_id,3,optional" form:"first_id" json:"first_id,string,omitempty"`
+	// The id of the last piece of data.
+	LastID *int64 `thrift:"last_id,4,optional" form:"last_id" json:"last_id,string,omitempty"`
+	Code   int64  `thrift:"code,253" form:"code" json:"code" query:"code"`
+	Msg    string `thrift:"msg,254" form:"msg" json:"msg" query:"msg"`
+}
+
+type CozeWorkflowVersionListResp struct {
+	Code int                          `json:"code"`
+	Msg  string                       `json:"msg"`
+	Data *CozeWorkflowVersionListData `json:"data"`
+}
+
+type CozeWorkflowVersionListData struct {
+	WorkflowID  string                 `json:"workflow_id"`
+	VersionList []*CozeWorkflowVersion `json:"version_list"`
+	Total       int32                  `json:"total"`
+}
+
+type CozeWorkflowVersion struct {
+	Version   string `json:"version"`
+	Desc      string `json:"version_description"`
+	CreatedAt int64  `json:"created_at"`
+	CommitId  string `json:"commit_id"`
+}
+
+type CozeCommonResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }

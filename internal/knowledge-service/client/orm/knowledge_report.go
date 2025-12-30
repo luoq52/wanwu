@@ -10,9 +10,9 @@ import (
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/orm/sqlopt"
 	async_task "github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/async-task"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/db"
-	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/generator"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/service"
 	"github.com/UnicomAI/wanwu/pkg/log"
+	wanwu_util "github.com/UnicomAI/wanwu/pkg/util"
 	"gorm.io/gorm"
 )
 
@@ -91,7 +91,7 @@ func BuildReportImportTask(req *knowledgebase_report_service.BatchAddKnowledgeRe
 	}
 	milli := time.Now().UnixMilli()
 	return &model.KnowledgeReportImportTask{
-		ImportId:     generator.GetGenerator().NewID(),
+		ImportId:     wanwu_util.NewID(),
 		KnowledgeId:  knowledge.KnowledgeId,
 		Status:       model.KnowledgeReportImportInit,
 		TotalCount:   0,

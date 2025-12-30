@@ -16,7 +16,7 @@ import (
 func OpenAPIWorkflowRun(ctx *gin.Context, workflowID string, input []byte) ([]byte, error) {
 	// 生成调用工作流的url
 	// 将用户输入的intput透传
-	testRunUrl, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, fmt.Sprintf(config.Cfg().Workflow.TestRunUri, workflowID))
+	testRunUrl, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, fmt.Sprintf(config.Cfg().Workflow.WorkflowRunByOpenapiUri, workflowID))
 	resp, err := resty.New().
 		R().
 		SetContext(ctx).
@@ -27,12 +27,13 @@ func OpenAPIWorkflowRun(ctx *gin.Context, workflowID string, input []byte) ([]by
 		Post(testRunUrl)
 	if err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_test_run", err.Error())
-	} else if resp.StatusCode() >= 300 {
-		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_test_run", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
 	}
 	b, err := io.ReadAll(resp.RawResponse.Body)
 	if err != nil {
 		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_test_run", err.Error())
+	}
+	if resp.StatusCode() >= 300 {
+		return nil, grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_test_run", fmt.Sprintf("[%v] %v", resp.StatusCode(), string(b)))
 	}
 	return b, nil
 }
@@ -69,7 +70,7 @@ func OpenAPIWorkflowFileUpload(ctx *gin.Context) (string, error) {
 		Get(uploadActionUri); err != nil {
 		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", fmt.Sprintf("[%v]", resp.StatusCode()))
 	}
 	var storeUri string
 	if len(uploadActionRet.Result.UploadAddress.StoreInfos) > 0 {
@@ -87,7 +88,11 @@ func OpenAPIWorkflowFileUpload(ctx *gin.Context) (string, error) {
 		Post(uploadCommonUrl); err != nil {
 		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		b, err := io.ReadAll(resp.RawResponse.Body)
+		if err != nil {
+			return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", fmt.Sprintf("[%v] %v", resp.StatusCode(), err))
+		}
+		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", fmt.Sprintf("[%v] %v", resp.StatusCode(), string(b)))
 	}
 	// 生成签名，并返回可访问文件的url
 	signImgUrl, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.SignImgUri)
@@ -104,7 +109,11 @@ func OpenAPIWorkflowFileUpload(ctx *gin.Context) (string, error) {
 		Post(signImgUrl); err != nil {
 		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", err.Error())
 	} else if resp.StatusCode() >= 300 {
-		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", fmt.Sprintf("[%v] %v", resp.StatusCode(), resp.String()))
+		b, err := io.ReadAll(resp.RawResponse.Body)
+		if err != nil {
+			return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", fmt.Sprintf("[%v] %v", resp.StatusCode(), err))
+		}
+		return "", grpc_util.ErrorStatusWithKey(errs.Code_BFFGeneral, "bff_workflow_file_upload", fmt.Sprintf("[%v] %v", resp.StatusCode(), string(b)))
 	}
 	return ret.Url, nil
 }

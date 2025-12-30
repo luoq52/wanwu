@@ -71,16 +71,25 @@ func ImportChatflow(ctx *gin.Context) {
 //
 //	@Tags			chatflow
 //	@Summary		导出Chatflow
-//	@Description	导出工作流的json文件
+//	@Description	导出对话流的json文件
 //	@Security		JWT
 //	@Accept			json
 //	@Produce		application/octet-stream
 //	@Param			workflow_id	query		string	true	"工作流ID"
+//	@Param			version		query		string	false	"版本"
 //	@Success		200			{object}	response.Response{}
 //	@Router			/appspace/chatflow/export [get]
 func ExportChatflow(ctx *gin.Context) {
 	fileName := "chatflow_export.json"
-	resp, err := service.ExportWorkflow(ctx, getOrgID(ctx), ctx.Query("workflow_id"))
+	workflowID := ctx.Query("workflow_id")
+	version := ctx.Query("version")
+	//适配从草稿导出 从最新版本导出 导出指定版本（workflow中FromDraft:0,FromSpecificVersion:1,FromLatestVersion:2）
+	var qType uint8
+	qType = 2
+	if version != "" {
+		qType = 1
+	}
+	resp, err := service.ExportWorkFlow(ctx, getOrgID(ctx), workflowID, version, qType)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
@@ -91,4 +100,111 @@ func ExportChatflow(ctx *gin.Context) {
 	ctx.Header("Access-Control-Expose-Headers", "Content-Disposition")
 	// 直接写入字节数据
 	ctx.Data(http.StatusOK, "application/octet-stream", resp)
+}
+
+// ExportChatflowDraft
+//
+//	@Tags			chatflow
+//	@Summary		导出Chatflow草稿
+//	@Description	导出对话流草稿的json文件
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		application/octet-stream
+//	@Param			workflow_id	query		string	true	"工作流ID"
+//	@Success		200			{object}	response.Response{}
+//	@Router			/appspace/chatflow/export/draft [get]
+func ExportChatflowDraft(ctx *gin.Context) {
+	fileName := "chatflow_export.json"
+	workflowID := ctx.Query("workflow_id")
+	version := ctx.Query("version")
+	qType := uint8(0)
+	resp, err := service.ExportWorkFlow(ctx, getOrgID(ctx), workflowID, version, qType)
+	if err != nil {
+		gin_util.Response(ctx, nil, err)
+		return
+	}
+	// 设置响应头
+	ctx.Header("Content-Disposition", "attachment; filename*=utf-8''"+url.QueryEscape(fileName))
+	ctx.Header("Content-Type", "application/octet-stream")
+	ctx.Header("Access-Control-Expose-Headers", "Content-Disposition")
+	// 直接写入字节数据
+	ctx.Data(http.StatusOK, "application/octet-stream", resp)
+}
+
+// ChatflowConvert
+//
+//	@Tags			chatflow
+//	@Summary		chatflow转为workflow
+//	@Description	chatflow转为workflow
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.WorkflowConvertReq	true	"对话流工作流转换参数"
+//	@Success		200		{object}	response.Response{}
+//	@Router			/appspace/chatflow/convert [post]
+func ChatflowConvert(ctx *gin.Context) {
+	var req request.WorkflowConvertReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	gin_util.Response(ctx, nil, service.WorkflowConvert(ctx, getOrgID(ctx), req.WorkflowID, constant.AppTypeWorkflow))
+}
+
+// ChatflowApplicationList
+//
+//	@Tags			chatflow
+//	@Summary		应用广场对话流关联应用
+//	@Description	应用广场对话流关联应用
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.ChatflowApplicationListReq	true	"应用广场对话流关联应用参数"
+//	@Success		200		{object}	response.Response{data=response.CozeDraftIntelligenceListData}
+//	@Router			/chatflow/application/list [post]
+func ChatflowApplicationList(ctx *gin.Context) {
+	var req request.ChatflowApplicationListReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	resp, err := service.ChatflowApplicationList(ctx, getUserID(ctx), getOrgID(ctx), req.WorkflowID)
+	gin_util.Response(ctx, resp, err)
+}
+
+// ChatflowApplicationInfo
+//
+//	@Tags			chatflow
+//	@Summary		应用广场对话流关联应用信息
+//	@Description	应用广场对话流关联应用信息
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.ChatflowApplicationInfoReq	true	"应用广场对话流关联应用信息参数"
+//	@Success		200		{object}	response.Response{data=response.CozeGetDraftIntelligenceInfoData}
+//	@Router			/chatflow/application/info [post]
+func ChatflowApplicationInfo(ctx *gin.Context) {
+	var req request.ChatflowApplicationInfoReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	resp, err := service.ChatflowApplicationInfo(ctx, getUserID(ctx), getOrgID(ctx), req)
+	gin_util.Response(ctx, resp, err)
+}
+
+// DeleteChatflowConversation
+//
+//	@Tags			chatflow
+//	@Summary		删除对话流会话
+//	@Description	删除对话流会话
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.ChatflowConversationDeleteReq	true	"删除对话流会话请求参数"
+//	@Success		200		{object}	response.Response{}
+//	@Router			/chatflow/conversation/delete [delete]
+func DeleteChatflowConversation(ctx *gin.Context) {
+	var req request.ChatflowConversationDeleteReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	gin_util.Response(ctx, nil, service.DeleteChatflowConversation(ctx, getOrgID(ctx), req.ProjectId, req.UniqueId))
 }

@@ -40,6 +40,11 @@ func WithIDs(ids []uint32) SQLOption {
 	})
 }
 
+func WithUUID(uuid string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("uuid = ?", uuid)
+	})
+}
 func WithOrgID(orgID string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		if orgID != "" {

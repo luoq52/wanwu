@@ -70,6 +70,10 @@ func GetModel(ctx *gin.Context, userId, orgId string, req *request.GetModelReque
 	return toModelInfo(ctx, resp)
 }
 
+func GetModelById(ctx *gin.Context, req *request.GetModelRequest) (*response.ModelInfo, error) {
+	return GetModel(ctx, "", "", req)
+}
+
 func ListModels(ctx *gin.Context, userId, orgId string, req *request.ListModelsRequest) (*response.ListResult, error) {
 	resp, err := model.ListModels(ctx.Request.Context(), &model_service.ListModelsReq{
 		Provider:    req.Provider,
@@ -105,16 +109,6 @@ func ChangeModelStatus(ctx *gin.Context, userId, orgId string, req *request.Mode
 	return nil
 }
 
-func GetModelById(ctx *gin.Context, req *request.GetModelByIdRequest) (*response.ModelInfo, error) {
-	resp, err := model.GetModelById(ctx.Request.Context(), &model_service.GetModelByIdReq{
-		ModelId: req.ModelId,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return toModelInfo(ctx, resp)
-}
-
 func ListTypeModels(ctx *gin.Context, userId, orgId string, req *request.ListTypeModelsRequest) (*response.ListResult, error) {
 	resp, err := model.ListTypeModels(ctx.Request.Context(), &model_service.ListTypeModelsReq{
 		ModelType: req.ModelType,
@@ -132,6 +126,16 @@ func ListTypeModels(ctx *gin.Context, userId, orgId string, req *request.ListTyp
 		List:  list,
 		Total: resp.Total,
 	}, nil
+}
+
+// --- internal ---
+
+func getModelIdByUuid(ctx *gin.Context, uuid string) (string, error) {
+	resp, err := model.GetModelByUuid(ctx, &model_service.GetModelByUuidReq{Uuid: uuid})
+	if err != nil {
+		return "", err
+	}
+	return resp.ModelId, nil
 }
 
 func parseImportAndUpdateClientReq(userId, orgId string, req *request.ImportOrUpdateModelRequest) (*model_service.ModelInfo, error) {
@@ -179,6 +183,7 @@ func toModelInfo(ctx *gin.Context, modelInfo *model_service.ModelInfo) (*respons
 	}
 	res := &response.ModelInfo{
 		ModelId:     modelInfo.ModelId,
+		Uuid:        modelInfo.Uuid,
 		Provider:    modelInfo.Provider,
 		Model:       modelInfo.Model,
 		ModelType:   modelInfo.ModelType,

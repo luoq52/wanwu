@@ -3,9 +3,6 @@ package request
 import (
 	"errors"
 	"regexp"
-
-	errs "github.com/UnicomAI/wanwu/api/proto/err-code"
-	grpc_util "github.com/UnicomAI/wanwu/pkg/grpc-util"
 )
 
 const (
@@ -13,20 +10,27 @@ const (
 	DocAnalyzerPdfParser = "model"
 	CommonSplitMethod    = "0" //通用分段
 	ParentSplitMethod    = "1" //父子分段
+	UrlFileUpload        = 2   //url文件上传
 )
 
-type DocListReq struct {
+type DocConfigReq struct {
 	KnowledgeId string `json:"knowledgeId" form:"knowledgeId" validate:"required"`
-	DocName     string `json:"docName" form:"docName"`
-	Status      int    `json:"status" form:"status"` // 当前状态  -1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败
+	DocId       string `json:"docId" form:"docId" validate:"required"`
+	CommonCheck
+}
+
+type DocListReq struct {
+	KnowledgeId string  `json:"knowledgeId" form:"knowledgeId" validate:"required"`
+	DocName     string  `json:"docName" form:"docName"`
+	Status      []int32 `json:"status" form:"status"` // 文档状态：-1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败
+	MetaValue   string  `json:"metaValue" form:"metaValue"`
+	GraphStatus []int32 `json:"graphStatus" form:"graphStatus"` // 图谱状态：-1.全部 0.待处理 1.解析中 2.解析成功 3.解析失败
 	PageSearch
 	CommonCheck
 }
 
-type DocImportReq struct {
-	KnowledgeId   string         `json:"knowledgeId" validate:"required"` //知识库id
-	DocImportType int            `json:"docImportType"`                   //文档导入类型，0：文件上传，1：url上传，2.批量url上传
-	DocInfo       []*DocInfo     `json:"docInfoList" validate:"required"` //上传文档列表
+type DocImportFileConfig struct {
+	DocImportType int            `json:"docImportType"`                   //文档导入类型，0：文件上传，1：单条url上传，2.文件url上传
 	DocSegment    *DocSegment    `json:"docSegment" validate:"required"`  //文档分段配置
 	DocAnalyzer   []string       `json:"docAnalyzer" validate:"required"` //文档解析类型 text / ocr  / model
 	ParserModelId string         `json:"parserModelId"`                   //模型解析或ocr模型id
@@ -34,8 +38,27 @@ type DocImportReq struct {
 	DocMetaData   []*DocMetaData `json:"docMetaData"`                     //元数据
 }
 
+type DocImportReq struct {
+	KnowledgeId         string     `json:"knowledgeId" validate:"required"` //知识库id
+	DocInfo             []*DocInfo `json:"docInfoList" validate:"required"` //上传文档列表
+	DocImportFileConfig            //文档导入配置
+}
+
+type DocConfigUpdateReq struct {
+	DocIdList   []string `json:"docIdList"  validate:"required"`  //文档id列表，当更新配置时需要传
+	KnowledgeId string   `json:"knowledgeId" validate:"required"` //知识库id
+	DocImportFileConfig
+	CommonCheck
+}
+
+type DocReImportReq struct {
+	DocIdList   []string `json:"docIdList"  validate:"required"`  //文档id列表
+	KnowledgeId string   `json:"knowledgeId" validate:"required"` //知识库id
+	CommonCheck
+}
+
 type DocMetaDataReq struct {
-	KnowledgeId  string         `json:"knowledgeId"`
+	KnowledgeId  string         `json:"knowledgeId" validate:"required"`
 	DocId        string         `json:"docId"`
 	MetaDataList []*DocMetaData `json:"metaDataList"` //文档元数据
 }
@@ -162,6 +185,19 @@ type DeleteDocChildSegmentReq struct {
 	CommonCheck
 }
 
+type KnowledgeDocListByMetaReq struct {
+	KnowledgeId string `json:"knowledgeId" form:"knowledgeId" validate:"required"`
+	MetaValue   string `json:"metaValue" form:"metaValue"`
+	PageSearch
+	CommonCheck
+}
+
+type KnowledgeDocExportReq struct {
+	KnowledgeId string   `json:"knowledgeId" form:"knowledgeId" validate:"required"` //知识库id
+	DocIdList   []string `json:"docIdList"`                                          //文档id
+	CommonCheck
+}
+
 func (c *DocImportReq) Check() error {
 	if len(c.DocAnalyzer) > 0 {
 		for _, v := range c.DocAnalyzer {
@@ -176,31 +212,30 @@ func (c *DocImportReq) Check() error {
 		seenKeys := make(map[string]bool)
 		for _, meta := range c.DocMetaData {
 			if meta.MetaKey == "" {
-				return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "key为空")
+				return errors.New("key为空")
 			}
 			// 检查Key是否重复
 			if seenKeys[meta.MetaKey] {
-				return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "key重复")
+				return errors.New("key重复")
 			}
 			seenKeys[meta.MetaKey] = true
 			if meta.MetaRule != "" {
 				// 检查rule和key传参
 				if meta.MetaValue != "" {
-					return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "常量和正则表达式重复")
+					return errors.New("常量和正则表达式重复")
 				}
 				// 检查正则合法性
 				_, err := regexp.Compile(meta.MetaRule)
 				if err != nil {
-					return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "非法正则表达式")
+					return errors.New("非法正则表达式")
 				}
 				// 检查key合法性
 				if !isValidKey(meta.MetaKey) {
-					return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "非法key")
+					return errors.New("非法key")
 				}
 			}
 		}
 	}
-
 	if c.DocSegment != nil {
 		if c.DocSegment.SegmentMethod != CommonSplitMethod && c.DocSegment.SegmentMethod != ParentSplitMethod {
 			return errors.New("segmentMethod error")
@@ -212,7 +247,11 @@ func (c *DocImportReq) Check() error {
 			return errors.New("subMaxSplitter error")
 		}
 	}
-
+	if c.DocImportType == UrlFileUpload {
+		if len(c.DocInfo) > 1 {
+			return errors.New("url文件仅可上传一个")
+		}
+	}
 	return nil
 }
 
@@ -230,7 +269,7 @@ func (c *DocMetaDataReq) Check() error {
 			if meta != nil {
 				if len(meta.MetaKey) > 0 {
 					if !isValidKey(meta.MetaKey) {
-						return grpc_util.ErrorStatus(errs.Code_BFFInvalidArg, "非法key")
+						return errors.New("非法key")
 					}
 				}
 			}

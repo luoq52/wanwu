@@ -72,7 +72,7 @@ func GetPromptTemplateDetail(ctx *gin.Context, templateId string) (*response.Pro
 
 func GetPromptOptimize(ctx *gin.Context, userID, orgID string, req request.PromptOptimizeReq) {
 	// 获取模型信息
-	modelInfo, err := model.GetModelById(ctx.Request.Context(), &model_service.GetModelByIdReq{ModelId: req.ModelId})
+	modelInfo, err := model.GetModel(ctx.Request.Context(), &model_service.GetModelReq{ModelId: req.ModelId})
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return

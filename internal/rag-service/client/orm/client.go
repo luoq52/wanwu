@@ -19,6 +19,7 @@ func NewClient(ctx context.Context, db *gorm.DB) (*Client, error) {
 	// auto migrate
 	if err := db.AutoMigrate(
 		model.RagInfo{},
+		model.RagPublish{},
 	); err != nil {
 		return nil, err
 	}

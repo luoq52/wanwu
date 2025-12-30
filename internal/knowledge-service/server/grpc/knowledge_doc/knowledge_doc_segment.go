@@ -11,10 +11,10 @@ import (
 	knowledgebase_doc_service "github.com/UnicomAI/wanwu/api/proto/knowledgebase-doc-service"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/model"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/orm"
-	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/generator"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/util"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/service"
 	"github.com/UnicomAI/wanwu/pkg/log"
+	wanwu_util "github.com/UnicomAI/wanwu/pkg/util"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -482,7 +482,7 @@ func buildDocSegmentImportTask(knowledge *model.KnowledgeBase, fileName, docId s
 	}
 
 	return &model.DocSegmentImportTask{
-		ImportId:     generator.GetGenerator().NewID(),
+		ImportId:     wanwu_util.NewID(),
 		DocId:        docId,
 		Status:       model.DocSegmentImportInit,
 		ImportParams: string(marshal),

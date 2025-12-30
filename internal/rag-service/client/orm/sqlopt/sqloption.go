@@ -27,6 +27,12 @@ func (f funcSQLOption) Apply(db *gorm.DB) *gorm.DB {
 	return f(db)
 }
 
+func WithID(id int64) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("id = ?", id)
+	})
+}
+
 func WithOrgID(orgID string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		if orgID != "" {
@@ -49,6 +55,15 @@ func WithRagID(ragID string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		if ragID != "" {
 			return db.Where("rag_id = ?", ragID)
+		}
+		return db
+	})
+}
+
+func WithVersion(version string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if version != "" {
+			return db.Where("version = ?", version)
 		}
 		return db
 	})

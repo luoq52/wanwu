@@ -2,6 +2,7 @@ package import_service
 
 import (
 	"context"
+	"errors"
 	"os"
 
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/model"
@@ -39,10 +40,18 @@ func (f UrlFileDocImportService) AnalyzeDoc(ctx context.Context, importTask *mod
 		}
 	}()
 	//2.读取excel
-	columnList, err := util.ReadExcelColumn(localFilePath, 1)
+	columnList, err := util.ReadExcelColumn(localFilePath, 1, 1)
 	if err != nil {
 		return nil, err
 	}
+	if len(columnList) == 0 {
+		return nil, errors.New("解析url失败")
+	}
+	urlCountLimit := config.GetConfig().UsageLimit.UrlCountLimit
+	if urlCountLimit <= 0 || len(columnList) < urlCountLimit {
+		urlCountLimit = len(columnList) // 如果数组长度小于限制，取实际长度
+	}
+	columnList = columnList[:urlCountLimit]
 	//3.执行文档解析
 	docUrlRespList, err := service.BatchRagDocUrlAnalysis(ctx, columnList)
 	if err != nil {
@@ -52,9 +61,10 @@ func (f UrlFileDocImportService) AnalyzeDoc(ctx context.Context, importTask *mod
 	var retList []*model.DocInfo
 	for _, docUrlREsp := range docUrlRespList {
 		retList = append(retList, &model.DocInfo{
-			DocName: docUrlREsp.FileName,
-			DocSize: int64(docUrlREsp.FileSize),
-			DocUrl:  docUrlREsp.Url,
+			DocName:     docUrlREsp.FileName,
+			DocSize:     int64(docUrlREsp.FileSize),
+			DocUrl:      docUrlREsp.Url,
+			FilePathMd5: util.MD5(docUrlREsp.Url),
 		})
 	}
 	return retList, nil

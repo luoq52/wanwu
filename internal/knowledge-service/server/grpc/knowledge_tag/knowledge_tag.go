@@ -9,9 +9,9 @@ import (
 	knowledgebase_tag_service "github.com/UnicomAI/wanwu/api/proto/knowledgebase-tag-service"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/model"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/client/orm"
-	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/generator"
 	"github.com/UnicomAI/wanwu/internal/knowledge-service/pkg/util"
 	"github.com/UnicomAI/wanwu/pkg/log"
+	wanwu_util "github.com/UnicomAI/wanwu/pkg/util"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -162,7 +162,7 @@ func buildKnowledgeTag(knowledgeTag *model.KnowledgeTag, selected bool) *knowled
 // buildKnowledgeTagModel 构造知识库标签模型
 func buildKnowledgeTagModel(req *knowledgebase_tag_service.CreateKnowledgeTagReq) *model.KnowledgeTag {
 	return &model.KnowledgeTag{
-		TagId:     generator.GetGenerator().NewID(),
+		TagId:     wanwu_util.NewID(),
 		Name:      req.TagName,
 		OrgId:     req.OrgId,
 		UserId:    req.UserId,

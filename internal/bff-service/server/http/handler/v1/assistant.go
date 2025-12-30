@@ -70,28 +70,28 @@ func AssistantConfigUpdate(ctx *gin.Context) {
 	gin_util.Response(ctx, resp, err)
 }
 
-// GetAssistantInfo
+// GetPublishedAssistantInfo
 //
 //	@Tags			agent
-//	@Summary		查看发布后智能体详情
-//	@Description	查看发布后智能体详情
+//	@Summary		查看已发布智能体详情
+//	@Description	查看已发布智能体详情
 //	@Security		JWT
 //	@Accept			json
 //	@Produce		json
-//	@Param			assistantId	query		string	true	"智能体id"
-//	@Success		200			{object}	response.Response{data=response.Assistant}
+//	@Param			data	query		request.AssistantIdRequest	true	"获取智能体信息的请求参数"
+//	@Success		200		{object}	response.Response{data=response.Assistant}
 //	@Router			/assistant [get]
-func GetAssistantInfo(ctx *gin.Context) {
+func GetPublishedAssistantInfo(ctx *gin.Context) {
 	userId, orgId := getUserID(ctx), getOrgID(ctx)
 	var req request.AssistantIdRequest
 	if !gin_util.BindQuery(ctx, &req) {
 		return
 	}
-	resp, err := service.GetAssistantInfo(ctx, userId, orgId, req)
+	resp, err := service.GetAssistantInfo(ctx, userId, orgId, req, true)
 	gin_util.Response(ctx, resp, err)
 }
 
-// GetAssistantDraftInfo
+// GetDraftAssistantInfo
 //
 //	@Tags			agent
 //	@Summary		查看草稿智能体详情
@@ -99,16 +99,16 @@ func GetAssistantInfo(ctx *gin.Context) {
 //	@Security		JWT
 //	@Accept			json
 //	@Produce		json
-//	@Param			assistantId	query		string	true	"智能体id"
-//	@Success		200			{object}	response.Response{data=response.Assistant}
+//	@Param			data	query		request.AssistantIdRequest	true	"获取智能体信息的请求参数"
+//	@Success		200		{object}	response.Response{data=response.Assistant}
 //	@Router			/assistant/draft [get]
-func GetAssistantDraftInfo(ctx *gin.Context) {
+func GetDraftAssistantInfo(ctx *gin.Context) {
 	userId, orgId := getUserID(ctx), getOrgID(ctx)
 	var req request.AssistantIdRequest
 	if !gin_util.BindQuery(ctx, &req) {
 		return
 	}
-	resp, err := service.GetAssistantDraftInfo(ctx, userId, orgId, req)
+	resp, err := service.GetAssistantInfo(ctx, userId, orgId, req, false)
 	gin_util.Response(ctx, resp, err)
 }
 
@@ -431,7 +431,7 @@ func GetConversationDetailList(ctx *gin.Context) {
 	gin_util.Response(ctx, resp, err)
 }
 
-// AssistantConversionStream
+// DraftAssistantConversionStream
 //
 //	@Tags			agent
 //	@Summary		智能体流式问答
@@ -441,14 +441,36 @@ func GetConversationDetailList(ctx *gin.Context) {
 //	@Produce		json
 //	@Param			data	body		request.ConversionStreamRequest	true	"智能体流式问答参数"
 //	@Success		200		{object}	response.Response
-//	@Router			/assistant/stream [post]
-func AssistantConversionStream(ctx *gin.Context) {
+//	@Router			/assistant/stream/draft [post]
+func DraftAssistantConversionStream(ctx *gin.Context) {
 	userId, orgId := getUserID(ctx), getOrgID(ctx)
 	var req request.ConversionStreamRequest
 	if !gin_util.Bind(ctx, &req) {
 		return
 	}
-	if err := service.AssistantConversionStream(ctx, userId, orgId, req); err != nil {
+	if err := service.AssistantConversionStream(ctx, userId, orgId, req, false); err != nil {
+		gin_util.Response(ctx, nil, err)
+	}
+}
+
+// PublishedAssistantConversionStream
+//
+//	@Tags			agent
+//	@Summary		已发布智能体流式问答
+//	@Description	已发布智能体流式问答
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.ConversionStreamRequest	true	"智能体流式问答参数"
+//	@Success		200		{object}	response.Response
+//	@Router			/assistant/stream [post]
+func PublishedAssistantConversionStream(ctx *gin.Context) {
+	userId, orgId := getUserID(ctx), getOrgID(ctx)
+	var req request.ConversionStreamRequest
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	if err := service.AssistantConversionStream(ctx, userId, orgId, req, true); err != nil {
 		gin_util.Response(ctx, nil, err)
 	}
 }

@@ -42,6 +42,21 @@ func WithKnowledgeID(id string) SQLOption {
 	})
 }
 
+func WithQAPairID(id string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("qa_pair_id = ?", id)
+	})
+}
+
+func WithQuestionMd5(questionMd5 string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if len(questionMd5) > 0 {
+			return db.Where("question_md5 = ?", questionMd5)
+		}
+		return db
+	})
+}
+
 func WithOverKnowledgePermission(id int) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("permission_type >= ?", id)
@@ -72,6 +87,12 @@ func WithKnowledgeIDList(idList []string) SQLOption {
 	})
 }
 
+func WithCategory(category int) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("category = ?", category)
+	})
+}
+
 func WithTagID(id string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("tag_id = ?", id)
@@ -90,6 +111,12 @@ func WithImportID(id string) SQLOption {
 	})
 }
 
+func WithExportID(id string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("export_id = ?", id)
+	})
+}
+
 func WithImportIDs(idList []string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("import_id in ?", idList)
@@ -99,6 +126,39 @@ func WithImportIDs(idList []string) SQLOption {
 func WithDocIDs(ids []string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("doc_id in ?", ids)
+	})
+}
+
+func WithDocIDsNonEmpty(ids []string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if len(ids) == 0 {
+			return db
+		}
+		return db.Where("doc_id in ?", ids)
+	})
+}
+
+func WithQAPairIDsNonEmpty(ids []string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if len(ids) == 0 {
+			return db
+		}
+		return db.Where("qa_pair_id in ?", ids)
+	})
+}
+
+func WithFileTypeFilter(fileType string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if len(fileType) > 0 {
+			return db.Where("file_type != ?", fileType)
+		}
+		return db
+	})
+}
+
+func WithQAPairIDs(ids []string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("qa_pair_id in ?", ids)
 	})
 }
 
@@ -117,6 +177,12 @@ func WithKey(key string) SQLOption {
 func WithType(metaValueType string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("`type` = ?", metaValueType)
+	})
+}
+
+func WithNonType(metaValueType string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		return db.Where("value_type != ?", metaValueType)
 	})
 }
 
@@ -174,9 +240,37 @@ func WithStatusList(status []int) SQLOption {
 	})
 }
 
+func WithGraphStatusList(graphStatus []int) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if len(graphStatus) == 0 {
+			return db
+		} else if len(graphStatus) == 1 {
+			return db.Where("graph_status = ?", graphStatus[0])
+		}
+		return db.Where("graph_status IN ?", graphStatus)
+	})
+}
+func WithStatus(status int) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if status == -1 {
+			return db
+		}
+		return db.Where("status = ?", status)
+	})
+}
+
 func WithoutStatus(status int) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		return db.Where("status != ?", status)
+	})
+}
+
+func WithoutDocId(docId string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if len(docId) > 0 {
+			return db.Where("doc_id != ?", docId)
+		}
+		return db
 	})
 }
 
@@ -245,6 +339,24 @@ func LikeName(name string) SQLOption {
 	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
 		if name != "" {
 			return db.Where("name LIKE ?", "%"+name+"%")
+		}
+		return db
+	})
+}
+
+func LikeMetaValue(value string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if value != "" {
+			return db.Where("value_main LIKE ?", "%"+value+"%")
+		}
+		return db
+	})
+}
+
+func LikeQuestion(question string) SQLOption {
+	return funcSQLOption(func(db *gorm.DB) *gorm.DB {
+		if question != "" {
+			return db.Where("question LIKE ?", "%"+question+"%")
 		}
 		return db
 	})

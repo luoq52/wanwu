@@ -2,6 +2,7 @@ package model
 
 type Assistant struct {
 	ID                  uint32 `gorm:"primarykey;column:id;comment:智能体Id"`
+	UUID                string `gorm:"column:uuid;type:varchar(255);uniqueIndex:idx_unique_uuid;comment:智能体uuid"`
 	AvatarPath          string `gorm:"column:avatar_path;comment:智能体头像"`
 	Name                string `gorm:"column:name;comment:智能体名称"`
 	Desc                string `gorm:"column:desc;comment:智能体介绍"`

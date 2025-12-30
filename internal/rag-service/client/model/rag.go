@@ -1,15 +1,27 @@
 package model
 
+const (
+	MatchTypeDefault         = "mix"
+	KnowledgePriorityDefault = 1
+	QAPriorityDefault        = 0
+	KeywordPriorityDefault   = 0.8
+	ThresholdDefault         = 0.4
+	SemanticsPriorityDefault = 0.2
+	TopKDefault              = 5
+)
+
 type RagInfo struct {
-	ID    int64  `json:"id" gorm:"primaryKey;type:bigint(20) auto_increment;not null;"`
+	ID    int64  `json:"id" gorm:"primaryKey;type:bigint(20);autoIncrement"`
 	RagID string `json:"ragId" gorm:"uniqueIndex:idx_unique_rag_id;column:rag_id;type:varchar(255);comment:ragId"`
 
 	// 使用嵌入结构体（将字段直接映射到主表）
-	BriefConfig         AppBriefConfig      `gorm:"embedded;embeddedPrefix:brief_"`
-	ModelConfig         AppModelConfig      `gorm:"embedded;embeddedPrefix:model_"`
-	RerankConfig        AppModelConfig      `gorm:"embedded;embeddedPrefix:rerank_"`
-	KnowledgeBaseConfig KnowledgeBaseConfig `gorm:"embedded;embeddedPrefix:kb_"`
-	SensitiveConfig     SensitiveConfig     `gorm:"embedded;embeddedPrefix:sensitive_"`
+	BriefConfig           AppBriefConfig      `gorm:"embedded;embeddedPrefix:brief_"`
+	ModelConfig           AppModelConfig      `gorm:"embedded;embeddedPrefix:model_"`
+	RerankConfig          AppModelConfig      `gorm:"embedded;embeddedPrefix:rerank_"`
+	QARerankConfig        AppModelConfig      `gorm:"embedded;embeddedPrefix:qa_rerank_"`
+	KnowledgeBaseConfig   KnowledgeBaseConfig `gorm:"embedded;embeddedPrefix:kb_"`
+	QAKnowledgebaseConfig string              `gorm:"column:qa_knowledgebase_config;type:longtext;comment:问答库配置"`
+	SensitiveConfig       SensitiveConfig     `gorm:"embedded;embeddedPrefix:sensitive_"`
 	PublicModel
 }
 

@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	uuid "github.com/satori/go.uuid"
+	"github.com/UnicomAI/wanwu/pkg/util"
 )
 
 func FileEOF(err error) bool {
@@ -13,7 +13,7 @@ func FileEOF(err error) bool {
 }
 
 func BuildFilePath(fileDir, fileExt string) string {
-	return fileDir + uuid.NewV4().String() + fileExt
+	return fileDir + util.GenUUID() + fileExt
 }
 
 func ReplaceLast(s, old, new string) string {

@@ -1,12 +1,12 @@
 <div align="center">
   <img src="https://github.com/user-attachments/assets/6ceb4269-a861-4545-84db-bad322592156" style="width:45%; height:auto;" />
 <p>
-  <a href="#-核心功能模块">核心功能模块</a> •
-  <a href="#-典型应用场景">典型应用场景</a> •
-  <a href="#-快速开始">快速开始</a> •
-  <a href="#-使用万悟">使用万悟</a> •
-  <a href="#-q--a">Q & A</a> •
-  <a href="#-联系我们">联系我们</a> 
+  <a href="#🚩 核心功能模块">核心功能模块</a> •
+  <a href="#x1F3AF; 典型应用场景">典型应用场景</a> •
+  <a href="#🚀 快速开始">快速开始</a> •
+  <a href="#x1F4D1; 使用万悟">使用万悟</a> •
+  <a href="#128172; Q & A">Q & A</a> •
+  <a href="#x1F4E9; 联系我们">联系我们</a> 
 </p>
 <p>
   <img alt="License" src="https://img.shields.io/badge/license-apache2.0-blue.svg">
@@ -22,6 +22,8 @@
     <a href="https://github.com/UnicomAI/wanwu/blob/main/README_繁體.md">繁體中文</a>
 </p>
 </div>
+
+
 
 
 &emsp;&emsp;**元景万悟智能体平台**是一款面向**企业级**场景的**一站式**、**商用license友好**的**智能体开发平台**，致力于为企业提供安全、高效、合规的一站式AI解决方案。我们以"技术开放、生态共建"为核心理念，通过整合大语言模型、业务流程自动化等前沿技术，构建了覆盖模型全生命周期管理、MCP、联网检索、智能体快速开发、企业知识库建设、复杂工作流编排等完整功能体系的AI工程化平台。平台采用模块化架构设计，支持灵活的功能扩展和二次开发，在确保企业数据安全和隐私保护的同时，大幅降低了AI技术的应用门槛。无论是中小型企业快速构建智能化应用，还是大型企业实现复杂业务场景的智能化改造，元景万悟智能体平台都能提供强有力的技术支撑，助力企业加速数字化转型进程，实现降本增效和业务创新。
@@ -53,7 +55,7 @@
 
 ### 🚩 核心功能模块
 
-**1. 模型纳管（Model Hub）**
+#### **1. 模型纳管（Model Hub）**
 
 ▸ 支持 **数百种专有/开源大模型**（包括GPT、Claude、Llama等系列）的统一接入与生命周期管理
 
@@ -67,7 +69,7 @@
 
 ▸ **内置丰富精选推荐**：整合100+行业MCP接口，让用户方便快捷，轻松调用
 
-#### **3. 联网检索**（Web Search）
+#### **3. 联网检索（Web Search）**
 
 ▸ **实时信息获取**：具备强大的联网检索能力，能够实时从互联网获取最新的信息。在问答场景中，当用户的问题需要最新的新闻、数据等信息时，平台可以快速检索并返回准确的结果，提升回答的时效性和准确性
 
@@ -81,11 +83,13 @@
 
 ▸ 内置 **条件分支、API、大模型、知识库、代码、MCP** 等多种节点，支持端到端流程调试与性能分析
 
-#### **5. 企业级知识库、RAG Pipeline**
+#### 5. <a href="#🚀  万悟高精度RAG">高精度知识库</a>
 
 ▸ 提供**知识库创建**→ **文档解析→向量化→检索→精排** 的全流程知识管理能力，支持pdf/docx/txt/xlsx/csv/pptx等 **多种格式** 文档，还支持网页资源的抓取和接入
 
 ▸ 集成 **多模态检索** 、**级联切分** 与 **自适应切分**，显著提升问答准确率
+
+▸ 文档解析方式支持OCR和[ MinerU模型解析(标题/表格/公式等场景)](https://github.com/UnicomAI/DocParserServer/tree/main)的私有化部署及接入
 
 #### **6. 智能体开发框架（Agent Framework）**
 
@@ -191,6 +195,8 @@
     docker compose --env-file .env --env-file .env.image.arm64 down
     ```
 
+5. 拉取中间件等镜像遇到困难？我们在网盘准备了一份镜像备份，请按照其中README操作：[万悟镜像备份](https://pan.baidu.com/e/1cupIcEP2RBwi_hOr4xQnFQ?pwd=ae86)
+
 - **源码启动（开发）**
 
 1. 基于上述Docker安装步骤，将系统服务完整启动
@@ -243,6 +249,28 @@
 
 ------
 
+### ➡️ 信创适配（TiDB & OceanBase）
+
+1. 基于上述Docker安装步骤，完成首次运行前的配置
+
+2. 根据需要修改.env文件中的`WANWU_DB_NAME`变量（以TiDB为例）
+   ```bash
+   # db: mysql | tidb | oceanbase
+   WANWU_DB_NAME=tidb
+   ```
+
+3. 启动数据库（以amd64为例）
+   ```bash
+   # tidb
+   docker compose --env-file .env --env-file .env.image.amd64 -f docker-compose.tidb.yaml up -d
+   # oceanbase
+   docker compose --env-file .env --env-file .env.image.amd64 -f docker-compose.oceanbase.yaml up -d
+   ```
+
+4. 基于上述Docker安装步骤，将系统服务完整启动
+
+------
+
 ### &#x1F4D1; 使用万悟
 
 为了帮助您快速上手本项目，我们强烈推荐先查看[ 文档操作手册](https://github.com/UnicomAI/wanwu/tree/main/configs/microservice/bff-service/static/manual)。我们为用户提供了交互式、结构化的操作指南，您可以直接在其中查看操作说明、接口文档等，极大地降低了学习和使用的门槛。详细功能清单如下：
@@ -250,7 +278,7 @@
 |                             功能                             |                           详细描述                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 | [模型管理](https://github.com/UnicomAI/wanwu/blob/main/configs/microservice/bff-service/static/manual/1.%E6%A8%A1%E5%9E%8B%E7%AE%A1%E7%90%86.md) | 支持用户导入包括联通元景、OpenAI-API-compatible、Ollama、通义千问、火山引擎等模型供应商的LLM、Embedding、Rerank模型。[ 模型导入方式-详细版](https://github.com/UnicomAI/wanwu/blob/main/configs/microservice/bff-service/static/manual/%E6%A8%A1%E5%9E%8B%E5%AF%BC%E5%85%A5%E6%96%B9%E5%BC%8F-%E8%AF%A6%E7%BB%86%E7%89%88.md) |
-| [知识库](https://github.com/UnicomAI/wanwu/tree/main/configs/microservice/bff-service/static/manual/2.%E7%9F%A5%E8%AF%86%E5%BA%93) | 在文档解析能力方面:支持12种文件类型的上传，支持url解析;文档解析方式支持OCR和[ MinerU模型解析(标题/表格/公式等场景)](https://github.com/UnicomAI/DocParserServer/tree/main)的私有化部署及接入，文档分段设置支持通用分段和父子分段。在调优能力方面:支持知识图谱、元数据管理及元数据过滤查询，支持分段内容增删改，支持对分段设置关键词标签提升召回效果，支持分段启停操作，支持命中测试等功能。在检索能力方面:支持向量检索、全文检索、混合检索多种检索模式;在问答能力方面:支持自动引用出处，支持图文并茂的生成答案 |
+| [知识库](https://github.com/UnicomAI/wanwu/tree/main/configs/microservice/bff-service/static/manual/2.%E7%9F%A5%E8%AF%86%E5%BA%93) | 在文档解析能力方面:支持12种文件类型的上传，支持url解析;文档解析方式支持OCR和[ MinerU模型解析(标题/表格/公式等场景)](https://github.com/UnicomAI/DocParserServer/tree/main)的私有化部署及接入，文档分段设置支持通用分段和父子分段。在调优能力方面:支持知识图谱、元数据管理及元数据过滤查询，支持分段内容增删改，支持对分段设置关键词标签提升召回效果，支持分段启停操作，支持命中测试等功能。在检索能力方面:支持向量检索、全文检索、混合检索多种检索模式;在问答能力方面:支持自动引用出处，支持图文并茂的生成答案。 |
 | [资源库](https://github.com/UnicomAI/wanwu/blob/main/configs/microservice/bff-service/static/manual/3.%E5%B7%A5%E5%85%B7%E5%B9%BF%E5%9C%BA.md) | 同时支持导入自己的MCP服务或自定义工具或提示词，并在工作流和智能体中使用；支持用户创建MCP Server |
 | [安全护栏](https://github.com/UnicomAI/wanwu/blob/main/configs/microservice/bff-service/static/manual/4.%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F.md) |        用户可以创建敏感词表，控制模型反馈结果的安全性        |
 | [文本问答](https://github.com/UnicomAI/wanwu/blob/main/configs/microservice/bff-service/static/manual/5.%E6%96%87%E6%9C%AC%E9%97%AE%E7%AD%94.md) | 基于私人知识库的专属知识顾问，支持知识库管理、知识问答、知识总结、个性参数配置、安全护栏、检索配置等功能，提高知识管理与学习的效率。支持公开或私密发布文本问答应用，支持发布为API |
@@ -260,6 +288,25 @@
 | [MCP广场](https://github.com/UnicomAI/wanwu/blob/main/configs/microservice/bff-service/static/manual/9.MCP%E5%B9%BF%E5%9C%BA.md) |             内置100+优选行业MCP server，即选即用             |
 | [模板广场](https://github.com/UnicomAI/wanwu/blob/main/configs/microservice/bff-service/static/manual/10.%E6%A8%A1%E6%9D%BF%E5%B9%BF%E5%9C%BA.md) |               内置50+优选行业提示词，即选即用                |
 | [设置](https://github.com/UnicomAI/wanwu/blob/main/configs/microservice/bff-service/static/manual/9.%E8%AE%BE%E7%BD%AE.md) | 平台支持多租户，允许用户进行组织、角色、用户管理、平台基础配置，单点登录配置 |
+| [知识图谱UniAI-GraphRAG](https://github.com/UnicomAI/wanwu/blob/66539378255f9a1da80b02a83e75c7a5155f7f87/configs/microservice/bff-service/static/manual/2.%E7%9F%A5%E8%AF%86%E5%BA%93/%E5%88%9B%E5%BB%BA%E7%9F%A5%E8%AF%86%E5%BA%93%E3%80%81%E9%97%AE%E7%AD%94%E5%BA%93/%E5%88%9B%E5%BB%BA%E7%9F%A5%E8%AF%86%E5%BA%93/%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md) | UniAI-GraphRAG结合领域知识本体建模、知识图谱与社区报告构建、图检索增强生成等技术可有效提升知识问答的完整性、逻辑性与可信度。可显著提升跨多文档总结与多跳关系推理等复杂问答场景的问答效果 |
+
+------
+
+### 🚀  万悟高精度RAG
+
+**万悟RAG已在业界权威公开评测集MutiHop-RAG数据集上完成检索召回性能指标评测**：
+
+<p align="center">
+  <img width="660" alt="image" src="https://github.com/user-attachments/assets/1a513ac7-6b7b-4903-9e6f-cb1215ba69cd" />
+</p>
+
+**检索性能综合评价指标：F1值（检索准确率和召回率的调和平均值）**
+
+1）万悟RAG比Dify高：14%
+
+2）万悟GraphRAG比Dify高：17.2%
+
+3）万悟GraphRAG比开源-LightRAG高：3.5%
 
 ------
 

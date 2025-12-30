@@ -59,7 +59,7 @@ func GetAppUrlInfo(ctx *gin.Context, suffix string) (*response.AppUrlConfig, err
 	if err != nil {
 		return nil, err
 	}
-	assistantInfo, err := assistant.GetAssistantInfo(ctx, &assistant_service.GetAssistantInfoReq{
+	assistantInfo, err := assistant.AssistantSnapshotInfo(ctx, &assistant_service.AssistantSnapshotInfoReq{
 		AssistantId: appUrlInfo.AppId,
 	})
 	if err != nil {
@@ -123,7 +123,7 @@ func AppUrlConversionStream(ctx *gin.Context, req request.UrlConversionStreamReq
 		FileInfo:       []request.ConversionStreamFile{},
 		Trial:          false,
 		Prompt:         req.Prompt,
-	})
+	}, true)
 	if err != nil {
 		return err
 	}

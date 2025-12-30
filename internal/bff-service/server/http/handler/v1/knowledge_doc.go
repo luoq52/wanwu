@@ -7,6 +7,27 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetDocConfig
+//
+//	@Tags			knowledge.doc
+//	@Summary		获取文档配置信息
+//	@Description	获取文档配置信息
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	query		request.DocConfigReq	true	"文档配置信息查询请求参数"
+//	@Success		200		{object}	response.Response{data=response.DocConfigResult}
+//	@Router			/knowledge/doc/config [get]
+func GetDocConfig(ctx *gin.Context) {
+	userId, orgId := getUserID(ctx), getOrgID(ctx)
+	var req request.DocConfigReq
+	if !gin_util.BindQuery(ctx, &req) {
+		return
+	}
+	resp, err := service.GetDocConfig(ctx, userId, orgId, &req)
+	gin_util.Response(ctx, resp, err)
+}
+
 // GetDocList
 //
 //	@Tags			knowledge.doc
@@ -15,13 +36,13 @@ import (
 //	@Security		JWT
 //	@Accept			json
 //	@Produce		json
-//	@Param			data	query		request.DocListReq	true	"文档列表查询请求参数"
+//	@Param			data	body		request.DocListReq	true	"文档列表查询请求参数"
 //	@Success		200		{object}	response.Response{data=response.DocPageResult}
-//	@Router			/knowledge/doc/list [get]
+//	@Router			/knowledge/doc/list [post]
 func GetDocList(ctx *gin.Context) {
 	userId, orgId := getUserID(ctx), getOrgID(ctx)
 	var req request.DocListReq
-	if !gin_util.BindQuery(ctx, &req) {
+	if !gin_util.Bind(ctx, &req) {
 		return
 	}
 	resp, err := service.GetDocList(ctx, userId, orgId, &req)
@@ -46,6 +67,48 @@ func ImportDoc(ctx *gin.Context) {
 		return
 	}
 	err := service.ImportDoc(ctx, userId, orgId, &req)
+	gin_util.Response(ctx, nil, err)
+}
+
+// UpdateDocConfig
+//
+//	@Tags			knowledge.doc
+//	@Summary		更新文档配置
+//	@Description	更新文档配置
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.DocConfigUpdateReq	true	"文更新文档配置请求参数"
+//	@Success		200		{object}	response.Response
+//	@Router			/knowledge/doc/update/config [post]
+func UpdateDocConfig(ctx *gin.Context) {
+	userId, orgId := getUserID(ctx), getOrgID(ctx)
+	var req request.DocConfigUpdateReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	err := service.UpdateDocConfig(ctx, userId, orgId, &req)
+	gin_util.Response(ctx, nil, err)
+}
+
+// ReImportDoc
+//
+//	@Tags			knowledge.doc
+//	@Summary		重新解析文档
+//	@Description	重新解析文档
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.DocReImportReq	true	"重新导入文档请求参数"
+//	@Success		200		{object}	response.Response
+//	@Router			/knowledge/doc/reimport [post]
+func ReImportDoc(ctx *gin.Context) {
+	userId, orgId := getUserID(ctx), getOrgID(ctx)
+	var req request.DocReImportReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	err := service.ReImportDoc(ctx, userId, orgId, &req)
 	gin_util.Response(ctx, nil, err)
 }
 
@@ -382,5 +445,26 @@ func DeleteDocChildSegment(ctx *gin.Context) {
 		return
 	}
 	err := service.DeleteDocChildSegment(ctx, userId, orgId, &req)
+	gin_util.Response(ctx, nil, err)
+}
+
+// ExportKnowledgeDoc
+//
+//	@Tags			knowledge.doc
+//	@Summary		知识库文档导出
+//	@Description	知识库文档导出
+//	@Security		JWT
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		request.KnowledgeDocExportReq	true	"知识库文档导出请求参数"
+//	@Success		200		{object}	response.Response
+//	@Router			/knowledge/doc/export [post]
+func ExportKnowledgeDoc(ctx *gin.Context) {
+	userId, orgId := getUserID(ctx), getOrgID(ctx)
+	var req request.KnowledgeDocExportReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	err := service.ExportKnowledgeDoc(ctx, userId, orgId, &req)
 	gin_util.Response(ctx, nil, err)
 }

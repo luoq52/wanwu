@@ -208,17 +208,17 @@ func (s *Service) GetMCPServerToolList(ctx context.Context, req *mcp_service.Get
 
 // internal
 func getMCPServerExample(ctx context.Context, mcpServerId string) (string, string, string, string) {
-	apiKey := "API KEY"
-	apiKeys, err := app.GetApiKeyList(ctx, &app_service.GetApiKeyListReq{
+	appKey := "API KEY"
+	appKeys, err := app.GetAppKeyList(ctx, &app_service.GetAppKeyListReq{
 		AppType: constant.AppTypeMCPServer,
 		AppId:   mcpServerId,
 	})
-	if err == nil && apiKeys.Total >= 1 {
-		apiKey = apiKeys.Info[0].ApiKey
+	if err == nil && appKeys.Total >= 1 {
+		appKey = appKeys.Info[0].AppKey
 	}
 
 	query := url.Values{}
-	query.Add("key", apiKey)
+	query.Add("key", appKey)
 	sseUrl, _ := url.JoinPath(config.Cfg().Server.ApiBaseUrl, "/openapi/v1/mcp/server/sse")
 	sseUrl = sseUrl + "?" + query.Encode()
 	sseExample := strings.ReplaceAll(exampleTemplate, "{{url}}", sseUrl)

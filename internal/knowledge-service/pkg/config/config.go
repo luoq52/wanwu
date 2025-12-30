@@ -85,12 +85,15 @@ type LogConfig struct {
 }
 
 type MinioConfig struct {
-	EndPoint        string `json:"endpoint" mapstructure:"endpoint"`
-	KnowledgeDir    string `mapstructure:"knowledge-dir" json:"knowledge-dir"`
-	User            string `mapstructure:"user" json:"user"`
-	Password        string `mapstructure:"password" json:"password"`
-	Bucket          string `mapstructure:"bucket" json:"bucket"`
-	PublicRagBucket string `mapstructure:"public-rag-bucket" json:"public-rag-bucket"`
+	EndPoint           string `json:"endpoint" mapstructure:"endpoint"`
+	KnowledgeDir       string `mapstructure:"knowledge-dir" json:"knowledge-dir"`
+	KnowledgeExportDir string `mapstructure:"knowledge-export-dir" json:"knowledge-export-dir"`
+	QAExportDir        string `mapstructure:"qa-export-dir" json:"qa-export-dir"`
+	User               string `mapstructure:"user" json:"user"`
+	Password           string `mapstructure:"password" json:"password"`
+	Bucket             string `mapstructure:"bucket" json:"bucket"`
+	PublicRagBucket    string `mapstructure:"public-rag-bucket" json:"public-rag-bucket"`
+	PublicExportBucket string `mapstructure:"public-export-bucket" json:"public-export-bucket"`
 }
 
 type KafkaConfig struct {
@@ -120,6 +123,7 @@ type UsageLimitConfig struct {
 	HtmlSizeLimit                int64  `mapstructure:"html-size-limit" json:"htmlSizeLimit"`
 	CompressedSizeLimit          int64  `mapstructure:"compressed-size-limit" json:"compressedSizeLimit"`
 	UploadConcurrentLimit        int64  `mapstructure:"upload-concurrent-limit" json:"uploadConcurrentLimit"`
+	UrlCountLimit                int    `mapstructure:"url-count-limit" json:"url-count-limit"`
 }
 
 type KnowledgeDocConfig struct {
@@ -157,5 +161,16 @@ type RagServerConfig struct {
 	UpdateReportUri           string `mapstructure:"update-report-uri" json:"update-report-uri"`
 	BatchDeleteReportsUri     string `mapstructure:"batch-delete-reports-uri" json:"batch-delete-reports-uri"`
 	KnowledgeGraphUri         string `mapstructure:"knowledge-graph-uri" json:"knowledge-graph-uri"`
+	InitQABaseUri             string `mapstructure:"init-QA-base-uri" json:"init-QA-base-uri"`
+	DeleteQABaseUri           string `mapstructure:"delete-QA-base-uri" json:"delete-QA-base-uri"`
+	UpdateQAMetasUri          string `mapstructure:"update-QA-metas-uri" json:"update-QA-metas-uri"`
+	DeleteQAMetaKeyUri        string `mapstructure:"delete-QA-meta-key-uri" json:"delete-QA-meta-key-uri"`
+	RenameQAMetakeyUri        string `mapstructure:"rename-QA-meta-key-uri" json:"rename-QA-meta-key-uri"`
+	BatchAddQAPairsUri        string `mapstructure:"batch-add-qa-pairs-uri" json:"batch-add-qa-pairs-uri"`
+	UpdateQAPairUri           string `mapstructure:"update-qa-pair-uri" json:"update-qa-pair-uri"`
+	UpdateQAPairStatusUri     string `mapstructure:"update-qa-pair-status-uri" json:"update-qa-pair-status-uri"`
+	BatchDeleteQAPairsUri     string `mapstructure:"batch-delete-qa-pairs-uri" json:"batch-delete-qa-pairs-uri"`
+	KnowledgeQAHitUri         string `mapstructure:"knowledge-QA-hit-uri" json:"knowledge-QA-hit-uri"`
+	KnowledgeDocSearchUri     string `mapstructure:"knowledge-doc-search-uri" json:"knowledge-doc-search-uri"`
 	Timeout                   int64  `mapstructure:"timeout" json:"timeout"`
 }
