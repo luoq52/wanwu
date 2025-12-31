@@ -172,8 +172,7 @@ export default {
     // 填充开场白
     setProloguePrompt(val) {
       // this.$refs['editable'].setPrompt(val)
-      const editable =
-        this.$refs.editable || (this.getEditableRef && this.getEditableRef());
+      const editable = this.$refs.editable || (this.getEditableRef && this.getEditableRef());
       if (editable) {
         editable.setPrompt(val);
       }
@@ -567,16 +566,13 @@ export default {
                     }
                     this.setStoreSessionStatus(-1);
                   }
-                  if (worldObj.isEnd && worldObj.finish === 1) {
+                  //&& worldObj.finish === 1
+                  if (worldObj.isEnd) {
                     this.setStoreSessionStatus(-1);
                   }
                 },
               );
 
-              /*this.$nextTick(()=>{
-                                // this.$refs['session-com'].scrollBottom()
-                                sessionCom.scrollBottom()
-                            })*/
             } else if (data.code === 7 || data.code === -1 || data.code === 1) {
               this.setStoreSessionStatus(-1);
               let fillData = {
