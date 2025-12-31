@@ -680,7 +680,7 @@ export default {
       desc: '版本描述',
       descPlaceholder: '请输入版本描述',
       publishType: '发布范围',
-      createdAt: '时间',
+      createdAt: '创建时间',
       rollback: '覆盖当前草稿',
     },
   },
