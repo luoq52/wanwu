@@ -2,9 +2,9 @@
   <div class="full-content flex">
     <el-main class="scroll">
       <div class="smart-center" style="padding: 0">
-        <!--基础配置回显-->
+        <!--开场白设置-->
         <div v-show="echo" class="session rl echo">
-          <Prologue
+          <streamGreetingField
             :editForm="editForm"
             @setProloguePrompt="setProloguePrompt"
             :isBigModel="true"
@@ -12,7 +12,7 @@
         </div>
         <!--对话-->
         <div v-show="!echo" class="center-session">
-          <SessionComponentSe
+          <streamMessageField
             ref="session-com"
             class="component"
             :sessionStatus="sessionStatus"
@@ -23,7 +23,7 @@
             :defaultUrl="editForm.avatar.path"
           />
         </div>
-        <!--输入框-->
+        <!--停止生成-重新生成-->
         <div class="center-editable">
           <div v-show="stopBtShow" class="stop-box">
             <span v-show="sessionStatus === 0" class="stop" @click="preStop">
@@ -41,7 +41,8 @@
               <span class="mdl">{{ $t('agent.refresh') }}</span>
             </span>
           </div>
-          <EditableDivV3
+          <!-- 输入框 -->
+          <streamInputField
             ref="editable"
             source="perfectReminder"
             :fileTypeArr="fileTypeArr"
@@ -54,6 +55,7 @@
             @modelChange="modelChange"
             @setSessionStatus="setSessionStatus"
           />
+          <!-- 版权信息 -->
           <div v-if="appUrlInfo" class="appUrlInfo">
             <span v-if="appUrlInfo.copyrightEnable">
               版权所有: {{ appUrlInfo.copyright }}
@@ -79,8 +81,13 @@
 </template>
 
 <script>
-import SessionComponentSe from './SessionComponentSe';
-import EditableDivV3 from './EditableDivV3';
+// import SessionComponentSe from './SessionComponentSe';
+// import EditableDivV3 from './EditableDivV3';
+// import Prologue from './Prologue';
+import streamMessageField from '@/components/stream/streamMessageField';
+import streamInputField from '@/components/stream/streamInputField';
+import streamGreetingField from '@/components/stream/streamGreetingField';
+import { parseSub, convertLatexSyntax } from '@/utils/util.js';
 import {
   delConversation,
   createConversation,
@@ -89,7 +96,6 @@ import {
   openurlConversation,
   OpenurlConverHistory,
 } from '@/api/agent';
-import Prologue from './Prologue';
 import sseMethod from '@/mixins/sseMethod';
 import { md } from '@/mixins/marksown-it';
 import { mapGetters } from 'vuex';
@@ -122,9 +128,12 @@ export default {
     },
   },
   components: {
-    SessionComponentSe,
-    EditableDivV3,
-    Prologue,
+    // SessionComponentSe,
+    // EditableDivV3,
+    streamMessageField,
+    streamInputField,
+    streamGreetingField,
+    // Prologue,
   },
   mixins: [sseMethod],
   computed: {
@@ -163,9 +172,7 @@ export default {
     },
     //切换对话
     conversionClick(n) {
-      // this.isModelDisable = true;
       if (this.sessionStatus === 0) {
-        //this.$message.warning('上个问题未答完')
         return;
       } else {
         this.stopBtShow = false;
@@ -199,15 +206,17 @@ export default {
 
       if (res.code === 0) {
         let history = res.data.list
-          ? res.data.list.map(n => {
+          ? res.data.list.map((n,index) => {
               return {
                 ...n,
                 query: n.prompt,
-                response: [0, 1, 2, 3, 4, 5, 6, 20, 21, 10].includes(n.qa_type)
-                  ? md.render(n.response)
-                  : n.response.replaceAll('\n-', '\n•'),
+                finish: 1,//兼容流式问答
+                // response: [0, 1, 2, 3, 4, 5, 6, 20, 21, 10].includes(n.qa_type)
+                //   ? md.render(n.response)
+                //   : n.response.replaceAll('\n-', '\n•'),
+                response: md.render(parseSub(convertLatexSyntax(n.response),index)),
                 oriResponse: n.response,
-                searchList: n.searchList ? n.searchList : [],
+                searchList: n.searchList || [],
                 fileList: n.requestFiles,
                 gen_file_url_list: n.responseFileUrls || [],
                 isOpen: true,
@@ -313,7 +322,7 @@ export default {
       }
       const fileInfo = this.$refs['editable'].getFileIdList();
       let fileId = !fileInfo.length ? this.fileId : fileInfo;
-      this.useSearch = this.$refs['editable'].sendUseSearch();
+      // this.useSearch = this.$refs['editable'].sendUseSearch();
       this.setSseParams({
         conversationId: this.conversationId,
         fileInfo: fileId,

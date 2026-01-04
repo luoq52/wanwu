@@ -1,3 +1,4 @@
+<!--问答消息框-->
 <template>
   <div class="session rl">
     <div
@@ -84,10 +85,6 @@
                   ></el-button>
                 </div>
               </div>
-
-              <!-- <div v-if="n.requestFileUrls && n.requestFileUrls.length" class="file-path query-file">
-                <el-image :src='n.requestFileUrls[0]' :preview-src-list="[n.requestFileUrls[0]]"></el-image>
-              </div> -->
             </div>
           </div>
         </div>
@@ -131,14 +128,14 @@
                 class="deepseek"
                 @click="toggle($event, i)"
               >
-                <template v-if="n.qa_type === 20">
+                <!-- <template v-if="n.qa_type === 20">
                   <img
                     :src="require('@/assets/imgs/tool-icon.png')"
                     class="think_icon"
                   />
                   {{ n.toolText }}
-                </template>
-                <template v-else>
+                </template> -->
+                <template>
                   <img
                     :src="require('@/assets/imgs/think-icon.png')"
                     class="think_icon"
@@ -222,7 +219,7 @@
                     class="subTag"
                     :data-parents-index="i"
                     :data-collapse="m.collapse ? 'true' : 'false'"
-                    v-if="n.qa_type === 1"
+                    v-if="n.qa_type === 1 || n.qa_type === 0"
                   >
                     {{ j + 1 }}
                   </sub>
@@ -258,9 +255,7 @@
                 class="restart"
                 @click="refresh"
               >
-                <!-- <i class="el-icon-refresh" @click="refresh">&nbsp;{{$t('agent.refresh')}}</i> -->
                 <img :src="require('@/assets/imgs/refresh-icon.png')" />
-                <!-- &nbsp;{{$t('agent.refresh')}} -->
               </span>
             </div>
             <div
@@ -273,7 +268,6 @@
               "
             >
               <img :src="require('@/assets/imgs/copy-icon.png')" />
-              <!-- <i class="el-icon-copy-document copy-icon" style="padding: 0 6px;margin: 0;" :title="$t('agent.clickCopy')" @click="()=>{copy(n.oriResponse) && copycb()}"></i> -->
             </div>
             <!--提示话术-->
             <div class="answer-operation-tip">
@@ -350,22 +344,12 @@ marked.setOptions({
 
 export default {
   mixins: [commonMixin],
-  props: ['defaultUrl', 'type'],//'sessionStatus',
+  props: ['defaultUrl', 'type'],
   data() {
     return {
       md: md,
       autoScroll: true,
       scrollTimeout: null,
-      isDs:
-        [
-          'txt2txt-002-001',
-          'txt2txt-002-002',
-          'txt2txt-002-004',
-          'txt2txt-002-005',
-          'txt2txt-002-006',
-          'txt2txt-002-007',
-          'txt2txt-002-008',
-        ].indexOf(this.$route.params.id) != -1,
       loading: false,
       marked: marked,
       session_data: {
@@ -374,9 +358,6 @@ export default {
         history: [],
         response: '',
       },
-      basePath: this.$basePath,
-      current_data: [],
-      //标注相关
       c: null,
       ctx: null,
       canvasShow: false,
@@ -437,7 +418,6 @@ export default {
     if (this.resizeTimer) {
       clearTimeout(this.resizeTimer);
     }
-
     // 移除图片错误事件监听器
     if (this.imageErrorHandler) {
       document.body.removeEventListener('error', this.imageErrorHandler, true);
@@ -481,7 +461,6 @@ export default {
       if (showScrollBtn !== null && showScrollBtn !== undefined) {
         return showScrollBtn;
       }
-      // 否则从 fileScrollStateMap 中获取
       return this.fileScrollStateMap[i] || false;
     },
     prev(e, i) {
@@ -530,12 +509,14 @@ export default {
       });
     },
     showSearchList(j, qa_type, citations) {
-      return qa_type === 1 ? citations.includes(j + 1) : true;
+      // return qa_type === 1 ? citations.includes(j + 1) : true;
+      return (citations|| []).includes(j + 1);
     },
     setCitations(index) {
       let citation = `#message-container${index} .citation`;
       const allCitations = document.querySelectorAll(citation);
       const citationsSet = new Set();
+
       allCitations.forEach(element => {
         const text = element.textContent.trim();
         if (text) {
@@ -546,7 +527,7 @@ export default {
       return Array.from(citationsSet);
     },
     goPreview(event, item) {
-      event.stopPropagation(); // 阻止事件冒泡
+      event.stopPropagation();
       let { meta_data } = item;
       let { file_name, download_link, page_num, row_num, sheet_name } =
         meta_data;
@@ -598,25 +579,19 @@ export default {
     handleScroll(e) {
       const container = document.getElementById(this.scrollContainerId);
       const { scrollTop, clientHeight, scrollHeight } = container;
-      // 检测是否接近底部（5px容差）
       const nearBottom = scrollHeight - (scrollTop + clientHeight) < 5;
-      // 用户手动滚动时取消自动置底
       if (!nearBottom) {
         this.autoScroll = false;
       }
-      // 清除之前的定时器
       clearTimeout(this.scrollTimeout);
-      // 设置新的定时器检测滚动停止
       this.scrollTimeout = setTimeout(() => {
-        // 如果停止时接近底部，恢复自动置底
         if (nearBottom) {
           this.autoScroll = true;
           this.scrollBottom();
         }
-      }, 500); // 500ms内没有新滚动视为停止
+      }, 500);
     },
     replaceHTML(data, n) {
-      let _data = data;
       const thinkStart = /<think>/i;
       const thinkEnd = /<\/think>/i;
       const toolStart = /<tool>/i;
@@ -624,7 +599,7 @@ export default {
 
       // 处理 think 标签
       if (thinkEnd.test(data)) {
-        n.thinkText = '已深度思考';
+        // n.thinkText = '已深度思考';
         if (!thinkStart.test(data)) {
           data = '<think>\n' + data;
         }
@@ -632,18 +607,18 @@ export default {
 
       // 新增处理 tool 标签
       if (toolEnd.test(data)) {
-        n.toolText = '已使用工具'; // 需要添加对应的翻译
+        // n.toolText = '已使用工具';
         if (!toolStart.test(data)) {
           data = '<tool>\n' + data;
         }
       }
+      n.thinkText = '思考结束';
       // 统一替换为 section 标签
       return data
         .replace(/think>/gi, 'section>')
         .replace(/tool>/gi, 'section>');
     },
     showDSBtn(data) {
-      // const pattern = /<\/?think>/;
       const pattern = /<(think|tool)(\s[^>]*)?>|<\/(think|tool)>/;
       const matches = data.match(pattern);
       if (!matches) {
@@ -688,7 +663,7 @@ export default {
     copy(text) {
       text = text.replaceAll('<br/>', '\n');
       var textareaEl = document.createElement('textarea');
-      textareaEl.setAttribute('readonly', 'readonly'); // 防止手机上弹出软键盘
+      textareaEl.setAttribute('readonly', 'readonly');
       textareaEl.value = text;
       document.body.appendChild(textareaEl);
       textareaEl.select();
@@ -705,7 +680,6 @@ export default {
       } else {
         this.$set(n.searchList, j, { ...m, collapse: false });
       }
-      //this.scrollBottom()
     },
     doLoading() {
       this.loading = true;
@@ -735,7 +709,7 @@ export default {
       }
       this.$set(this.session_data.history, index, data);
       this.scrollBottom();
-      this.codeScrollBottom(); //code内容置底
+      this.codeScrollBottom();
       if (data.finish === 1) {
         this.$nextTick(() => {
           const setCitations = this.setCitations(index);
@@ -755,16 +729,19 @@ export default {
         ? `${(fileSize / (1024 * 1024)).toFixed(2)} MB`
         : `${fileSize} bytes`;
     },
-    //websocket 替换全部数据
     replaceData(data) {
       this.session_data = data;
       this.scrollBottom();
     },
-    //http 只替换history
     replaceHistory(data) {
       this.session_data.history = data;
+      this.session_data.history.forEach((n, index) => {
+        this.$nextTick(() => {
+          const setCitations = this.setCitations(index);
+          this.$set(this.session_data.history[index],'citations',setCitations);
+        });
+      });
       this.scrollBottom();
-      //this.loadAllImg()
     },
     replaceHistoryWithImg(data) {
       this.session_data.history = data;
@@ -805,7 +782,6 @@ export default {
           }),
         ),
       );
-      // return JSON.parse(JSON.stringify(this.session_data.history.filter((item)=>{ delete item.operation ; return !item.pending})))
     },
     getAllList() {
       return JSON.parse(JSON.stringify(this.session_data.history));
@@ -842,11 +818,9 @@ export default {
       }
       this.$set(this.session_data.history, index, { ...item, evaluate: 2 });
     },
-    //=================标注相关===============
     initCanvasUtil() {
       this.canvasShow = true;
       this.$nextTick(() => {
-        // 开始画图 canvas, 2d, 宽高，形状
         this.cv &&
           this.cv.destroy() &&
           this.cv.clearPre() &&
@@ -856,7 +830,6 @@ export default {
       });
     },
     preTagging(response) {
-      // canvas大小重置
       this.currImg = {
         url: '',
         width: 0,
@@ -868,16 +841,13 @@ export default {
         dx: 0,
         dy: 0,
       };
-      // 图片原始宽高
       var image = new Image();
       image.src = response.annotationImg;
       image.onload = () => {
         this.currImg.width = image.width;
         this.currImg.height = image.height;
-        //if (!this.c) {
         this.c = document.getElementById('mycanvas');
         this.ctx = this.c.getContext('2d');
-        //}
         this.resizeCanvas();
         this.initCanvasUtil();
 
@@ -900,11 +870,9 @@ export default {
       let currImg = this.currImg;
       let contain = document.getElementById('mycantain');
       if (currImg.width > contain.offsetWidth) {
-        // 宽度大于容器
         this.currImg.roteX = currImg.width / contain.offsetWidth;
         currImg.w = contain.offsetWidth;
         currImg.h = (currImg.height * contain.offsetWidth) / currImg.width;
-        // 压缩后高度大于cantain
         if (currImg.h > contain.offsetHeight) {
           currImg.h = contain.offsetHeight;
           currImg.w = (currImg.width * currImg.h) / currImg.height;
@@ -915,9 +883,7 @@ export default {
           currImg.dy = (contain.offsetHeight - currImg.h) / 2;
         }
       } else {
-        // 高度压缩比例
         currImg.roteY = currImg.height / currImg.h;
-        // 压缩后宽度
         currImg.w = (currImg.width * currImg.h) / currImg.height;
         currImg.roteX = currImg.width / currImg.w;
         currImg.dx = (contain.offsetWidth - currImg.w) / 2;
@@ -929,27 +895,7 @@ export default {
       this.$nextTick(() => {
         this.cv && this.cv.resizeCurrImg(currImg);
       });
-    },
-    listenerImg() {
-      //捕获图片加载错误
-      this.imageErrorHandler = e => {
-        if (e.target.tagName === 'IMG') {
-          this.handleImageError(e.target);
-        }
-      };
-      document.body.addEventListener('error', this.imageErrorHandler, true);
-    },
-    handleImageError(img) {
-      // 防止重复处理
-      if (img.classList.contains('failed')) {
-        return;
-      }
-      img.classList.add('failed');
-
-      // 设置图片为不可见，避免闪烁
-      img.style.visibility = 'hidden';
-      img.style.display = 'none';
-    },
+    }
   },
 };
 </script>
@@ -1161,7 +1107,6 @@ export default {
     }
   }
   .session-answer {
-    // background-color: #eceefe;
     border-radius: 10px;
     .answer-annotation {
       line-height: 0 !important;
@@ -1470,16 +1415,15 @@ img.failed::after {
 .text-loading > div:nth-child(2n-1) {
   animation-delay: -0.5s;
 }
-
 @keyframes ball-beat {
   50% {
     opacity: 0.2;
     transform: scale(0.75);
   }
-
   100% {
     opacity: 1;
     transform: scale(1);
   }
 }
 </style>
+
