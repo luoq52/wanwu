@@ -14,6 +14,7 @@ type Assistant struct {
 	KnowledgebaseConfig string `gorm:"column:knowledgebase_config;type:longtext;comment:知识库配置"`
 	SafetyConfig        string `gorm:"column:safety_config;type:longtext;comment:安全配置"`
 	VisionConfig        string `gorm:"column:vision_config;type:longtext;comment:视觉配置"`
+	MemoryConfig        string `gorm:"column:memory_config;type:longtext;comment:记忆配置"`
 	Scope               int    `gorm:"column:scope;type:tinyint;comment:智能体可见范围"`
 	UserId              string `gorm:"column:user_id;index:idx_assistant_user_id;comment:用户id"`
 	OrgId               string `gorm:"column:org_id;index:idx_assistant_org_id;comment:组织id"`

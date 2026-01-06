@@ -203,6 +203,18 @@ func (s *Service) AssistantConfigUpdate(ctx context.Context, req *assistant_serv
 		existingAssistant.VisionConfig = string(visionConfigBytes)
 	}
 
+	// 处理memoryConfig，转换成json字符串之后再更新
+	if req.MemoryConfig != nil {
+		memoryConfigBytes, err := json.Marshal(req.MemoryConfig)
+		if err != nil {
+			return nil, errStatus(errs.Code_AssistantErr, &errs.Status{
+				TextKey: "assistant_memoryConfig_marshal",
+				Args:    []string{err.Error()},
+			})
+		}
+		existingAssistant.MemoryConfig = string(memoryConfigBytes)
+	}
+
 	// 调用client方法更新智能体
 	if status := s.cli.UpdateAssistant(ctx, existingAssistant); status != nil {
 		return nil, errStatus(errs.Code_AssistantErr, status)
@@ -363,6 +375,22 @@ func (s *Service) GetAssistantInfo(ctx context.Context, req *assistant_service.G
 		visionConfig.MaxPicNum = config.Cfg().Assistant.MaxPicNum
 	}
 
+	// 处理assistant.MemoryConfig，转换成AssistantMemoryConfig
+	var memoryConfig *assistant_service.AssistantMemoryConfig
+	if assistant.MemoryConfig != "" {
+		memoryConfig = &assistant_service.AssistantMemoryConfig{}
+		if err := json.Unmarshal([]byte(assistant.MemoryConfig), memoryConfig); err != nil {
+			return nil, errStatus(errs.Code_AssistantErr, &errs.Status{
+				TextKey: "assistant_memoryConfig_unmarshal",
+				Args:    []string{err.Error()},
+			})
+		}
+	} else {
+		memoryConfig = &assistant_service.AssistantMemoryConfig{
+			MaxHistoryLength: config.DefaultMaxHistoryLength,
+		}
+	}
+
 	return &assistant_service.AssistantInfo{
 		AssistantId: util.Int2Str(assistant.ID),
 		Identity: &assistant_service.Identity{
@@ -383,6 +411,7 @@ func (s *Service) GetAssistantInfo(ctx context.Context, req *assistant_service.G
 		RerankConfig:        rerankConfig,
 		SafetyConfig:        safetyConfig,
 		VisionConfig:        visionConfig,
+		MemoryConfig:        memoryConfig,
 		Scope:               int32(assistant.Scope),
 		WorkFlowInfos:       workFlowInfos,
 		McpInfos:            mcpInfos,

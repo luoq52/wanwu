@@ -258,6 +258,22 @@ func (s *Service) AssistantSnapshotInfo(ctx context.Context, req *assistant_serv
 		visionConfig.MaxPicNum = config.Cfg().Assistant.MaxPicNum
 	}
 
+	// 转换MemoryConfig
+	var memoryConfig *assistant_service.AssistantMemoryConfig
+	if snapshotAssistant.MemoryConfig != "" {
+		memoryConfig = &assistant_service.AssistantMemoryConfig{}
+		if err := json.Unmarshal([]byte(snapshotAssistant.MemoryConfig), memoryConfig); err != nil {
+			return nil, errStatus(errs.Code_AssistantErr, &errs.Status{
+				TextKey: "assistant_memoryConfig_unmarshal",
+				Args:    []string{err.Error()},
+			})
+		}
+	} else {
+		memoryConfig = &assistant_service.AssistantMemoryConfig{
+			MaxHistoryLength: config.DefaultMaxHistoryLength,
+		}
+	}
+
 	return &assistant_service.AssistantInfo{
 		AssistantId: util.Int2Str(snapshotAssistant.ID),
 		Identity: &assistant_service.Identity{
@@ -277,6 +293,7 @@ func (s *Service) AssistantSnapshotInfo(ctx context.Context, req *assistant_serv
 		RerankConfig:        rerankConfig,
 		SafetyConfig:        safetyConfig,
 		VisionConfig:        visionConfig,
+		MemoryConfig:        memoryConfig,
 		Scope:               int32(snapshotAssistant.Scope),
 		WorkFlowInfos:       workFlowInfos,
 		McpInfos:            mcpInfos,

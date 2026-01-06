@@ -113,6 +113,7 @@ func (c *Client) RollbackAssistantSnapshot(ctx context.Context, assistant *model
 			"rerank_config":        assistant.RerankConfig,
 			"safety_config":        assistant.SafetyConfig,
 			"vision_config":        assistant.VisionConfig,
+			"memory_config":        assistant.MemoryConfig,
 		}).Error; err != nil {
 			return toErrStatus("assistant_update", fmt.Sprintf("assistant update failed: %v", err))
 		}
