@@ -119,8 +119,8 @@ export default {
           },
         ],
         desc: [
-          { required: true, message: '请输入文本描述', trigger: 'blur' },
-          { max: 600, message: '文本描述限制600字符以内', trigger: 'blur' },
+          { required: true, message: this.$t('app.inputTextDesc'), trigger: 'blur' },
+          { max: 600, message: this.$t('app.descLimit600'), trigger: 'blur' },
         ],
       },
       titleMap: {
