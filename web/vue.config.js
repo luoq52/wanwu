@@ -168,6 +168,7 @@ module.exports = {
     sourceMap: false,
     loaderOptions: {
       scss: {
+        implementation: require('sass'),
         additionalData: `
             @use "@/style/theme/vars_blue.scss" as *;
             @use "@/style/theme/common.scss" as *;
@@ -175,6 +176,7 @@ module.exports = {
       },
     },
   },
+  parallel: false,
   configureWebpack: {
     cache: {
       type: 'filesystem',
