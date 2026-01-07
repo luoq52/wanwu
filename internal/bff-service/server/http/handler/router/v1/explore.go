@@ -29,9 +29,11 @@ func registerExploration(apiV1 *gin.RouterGroup) {
 	// workflow 相关接口
 	mid.Sub("exploration").Reg(apiV1, "/workflow/run", http.MethodPost, v1.PublishedWorkflowRun, "已发布工作流运行接口", middleware.AppHistoryRecord("workflow_id", constant.AppTypeWorkflow))
 	mid.Sub("exploration").Reg(apiV1, "/appspace/workflow/export", http.MethodGet, v1.ExportWorkflow, "导出workflow")
+	mid.Sub("exploration").Reg(apiV1, "/appspace/workflow/copy", http.MethodPost, v1.CopyWorkflow, "拷贝workflow")
 
 	// chatflow 相关接口
 	mid.Sub("exploration").Reg(apiV1, "/chatflow/application/list", http.MethodPost, v1.ChatflowApplicationList, "应用广场对话流关联应用", middleware.AppHistoryRecord("workflow_id", constant.AppTypeChatflow))
 	mid.Sub("exploration").Reg(apiV1, "/chatflow/application/info", http.MethodPost, v1.ChatflowApplicationInfo, "应用广场对话流关联应用信息")
 	mid.Sub("exploration").Reg(apiV1, "/chatflow/conversation/delete", http.MethodDelete, v1.DeleteChatflowConversation, "删除对话流会话")
+	mid.Sub("exploration").Reg(apiV1, "/appspace/chatflow/copy", http.MethodPost, v1.CopyChatflow, "拷贝chatflow")
 }

@@ -16,7 +16,11 @@
         :label="$t('app.picNumLimit')"
         prop="visionConfig.picNum"
         :rules="[
-          { required: true, message: $t('app.picNumLimitDesc'), trigger: 'blur' },
+          {
+            required: true,
+            message: $t('app.picNumLimitDesc'),
+            trigger: 'blur',
+          },
         ]"
       >
         <el-slider
@@ -29,7 +33,9 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submit('ruleForm')">{{$t('common.button.confirm')}}</el-button>
+      <el-button type="primary" @click="submit('ruleForm')">
+        {{ $t('common.button.confirm') }}
+      </el-button>
     </span>
   </el-dialog>
 </template>
@@ -75,7 +81,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/.el-input-number--small {
+::v-deep.el-input-number--small {
   line-height: 28px !important;
 }
 .goSafety {

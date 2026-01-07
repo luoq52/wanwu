@@ -308,7 +308,7 @@ export default {
   display: flex;
   justify-content: center;
 
-  /deep/ .el-form-item__content {
+  ::v-deep .el-form-item__content {
     margin-left: 0 !important;
   }
 }

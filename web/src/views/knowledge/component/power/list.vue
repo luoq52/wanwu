@@ -290,7 +290,7 @@ export default {
         font-size: 12px;
       }
 
-      /deep/ .el-table__header {
+      ::v-deep .el-table__header {
         th {
           background-color: #f5f7fa;
           color: #606266;
@@ -300,7 +300,7 @@ export default {
         }
       }
 
-      /deep/ .el-table__body {
+      ::v-deep .el-table__body {
         tr {
           &:hover {
             background-color: #f5f7fa;
@@ -313,7 +313,7 @@ export default {
         }
       }
 
-      /deep/ .el-table__empty-block {
+      ::v-deep .el-table__empty-block {
         background-color: #fafafa;
       }
     }

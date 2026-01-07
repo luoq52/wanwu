@@ -7117,6 +7117,34 @@ paths:
       summary: 拷贝Chatflow
       tags:
       - chatflow
+  /appspace/chatflow/copy/draft:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 拷贝Chatflow草稿的请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.WorkflowIDReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.CozeWorkflowIDData'
+              type: object
+      security:
+      - JWT: []
+      summary: 拷贝Chatflow
+      tags:
+      - chatflow
   /appspace/chatflow/export:
     get:
       consumes:
@@ -7432,7 +7460,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 创建Workflow的请求参数
+      - description: 拷贝Workflow的请求参数
         in: body
         name: data
         required: true
@@ -7453,6 +7481,34 @@ paths:
       security:
       - JWT: []
       summary: 拷贝Workflow
+      tags:
+      - workflow
+  /appspace/workflow/copy/draft:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 拷贝Workflow草稿的请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.WorkflowIDReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.CozeWorkflowIDData'
+              type: object
+      security:
+      - JWT: []
+      summary: 拷贝Workflow草稿
       tags:
       - workflow
   /appspace/workflow/export:

@@ -156,6 +156,7 @@ message AssistantConfigUpdateReq {
   Identity identity = 9;
   AssistantSafetyConfig safetyConfig = 10;
   AssistantVisionConfig visionConfig = 11;
+  AssistantMemoryConfig memoryConfig = 12;
 }
 
 message AssistantSafetyConfig {
@@ -171,6 +172,10 @@ message SensitiveTable {
 message AssistantVisionConfig {
   int32 maxPicNum = 1;
   int32 picNum = 2;
+}
+
+message AssistantMemoryConfig {
+  int32 maxHistoryLength = 1;
 }
 
 message AssistantDeleteReq {
@@ -252,6 +257,7 @@ message AssistantInfo {
   AssistantSafetyConfig safetyConfig = 18;
   AssistantVisionConfig visionConfig = 19;
   string uuid = 20;
+  AssistantMemoryConfig memoryConfig = 21;
 }
 
 

@@ -1193,6 +1193,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/appspace/chatflow/copy/draft": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "chatflow"
+                ],
+                "summary": "拷贝Chatflow",
+                "parameters": [
+                    {
+                        "description": "拷贝Chatflow草稿的请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.WorkflowIDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.CozeWorkflowIDData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/appspace/chatflow/export": {
             "get": {
                 "security": [
@@ -1742,7 +1792,57 @@ const docTemplate = `{
                 "summary": "拷贝Workflow",
                 "parameters": [
                     {
-                        "description": "创建Workflow的请求参数",
+                        "description": "拷贝Workflow的请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.WorkflowIDReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.CozeWorkflowIDData"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/appspace/workflow/copy/draft": {
+            "post": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workflow"
+                ],
+                "summary": "拷贝Workflow草稿",
+                "parameters": [
+                    {
+                        "description": "拷贝Workflow草稿的请求参数",
                         "name": "data",
                         "in": "body",
                         "required": true,

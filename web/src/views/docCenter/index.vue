@@ -313,11 +313,11 @@ export default {
           width: fit-content;
           overflow-x: auto;
           overflow-y: hidden;
-          .menu-indent /deep/ .el-submenu__title,
+          .menu-indent ::v-deep .el-submenu__title,
           .menu-indent-item {
             padding-left: 49px !important;
           }
-          .menu-indent-sub /deep/ .el-submenu__title {
+          .menu-indent-sub ::v-deep .el-submenu__title {
             padding-left: 60px !important;
           }
         }
@@ -331,32 +331,32 @@ export default {
         background: rgba(255, 255, 255, 0);
         border-radius: 8px;
       }
-      /deep/ .el-submenu__title,
-      /deep/ .el-menu-item span,
-      /deep/ .el-submenu__title span {
+      ::v-deep .el-submenu__title,
+      ::v-deep .el-menu-item span,
+      ::v-deep .el-submenu__title span {
         font-size: 14px !important;
       }
-      /deep/ .el-menu-item.is-active {
+      ::v-deep .el-menu-item.is-active {
         background-color: rgba(230, 0, 1, 0.03) !important;
       }
-      /deep/ .el-menu-item:focus {
+      ::v-deep .el-menu-item:focus {
         background-color: rgba(230, 0, 1, 0.03) !important;
       }
-      /deep/ .el-menu-item:hover,
-      /deep/ .el-submenu__title:hover {
+      ::v-deep .el-menu-item:hover,
+      ::v-deep .el-submenu__title:hover {
         background-color: #f6f6f6 !important;
       }
-      /deep/ .el-submenu__title {
+      ::v-deep .el-submenu__title {
         span {
           font-size: 14px !important;
         }
       }
-      /deep/ .el-submenu.is-active .el-submenu__title {
+      ::v-deep .el-submenu.is-active .el-submenu__title {
         border-bottom-color: $color !important;
       }
     }
   }
-  .doc-outer-container /deep/ {
+  .doc-outer-container ::v-deep {
     .el-submenu.is-active,
     .el-submenu.is-active > .el-submenu__title,
     .el-submenu.is-active > .el-submenu__title i:first-child,
@@ -386,7 +386,7 @@ export default {
     display: flex;
     align-items: center;
   }
-  .top-search-input /deep/ {
+  .top-search-input ::v-deep {
     .el-input__inner {
       border-radius: 20px;
     }

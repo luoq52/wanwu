@@ -47,7 +47,27 @@ func CopyChatflow(ctx *gin.Context) {
 	if !gin_util.Bind(ctx, &req) {
 		return
 	}
-	resp, err := service.CopyWorkflow(ctx, getOrgID(ctx), req.WorkflowID)
+	resp, err := service.CopyWorkflow(ctx, getOrgID(ctx), req.WorkflowID, true)
+	gin_util.Response(ctx, resp, err)
+}
+
+// CopyChatflowDraft
+//
+//	@Tags		chatflow
+//	@Summary	拷贝Chatflow
+//	@Description
+//	@Security	JWT
+//	@Accept		json
+//	@Produce	json
+//	@Param		data	body		request.WorkflowIDReq	true	"拷贝Chatflow草稿的请求参数"
+//	@Success	200		{object}	response.Response{data=response.CozeWorkflowIDData}
+//	@Router		/appspace/chatflow/copy/draft [post]
+func CopyChatflowDraft(ctx *gin.Context) {
+	var req request.WorkflowIDReq
+	if !gin_util.Bind(ctx, &req) {
+		return
+	}
+	resp, err := service.CopyWorkflow(ctx, getOrgID(ctx), req.WorkflowID, false)
 	gin_util.Response(ctx, resp, err)
 }
 
@@ -83,13 +103,7 @@ func ExportChatflow(ctx *gin.Context) {
 	fileName := "chatflow_export.json"
 	workflowID := ctx.Query("workflow_id")
 	version := ctx.Query("version")
-	//适配从草稿导出 从最新版本导出 导出指定版本（workflow中FromDraft:0,FromSpecificVersion:1,FromLatestVersion:2）
-	var qType uint8
-	qType = 2
-	if version != "" {
-		qType = 1
-	}
-	resp, err := service.ExportWorkFlow(ctx, getOrgID(ctx), workflowID, version, qType)
+	resp, err := service.ExportWorkFlow(ctx, getOrgID(ctx), workflowID, version, true)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return
@@ -116,9 +130,7 @@ func ExportChatflow(ctx *gin.Context) {
 func ExportChatflowDraft(ctx *gin.Context) {
 	fileName := "chatflow_export.json"
 	workflowID := ctx.Query("workflow_id")
-	version := ctx.Query("version")
-	qType := uint8(0)
-	resp, err := service.ExportWorkFlow(ctx, getOrgID(ctx), workflowID, version, qType)
+	resp, err := service.ExportWorkFlow(ctx, getOrgID(ctx), workflowID, "", false)
 	if err != nil {
 		gin_util.Response(ctx, nil, err)
 		return

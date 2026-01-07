@@ -340,7 +340,7 @@ export default {
 
 <style lang="scss" scoped>
 .batch-meta-dialog {
-  /deep/ .el-dialog__header {
+  ::v-deep .el-dialog__header {
     padding: 20px 20px 10px;
     border-bottom: 1px solid #f0f0f0;
   }
@@ -364,11 +364,11 @@ export default {
 }
 
 .batch-meta-dialog {
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     padding: 20px;
   }
 
-  /deep/ .el-dialog__footer {
+  ::v-deep .el-dialog__footer {
     padding: 10px 20px 20px;
     border-top: 1px solid #f0f0f0;
   }
@@ -439,7 +439,7 @@ export default {
             flex: 1;
             min-width: 120px;
 
-            /deep/ .el-input__inner {
+            ::v-deep .el-input__inner {
               border: 1px solid #dcdfe6;
               border-radius: 4px;
               height: 32px;
@@ -451,7 +451,7 @@ export default {
             flex: 1;
             min-width: 120px;
 
-            /deep/ .el-input__inner {
+            ::v-deep .el-input__inner {
               border: 1px solid #dcdfe6;
               border-radius: 4px;
               height: 32px;
@@ -475,7 +475,7 @@ export default {
             flex: 1;
             min-width: 120px;
 
-            /deep/ .el-input__inner {
+            ::v-deep .el-input__inner {
               border: 1px solid #dcdfe6;
               border-radius: 4px;
               height: 32px;
@@ -504,12 +504,12 @@ export default {
     padding: 0 10px 10px 0;
 
     .apply-checkbox {
-      /deep/ .el-checkbox__label {
+      ::v-deep .el-checkbox__label {
         color: #606266;
         font-size: 14px;
       }
 
-      /deep/ .el-checkbox__input.is-checked .el-checkbox__inner {
+      ::v-deep .el-checkbox__input.is-checked .el-checkbox__inner {
         background-color: $color;
         border-color: $color;
       }

@@ -557,7 +557,7 @@ export default {
         overflow-y: auto;
 
         .permission-tree {
-          /deep/ .el-tree-node__content {
+          ::v-deep .el-tree-node__content {
             height: 32px;
             line-height: 32px;
 
@@ -570,7 +570,7 @@ export default {
             }
           }
 
-          /deep/ .el-checkbox {
+          ::v-deep .el-checkbox {
             margin-right: 8px;
           }
 

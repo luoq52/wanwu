@@ -73,6 +73,9 @@ func AssistantConfigUpdate(ctx *gin.Context, userId, orgId string, req request.A
 		VisionConfig: &assistant_service.AssistantVisionConfig{
 			PicNum: req.VisionConfig.PicNum,
 		},
+		MemoryConfig: &assistant_service.AssistantMemoryConfig{
+			MaxHistoryLength: req.MemoryConfig.MaxHistoryLength,
+		},
 		Identity: &assistant_service.Identity{
 			UserId: userId,
 			OrgId:  orgId,
@@ -790,6 +793,12 @@ func transAssistantResp2Model(ctx *gin.Context, resp *assistant_service.Assistan
 			PicNum:    resp.VisionConfig.PicNum,
 		}
 	}
+
+	// 转换Memory配置
+	memoryConfig := request.MemoryConfig{
+		MaxHistoryLength: resp.MemoryConfig.MaxHistoryLength,
+	}
+
 	assistantModel := response.Assistant{
 		AssistantId:         resp.AssistantId,
 		UUID:                resp.Uuid,
@@ -802,6 +811,7 @@ func transAssistantResp2Model(ctx *gin.Context, resp *assistant_service.Assistan
 		RerankConfig:        rerankConfig,
 		SafetyConfig:        safetyConfig,
 		VisionConfig:        visionConfig,
+		MemoryConfig:        memoryConfig,
 		Scope:               resp.Scope,
 		WorkFlowInfos:       assistantWorkFlowInfos,
 		MCPInfos:            assistantMCPInfos,

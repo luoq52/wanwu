@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"mime"
 	"net/http"
 
 	v1 "github.com/UnicomAI/wanwu/internal/bff-service/server/http/handler/v1"
@@ -9,6 +10,10 @@ import (
 )
 
 func registerGuest(apiV1 *gin.RouterGroup) {
+
+	// 修复静态文件服务下载.csv文件response header Content-Type为"text/plain; charset=utf-8"的问题
+	_ = mime.AddExtensionType(".csv", "text/csv; charset=utf-8")
+
 	apiV1.Static("/static", "./configs/microservice/bff-service/static")
 	apiV1.Static("/cache", "./cache")
 

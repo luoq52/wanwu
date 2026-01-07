@@ -432,17 +432,17 @@ export default {
       vertical-align: middle;
     }
   }
-  /deep/ .el-switch__label * {
+  ::v-deep .el-switch__label * {
     font-size: 13px;
   }
 }
-.mark-textArea /deep/ {
+.mark-textArea ::v-deep {
   .el-textarea__inner {
     font-family: inherit;
     font-size: inherit;
   }
 }
-/deep/ .operation.el-button--text.el-button {
+::v-deep .operation.el-button--text.el-button {
   padding: 3px 10px 3px 0;
   border-right: 1px solid #eaeaea !important;
 }

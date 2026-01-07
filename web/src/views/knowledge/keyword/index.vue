@@ -180,7 +180,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/ {
+::v-deep {
   .el-button.is-disabled,
   .el-button--info.is-disabled {
     color: #c0c4cc !important;

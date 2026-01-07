@@ -183,13 +183,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.depart-all /deep/ {
+.depart-all ::v-deep {
   .el-select__tags {
     max-height: 90px;
     overflow-y: auto;
   }
 }
-.dropdown-tree-wrap /deep/ {
+.dropdown-tree-wrap ::v-deep {
   .el-checkbox__input.is-checked .el-checkbox__inner,
   .el-checkbox__input.is-indeterminate .el-checkbox__inner {
     background-color: $color !important;

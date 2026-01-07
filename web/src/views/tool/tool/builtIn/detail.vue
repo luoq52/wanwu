@@ -480,7 +480,7 @@ export default {
   }
 }
 .mcp-markdown {
-  /deep/.code-header {
+  ::v-deep.code-header {
     /*height: 0!important;*/
     padding: 0 0 5px 0;
   }

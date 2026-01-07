@@ -77,13 +77,13 @@
             @drop.prevent.stop="handleDrop"
             contenteditable="true"
           ></div>
-          <span class="editable--placeholder" v-if="!promptValue || !promptValue.trim()">
+          <span
+            class="editable--placeholder"
+            v-if="!promptValue || !promptValue.trim()"
+          >
             {{ placeholder }}
           </span>
-          <i
-            class="el-icon-close editable--close"
-            @click.stop="clearInput"
-          ></i>
+          <i class="el-icon-close editable--close" @click.stop="clearInput"></i>
           <div class="edtable--wrap">
             <el-button type="primary" class="editable--send" @click="preSend">
               <span>{{ $t('agent.send') }}</span>
@@ -322,7 +322,7 @@ export default {
     preSend() {
       this.hasFile = false;
       this.$emit('preSend');
-    }
+    },
   },
 };
 </script>
@@ -496,7 +496,7 @@ export default {
   border: 1px solid #dcdfe6 !important;
   background: #ffffff !important;
 }
-.editable-box /deep/.light-input {
+.editable-box ::v-deep.light-input {
   border: 1px solid deepskyblue;
   padding: 2px 14px 2px 10px;
   margin: 0 5px;

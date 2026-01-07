@@ -619,7 +619,7 @@ export default {
       white-space: normal;
       max-width: 100%;
       box-sizing: border-box;
-      /deep/ {
+      ::v-deep {
         * {
           max-width: 100%;
           word-wrap: break-word;

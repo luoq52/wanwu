@@ -1322,13 +1322,13 @@ export default {
   line-height: 28px !important;
 }
 
-/deep/ .el-input-number.is-controls-right .el-input-number__decrease,
-/deep/ .el-input-number.is-controls-right .el-input-number__increase {
+::v-deep .el-input-number.is-controls-right .el-input-number__decrease,
+::v-deep .el-input-number.is-controls-right .el-input-number__increase {
   line-height: 14px !important;
   border: 0;
 }
 
-/deep/ {
+::v-deep {
   .el-upload {
     width: 100%;
   }
@@ -1518,7 +1518,7 @@ export default {
       display: flex;
       flex-direction: column;
 
-      /deep/ {
+      ::v-deep {
         .el-form-item__content {
           margin: 0 !important;
         }

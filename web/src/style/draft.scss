@@ -187,7 +187,7 @@
       }
     }
 
-    /deep/ .desc-input {
+    ::v-deep .desc-input {
       height: 100%;
 
       .el-textarea__inner {
@@ -274,8 +274,8 @@
       cursor: pointer;
     }
 
-    /deep/ .el-input__inner,
-    /deep/ .el-textarea__inner {
+    ::v-deep .el-input__inner,
+    ::v-deep .el-textarea__inner {
       border: 1px solid #d3d7dd !important;
       font-family: 'Microsoft YaHei', Arial, sans-serif;
       padding: 15px;
@@ -315,7 +315,7 @@
       right: 10px;
     }
 
-    /deep/ .desc-input {
+    ::v-deep .desc-input {
       .el-textarea__inner {
         height: 90px !important;
       }

@@ -590,12 +590,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-radio__input.is-checked .el-radio__inner {
+::v-deep .el-radio__input.is-checked .el-radio__inner {
   border-color: #d33a3a !important;
   background: transparent !important;
 }
 
-/deep/ .el-radio__input.is-checked .el-radio__inner::after {
+::v-deep .el-radio__input.is-checked .el-radio__inner::after {
   background: #eb0a0b !important;
   width: 7px !important;
   height: 7px !important;
@@ -655,7 +655,7 @@ export default {
   .action-form {
     padding: 0 40px;
 
-    /deep/ .schema-textarea {
+    ::v-deep .schema-textarea {
       .el-textarea__inner {
         height: 200px !important;
       }
@@ -715,8 +715,8 @@ export default {
   position: relative;
   height: 100%;
 
-  /deep/ .el-input__inner,
-  /deep/ .el-textarea__inner {
+  ::v-deep .el-input__inner,
+  ::v-deep .el-textarea__inner {
     background-color: transparent !important;
     border: 1px solid #d3d7dd !important;
     font-family: 'Microsoft YaHei', Arial, sans-serif;
@@ -761,7 +761,7 @@ export default {
   }
 }
 
-.action-form /deep/ .el-form-item__label {
+.action-form ::v-deep .el-form-item__label {
   display: block;
   width: 100%;
   text-align: left;
@@ -769,9 +769,9 @@ export default {
 }
 
 .api-list {
-  .api-table /deep/ .el-table__body tr td,
-  .api-table /deep/ .el-table__header tr th,
-  .api-table /deep/ .el-table__body tr:hover > td {
+  .api-table ::v-deep .el-table__body tr td,
+  .api-table ::v-deep .el-table__header tr th,
+  .api-table ::v-deep .el-table__body tr:hover > td {
     background-color: transparent !important;
   }
 }

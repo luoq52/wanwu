@@ -221,7 +221,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ {
+::v-deep {
   .el-dialog__body {
     padding: 20px !important;
   }

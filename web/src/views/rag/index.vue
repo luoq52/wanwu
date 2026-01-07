@@ -20,7 +20,7 @@ export default {
         avatar: {},
         name: '',
         desc: '',
-      }
+      },
     };
   },
   created() {
@@ -41,12 +41,12 @@ export default {
     },
     goBack() {
       this.$router.go(-1);
-    }
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-/deep/ {
+::v-deep {
   .apikeyBtn {
     padding: 11px 10px;
     border: 1px solid $btn_bg;

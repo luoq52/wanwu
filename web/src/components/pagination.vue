@@ -36,7 +36,7 @@ export default {
     margin-top: 5px;
   }
 }
-.my-pagination /deep/ {
+.my-pagination ::v-deep {
   .el-pagination.is-background .el-pager li:not(.disabled).active {
     background-color: $color;
     color: #fff;

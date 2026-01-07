@@ -19,6 +19,10 @@ type AssistantConfig struct {
 	SafetyConfig        AppSafetyConfig        `json:"safetyConfig"`        // 敏感词表配置
 	RerankConfig        AppModelConfig         `json:"rerankConfig"`        // Rerank模型
 	VisionConfig        VisionConfig           `json:"visionConfig"`        // 视觉配置
+	MemoryConfig        MemoryConfig           `json:"memoryConfig"`        // 记忆配置
+}
+type MemoryConfig struct {
+	MaxHistoryLength int32 `json:"maxHistoryLength"`
 }
 
 func (a *AssistantConfig) Check() error { return nil }

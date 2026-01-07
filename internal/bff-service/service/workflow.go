@@ -142,7 +142,7 @@ func CreateWorkflow(ctx *gin.Context, orgID, name, desc, iconUri string) (*respo
 	return ret.Data, nil
 }
 
-func CopyWorkflow(ctx *gin.Context, orgID, workflowID string) (*response.CozeWorkflowIDData, error) {
+func CopyWorkflow(ctx *gin.Context, orgID, workflowID string, needPublished bool) (*response.CozeWorkflowIDData, error) {
 	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.CopyUri)
 	ret := &response.CozeWorkflowIDResp{}
 	if resp, err := resty.New().
@@ -151,9 +151,10 @@ func CopyWorkflow(ctx *gin.Context, orgID, workflowID string) (*response.CozeWor
 		SetHeader("Content-Type", "application/json").
 		SetHeader("Accept", "application/json").
 		SetHeaders(workflowHttpReqHeader(ctx)).
-		SetQueryParams(map[string]string{
+		SetBody(map[string]any{
 			"space_id":    orgID,
 			"workflow_id": workflowID,
+			"qType":       util.IfElse(needPublished, uint8(2), uint8(0)), //（workflow中FromDraft:0,FromLatestVersion:2）
 		}).
 		SetResult(ret).
 		Post(url); err != nil {
@@ -190,7 +191,7 @@ func DeleteWorkflow(ctx *gin.Context, orgID, workflowID string) error {
 	return nil
 }
 
-func ExportWorkFlow(ctx *gin.Context, orgID, workflowID, version string, qType uint8) ([]byte, error) {
+func ExportWorkFlow(ctx *gin.Context, orgID, workflowID, version string, needPublished bool) ([]byte, error) {
 	url, _ := net_url.JoinPath(config.Cfg().Workflow.Endpoint, config.Cfg().Workflow.ExportUri)
 	ret := &response.CozeWorkflowExportResp{}
 	if resp, err := resty.New().
@@ -203,7 +204,8 @@ func ExportWorkFlow(ctx *gin.Context, orgID, workflowID, version string, qType u
 			"workflow_id": workflowID,
 			"version":     version,
 			"space_id":    orgID,
-			"qType":       qType,
+			"qType":       util.IfElse(!needPublished, uint8(0), util.IfElse(needPublished && version == "", uint8(2), uint8(1))),
+			//适配从草稿导出 从最新版本导出 导出指定版本（workflow中FromDraft:0,FromSpecificVersion:1,FromLatestVersion:2）
 		}).
 		SetResult(&ret).
 		Post(url); err != nil {

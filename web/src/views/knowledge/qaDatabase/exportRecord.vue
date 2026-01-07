@@ -237,21 +237,21 @@ export default {
 
 <style lang="scss" scoped>
 .qa-export-dialog {
-  /deep/ .el-dialog__header {
+  ::v-deep .el-dialog__header {
     padding: 20px 20px 10px;
     border-bottom: 1px solid #f0f0f0;
   }
 
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     padding: 20px;
   }
 
-  /deep/ .el-dialog__footer {
+  ::v-deep .el-dialog__footer {
     padding: 10px 20px 20px;
     border-top: 1px solid #f0f0f0;
   }
 
-  /deep/ .el-button.is-disabled {
+  ::v-deep .el-button.is-disabled {
     background: transparent;
   }
 }

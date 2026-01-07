@@ -5,10 +5,6 @@ import (
 	"github.com/UnicomAI/wanwu/internal/assistant-service/config"
 )
 
-const (
-	maxHistory = 5
-)
-
 type AgentChatReq struct {
 	Input      string   `json:"input"`
 	Stream     bool     `json:"stream"`
@@ -103,7 +99,7 @@ func buildAgentModelParams(sseRequest *config.AgentSSERequest) *ModelParams {
 	modelParams := &ModelParams{
 		ModelId:    sseRequest.ModelId,
 		History:    sseRequest.History,
-		MaxHistory: maxHistory,
+		MaxHistory: int(sseRequest.MaxHistoryLength),
 	}
 	return buildModelParams(modelParamsReq, modelParams)
 }

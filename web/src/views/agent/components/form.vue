@@ -9,7 +9,7 @@
               :src="
                 editForm.avatar.path
                   ? `/user/api` + editForm.avatar.path
-                  : '@/assets/imgs/bg-logo.png'
+                  : require('@/assets/imgs/bg-logo.png')
               "
             />
           </div>
@@ -260,6 +260,34 @@
               >
                 {{ $t('agent.form.functionCallTips') }}
               </div>
+            </div>
+          </div>
+          <div class="box">
+            <p class="block-title common-set">
+              <span class="common-set-label">
+                <img
+                  :src="require('@/assets/imgs/require.png')"
+                  class="required-label"
+                />
+                {{ $t('agent.form.maxHistory') }}
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="$t('agent.form.maxHistoryTips')"
+                  placement="top"
+                >
+                  <span class="el-icon-question question-tips"></span>
+                </el-tooltip>
+              </span>
+            </p>
+            <div class="rl">
+              <el-slider
+                v-model="editForm.memoryConfig.maxHistoryLength"
+                show-input
+                :step="1"
+                :min="0"
+                :max="100"
+              ></el-slider>
             </div>
           </div>
           <div class="box">
@@ -608,6 +636,7 @@ export default {
     ...mapGetters('user', ['commonInfo']),
     agentFormParams() {
       const {
+        memoryConfig,
         modelParams,
         modelConfig,
         prologue,
@@ -618,6 +647,7 @@ export default {
       } = this.editForm;
 
       return {
+        memoryConfig,
         modelParams,
         modelConfig,
         prologue,
@@ -692,6 +722,9 @@ export default {
         avatar: {},
         name: '',
         desc: '',
+        memoryConfig: {
+          maxHistoryLength: 5,
+        },
         rerankParams: '',
         modelParams: '',
         prologue: '', //开场白
@@ -1153,6 +1186,7 @@ export default {
       );
       const params = {
         assistantId: this.editForm.assistantId,
+        memoryConfig: this.editForm.memoryConfig,
         prologue: this.editForm.prologue,
         recommendQuestion:
           recommendQuestion.length > 0 && recommendQuestion[0] !== ''
@@ -1235,6 +1269,10 @@ export default {
           prologue: data.prologue || '', //开场白
           name: data.name || '',
           desc: data.desc || '',
+          memoryConfig: {
+            ...this.editForm.memoryConfig,
+            ...data.memoryConfig,
+          },
           instructions: data.instructions || '', //系统提示词
           rerankParams: data.rerankConfig.modelId || '',
           visionConfig: data.visionConfig, //图片配置

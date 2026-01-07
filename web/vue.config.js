@@ -167,8 +167,11 @@ module.exports = {
   css: {
     sourceMap: false,
     loaderOptions: {
-      sass: {
-        prependData: `@import "~@/style/theme/vars_blue.scss";@import "~@/style/theme/common.scss";`, // 假设variables.scss位于src/styles目录下
+      scss: {
+        additionalData: `
+            @use "@/style/theme/vars_blue.scss" as *;
+            @use "@/style/theme/common.scss" as *;
+        `, // 假设variables.scss位于src/styles目录下
       },
     },
   },

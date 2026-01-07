@@ -338,7 +338,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ {
+::v-deep {
   .el-loading-spinner .path {
     stroke: #e60001 !important;
   }
@@ -356,13 +356,13 @@ export default {
     margin-top: 5px;
   }
 }
-.common-table /deep/ tbody {
+.common-table ::v-deep tbody {
   td,
   tr {
     background-color: #fff !important;
   }
 }
-.my-pagination /deep/ {
+.my-pagination ::v-deep {
   .ecTable-pagination {
     height: 50px;
     // display:flex;

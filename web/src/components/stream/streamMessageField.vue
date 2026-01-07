@@ -72,9 +72,13 @@
                           style="width: 30px !important"
                         />
                         <div class="docInfo">
-                          <p class="docInfo_name">{{ $t('knowledgeManage.fileName') }}:{{ file.name }}</p>
+                          <p class="docInfo_name">
+                            {{ $t('knowledgeManage.fileName') }}:{{ file.name }}
+                          </p>
                           <p class="docInfo_size">
-                            {{ $t('knowledgeManage.fileSize') }}:{{ getFileSizeDisplay(file.size) }}
+                            {{ $t('knowledgeManage.fileSize') }}:{{
+                              getFileSizeDisplay(file.size)
+                            }}
                           </p>
                         </div>
                       </div>
@@ -123,10 +127,8 @@
           class="session-answer"
           :id="'message-container' + i"
         >
-        <!-- v-if="[0].includes(n.qa_type)" -->
-          <div
-            class="session-answer-wrapper"
-          >
+          <!-- v-if="[0].includes(n.qa_type)" -->
+          <div class="session-answer-wrapper">
             <img class="logo" :src="'/user/api/' + defaultUrl" />
             <div class="session-wrap" style="width: calc(100% - 30px)">
               <div
@@ -579,7 +581,7 @@ export default {
       });
     },
     showSearchList(j, citations) {
-      return (citations|| []).includes(j + 1);
+      return (citations || []).includes(j + 1);
     },
     setCitations(index) {
       let citation = `#message-container${index} .citation`;
@@ -683,7 +685,7 @@ export default {
           data = '<tool>\n' + data;
         }
       }
-      
+
       // 统一替换为 section 标签
       return data
         .replace(/think>/gi, 'section>')
@@ -812,7 +814,11 @@ export default {
       this.session_data.history.forEach((n, index) => {
         this.$nextTick(() => {
           const setCitations = this.setCitations(index);
-          this.$set(this.session_data.history[index],'citations',setCitations);
+          this.$set(
+            this.session_data.history[index],
+            'citations',
+            setCitations,
+          );
         });
       });
       this.scrollBottom();
@@ -969,7 +975,7 @@ export default {
       this.$nextTick(() => {
         this.cv && this.cv.resizeCurrImg(currImg);
       });
-    }
+    },
   },
 };
 </script>
@@ -1004,7 +1010,7 @@ export default {
   }
 }
 
-/deep/ {
+::v-deep {
   pre {
     white-space: pre-wrap !important;
     min-height: 50px;
@@ -1295,7 +1301,7 @@ export default {
     .el-image {
       height: 200px !important;
       background-color: #f9f9f9;
-      /deep/.el-image__inner,
+      ::v-deep.el-image__inner,
       img {
         width: 100%;
         height: 100%;
@@ -1353,7 +1359,7 @@ export default {
       color: #ff2324;
       font-size: 16px;
       cursor: pointer;
-      /deep/ {
+      ::v-deep {
         .el-dropdown-menu {
           width: 100px;
         }
@@ -1370,7 +1376,7 @@ export default {
     margin-right: 3px;
   }
   .ds-res {
-    /deep/ section {
+    ::v-deep section {
       color: #8b8b8b;
       position: relative;
       font-size: 12px;
@@ -1378,7 +1384,7 @@ export default {
         font-size: 12px;
       }
     }
-    /deep/ section::before {
+    ::v-deep section::before {
       content: '';
       position: absolute;
       height: 100%;
@@ -1386,7 +1392,7 @@ export default {
       background: #ddd;
       left: -8px;
     }
-    /deep/.hideDs {
+    ::v-deep.hideDs {
       display: none;
     }
   }
@@ -1510,4 +1516,3 @@ img.failed::after {
   }
 }
 </style>
-

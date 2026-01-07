@@ -132,7 +132,7 @@ func (s *Service) GetConversationDetailList(ctx context.Context, req *assistant_
 	indexPattern := "conversation_detail_infos_*"
 
 	// 从ES查询数据
-	documents, total, err := es.Assistant().SearchByFields(ctx, indexPattern, fieldConditions, int(from), size)
+	documents, total, err := es.Assistant().SearchByFields(ctx, indexPattern, fieldConditions, int(from), size, "desc")
 	if err != nil {
 		log.Errorf("从ES查询对话详情失败，conversationId: %s, userId: %s, error: %v", req.ConversationId, req.Identity.UserId, err)
 		return nil, fmt.Errorf("查询对话详情失败: %v", err)
@@ -583,6 +583,13 @@ func (s *Service) AssistantConversionStreamNew(req *assistant_service.AssistantC
 		return grpc_util.ErrorStatusWithKey(errs.Code_AssistantConversationErr, "assistant_conversation", "MCP配置解析失败")
 	}
 
+	// 记忆参数配置
+	if err = s.setMemoryParams(ctx, sseReq, assistant); err != nil {
+		SSEError(stream, "智能体记忆配置解析失败")
+		saveConversation(ctx, req, "智能体记忆配置解析失败", "")
+		return grpc_util.ErrorStatusWithKey(errs.Code_AssistantConversationErr, "assistant_conversation", "记忆配置解析失败")
+	}
+
 	// 历史聊天记录配置
 	if !req.Trial && req.ConversationId != "" {
 		s.setHistoryParams(ctx, sseReq, req)
@@ -859,6 +866,22 @@ func (s *Service) setToolAndWorkflowParamsNew(ctx context.Context, sseReq *confi
 	log.Debugf("智能体tool_plugin_list，assistantId: %s, tool_plugin_list: %s", assistantId, allPlugin)
 	return nil
 }
+func (s *Service) setMemoryParams(_ context.Context, sseReq *config.AgentSSERequest, assistant *model.Assistant) error {
+	memoryConfig := &assistant_service.AssistantMemoryConfig{}
+	if assistant.MemoryConfig == "" || assistant.MemoryConfig == "{}" {
+		sseReq.MaxHistoryLength = config.DefaultMaxHistoryLength
+		return nil
+	}
+	if err := json.Unmarshal([]byte(assistant.MemoryConfig), memoryConfig); err != nil {
+		return fmt.Errorf("Assistant服务解析智能体记忆配置失败，assistantId: %d, error: %v, memoryConfigRaw: %s", assistant.ID, err, assistant.MemoryConfig)
+	}
+	if memoryConfig.MaxHistoryLength > 0 {
+		sseReq.MaxHistoryLength = memoryConfig.MaxHistoryLength
+	} else {
+		sseReq.MaxHistoryLength = config.DefaultMaxHistoryLength
+	}
+	return nil
+}
 
 // 设置MCP参数
 func (s *Service) setMCPParams(ctx context.Context, sseReq *config.AgentSSERequest, assistant *model.Assistant, draft bool, assistantSnapshot *model.AssistantSnapshot) error {
@@ -949,16 +972,16 @@ func (s *Service) setHistoryParams(ctx context.Context, sseReq *config.AgentSSER
 	}
 	indexPattern := "conversation_detail_infos_*"
 
-	documents, _, err := es.Assistant().SearchByFields(ctx, indexPattern, fieldConditions, 0, 1000)
+	documents, _, err := es.Assistant().SearchByFields(ctx, indexPattern, fieldConditions, 0, int(sseReq.MaxHistoryLength), "desc")
 	if err != nil {
 		log.Warnf("Assistant服务查询历史聊天记录失败，conversationId: %s, userId: %s, error: %v", req.ConversationId, req.Identity.UserId, err)
 		return
 	}
 
 	var historyList []config.AssistantConversionHistory
-	for _, doc := range documents {
+	for i := len(documents) - 1; i >= 0; i-- {
 		var detail model.ConversationDetails
-		if err := json.Unmarshal(doc, &detail); err != nil {
+		if err := json.Unmarshal(documents[i], &detail); err != nil {
 			log.Warnf("Assistant服务解析ES历史聊天记录失败: %v", err)
 			continue
 		}

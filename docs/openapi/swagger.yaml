@@ -178,6 +178,32 @@ definitions:
         description: 文档url
         type: string
     type: object
+  request.DocListReq:
+    properties:
+      docName:
+        type: string
+      graphStatus:
+        description: 图谱状态：-1.全部 0.待处理 1.解析中 2.解析成功 3.解析失败
+        items:
+          type: integer
+        type: array
+      knowledgeId:
+        type: string
+      metaValue:
+        type: string
+      pageNo:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        description: 文档状态：-1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败
+        items:
+          type: integer
+        type: array
+    required:
+    - knowledgeId
+    - pageSize
+    type: object
   request.DocMetaData:
     properties:
       metaId:
@@ -1377,42 +1403,17 @@ paths:
       tags:
       - openapi
   /knowledge/doc/list:
-    get:
+    post:
       consumes:
       - application/json
       description: 获取知识库文档列表，不展示状态为无效（-1）的文档数据
       parameters:
-      - in: query
-        name: docName
-        type: string
-      - collectionFormat: csv
-        description: 图谱状态：-1.全部 0.待处理 1.解析中 2.解析成功 3.解析失败
-        in: query
-        items:
-          type: integer
-        name: graphStatus
-        type: array
-      - in: query
-        name: knowledgeId
+      - description: 文档列表查询请求参数
+        in: body
+        name: data
         required: true
-        type: string
-      - in: query
-        name: metaValue
-        type: string
-      - in: query
-        name: pageNo
-        type: integer
-      - in: query
-        name: pageSize
-        required: true
-        type: integer
-      - collectionFormat: csv
-        description: 文档状态：-1-全部， 0-待处理， 1- 处理完成， 2-正在审核中，3-正在解析中，4-审核未通过，5-解析失败
-        in: query
-        items:
-          type: integer
-        name: status
-        type: array
+        schema:
+          $ref: '#/definitions/request.DocListReq'
       produces:
       - application/json
       responses:

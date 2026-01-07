@@ -14,8 +14,14 @@
         style="width: 100%; margin-top: 15px"
         :header-cell-style="{ background: '#F9F9F9', color: '#999999' }"
       >
-        <el-table-column prop="name" :label="$t('app.appName')"></el-table-column>
-        <el-table-column prop="description" :label="$t('oauth.desc')"></el-table-column>
+        <el-table-column
+          prop="name"
+          :label="$t('app.appName')"
+        ></el-table-column>
+        <el-table-column
+          prop="description"
+          :label="$t('oauth.desc')"
+        ></el-table-column>
         <el-table-column prop="suffix" :label="$t('app.accessUrl')">
           <template slot-scope="scope">
             <span>{{ scope.row.suffix }}</span>
@@ -65,7 +71,10 @@
             { required: true, message: $t('app.appNameMsg'), trigger: 'blur' },
           ]"
         >
-          <el-input v-model="form.name" :placeholder="$t('app.appNameMsg')"></el-input>
+          <el-input
+            v-model="form.name"
+            :placeholder="$t('app.appNameMsg')"
+          ></el-input>
         </el-form-item>
         <el-form-item :label="$t('app.appDesc')" prop="description">
           <el-input
@@ -180,8 +189,12 @@
         </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">{{ $t('common.button.cancel') }}</el-button>
-        <el-button type="primary" @click="submit('form')">{{ $t('common.button.confirm') }}</el-button>
+        <el-button @click="handleClose">
+          {{ $t('common.button.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="submit('form')">
+          {{ $t('common.button.confirm') }}
+        </el-button>
       </span>
     </el-dialog>
   </div>
@@ -393,7 +406,7 @@ export default {
     width: 20%;
     display: flex;
     justify-content: flex-end;
-    /deep/.el-form-item__content {
+    ::v-deep.el-form-item__content {
       margin-left: 0 !important;
     }
   }

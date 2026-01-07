@@ -146,7 +146,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/ {
+::v-deep {
   .el-tabs__content {
     overflow: unset;
   }

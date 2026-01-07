@@ -254,14 +254,14 @@ export default {
         font-size: 16px;
       }
       .not-allow,
-      .not-allow/deep/.el-upload-dragger {
+      .not-allow::v-deep.el-upload-dragger {
         cursor: not-allowed;
       }
       .allow,
-      .allow/deep/.el-upload-dragger {
+      .allow::v-deep.el-upload-dragger {
         cursor: pointer;
       }
-      /deep/ {
+      ::v-deep {
         .el-upload {
           width: 100%;
           height: 100%;
@@ -337,7 +337,7 @@ export default {
   margin-bottom: 0;
   margin-top: -1px;
   border: 1px solid #ddd;
-  /deep/ {
+  ::v-deep {
     .el-form-item__label {
       display: inline-block;
       flex: 1;
@@ -362,7 +362,7 @@ export default {
   margin-top: 20px;
   border-top: 1px solid transparent !important;
   border-bottom: 1px solid transparent !important;
-  /deep/ {
+  ::v-deep {
     .el-collapse-item__header {
       background-color: transparent !important;
       color: #fafafa !important;
@@ -378,7 +378,7 @@ export default {
   }
 }
 .knowledgeEnhance
-  /deep/
+  ::v-deep
   .knowledge-upload-box
   .knowledge-upload
   .knowledge-file {

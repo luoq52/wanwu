@@ -57,7 +57,7 @@ export default {
   justify-content: space-between;
 }
 
-/deep/ {
+::v-deep {
   .el-loading-mask {
     background: none !important;
   }

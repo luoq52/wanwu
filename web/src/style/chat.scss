@@ -87,7 +87,7 @@
     .center-session {
       height: calc(100% - 110px);
       padding: 0;
-      /deep/.history-box {
+      ::v-deep.history-box {
         height: calc(100% - 76px);
         overflow-y: scroll;
         padding: 0 20px;

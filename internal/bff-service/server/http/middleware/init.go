@@ -7,7 +7,7 @@ import (
 
 func Init() {
 
-	mid.InitWrapper(Record, StaticFSHeader)
+	mid.InitWrapper(Record)
 
 	// --- openapi ---
 	mid.NewSub("openapi", "对外提供原子能力", route.PermNone, false, false)

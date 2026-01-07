@@ -233,7 +233,7 @@ export default {
     }
   }
   .my-pagination {
-    /deep/.el-pagination {
+    ::v-deep.el-pagination {
       text-align: right;
     }
     .el-pagination.is-background .el-pager li:not(.disabled).active {

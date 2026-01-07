@@ -119,7 +119,11 @@ export default {
           },
         ],
         desc: [
-          { required: true, message: this.$t('app.inputTextDesc'), trigger: 'blur' },
+          {
+            required: true,
+            message: this.$t('app.inputTextDesc'),
+            trigger: 'blur',
+          },
           { max: 600, message: this.$t('app.descLimit600'), trigger: 'blur' },
         ],
       },
@@ -256,7 +260,7 @@ export default {
   width: 100px;
   height: 100px;
   margin-top: 3px;
-  /deep/ {
+  ::v-deep {
     .el-upload {
       width: 100%;
       height: 100%;

@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -25,7 +24,7 @@ func AuthOpenAPIKey(openApiType string) func(*gin.Context) {
 		}
 		apiKey, err := service.GetApiKeyByKey(ctx, token)
 		if err != nil {
-			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, err.Error())
+			gin_util.ResponseErrWithStatus(ctx, http.StatusUnauthorized, err)
 			ctx.Abort()
 			return
 		}
@@ -43,31 +42,6 @@ func AuthOpenAPIKey(openApiType string) func(*gin.Context) {
 		ctx.Set(gin_util.X_ORG_ID, apiKey.OrgId)
 	}
 }
-
-// func AuthOpenAPI(appType string) func(*gin.Context) {
-// 	return func(ctx *gin.Context) {
-// 		token, err := getAppKey(ctx)
-// 		if err != nil {
-// 			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, err.Error())
-// 			ctx.Abort()
-// 			return
-// 		}
-// 		appKey, err := service.GetAppKeyByKey(ctx, token)
-// 		if err != nil {
-// 			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, err.Error())
-// 			ctx.Abort()
-// 			return
-// 		}
-// 		if appKey.AppType != appType {
-// 			gin_util.ResponseDetail(ctx, http.StatusUnauthorized, codes.Code(err_code.Code_BFFAuth), nil, "invalid appType")
-// 			ctx.Abort()
-// 			return
-// 		}
-// 		ctx.Set(gin_util.USER_ID, appKey.UserId)
-// 		ctx.Set(gin_util.X_ORG_ID, appKey.OrgId)
-// 		ctx.Set(gin_util.APP_ID, appKey.AppId)
-// 	}
-//}
 
 func AuthAppKeyByQuery(appType string) func(*gin.Context) {
 	return func(ctx *gin.Context) {
@@ -99,36 +73,33 @@ func AuthAppKeyByQuery(appType string) func(*gin.Context) {
 func AuthOpenAPIKnowledge(fieldName string, permissionType int32) func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
 		defer util.PrintPanicStack()
-		//1.获取value值
-		value := getFieldValue(ctx, fieldName)
-		if len(value) == 0 {
-			gin_util.ResponseErrWithStatus(ctx, http.StatusBadRequest, errors.New("knowledgeId is required"))
+
+		// 1. 获取知识库ID
+		knowledgeId := getFieldValue(ctx, fieldName)
+		if len(knowledgeId) == 0 {
+			gin_util.ResponseDetail(ctx, http.StatusBadRequest, codes.Code(err_code.Code_BFFAuth), nil, "knowledgeId is required")
 			ctx.Abort()
 			return
 		}
-		//2.校验用户授权权限
-		err := openAPIKnowledgeGrantUser(ctx, value, permissionType)
-		//3.返回结果
-		if err != nil {
+
+		// 2. 获取用户和机构信息
+		userID, orgID := ctx.GetString(gin_util.USER_ID), ctx.GetString(gin_util.X_ORG_ID)
+		if len(userID) == 0 || len(orgID) == 0 {
+			gin_util.ResponseDetail(ctx, http.StatusBadRequest, codes.Code(err_code.Code_BFFAuth), nil, "USER-ID or X-Org-Id is required")
+			ctx.Abort()
+			return
+		}
+
+		// 3. 校验用户对知识库的权限
+		if err := service.CheckKnowledgeUserPermission(ctx, userID, orgID, knowledgeId, permissionType); err != nil {
 			gin_util.ResponseErrWithStatus(ctx, http.StatusBadRequest, err)
 			ctx.Abort()
 			return
 		}
-	}
-}
 
-func openAPIKnowledgeGrantUser(ctx *gin.Context, knowledgeId string, permissionType int32) error {
-	// userID orgID
-	userID, orgID := getOpenAPIUserID(ctx), getOpenAPIOrgID(ctx)
-	if len(userID) == 0 || len(orgID) == 0 {
-		return errors.New("USER-ID or X-Org-Id is empty")
+		// 4. 权限验证通过，继续后续处理
+		ctx.Next()
 	}
-
-	// check user knowledge permission
-	if err := service.CheckKnowledgeUserPermission(ctx, userID, orgID, knowledgeId, permissionType); err != nil {
-		return err
-	}
-	return nil
 }
 
 // --- internal ---
@@ -153,14 +124,4 @@ func getAppKeyByQuery(ctx *gin.Context) (string, error) {
 	} else {
 		return "", fmt.Errorf("token is nil")
 	}
-}
-
-// 获取当前用户ID
-func getOpenAPIUserID(ctx *gin.Context) string {
-	return ctx.GetString(gin_util.USER_ID)
-}
-
-// 获取当前组织ID
-func getOpenAPIOrgID(ctx *gin.Context) string {
-	return ctx.GetString(gin_util.X_ORG_ID)
 }

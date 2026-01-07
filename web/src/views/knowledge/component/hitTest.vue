@@ -517,22 +517,22 @@ export default {
                 border: none !important;
                 background: transparent !important;
 
-                /deep/ .el-collapse-item__arrow {
+                ::v-deep .el-collapse-item__arrow {
                   display: none !important;
                 }
 
-                /deep/ .el-collapse-item__header {
+                ::v-deep .el-collapse-item__header {
                   background: transparent !important;
                   border: none !important;
                   padding: 0 !important;
                 }
 
-                /deep/ .el-collapse-item__wrap {
+                ::v-deep .el-collapse-item__wrap {
                   background: transparent !important;
                   border: none !important;
                 }
 
-                /deep/ .el-collapse-item__content {
+                ::v-deep .el-collapse-item__content {
                   background: transparent !important;
                   border: none !important;
                   padding: 0 !important;

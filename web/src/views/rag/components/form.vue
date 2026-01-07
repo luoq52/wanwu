@@ -9,7 +9,7 @@
               :src="
                 editForm.avatar.path
                   ? `/user/api` + editForm.avatar.path
-                  : '@/assets/imgs/bg-logo.png'
+                  : require('@/assets/imgs/bg-logo.png')
               "
             />
           </div>
@@ -313,7 +313,7 @@ export default {
       version: '',
       rerankOptions: [],
       localKnowledgeConfig: {},
-      publishType: this.$route.query.publishType,
+      publishType: '', // 为空表示未发布，private表示私密，organization表示组织内可见，public表示公开
       publishForm: {
         publishType: 'private',
         version: '',

@@ -505,7 +505,7 @@ export default {
     text-align: right;
   }
 }
-.avatar-uploader /deep/ .el-upload {
+.avatar-uploader ::v-deep .el-upload {
   text-align: left !important;
 }
 .avatar-uploader-icon {

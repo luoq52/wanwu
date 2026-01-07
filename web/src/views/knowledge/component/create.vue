@@ -651,13 +651,13 @@ export default {
 
 <style lang="scss" scoped>
 .knowledge-create-dialog {
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     max-height: 60vh;
     overflow-y: auto;
     padding: 20px;
   }
 
-  /deep/ .el-form-item {
+  ::v-deep .el-form-item {
     .el-select {
       width: 100%;
     }

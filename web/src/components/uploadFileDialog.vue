@@ -129,7 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 .avatar-uploader {
-  /deep/ .el-upload:focus {
+  ::v-deep .el-upload:focus {
     border-color: #606266 !important;
     color: #606266 !important;
   }

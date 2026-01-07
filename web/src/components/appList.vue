@@ -465,14 +465,7 @@ export default {
       }
     },
     intelligentEdit(row) {
-      this.$router.push({
-        path: '/agent/test',
-        query: {
-          id: row.appId,
-          ...(row.publishType !== '' && { publish: true }),
-          publishType: row.publishType,
-        },
-      });
+      this.$router.push({ path: `/agent/test?id=${row.appId}` });
     },
     intelligentDelete(row) {
       this.row = row;
@@ -516,14 +509,7 @@ export default {
       }
     },
     txtQuesEdit(row) {
-      this.$router.push({
-        path: '/rag/test',
-        query: {
-          id: row.appId,
-          ...(row.publishType !== '' && { publish: true }),
-          publishType: row.publishType,
-        },
-      });
+      this.$router.push({ path: `/rag/test?id=${row.appId}` });
     },
     txtQuesDelete(row) {
       this.row = row;

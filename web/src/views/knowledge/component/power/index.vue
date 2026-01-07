@@ -263,22 +263,22 @@ export default {
 }
 
 .power-management-dialog {
-  /deep/ .el-dialog {
+  ::v-deep .el-dialog {
     border-radius: 8px;
   }
 
-  /deep/ .el-dialog__header {
+  ::v-deep .el-dialog__header {
     padding: 20px 20px 10px 20px;
     border-bottom: 1px solid #e4e7ed;
   }
 
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     padding: 20px;
     max-height: 70vh;
     overflow-y: auto;
   }
 
-  /deep/ .el-dialog__footer {
+  ::v-deep .el-dialog__footer {
     padding: 10px 20px 20px 20px;
     text-align: right;
     border-top: 1px solid #e4e7ed;
