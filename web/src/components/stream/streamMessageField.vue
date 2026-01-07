@@ -1,6 +1,12 @@
 <!--问答消息框-->
 <template>
   <div class="session rl">
+    <div class="session-setting">
+      <el-link class="right-setting" @click="gropdownClick" type="primary" :underline="false" style="color: var(--color);top:0;">
+        <span class="el-icon-delete"></span>
+        {{ $t('app.clearChat') }}
+      </el-link>
+    </div>
     <div
       class="history-box showScroll"
       :id="scrollContainerId"
@@ -128,7 +134,22 @@
                 class="deepseek"
                 @click="toggle($event, i)"
               >
-                <template>
+               <div
+                class="deepseek"
+                v-if="
+                  n.msg_type &&
+                  ['qa_start', 'qa_finish', 'knowledge_start'].includes(
+                    n.msg_type,
+                  )
+                "
+              >
+                <img
+                  :src="require('@/assets/imgs/think-icon.png')"
+                  class="think_icon"
+                />
+                {{ getTitle(n.msg_type) }}
+              </div>
+                <!-- <template>
                   <img
                     :src="require('@/assets/imgs/think-icon.png')"
                     class="think_icon"
@@ -140,9 +161,30 @@
                     'el-icon-arrow-down': !n.isOpen,
                     'el-icon-arrow-up': n.isOpen,
                   }"
-                ></i>
+                ></i> -->
+                 <template v-else>
+                  <img
+                    :src="require('@/assets/imgs/think-icon.png')"
+                    class="think_icon"
+                  />
+                  <div
+                    v-if="showDSBtn(n.response)"
+                    class="deepseek"
+                    @click="toggle($event, i)"
+                  >
+                    {{ n.thinkText }}
+                    <i
+                      v-bind:class="{
+                        'el-icon-arrow-down': !n.isOpen,
+                        'el-icon-arrow-up': n.isOpen,
+                      }"
+                    ></i>
+                  </div>
+                  <span v-else class="deepseek">{{ $t('menu.knowledge') }}</span>
+                </template>
               </div>
               <div
+                v-if="n.response"
                 class="answer-content"
                 v-bind:class="{ 'ds-res': showDSBtn(n.response) }"
                 v-html="
@@ -178,22 +220,35 @@
             v-if="n.searchList && n.searchList.length && n.finish === 1"
             class="search-list"
           >
+           <h2 class="recommended-question-title"
+              v-if="n.msg_type && ['qa_finish'].includes(n.msg_type)"
+            >
+              {{ $t('app.recommendedQuestion') }}
+            </h2>
             <div
               v-for="(m, j) in n.searchList"
               :key="`${j}sdsl`"
               class="search-list-item"
             >
               <div
-                class="serach-list-item"
-                v-if="showSearchList(j,n.citations)"
+                v-if="m.content_type && m.content_type === 'qa'"
+                class="qa_content"
+                @click="handleRecommendedQuestion(m)"
               >
-                <span @click="collapseClick(n, m, j)">
-                  <i
-                    :class="[
-                      '',
-                      m.collapse
-                        ? 'el-icon-caret-bottom'
-                        : 'el-icon-caret-right',
+                <span>{{ j + 1 }}. {{ m.question }}</span>
+              </div>
+              <template v-else>
+                <div
+                  class="serach-list-item"
+                  v-if="showSearchList(j,n.citations)"
+                >
+                  <span @click="collapseClick(n, m, j)">
+                    <i
+                      :class="[
+                        '',
+                        m.collapse
+                          ? 'el-icon-caret-bottom'
+                          : 'el-icon-caret-right',
                     ]"
                   ></i>
                   {{ $t('agent.source') }}：
@@ -218,12 +273,13 @@
                   {{ m.title }}
                 </span>
                 <!-- <span @click="goPreview($event,m)" class="search-doc">查看全文</span> -->
-              </div>
-              <el-collapse-transition>
-                <div v-show="m.collapse ? true : false" class="snippet">
-                  <p v-html="m.snippet"></p>
                 </div>
-              </el-collapse-transition>
+                <el-collapse-transition>
+                  <div v-show="m.collapse ? true : false" class="snippet">
+                    <p v-html="m.snippet"></p>
+                  </div>
+                </el-collapse-transition>
+              </template>
             </div>
           </div>
           <!--loading-->
@@ -420,13 +476,15 @@ export default {
     }
   },
   methods: {
+    handleRecommendedQuestion(m) {
+      this.$emit('handleRecommendedQuestion', m.question);
+    },
     handleCitationBtnClick(e){
       const target = e.target;
       if (target.classList.contains('citation-tips-content-icon')) {
         const index = target.dataset.index;
         const citation = Number(target.dataset.citation);
         const historyItem = this.session_data.history[index]
-        console.log(historyItem);
         if(historyItem && historyItem.searchList){
           const searchItem = historyItem.searchList[citation-1];
           if (searchItem) {
@@ -672,6 +730,9 @@ export default {
     },
     queryCopy(text) {
       this.$emit('queryCopy', text);
+    },
+    getSessionData() {
+      return this.session_data;
     },
     copy(text) {
       text = text.replaceAll('<br/>', '\n');
@@ -1144,6 +1205,15 @@ export default {
     /*出处*/
     .search-list {
       padding: 10px 20px 3px 54px;
+      .qa_content {
+        display: flex;
+        gap: 10px;
+        margin-top: 5px;
+      }
+      .recommended-question-title {
+        border-bottom: 1px solid #e5e5e5;
+        padding: 5px 0;
+      }
       .search-list-item {
         margin-bottom: 5px;
         line-height: 22px;
@@ -1268,13 +1338,14 @@ export default {
 
   .history-box {
     height: calc(100% - 46px);
-    overflow-y: auto;
+    // overflow-y: auto;
     padding: 20px;
   }
   /*删除历史...*/
   .session-setting {
     position: relative;
     height: 36px;
+    right:50px;
     .right-setting {
       position: absolute;
       right: 10px;

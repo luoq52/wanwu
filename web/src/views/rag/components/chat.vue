@@ -12,7 +12,7 @@
         </div>
         <!--对话-->
         <div v-show="!echo" class="center-session">
-          <SessionComponentSe
+          <streamMessageField
             ref="session-com"
             class="component"
             :sessionStatus="sessionStatus"
@@ -34,13 +34,11 @@
               <span class="mdl">{{ $t('agent.stop') }}</span>
             </span>
           </div>
-          <EditableDivV3
+          <streamInputField
             ref="editable"
             source="perfectReminder"
             :fileTypeArr="fileTypeArr"
-            :currentModel="currentModel"
-            :isModelDisable="isModelDisable"
-            :showModelSelect="false"
+            :type="'webChat'"
             @preSend="preSend"
             @setSessionStatus="setSessionStatus"
           />
@@ -51,9 +49,11 @@
 </template>
 
 <script>
-import SessionComponentSe from './SessionComponentSe';
-import EditableDivV3 from './EditableDivV3';
+// import SessionComponentSe from './SessionComponentSe';
+// import EditableDivV3 from './EditableDivV3';
+import streamMessageField from '@/components/stream/streamMessageField';
 import streamGreetingField from '@/components/stream/streamGreetingField';
+import streamInputField from '@/components/stream/streamInputField';
 // import Prologue from './Prologue';
 import sseMethod from '@/mixins/sseMethod';
 import { mapGetters } from 'vuex';
@@ -68,12 +68,18 @@ export default {
       type: Object,
       default: null,
     },
+    type: {
+      type: String,
+      default: 'agentChat',
+    }
   },
   components: {
-    SessionComponentSe,
-    EditableDivV3,
-    streamGreetingField
+    // SessionComponentSe,
+    // EditableDivV3,
     // Prologue,
+    streamGreetingField,
+    streamMessageField,
+    streamInputField,
   },
   mixins: [sseMethod],
   computed: {
@@ -83,9 +89,6 @@ export default {
   },
   data() {
     return {
-      amswerNum: 0,
-      isModelDisable: false,
-      currentModel: null,
       echo: true,
       basicForm: {
         avatar: '',
@@ -160,10 +163,6 @@ export default {
       return true;
     },
     setParams() {
-      ++this.amswerNum;
-      if (this.amswerNum > 0) {
-        this.isModelDisable = true;
-      }
       let fileId = this.getFileIdList() || this.fileId;
       this.useSearch = this.$refs['editable'].sendUseSearch();
       this.modelParams = this.$refs['editable'].getModelInfo();

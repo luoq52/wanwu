@@ -17,7 +17,6 @@
             :sessionStatus="sessionStatus"
             @clearHistory="clearHistory"
             @refresh="refresh"
-            :type="type"
             @queryCopy="queryCopy"
             :defaultUrl="editForm.avatar.path"
           />
@@ -45,12 +44,8 @@
             ref="editable"
             source="perfectReminder"
             :fileTypeArr="fileTypeArr"
-            :currentModel="currentModel"
-            :isModelDisable="isModelDisable"
             :type="type"
-            :disableClick="disableClick"
             @preSend="preSend"
-            @modelChange="modelChange"
             @setSessionStatus="setSessionStatus"
           />
           <!-- 版权信息 -->
@@ -119,11 +114,7 @@ export default {
     appUrlInfo: {
       type: Object,
       default: null,
-    },
-    disableClick: {
-      type: Boolean,
-      default: false,
-    },
+    }
   },
   components: {
     // SessionComponentSe,
@@ -141,9 +132,6 @@ export default {
   },
   data() {
     return {
-      amswerNum: 0,
-      isModelDisable: false,
-      currentModel: null,
       echo: true,
       fileTypeArr: ['doc/*', 'image/*'],
       hasDrawer: false,
@@ -306,15 +294,7 @@ export default {
       }
       return true;
     },
-    modelChange() {
-      //切换模型新建对话
-      this.preCreateConversation();
-    },
     setParams() {
-      ++this.amswerNum;
-      if (this.amswerNum > 0) {
-        this.isModelDisable = true;
-      }
       const fileInfo = this.$refs['editable'].getFileIdList();
       let fileId = !fileInfo.length ? this.fileId : fileInfo;
       // this.useSearch = this.$refs['editable'].sendUseSearch();

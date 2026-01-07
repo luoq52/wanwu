@@ -9,7 +9,6 @@ var originalFetch = window.fetch;
 
 import { md } from './marksown-it';
 import $ from './jquery.min.js';
-import { file } from 'jszip';
 import { OPENURL_API, USER_API } from '@/utils/requestConstants';
 
 const AGENT_API_URL = `${USER_API}/assistant/stream`;
@@ -336,9 +335,10 @@ export default {
                   endStr += worldObj.world;
                   endStr = convertLatexSyntax(endStr);
                   endStr = parseSub(endStr, lastIndex, search_list);
+                  const finalResponse = String(endStr);
                   let fillData = {
                     ...commonData,
-                    response: md.render(endStr),
+                    response: md.render(finalResponse),
                     oriResponse: endStr,
                     finish: worldObj.finish,
                     searchList:
@@ -534,13 +534,7 @@ export default {
                   const finalResponse = String(endStr);
                   let fillData = {
                     ...commonData,
-                    response: [0, 1, 2, 3, 4, 6, 20, 21, 10].includes(
-                      commonData.qa_type,
-                    )
-                      ? md.render(finalResponse)
-                      : finalResponse
-                          .replaceAll('\n-', '<br/>•')
-                          .replaceAll('\n', '<br/>'),
+                    response: md.render(finalResponse),
                     finish: worldObj.finish,
                     oriResponse: endStr,
                     searchList:
