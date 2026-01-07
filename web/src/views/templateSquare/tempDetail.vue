@@ -369,7 +369,7 @@ export default {
   }
 }
 .tempSquare-markdown {
-  /deep/.code-header {
+  ::v-deep.code-header {
     padding: 0 0 5px 0;
   }
 }

@@ -256,7 +256,7 @@ export default {
   width: 100px;
   height: 100px;
   margin-top: 3px;
-  /deep/ {
+  ::v-deep {
     .el-upload {
       width: 100%;
       height: 100%;

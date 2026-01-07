@@ -330,7 +330,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/style/auth.scss';
 
-/deep/ .auth-box {
+::v-deep .auth-box {
   min-width: 400px;
   background: rgba(244, 247, 255, 0.7);
   border-radius: 4px;

@@ -122,7 +122,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/ {
+::v-deep {
   .el-input-number--small {
     line-height: 28px !important;
   }

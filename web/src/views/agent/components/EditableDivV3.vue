@@ -694,7 +694,7 @@ export default {
   border: 1px solid #dcdfe6 !important;
   background: #ffffff !important;
 }
-.editable-box /deep/.light-input {
+.editable-box ::v-deep.light-input {
   border: 1px solid deepskyblue;
   padding: 2px 14px 2px 10px;
   margin: 0 5px;

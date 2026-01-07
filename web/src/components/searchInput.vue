@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-search-input /deep/ {
+.table-search-input ::v-deep {
   width: 260px;
   margin-right: 15px;
   /* .el-input__inner:focus,

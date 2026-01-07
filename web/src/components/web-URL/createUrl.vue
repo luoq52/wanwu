@@ -393,7 +393,7 @@ export default {
     width: 20%;
     display: flex;
     justify-content: flex-end;
-    /deep/.el-form-item__content {
+    ::v-deep.el-form-item__content {
       margin-left: 0 !important;
     }
   }

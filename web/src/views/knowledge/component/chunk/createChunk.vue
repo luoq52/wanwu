@@ -306,7 +306,7 @@ export default {
   display: flex;
   justify-content: center;
 
-  /deep/ .el-form-item__content {
+  ::v-deep .el-form-item__content {
     margin-left: 0 !important;
   }
 }
@@ -318,7 +318,7 @@ export default {
   background: $color_opacity;
 }
 
-/deep/ {
+::v-deep {
   .el-tag .el-tag__close {
     color: #3848f7 !important;
   }

@@ -29,7 +29,7 @@
   .auth-form {
     padding: 30px;
 
-    /deep/ {
+    ::v-deep {
       .el-input {
         height: 30px;
         line-height: 36px;
@@ -92,7 +92,7 @@
       position: relative;
     }
 
-    /deep/ .auth-icon {
+    ::v-deep .auth-icon {
       position: absolute;
       width: 17px;
       z-index: 10;
@@ -100,7 +100,7 @@
       left: 17px;
     }
 
-    /deep/ .pwd-icon {
+    ::v-deep .pwd-icon {
       position: absolute;
       width: 17px;
       z-index: 10;
@@ -162,7 +162,7 @@
     }
   }
 
-  .auth-pwd-input /deep/ {
+  .auth-pwd-input ::v-deep {
     .el-input__inner {
       padding-right: 46px;
     }

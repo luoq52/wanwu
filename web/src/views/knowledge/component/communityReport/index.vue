@@ -340,12 +340,12 @@ export default {
     border: 1px solid $color;
     overflow: hidden;
 
-    /deep/ .el-collapse {
+    ::v-deep .el-collapse {
       border: none;
       border-radius: 6px;
     }
 
-    /deep/ .el-collapse-item__header {
+    ::v-deep .el-collapse-item__header {
       background-color: #f7f8fa;
       border-bottom: 1px solid #e4e7ed;
       padding: 12px 20px;
@@ -364,7 +364,7 @@ export default {
       }
     }
 
-    /deep/ .el-collapse-item__content {
+    ::v-deep .el-collapse-item__content {
       padding: 15px 20px;
       background-color: #fff;
       border-bottom: 1px solid #e4e7ed;
@@ -373,17 +373,17 @@ export default {
       border-top: none;
     }
 
-    /deep/ .el-collapse-item__header .el-collapse-item__arrow,
+    ::v-deep .el-collapse-item__header .el-collapse-item__arrow,
     .el-collapse-item__arrow,
     [class*='el-collapse-item__arrow'] {
       display: none !important;
     }
 
-    /deep/ .el-collapse-item:last-child .el-collapse-item__content {
+    ::v-deep .el-collapse-item:last-child .el-collapse-item__content {
       border-bottom: none;
     }
 
-    /deep/ .el-collapse-item__header::after {
+    ::v-deep .el-collapse-item__header::after {
       display: none !important;
     }
 
@@ -486,7 +486,7 @@ export default {
 
       .content-edit {
         .edit-input {
-          /deep/ .el-textarea__inner {
+          ::v-deep .el-textarea__inner {
             border: 1px solid $color;
             border-radius: 4px;
             resize: vertical;
@@ -495,7 +495,7 @@ export default {
       }
     }
 
-    /deep/ .el-collapse-item__content {
+    ::v-deep .el-collapse-item__content {
       font-size: 14px;
       color: #333;
       line-height: 1.5;

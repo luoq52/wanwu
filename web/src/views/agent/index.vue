@@ -395,8 +395,8 @@ export default {
 }
 
 // weburl适配移动端样式
-/deep/ .chatBg,
-/deep/ .explore-container {
+::v-deep .chatBg,
+::v-deep .explore-container {
   @media (max-width: 768px) {
     .el-aside {
       position: fixed !important;

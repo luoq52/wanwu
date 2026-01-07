@@ -223,6 +223,6 @@ export default {
   },
 };
 </script>
-<style lang="sass">
-@import "@/style/echart"
+<style lang="scss">
+@use "@/style/echart" as *;
 </style>

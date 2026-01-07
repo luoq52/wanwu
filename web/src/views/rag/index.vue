@@ -70,7 +70,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/ {
+::v-deep {
   .apikeyBtn {
     padding: 11px 10px;
     border: 1px solid $btn_bg;

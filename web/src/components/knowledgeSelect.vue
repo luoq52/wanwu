@@ -144,8 +144,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import '@/style/markdown.scss';
-/deep/ {
+@use '@/style/markdown.scss';
+::v-deep {
   .el-dialog__body {
     padding: 10px 20px;
   }
@@ -205,7 +205,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /deep/ {
+    ::v-deep {
       .el-button--primary {
         background: #fff !important;
         border: 1px solid #eee !important;

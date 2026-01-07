@@ -713,11 +713,11 @@ export default {
           width: auto;
           overflow-x: auto;
           overflow-y: hidden;
-          .menu-indent /deep/ .el-submenu__title,
+          .menu-indent ::v-deep .el-submenu__title,
           .menu-indent-item {
             padding-left: 49px !important;
           }
-          .menu-indent-sub /deep/ .el-submenu__title {
+          .menu-indent-sub ::v-deep .el-submenu__title {
             padding-left: 60px !important;
           }
           .menu-icon {
@@ -746,46 +746,46 @@ export default {
           }
         }
       }
-      /deep/ .el-menu-item {
+      ::v-deep .el-menu-item {
         color: $color_title;
       }
-      /deep/ .el-submenu__title,
-      /deep/ .el-menu-item span,
-      /deep/ .el-submenu__title span {
+      ::v-deep .el-submenu__title,
+      ::v-deep .el-menu-item span,
+      ::v-deep .el-submenu__title span {
         font-size: 14px !important;
       }
-      /deep/ .el-menu-item.is-active,
-      /deep/ .el-menu-item:focus {
+      ::v-deep .el-menu-item.is-active,
+      ::v-deep .el-menu-item:focus {
         background-color: $color_opacity !important;
       }
-      /deep/ .el-menu-item.is-active,
-      /deep/ .el-submenu.is-active {
+      ::v-deep .el-menu-item.is-active,
+      ::v-deep .el-submenu.is-active {
         .el-submenu__title:hover {
           background-color: $color_opacity !important;
         }
       }
-      /*/deep/ .el-submenu.is-active {
+      /*::v-deep .el-submenu.is-active {
         .el-submenu__title:hover {
           background-color: rgba(255, 255, 255, 0) !important;
         }
       }*/
-      /deep/ .el-submenu__title {
+      ::v-deep .el-submenu__title {
         span {
           font-size: 14px !important;
         }
       }
-      /deep/ .el-submenu.is-active .el-submenu__title {
+      ::v-deep .el-submenu.is-active .el-submenu__title {
         border-bottom-color: $color !important;
       }
-      /deep/ .el-menu .el-submenu__title,
-      /deep/ .el-menu .el-menu-item {
+      ::v-deep .el-menu .el-submenu__title,
+      ::v-deep .el-menu .el-menu-item {
         height: 40px;
         line-height: 40px;
         border-radius: 6px;
         margin: 10px 20px;
         min-width: auto;
       }
-      /deep/ .el-menu {
+      ::v-deep .el-menu {
         border: none;
       }
     }
@@ -794,7 +794,7 @@ export default {
       height: 100%;
     }
   }
-  .outer-container /deep/ {
+  .outer-container ::v-deep {
     .el-submenu.is-active,
     .el-submenu.is-active > .el-submenu__title,
     .el-submenu.is-active > .el-submenu__title i:first-child,
@@ -823,7 +823,7 @@ export default {
   color: $color !important;
 }
 .header__org_select,
-.menu__org_select /deep/ {
+.menu__org_select ::v-deep {
   width: calc(100% - 37px);
   .el-input__inner:focus,
   .el-input__inner:hover,
@@ -847,7 +847,7 @@ export default {
     }
   }
 }
-.menu__org_select /deep/ {
+.menu__org_select ::v-deep {
   width: 190px;
   .el-input__inner {
     background-color: rgba(255, 255, 255, 0);
@@ -904,7 +904,7 @@ export default {
     margin-bottom: 2px;
   }
 }
-.menu--popover-item:hover /deep/ {
+.menu--popover-item:hover ::v-deep {
   background: #f5f7fa !important;
   .el-input .el-input__inner {
     border: none !important;

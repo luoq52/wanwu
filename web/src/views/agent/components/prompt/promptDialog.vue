@@ -171,17 +171,17 @@ export default {
 <style lang="scss" scoped>
 @import '@/style/markdown.scss';
 .prompt-dialog {
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     padding: 5px 20px 20px 20px;
   }
 
-  /deep/ .el-dialog__header {
+  ::v-deep .el-dialog__header {
     padding: 20px 20px 10px;
     display: flex;
     align-items: center;
   }
 
-  /deep/ .el-dialog__headerbtn {
+  ::v-deep .el-dialog__headerbtn {
     position: unset !important;
   }
 }
@@ -201,7 +201,7 @@ export default {
   .title-search-input {
     width: 300px;
     margin-right: 10px;
-    /deep/ .el-input__inner {
+    ::v-deep .el-input__inner {
       height: 32px;
       line-height: 32px;
     }
@@ -330,7 +330,7 @@ export default {
           opacity: 0;
           transition: opacity 0.3s;
 
-          /deep/ .el-button {
+          ::v-deep .el-button {
             padding: 4px 0;
             font-weight: bold;
           }
@@ -362,9 +362,9 @@ export default {
         line-height: 1.8;
         color: #303133;
 
-        /deep/ h1,
-        /deep/ h2,
-        /deep/ h3 {
+        ::v-deep h1,
+        ::v-deep h2,
+        ::v-deep h3 {
           margin-top: 16px;
           margin-bottom: 8px;
 

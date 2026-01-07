@@ -408,7 +408,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-/deep/ {
+::v-deep {
   .vertical-form-item {
     display: flex;
     flex-direction: column;
@@ -529,11 +529,11 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /deep/ .el-form-item__content {
+    ::v-deep .el-form-item__content {
       display: flex;
       justify-content: flex-end;
     }
-    /deep/ .el-form-item__label {
+    ::v-deep .el-form-item__label {
       width: 120px !important;
       color: #000;
     }

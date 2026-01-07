@@ -188,16 +188,16 @@ export default {
 
 <style lang="scss" scoped>
 .qa-create-dialog {
-  /deep/ .el-dialog__header {
+  ::v-deep .el-dialog__header {
     padding: 20px 20px 10px;
     border-bottom: 1px solid #f0f0f0;
   }
 
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     padding: 20px;
   }
 
-  /deep/ .el-dialog__footer {
+  ::v-deep .el-dialog__footer {
     padding: 10px 20px 20px;
     border-top: 1px solid #f0f0f0;
   }
@@ -208,17 +208,17 @@ export default {
     margin-bottom: 20px;
   }
 
-  /deep/ .el-form-item__label {
+  ::v-deep .el-form-item__label {
     font-weight: 500;
     color: #333;
   }
 
-  /deep/ .el-input__inner,
-  /deep/ .el-textarea__inner {
+  ::v-deep .el-input__inner,
+  ::v-deep .el-textarea__inner {
     border-radius: 4px;
   }
 
-  /deep/ .el-textarea {
+  ::v-deep .el-textarea {
     .el-input__count {
       background: transparent;
       color: #909399;

@@ -314,7 +314,7 @@ export default {
     font-weight: 800;
     margin-right: 6px;
   }
-  /deep/.el-button--mini,
+  ::v-deep.el-button--mini,
   .el-button--mini.is-round {
     font-size: 12px;
     height: 24px;
@@ -354,7 +354,7 @@ export default {
   flex-direction: column;
 }
 
-.desc-input /deep/ .el-textarea__inner {
+.desc-input ::v-deep .el-textarea__inner {
   background-color: transparent !important;
   border: 1px solid #d3d7dd !important;
   padding: 15px;

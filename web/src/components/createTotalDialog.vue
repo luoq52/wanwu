@@ -140,7 +140,7 @@ export default {
     }
   }
 }
-.createTotalDialog /deep/ {
+.createTotalDialog ::v-deep {
   .el-dialog {
     background: linear-gradient(
       1deg,

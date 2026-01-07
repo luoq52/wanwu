@@ -670,7 +670,7 @@ export default {
         }
       }
 
-      /deep/ .el-button {
+      ::v-deep .el-button {
         i {
           font-size: 22px !important;
           color: $color !important;
@@ -701,7 +701,7 @@ export default {
         }
       }
 
-      /deep/ .el-button:hover {
+      ::v-deep .el-button:hover {
         i {
           color: #ffffff !important;
           font-size: 20px !important;

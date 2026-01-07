@@ -133,7 +133,7 @@
       background: linear-gradient(180deg, #c098ff 0%, #a16ff4 100%);
     }
 
-    .logo /deep/ {
+    .logo ::v-deep {
       width: 60px;
       height: 60px;
       margin-right: 12px;
@@ -274,7 +274,7 @@
   text-align: center;
   padding: 100px 0;
 
-  /deep/ .el-empty__description p {
+  ::v-deep .el-empty__description p {
     color: #b3b1bc;
   }
 }

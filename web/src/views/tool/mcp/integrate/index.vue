@@ -209,7 +209,7 @@ export default {
   width: 100%;
   text-align: center;
   margin-top: -60px;
-  /deep/ .el-empty__description p {
+  ::v-deep .el-empty__description p {
     color: #b3b1bc;
   }
 }

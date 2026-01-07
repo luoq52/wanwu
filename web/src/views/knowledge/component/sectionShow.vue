@@ -135,7 +135,7 @@ export default {
 
 <style lang="scss" scoped>
 .section-dialog {
-  /deep/ .el-dialog__body {
+  ::v-deep .el-dialog__body {
     padding: 0 20px 20px 20px;
     max-height: 70vh;
     overflow-y: auto;
@@ -236,7 +236,7 @@ export default {
     padding: 0;
     background: transparent;
 
-    /deep/ .el-collapse {
+    ::v-deep .el-collapse {
       border: none !important;
       border-top: none !important;
       border-bottom: none !important;
@@ -246,13 +246,13 @@ export default {
       border-radius: 0 !important;
     }
 
-    /deep/ .el-collapse-item {
+    ::v-deep .el-collapse-item {
       border: none !important;
       margin-bottom: 0 !important;
       background: transparent !important;
     }
 
-    /deep/ .el-collapse-item__header {
+    ::v-deep .el-collapse-item__header {
       background: transparent;
       border: none;
       padding: 0 10px;
@@ -265,12 +265,12 @@ export default {
       }
     }
 
-    /deep/ .el-collapse-item__content {
+    ::v-deep .el-collapse-item__content {
       padding: 0;
       background: transparent;
     }
 
-    /deep/ .el-collapse-item__arrow {
+    ::v-deep .el-collapse-item__arrow {
       display: none !important;
     }
 
@@ -320,7 +320,7 @@ export default {
     }
 
     .section-collapse {
-      /deep/ .el-collapse-item__header {
+      ::v-deep .el-collapse-item__header {
         flex-direction: column;
         align-items: flex-start;
 

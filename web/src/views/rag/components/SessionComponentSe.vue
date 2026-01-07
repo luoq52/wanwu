@@ -799,7 +799,7 @@ img.failed::after {
   white-space: nowrap;
 }
 
-/deep/ {
+::v-deep {
   pre {
     white-space: pre-wrap !important;
   }
@@ -1059,7 +1059,7 @@ img.failed::after {
     .el-image {
       height: 200px !important;
       background-color: #f9f9f9;
-      /deep/.el-image__inner,
+      ::v-deep.el-image__inner,
       img {
         width: 100%;
         height: 100%;
@@ -1116,7 +1116,7 @@ img.failed::after {
       color: #ff2324;
       font-size: 16px;
       cursor: pointer;
-      /deep/ {
+      ::v-deep {
         .el-dropdown-menu {
           width: 100px;
         }
@@ -1133,7 +1133,7 @@ img.failed::after {
     margin-right: 3px;
   }
   .ds-res {
-    /deep/ section {
+    ::v-deep section {
       color: #8b8b8b;
       position: relative;
       font-size: 12px;
@@ -1141,7 +1141,7 @@ img.failed::after {
         font-size: 12px;
       }
     }
-    /deep/ section::before {
+    ::v-deep section::before {
       content: '';
       position: absolute;
       height: 100%;
@@ -1149,7 +1149,7 @@ img.failed::after {
       background: #ddd;
       left: -8px;
     }
-    /deep/.hideDs {
+    ::v-deep.hideDs {
       display: none;
     }
   }

@@ -204,7 +204,7 @@ export default {
       height: 128px;
       flex-shrink: 0;
 
-      /deep/ {
+      ::v-deep {
         .el-upload {
           width: 100%;
           height: 100%;

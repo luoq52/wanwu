@@ -340,7 +340,7 @@ export default {
 .modelAccess-select {
   width: 200px;
 }
-.mark-textArea /deep/ {
+.mark-textArea ::v-deep {
   .el-textarea__inner {
     font-family: inherit;
     font-size: inherit;
@@ -496,7 +496,7 @@ export default {
     }
   }
 }
-/deep/ .el-dropdown-menu__item.card-delete:hover {
+::v-deep .el-dropdown-menu__item.card-delete:hover {
   color: #ff4d4f !important;
   background: #fbeae8 !important;
 }
@@ -507,7 +507,7 @@ export default {
   width: 100%;
   text-align: center;
   margin-top: -60px;
-  /deep/ .el-empty__description p {
+  ::v-deep .el-empty__description p {
     color: #b3b1bc;
   }
 }
