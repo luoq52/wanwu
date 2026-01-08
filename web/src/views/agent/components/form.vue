@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="header-right">
-        <div class="header-api">
+        <div class="header-api" v-if="publishType">
           <el-tag effect="plain" class="root-url">
             {{ $t('rag.form.apiRootUrl') }}
           </el-tag>
@@ -713,7 +713,7 @@ export default {
         ],
       },
       editForm: {
-        category: SINGLE_AGENT,
+        // category: SINGLE_AGENT,
         newAgent: false,
         functionCalling: '',
         visionsupport: '',
