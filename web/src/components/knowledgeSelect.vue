@@ -144,7 +144,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@use '@/style/markdown.scss';
 ::v-deep {
   .el-dialog__body {
     padding: 10px 20px;
